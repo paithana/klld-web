@@ -1,0 +1,632 @@
+/*
+Theme Name:     Khao Lak Land Discovery
+Description:    Khao Lak Land Discovery
+Theme URI:      https://www.khaolaklanddiscovery.com
+Author:         Khao Lak Land Discovery
+Author URI:     https://www.khaolaklanddiscovery.com
+Version:        3.1.1
+
+Template:       traveler
+Date: 			23-feb-2025
+*/
+
+
+:root {
+  --main-color: #0b7016;
+  --link-color: #ffcc00;
+  --klld-green: #0b7016;
+  --klld-yellow: #ffcc00;
+  --klld-dgreen: #264918;
+  --klld-text: #303030;
+  --klld-link: #0B7016;
+  --klld-deep-green: #264918;
+  --klld-white-text: #F3F2E9;
+  --klld-navy: #365374;
+  --klld-notice: #ec927e;
+}
+.stt-attr-durations,.stt-attr-attributes{
+	display: none !important;
+}
+
+.st-mod-style .st-style-elementor h3{
+  font-size: 1.25rem !important
+}
+
+.logo img {
+	max-width: 120px !important;
+	width: 100% !important;
+	padding: 1em !important;
+}
+/* .reviews{
+	display: none !important;
+} */
+#st-content-wrapper .search-result-page .banner {
+background-image: url("https://khaolaklanddiscovery.com/wp-content/uploads/2023/03/Khao-Lak-Land-Discovery-Taxi-and-Transfer.jpg");	
+}
+.hide{
+	display: hidden !important;
+}
+.single.st-mod-style .daterangepicker.single .calendar .calendar-table .table-sub-header .day-off-week{
+	width:14.28% !important;
+}
+
+/* Elementor WhatsApp Chat Button*/
+.e-contact-buttons-var-9.has-h-alignment-start .e-contact-buttons__chat-button-text{
+	display: none !important;		
+}
+
+img.custom-logo {
+	width: 60px;
+}
+.header__center #st-main-menu .main-menu li.menu-item-has-children .menu-dropdown{
+min-width:60px
+}
+/* }
+.rate-count{
+	display: none;
+} */
+klld-notice > * {
+color: var(--klld-notice) !important;
+}
+/*Date Not Available Text*/
+.st-mod-style .daterangepicker.dropdown-menu .calendar .calendar-table .table-condensed tbody tr .td-date.disabled .date{
+	text-decoration: line-through;
+	color: var(--klld-notice) !important;
+}
+/*Date Not Available*/
+body.st-mod-style .calendar-table .table-condensed tbody tr .td-date.disabled .date{	background: #ff5732 !important;
+}
+
+#add_payment_method #payment ul.payment_methods li img,
+.woocommerce-cart #payment ul.payment_methods li img,
+.woocommerce-checkout #payment ul.payment_methods li img {
+  max-width: 60px !important;
+}
+
+@media screen and (min-width: 1050px) and (max-width: 1400px) {
+	.header__center #st-main-menu .main-menu>li>a {
+		font-size: 0.725rem !important;
+	}
+	.header__center #st-main-menu .main-menu li.menu-item-has-children .menu-dropdown{
+		max-width: unset;
+		min-width: 80px !important;
+	}
+	.header__center #st-main-menu .main-menu > li > a{
+		text-transform: uppercase !important;
+	}
+}
+
+
+
+@media screen and (max-width: 720px) {
+  body.st-mod-style .st-style-elementor h3 {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    color: var(--klld-green) !important;
+  }
+}
+
+/* 
+.single-st_tours #st-content-wrapper.st-style-elementor.st-single-tour-8 .st-program-list .st-program .accordion-header button span {
+	color: var(--klld-green) !important;
+} 
+.booking-item-price{
+	color: var(--klld-green) !important;	
+}
+*/
+.woocommerce .cart-collaterals .shop_table th,
+.woocommerce-page .cart-collaterals .shop_table th {
+  color: var(--klld-green) !important;
+}
+
+.fotorama {
+  display: none !important;
+}
+
+.st-attributes {
+  display: none;
+}
+
+.accordion-button {
+  color: #38761d !important;
+}
+
+@media screen and (max-width: 1024px) {
+/*   .hotel-target-book-mobile.d-flex.justify-content-between.align-items-center {
+    z-index: 10 !important;
+    position: fixed !important;
+  } */
+
+  #st-main-menu .main-menu a {
+    font-size: 1rem;
+  }
+}
+
+
+.service-list-wrapper.service-tour .services-item.item-elementor .price-wrapper .price .sale-top .item {
+  color: var(--main-color);
+}
+
+.single.st-mod-style .mfp-content {
+  width: 100%;
+  background: 0 0;
+  height: auto;
+  min-height: 50vh;
+}
+
+.mfp-img {
+  max-width: auto !important;
+  max-width: auto !important;
+  height: auto !important;
+  width: 100% !important;
+  object-fit: contain !important;
+  image-resolution: 4/3;
+}
+
+@media screen and (max-width: 1366px) {
+  .mfp-img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .mfp-content .mfp-figure {
+    min-height: 50vh !important;
+    height: auto !important;
+  }
+
+  .single.st-mod-style .mfp-content {
+    height: auto !important;
+  }
+}
+
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  outline: 0;
+  line-height: normal;
+  border: solid 1px #e3e3e3 !important;
+}
+
+.st-highlight li {
+  /*   list-style: none; */
+  /*   display: inline-block; */
+  padding-right: 0.5em;
+
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.guest_name_input span {
+  font-size: 1rem;
+}
+
+.single #st-content-wrapper.st-style-elementor .widgets .st-border-radius {
+  display: none !important;
+}
+
+.st-attributes {
+  display: none;
+}
+
+.accordion-item,
+.accordion-item i {
+  color: var(--c-green) !important;
+}
+
+.service-avatar {
+  display: none !important;
+}
+
+a.st-link {
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+}
+
+.services-item.item-elementor .item .content-item .title a {
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+}
+
+.header__right .items .dropdown.dropdown-minicart .dropdown-menu {
+  width: fit-content !important;
+}
+
+/*link*/
+body.st-mod-style .st-style-elementor a {
+  color: #38761d;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.elementor-button {
+  background-color: #38761d;
+}
+
+#st-content-wrapper .st-breadcrumb ul li a {
+  color: #38761d;
+}
+
+/*End Blog-section*/
+.woocommerce .st-woo-heading,
+.woocommerce-page .st-woo-heading,
+.woocommerce .booking-item-price,
+.woocommerce .shop_table th,
+.woocommerce-checkout,
+.woocommerce-checkout .st-woo-heading,
+.woocommerce-checkout .woocommerce-checkout-review-order-table header .col-left .booking-item-payment-title a,
+.woocommerce-checkout .woocommerce-checkout-review-order-table .booking-item-payment-details li .booking-item-payment-price li .booking-item-payment-price-title,
+.woocommerce-checkout .woocommerce-checkout-review-order-table .booking-item-payment-total {
+  color: var(--main-color);
+}
+
+.service-list-wrapper.service-tour .services-item.item-elementor .price-wrapper .price {
+  color: var(--main-color);
+}
+
+.sub-title.st-address.d-flex.align-items-center {
+  width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#st-main-menu .main-menu a:hover {
+  color: #38761D !important;
+}
+
+a.st_click_choose_datetime_transfer {
+  color: var(--main-color) !important;
+  line-height: 3em;
+}
+
+.st-choose-datetime {
+  display: block !important;
+  width: fit-content;
+  margin: 1em 0;
+  border-radius: 10px;
+  background-color: #ffcc00 !important;
+  padding: 0 1.5em;
+  transition: 0.8s;
+}
+
+.st-choose-datetime:hover {
+  opacity: 0.8;
+  background: #fff0b0 !important;
+}
+
+i.stt-icon-youtube.mr5 {
+  font-size: 20px !important;
+  color: red !important;
+  margin: 0px !important;
+}
+
+.header__right .items li.st-header-link a {
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border: 1px solid #dedede;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.checkout-rep > span.woocommerce-input-wrapper {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+}
+
+.checkout-rep {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-rep label.radio {
+  display: inline-block !important;
+  margin-left: 10px;
+  margin-right: 5em !important;
+}
+
+@media screen and (max-width: 1366px) {
+  .checkout-rep label.radio {
+    margin-right: 1em !important;
+  }
+}
+
+.service-excerpt {
+  max-height: 75px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+
+.stt-icon-youtube:after {
+  margin: 0px !important;
+}
+
+body.st-mod-style .st-style-elementor h2 {
+  font-size: 1.5rem;
+  line-height: 1.25em;
+}
+
+@media screen and (max-width: 767px) {
+  body.st-mod-style .st-style-elementor h2 {
+    font-size: 1.5rem;
+    line-height: 1.25em;
+  }
+
+  .cky-revisit-bottom-left {
+    margin-bottom: 4em !important;
+  }
+}
+
+.accordion-button {
+  color: #38761d !important;
+  padding-right: 0px !important;
+}
+
+button.accordion-button.collapsed::after {
+  border: none !important;
+}
+
+#gotop {
+  background: #38761d !important;
+  z-index: 1;
+}
+.st-blog .content img {
+  border-radius: 5px;
+}
+.number.text-end {
+  color: #0b7016 !important;
+}
+/*post comment btn*/
+.single-post .blog-style3 .article-style3 #comment-wrapper #respond .form-submit .submit {
+  background: #0b7016 !important;
+  color: #ffcc00;
+}
+.custom-transfer-alert {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background-color: #fff8bb;
+  border-radius: 0.3rem;
+  color: #9c9c9c;
+}
+/*cart menu*/
+.header__right .items .dropdown.dropdown-minicart .dropdown-menu .cart-total .sub-total {
+  padding: 18px 0px !important;
+}
+/*transfer calendar*/
+.daterangepicker .table-condensed .td-date.active .date {
+  background: #ffcc00 !important;
+  color: #38761d !important;
+}
+/*Roundtrip calendar*/
+.td-date.start-date {
+  background: #fff0b0 !important;
+  /* border-radius: 50% 0 0 50% !important; */
+}
+.td-date.end-date {
+  border-radius: 0 50% 50% 0 !important;
+}
+.td-date.in-range {
+  background: #fff0b0 !important;
+}
+.td-date {
+  background: rgba(0, 0, 0, 0) !important;
+}
+/*Transfer roundtrip calendar*/
+@media screen and (min-width: 992px) {
+  .daterangepicker.dropdown-menu.popup-date-custom-cartranfer.ltr.show-calendar.moveright.opensright {
+    left: 600px !important;
+  }
+}
+/*remove Cart item*/
+.booking-item-wishlist-remove {
+  color: #0b7016 !important;
+}
+.booking-item-wishlist-remove:hover {
+  color: #ffcc00 !important;
+}
+/*Custom hotel field Woo*/
+.hotel-field {
+  width: 70% !important;
+}
+.room-field {
+  width: 30% !important;
+}
+/*Woo Cart img*/
+@media screen and (max-width: 767px) {
+  .woocommerce img {
+    margin: 20px 0 !important;
+  }
+}
+.woocommerce img {
+  width: 100% !important;
+  border-radius: 8px !important;
+}
+/*Woo Coupon on Checkout*/
+.woocommerce-info,
+.woocommerce-info::before,
+.woocommerce-info::after {
+  border-top-color: #0b7016 !important;
+}
+.showcoupon {
+  color: #0b7016 !important;
+}
+.woocommerce-info::before {
+  color: #0b7016 !important;
+}
+/*Woo Checkout tour-additional*/
+#billing_tour_additional,
+#billing_transfer_note {
+  padding: 12px 10px;
+  box-sizing: border-box;
+  border: 1px solid #dae1e7;
+  border-radius: 8px;
+}
+/*Tour Highlight- What to bring header*/
+.st-section-title {
+  font-size: 26px !important;
+  color: #000 !important;
+}
+/*Slider NAV btn*/
+.single.st-header-9 .st-gallery.style-slider .owl-nav .owl-prev,
+.single.st-header-9 .st-gallery.style-slider .owl-nav .owl-next {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+.single.st-header-9 .st-gallery.style-slider .owl-nav .owl-next span:before,
+.single.st-header-9 .st-gallery.style-slider .owl-nav .owl-prev span:before {
+  color: #fff !important;
+}
+.header__right .items .dropdown .dropdown-menu li:last-child {
+  padding-left: 0px !important;
+}
+.st-contact-form.st-border-new .st-button-subbmit {
+  display: block !important;
+}
+.trf-header-wrap {
+  justify-items: center !important;
+  max-width: 600px;
+  margin: auto;
+}
+@media screen and (max-width: 767px) {
+  #st-content-wrapper.search-result-page .banner {
+    padding: 2em !important;
+  }
+  h2.trf-header {
+    font-size: 1.5rem !important;
+  }
+}
+#st-content-wrapper.search-result-page .banner {
+  padding: 5em;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+/*transfer header text*/
+h2.trf-header {
+  text-align: center;
+  color: #ffcc00 !important;
+  font-size: 1.5rem !important;
+}
+p.trf-description {
+  text-align: center;
+  font-size: 1rem !important;
+  line-height: 1.5em !important;
+  color: #ffffff !important;
+}
+.service-list-wrapper .item .title a {
+  color: #38761d !important;
+}
+#topbar,
+#topbar a {
+  color: #fff !important;
+  background-color: var(--main-color) !important;
+}
+.header__right .items li:not(:first-child) {
+  margin-left: 0px !important;
+  padding-left: 20px !important;
+}
+a.service-avatar {
+  display: none !important;
+}
+.review-score {
+  color: #38761d !important;
+}
+
+.img-fluid {
+  border-radius: 16px;
+}
+.services-item.item-elementor .item .content-item .title {
+  width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.blog-style3 .st-blog .sidebar-widget .wp-block-search__inside-wrapper .wp-block-search__button {
+  background: #38761d !important;
+}
+.meta ul li:first-child {
+  display: none !important;
+}
+/*Woo btn styling*/
+.woocommerce .wc-proceed-to-checkout .checkout-button,
+.woocommerce-page .wc-proceed-to-checkout .checkout-button {
+  background: #38761d !important;
+  color: #ffcc00 !important;
+  border: solid 1px #ffcc00 !important;
+}
+.woocommerce .wc-proceed-to-checkout .checkout-button:hover,
+.woocommerce-page .wc-proceed-to-checkout .checkout-button:hover {
+  background: #ffcc00 !important;
+  color: #38761d !important;
+  border: solid 1px #38761d !important;
+}
+.booking-item-title a {
+  font-size: 1.2rem !important;
+  color: #38761d !important;
+}
+.btn.btn-primary {
+  background: #38761d !important;
+  color: #fff !important;
+}
+.btn.btn-primary:hover {
+  background: #38761d !important;
+  color: #ffcc00 !important;
+}
+.daterangepicker select.hourselect,
+.daterangepicker select.minuteselect,
+.daterangepicker select.secondselect,
+.daterangepicker select.ampmselect {
+  color: #38761d !important;
+}
+.woocommerce-checkout #place_order {
+  background: #38761d !important;
+}
+.woocommerce-checkout #place_order:hover {
+  background: #38761d !important;
+  color: #ffcc00 !important;
+}
+.st-woo-thankyou-page .order-payment-list .order_item a {
+  color: #38761d !important;
+}
+.woocommerce .booking-list,
+.woocommerce-page .booking-list {
+  padding: 20px !important;
+}
+.woocommerce .st-woo-heading,
+.woocommerce-page .st-woo-heading {
+  padding: 1em !important;
+}
+.form-row-wide {
+  width: 100% !important;
+}
+#billing_adult_field,
+#billing_child_field,
+#billing_infant_field,
+#billing_luggage_field {
+  width: 25% !important;
+}
+.btn-cart-checkout {
+  color: #ffcc00 !important;
+}
+.st-modal-header {
+  display: inline-block;
+}
+.st-estimate-distance .transfer-map-infor {
+  color: #ffcc00;
+}
+#main-footer {
+  border-bottom: 0 !important;
+}
+/* .st-close-button {
+  padding-bottom: 1em !important;
+}
+ */

@@ -1,0 +1,126 @@
+# BEGIN LSCACHE
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+<IfModule LiteSpeed>
+RewriteEngine on
+CacheLookup on
+RewriteRule .* - [E=Cache-Control:no-autoflush]
+RewriteRule litespeed/debug/.*\.log$ - [F,L]
+RewriteRule \.litespeed_conf\.dat - [F,L]
+
+### marker ASYNC start ###
+RewriteCond %{REQUEST_URI} /wp-admin/admin-ajax\.php
+RewriteCond %{QUERY_STRING} action=async_litespeed
+RewriteRule .* - [E=noabort:1]
+### marker ASYNC end ###
+
+### marker MOBILE start ###
+RewriteCond %{HTTP_USER_AGENT} Mobile|Android|Silk/|Kindle|BlackBerry|Opera\ Mini|Opera\ Mobi [NC]
+RewriteRule .* - [E=Cache-Control:vary=%{ENV:LSCACHE_VARY_VALUE}+ismobile]
+### marker MOBILE end ###
+
+### marker NOCACHE COOKIES start ###
+RewriteCond %{HTTP_COOKIE} woocommerce_items_in_cart|wp\-hooks|jquery\-core|jquery\-migrate
+RewriteRule .* - [E=Cache-Control:no-cache]
+### marker NOCACHE COOKIES end ###
+
+### marker LOGIN COOKIE start ###
+RewriteRule .? - [E="Cache-Vary:wp-hooks,jquery-core,jquery-migrate,admin-ajax,woocommerce_cart_hash"]
+### marker LOGIN COOKIE end ###
+
+### marker WEBP start ###
+RewriteCond %{HTTP_ACCEPT} image/webp [OR]
+RewriteCond %{HTTP_USER_AGENT} iPhone\ OS\ (1[4-9]|[2-9][0-9]) [OR]
+RewriteCond %{HTTP_USER_AGENT} Firefox/([6-9][0-9]|[1-9][0-9]{2,})
+RewriteRule .* - [E=Cache-Control:vary=%{ENV:LSCACHE_VARY_VALUE}+webp]
+### marker WEBP end ###
+
+### marker DROPQS start ###
+CacheKeyModify -qs:fbclid
+CacheKeyModify -qs:gclid
+CacheKeyModify -qs:utm*
+CacheKeyModify -qs:_ga
+### marker DROPQS end ###
+
+</IfModule>
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+# END LSCACHE
+
+# BEGIN NON_LSCACHE
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+### marker BROWSER CACHE start ###
+<IfModule mod_expires.c>
+ExpiresActive on
+ExpiresByType application/pdf A43200
+ExpiresByType image/x-icon A43200
+ExpiresByType image/vnd.microsoft.icon A43200
+ExpiresByType image/svg+xml A43200
+
+ExpiresByType image/jpg A43200
+ExpiresByType image/jpeg A43200
+ExpiresByType image/png A43200
+ExpiresByType image/gif A43200
+ExpiresByType image/webp A43200
+ExpiresByType image/avif A43200
+
+ExpiresByType video/ogg A43200
+ExpiresByType audio/ogg A43200
+ExpiresByType video/mp4 A43200
+ExpiresByType video/webm A43200
+
+ExpiresByType text/css A43200
+ExpiresByType text/javascript A43200
+ExpiresByType application/javascript A43200
+ExpiresByType application/x-javascript A43200
+
+ExpiresByType application/x-font-ttf A43200
+ExpiresByType application/x-font-woff A43200
+ExpiresByType application/font-woff A43200
+ExpiresByType application/font-woff2 A43200
+ExpiresByType application/vnd.ms-fontobject A43200
+ExpiresByType font/ttf A43200
+ExpiresByType font/otf A43200
+ExpiresByType font/woff A43200
+ExpiresByType font/woff2 A43200
+
+</IfModule>
+### marker BROWSER CACHE end ###
+
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+# END NON_LSCACHE
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Fix Authorization Headers
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Multilingual wp-login redirects
+RewriteRule ^en/wp-login\.php$ /wp-login.php [QSA,L]
+RewriteRule ^fr/wp-login\.php$ /wp-login.php [QSA,L]
+RewriteRule ^de/wp-login\.php$ /wp-login.php [QSA,L]
+
+# Standard WordPress routing
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+# Security & Performance
+<IfModule mod_headers.c>
+    # Allow AJAX from same origin
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes +FollowSymLinks
+
+# Increase limits for admin-ajax
+<IfModule mod_fcgid.c>
+    FcgidMaxRequestLen 1073741824
+</IfModule>

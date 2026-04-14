@@ -1,0 +1,444 @@
+# Copyright (C) 2026 OnTheGoSystems
+# This file is distributed under the same license as the WPML Media Translation plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WPML Media Translation 3.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpml-media-translation\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-01-22T11:44:15+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml-media\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Plugin Name of the plugin
+#. translators: name ot WPML-Media plugin
+#: plugin.php
+#: classes/menus/wpml-media-posts-media-flag-notice.php:67
+msgid "WPML Media Translation"
+msgstr "WPML Media Translation"
+
+#. Plugin URI of the plugin
+#: plugin.php
+msgid "https://wpml.org/"
+msgstr "https://wpml.org/"
+
+#. Description of the plugin
+#: plugin.php
+msgid "Show different images for content in different languages | <a href=\"https://wpml.org/documentation/getting-started-guide/media-translation/?utm_source=plugin&utm_medium=gui&utm_campaign=wpmlmedia\">Documentation</a> | <a href=\"https://wpml.org/version/wpml-media-translation-3-1-0/\">WPML Media Translation 3.1.0 release notes</a>"
+msgstr "Zeigen Sie verschiedene Bilder für Inhalte in verschiedenen Sprachen an | <a href=\"https://wpml.org/documentation/getting-started-guide/media-translation/?utm_source=plugin&utm_medium=gui&utm_campaign=wpmlmedia\">Dokumentation</a> | <a href=\"https://wpml.org/version/wpml-media-translation-3-1-0/\">WPML Media Translation 3.1.0 Versionshinweise</a>"
+
+#. Author of the plugin
+#: plugin.php
+msgid "OnTheGoSystems"
+msgstr "OnTheGoSystems"
+
+#. Author URI of the plugin
+#: plugin.php
+msgid "http://www.onthegosystems.com/"
+msgstr "http://www.onthegosystems.com/"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:54
+msgid "Translating media urls in custom field translations: %s"
+msgstr "Medien-URLs in benutzerdefinierten Feldübersetzungen übersetzen: %s"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:56
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:47
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:59
+msgid "%d left"
+msgstr "%d verbleibend"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:57
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:48
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:60
+msgid "done!"
+msgstr "Fertig!"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:64
+msgid "Translating media urls in custom fields translations failed: Please try again (%s)"
+msgstr "Medien-URLs in benutzerdefinierten Feldübersetzungen fehlgeschlagen: Bitte versuchen Sie es erneut (%s)"
+
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:45
+msgid "Translating media urls in post translations: %s"
+msgstr "Medien-URLs in Beitragsübersetzungen übersetzen: %s"
+
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:55
+msgid "Translating media urls in posts translations failed: Please try again (%s)"
+msgstr "Medien-URLs in Beitragsübersetzungen fehlgeschlagen: Bitte versuchen Sie es erneut (%s)"
+
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:57
+msgid "Translating media urls in string translations: %s"
+msgstr "Medien-URLs in String-Übersetzungen übersetzen: %s"
+
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:67
+msgid "Translating media urls in string translations failed: Please try again (%s)"
+msgstr "Medien-URLs in String-Übersetzungen fehlgeschlagen: Bitte versuchen Sie es erneut (%s)"
+
+#: classes/class-wpml-media.php:215
+msgid "Started..."
+msgstr "Gestartet..."
+
+#: classes/class-wpml-media.php:383
+#: classes/menus/wpml-media-menus.php:71
+#: classes/menus/wpml-media-translations-ui.php:71
+msgid "Media Translation"
+msgstr "Medienübersetzung"
+
+#: classes/media-translation/class-wpml-media-attachment-image-update.php:68
+msgid "Failed to load the image editor"
+msgstr "Bildeditor konnte nicht geladen werden"
+
+#: classes/media-translation/class-wpml-media-get-attachment-translation-data.php:30
+#: classes/media-translation/class-wpml-media-save-translation.php:194
+msgid "Invalid nonce"
+msgstr "Ungültige Nonce"
+
+#: classes/media-translation/class-wpml-media-save-translation.php:66
+msgid "You are not allowed to edit this item."
+msgstr "Sie sind nicht berechtigt, dieses Element zu bearbeiten."
+
+#: classes/media-translation/class-wpml-media-set-posts-media-flag.php:45
+msgid "Running setup..."
+msgstr "Einrichtung wird ausgeführt..."
+
+#: classes/media-translation/class-wpml-media-set-posts-media-flag.php:79
+msgid "Setup complete!"
+msgstr "Einrichtung abgeschlossen!"
+
+#: classes/media-translation/class-wpml-media-set-posts-media-flag.php:102
+msgid "Setup in progress: %d%% complete..."
+msgstr "Einrichtung läuft: %d%% abgeschlossen..."
+
+#: classes/menus/wpml-media-help-tab.php:14
+msgid "WPML &raquo; Media Translation"
+msgstr "WPML &raquo; Medienübersetzung"
+
+#: classes/menus/wpml-media-help-tab.php:15
+msgid "WPML &raquo; Translation Management"
+msgstr "WPML &raquo; Übersetzungsmanagement"
+
+#: classes/menus/wpml-media-help-tab.php:19
+msgid "Translating Media"
+msgstr "Medien übersetzen"
+
+#: classes/menus/wpml-media-help-tab.php:21
+msgid "There are two ways for you to translate Media:"
+msgstr "Es gibt zwei Möglichkeiten, Medien zu übersetzen:"
+
+#: classes/menus/wpml-media-help-tab.php:24
+msgid "Use the dashboard on the %s page to translate your images and other media files."
+msgstr "Verwenden Sie das Dashboard auf der Seite %s, um Ihre Bilder und andere Mediendateien zu übersetzen."
+
+#: classes/menus/wpml-media-help-tab.php:28
+msgid "Use the dashboard on the %s page to send pages that contain media, for translation."
+msgstr "Verwenden Sie das Dashboard auf der Seite %s, um Seiten, die Medien enthalten, zur Übersetzung zu senden."
+
+#: classes/menus/wpml-media-help-tab.php:32
+msgid "Learn more about WPML Media Translation"
+msgstr "Erfahren Sie mehr über WPML Media Translation"
+
+#: classes/menus/wpml-media-menus.php:72
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: classes/menus/wpml-media-menus.php:73
+msgid "Save media translation"
+msgstr "Medienübersetzung speichern"
+
+#: classes/menus/wpml-media-menus.php:79
+msgid "Scan complete!"
+msgstr "Scan abgeschlossen!"
+
+#. translators: used to build a link in the "Click here to finish the setup"
+#: classes/menus/wpml-media-posts-media-flag-notice.php:70
+msgctxt "Used to build a link in the \"Click here to finish the setup\""
+msgid "here"
+msgstr "hier"
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:75
+msgid "The %1$s setup is almost complete. Click %2$s to finish the setup."
+msgstr "Die Einrichtung von %1$s ist fast abgeschlossen. Klicken Sie %2$s, um die Einrichtung abzuschließen."
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:97
+msgid "Setup required"
+msgstr "Einrichtung erforderlich"
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:111
+msgid "In order to get WPML Media Translation fully working, you need to run this set up which takes only a few moments depending on the total number of posts in your WordPress install."
+msgstr "Damit WPML Media Translation vollständig funktioniert, müssen Sie diese Einrichtung ausführen, die je nach der Gesamtzahl der Beiträge in Ihrer WordPress-Installation nur wenige Augenblicke dauert."
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:114
+msgid "Finish setup"
+msgstr "Einrichtung abschließen"
+
+#: classes/menus/wpml-media-translations-ui.php:72
+msgid "Filter by date"
+msgstr "Nach Datum filtern"
+
+#: classes/menus/wpml-media-translations-ui.php:73
+msgid "All dates"
+msgstr "Alle Daten"
+
+#: classes/menus/wpml-media-translations-ui.php:76
+msgid "Filter by translation status"
+msgstr "Nach Übersetzungsstatus filtern"
+
+#: classes/menus/wpml-media-translations-ui.php:77
+msgid "All translation statuses"
+msgstr "Alle Übersetzungsstatus"
+
+#: classes/menus/wpml-media-translations-ui.php:78
+msgid "Media file not translated"
+msgstr "Mediendatei nicht übersetzt"
+
+#: classes/menus/wpml-media-translations-ui.php:79
+msgid "Translated media uploaded"
+msgstr "Übersetzte Medien hochgeladen"
+
+#: classes/menus/wpml-media-translations-ui.php:80
+msgid "Translation in progress"
+msgstr "Übersetzung läuft"
+
+#: classes/menus/wpml-media-translations-ui.php:81
+msgid "Needs media file translation"
+msgstr "Mediendatei muss übersetzt werden"
+
+#: classes/menus/wpml-media-translations-ui.php:82
+msgid "Filter by language"
+msgstr "Nach Sprache filtern"
+
+#: classes/menus/wpml-media-translations-ui.php:83
+msgid "Any language"
+msgstr "Beliebige Sprache"
+
+#: classes/menus/wpml-media-translations-ui.php:84
+msgid "Search Media:"
+msgstr "Medien suchen:"
+
+#: classes/menus/wpml-media-translations-ui.php:85
+msgid "Title, caption or description"
+msgstr "Titel, Bildunterschrift oder Beschreibung"
+
+#: classes/menus/wpml-media-translations-ui.php:86
+msgid "Filter"
+msgstr "Filtern"
+
+#: classes/menus/wpml-media-translations-ui.php:87
+msgid "Original language"
+msgstr "Originalsprache"
+
+#: classes/menus/wpml-media-translations-ui.php:88
+msgid "Media Type"
+msgstr "Medientyp"
+
+#: classes/menus/wpml-media-translations-ui.php:89
+msgid "Copied media"
+msgstr "Kopierte Medien"
+
+#: classes/menus/wpml-media-translations-ui.php:90
+msgid "Connected media"
+msgstr "Verbundene Medien"
+
+#: classes/menus/wpml-media-translations-ui.php:91
+msgid "This media text is a copy"
+msgstr "Dieser Medientext ist eine Kopie"
+
+#: classes/menus/wpml-media-translations-ui.php:93
+msgid "Some builders like Block Editor, the Divi Image module, or WooCommerce product images, copy the image texts (alt, caption, title) into the translations as soon as you insert the image. Each translation then keeps its own copy of these texts. Changing the translations here will not update those existing translations automatically."
+msgstr "Einige Builder wie der Block-Editor, das Divi-Bildmodul oder WooCommerce-Produktbilder kopieren die Bildtexte (Alt-Text, Bildunterschrift, Titel) in die Übersetzungen, sobald Sie das Bild einfügen. Jede Übersetzung behält dann ihre eigene Kopie dieser Texte. Eine Änderung der Übersetzungen hier aktualisiert diese bestehenden Übersetzungen nicht automatisch."
+
+#: classes/menus/wpml-media-translations-ui.php:97
+msgid "This is connected media text"
+msgstr "Dies ist verbundener Medientext"
+
+#: classes/menus/wpml-media-translations-ui.php:98
+msgid "Most builders, like Elementor, Beaver Builder, Cornerstone, and many gallery plugins, simply point to the text in the Media library every time a page loads. When you update the texts here, every page (and its translations) will instantly reflect the changes."
+msgstr "Die meisten Builder, wie Elementor, Beaver Builder, Cornerstone und viele Galerie-Plugins, verweisen einfach auf den Text in der Medienbibliothek, jedes Mal, wenn eine Seite geladen wird. Wenn Sie die Texte hier aktualisieren, werden alle Seiten (und deren Übersetzungen) die Änderungen sofort widerspiegeln."
+
+#: classes/menus/wpml-media-translations-ui.php:102
+msgid "This media text is both copied and connected"
+msgstr "Dieser Medientext ist sowohl kopiert als auch verbunden"
+
+#: classes/menus/wpml-media-translations-ui.php:103
+msgid "When you update the media texts here, every page (and its translations) will instantly reflect the changes."
+msgstr "Wenn Sie die Medientexte hier aktualisieren, werden alle Seiten (und deren Übersetzungen) die Änderungen sofort widerspiegeln."
+
+#: classes/menus/wpml-media-translations-ui.php:107
+msgid "This media's texts were automatically translated, and you cannot edit them here. Instead, use the Advanced Translation Editor to edit the translation of the page where this image is inserted."
+msgstr "Die Texte dieser Medien wurden automatisch übersetzt und können hier nicht bearbeitet werden. Verwenden Sie stattdessen den Erweiterten Übersetzungseditor, um die Übersetzung der Seite zu bearbeiten, auf der dieses Bild eingefügt ist."
+
+#: classes/menus/wpml-media-translations-ui.php:111
+msgid "No attachments found"
+msgstr "Keine Anhänge gefunden"
+
+#: classes/menus/wpml-media-translations-ui.php:112
+msgid "Add media file translation"
+msgstr "Medienübersetzung hinzufügen"
+
+#. translators: %s - language name.
+#: classes/menus/wpml-media-translations-ui.php:114
+msgid "Edit %s translation"
+msgstr "Übersetzung von %s bearbeiten"
+
+#: classes/menus/wpml-media-translations-ui.php:115
+msgid "Original:"
+msgstr "Original:"
+
+#: classes/menus/wpml-media-translations-ui.php:116
+msgid "Translation:"
+msgstr "Übersetzung:"
+
+#: classes/menus/wpml-media-translations-ui.php:117
+msgid "File"
+msgstr "Datei"
+
+#: classes/menus/wpml-media-translations-ui.php:118
+msgid "Name"
+msgstr "Name"
+
+#: classes/menus/wpml-media-translations-ui.php:119
+msgid "Caption"
+msgstr "Bildunterschrift"
+
+#: classes/menus/wpml-media-translations-ui.php:120
+msgid "Alt text"
+msgstr "Alt-Text"
+
+#: classes/menus/wpml-media-translations-ui.php:121
+msgid "Description"
+msgstr "Beschreibung"
+
+#: classes/menus/wpml-media-translations-ui.php:122
+msgid "Copy from original"
+msgstr "Aus Original kopieren"
+
+#: classes/menus/wpml-media-translations-ui.php:123
+msgid "Upload translated media file"
+msgstr "Übersetzte Mediendatei hochladen"
+
+#: classes/menus/wpml-media-translations-ui.php:124
+msgid "Use a different file"
+msgstr "Eine andere Datei verwenden"
+
+#: classes/menus/wpml-media-translations-ui.php:125
+msgid "Revert to original"
+msgstr "Zum Original zurückkehren"
+
+#: classes/menus/wpml-media-translations-ui.php:126
+msgid "Restore original media file"
+msgstr "Original-Mediendatei wiederherstellen"
+
+#: classes/menus/wpml-media-translations-ui.php:128
+msgid "Any changes you make to the text here will not affect any previous publications of this media on your website. This edited version will only appear if you select it from the library to be embedded."
+msgstr "Alle Änderungen, die Sie hier am Text vornehmen, wirken sich nicht auf frühere Veröffentlichungen dieser Medien auf Ihrer Website aus. Diese bearbeitete Version wird nur angezeigt, wenn Sie sie aus der Bibliothek zum Einbetten auswählen."
+
+#: classes/menus/wpml-media-translations-ui.php:161
+msgid "Not translated"
+msgstr "Nicht übersetzt"
+
+#: classes/menus/wpml-media-translations-ui.php:162
+msgid "In progress"
+msgstr "In Bearbeitung"
+
+#: classes/menus/wpml-media-translations-ui.php:163
+msgid "Translated"
+msgstr "Übersetzt"
+
+#: classes/menus/wpml-media-translations-ui.php:164
+msgid "Needs translation"
+msgstr "Muss übersetzt werden"
+
+#: classes/menus/wpml-media-translations-ui.php:393
+msgid "Navigation"
+msgstr "Navigation"
+
+#: classes/menus/wpml-media-translations-ui.php:394
+msgid "of"
+msgstr "von"
+
+#: classes/menus/wpml-media-translations-ui.php:398
+msgid "First page"
+msgstr "Erste Seite"
+
+#: classes/menus/wpml-media-translations-ui.php:401
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+#: classes/menus/wpml-media-translations-ui.php:407
+msgid "Next page"
+msgstr "Nächste Seite"
+
+#: classes/menus/wpml-media-translations-ui.php:410
+msgid "Last page"
+msgstr "Letzte Seite"
+
+#: classes/menus/wpml-media-translations-ui.php:425
+msgid "Close"
+msgstr "Schließen"
+
+#: classes/menus/wpml-media-translations-ui.php:426
+msgid "The media that you uploaded was replaced in these translated posts:"
+msgstr "Die von Ihnen hochgeladenen Medien wurden in diesen übersetzten Beiträgen ersetzt:"
+
+#: classes/menus/wpml-media-translations-ui.php:427
+msgid "The same media might be used in other posts too. Do you want to scan and replace it?"
+msgstr "Dieselbe Mediendatei könnte auch in anderen Beiträgen verwendet werden. Möchten Sie sie scannen und ersetzen?"
+
+#: classes/menus/wpml-media-translations-ui.php:428
+msgid "The media that you uploaded will be used in future post translations. The same media might be used in already existing posts. Do you want to scan and replace it now?"
+msgstr "Die von Ihnen hochgeladenen Medien werden in zukünftigen Beitragsübersetzungen verwendet. Dieselbe Mediendatei könnte auch in bereits vorhandenen Beiträgen verwendet werden. Möchten Sie sie jetzt scannen und ersetzen?"
+
+#: classes/menus/wpml-media-translations-ui.php:429
+msgid "Scan for content that has specifically this media (faster)"
+msgstr "Nach Inhalten suchen, die speziell diese Medien enthalten (schneller)"
+
+#: classes/menus/wpml-media-translations-ui.php:430
+msgid "Scan for content that has any of the media files that I translated (takes more time)"
+msgstr "Nach Inhalten suchen, die eine der von mir übersetzten Mediendateien enthalten (dauert länger)"
+
+#: classes/menus/wpml-media-translations-ui.php:431
+msgctxt "Button label (verb)"
+msgid "Scan & Replace"
+msgstr "Scannen & Ersetzen"
+
+#: classes/privacy/class-wpml-media-privacy-content.php:19
+msgid "WPML Media Translation will send the email address and name of each manager and assigned translator as well as the content itself to Advanced Translation Editor and to the translation services which are used."
+msgstr "WPML Media Translation sendet die E-Mail-Adresse und den Namen jedes Managers und zugewiesenen Übersetzers sowie den Inhalt selbst an den Erweiterten Übersetzungseditor und an die verwendeten Übersetzungsdienste."
+
+#: classes/setup/class-wpml-media-set-initial-language.php:34
+msgid "Setting language to media: done!"
+msgstr "Sprache auf Medien einstellen: Fertig!"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:77
+msgid "Upgrade required"
+msgstr "Upgrade erforderlich"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:83
+msgid "The %1$sWPML Media%2$s database needs updating. Please run the updater and leave the tab open until it completes."
+msgstr "Die Datenbank von %1$sWPML Media%2$s muss aktualisiert werden. Bitte führen Sie das Update aus und lassen Sie den Tab geöffnet, bis es abgeschlossen ist."
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:89
+msgctxt "Update button label"
+msgid "Update"
+msgstr "Aktualisieren"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:119
+msgid "Reset new content duplication settings"
+msgstr "Einstellungen für die Duplizierung neuer Inhalte zurücksetzen"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:130
+msgid "Updating attachments translation status: %d remaining."
+msgstr "Aktualisiere den Übersetzungsstatus der Anhänge: %d verbleibend."
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:137
+msgid "Update complete!"
+msgstr "Update abgeschlossen!"
+
+#: inc/wpml-media-dependencies.class.php:29
+msgid "WPML Media is enabled but not effective. It requires <a href=\"%s\">WPML</a> in order to work."
+msgstr "WPML Media ist aktiviert, aber nicht wirksam. Es erfordert <a href=\"%s\">WPML</a>, um zu funktionieren."

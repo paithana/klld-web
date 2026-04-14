@@ -1,0 +1,444 @@
+# Copyright (C) 2026 OnTheGoSystems
+# This file is distributed under the same license as the WPML Media Translation plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WPML Media Translation 3.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpml-media-translation\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-01-22T11:44:15+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml-media\n"
+"Language: he_IL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Plugin Name of the plugin
+#. translators: name ot WPML-Media plugin
+#: plugin.php
+#: classes/menus/wpml-media-posts-media-flag-notice.php:67
+msgid "WPML Media Translation"
+msgstr "WPML Media Translation"
+
+#. Plugin URI of the plugin
+#: plugin.php
+msgid "https://wpml.org/"
+msgstr "https://wpml.org/"
+
+#. Description of the plugin
+#: plugin.php
+msgid "Show different images for content in different languages | <a href=\"https://wpml.org/documentation/getting-started-guide/media-translation/?utm_source=plugin&utm_medium=gui&utm_campaign=wpmlmedia\">Documentation</a> | <a href=\"https://wpml.org/version/wpml-media-translation-3-1-0/\">WPML Media Translation 3.1.0 release notes</a>"
+msgstr "הצג תמונות שונות עבור תוכן בשפות שונות | <a href=\"https://wpml.org/documentation/getting-started-guide/media-translation/?utm_source=plugin&utm_medium=gui&utm_campaign=wpmlmedia\">תיעוד</a> | <a href=\"https://wpml.org/version/wpml-media-translation-3-1-0/\">הערות מהדורת WPML Media Translation 3.1.0</a>"
+
+#. Author of the plugin
+#: plugin.php
+msgid "OnTheGoSystems"
+msgstr "OnTheGoSystems"
+
+#. Author URI of the plugin
+#: plugin.php
+msgid "http://www.onthegosystems.com/"
+msgstr "http://www.onthegosystems.com/"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:54
+msgid "Translating media urls in custom field translations: %s"
+msgstr "מתרגם כתובות אתרים של מדיה בתרגומי שדות מותאמים אישית: %s"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:56
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:47
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:59
+msgid "%d left"
+msgstr "%d נותרו"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:57
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:48
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:60
+msgid "done!"
+msgstr "בוצע!"
+
+#: classes/batch-media-url-translation/wpml-media-custom-field-batch-media-url-translation.php:64
+msgid "Translating media urls in custom fields translations failed: Please try again (%s)"
+msgstr "תרגום כתובות אתרים של מדיה בתרגומי שדות מותאמים אישית נכשל: אנא נסה שוב (%s)"
+
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:45
+msgid "Translating media urls in post translations: %s"
+msgstr "מתרגם כתובות אתרים של מדיה בתרגומי פוסטים: %s"
+
+#: classes/batch-media-url-translation/wpml-media-post-batch-media-url-translation.php:55
+msgid "Translating media urls in posts translations failed: Please try again (%s)"
+msgstr "תרגום כתובות אתרים של מדיה בתרגומי פוסטים נכשל: אנא נסה שוב (%s)"
+
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:57
+msgid "Translating media urls in string translations: %s"
+msgstr "מתרגם כתובות אתרים של מדיה בתרגומי מחרוזות: %s"
+
+#: classes/batch-media-url-translation/wpml-media-string-batch-media-url-translation.php:67
+msgid "Translating media urls in string translations failed: Please try again (%s)"
+msgstr "תרגום כתובות אתרים של מדיה בתרגומי מחרוזות נכשל: אנא נסה שוב (%s)"
+
+#: classes/class-wpml-media.php:215
+msgid "Started..."
+msgstr "התחיל..."
+
+#: classes/class-wpml-media.php:383
+#: classes/menus/wpml-media-menus.php:71
+#: classes/menus/wpml-media-translations-ui.php:71
+msgid "Media Translation"
+msgstr "תרגום מדיה"
+
+#: classes/media-translation/class-wpml-media-attachment-image-update.php:68
+msgid "Failed to load the image editor"
+msgstr "טעינת עורך התמונות נכשלה"
+
+#: classes/media-translation/class-wpml-media-get-attachment-translation-data.php:30
+#: classes/media-translation/class-wpml-media-save-translation.php:194
+msgid "Invalid nonce"
+msgstr "Nonce לא חוקי"
+
+#: classes/media-translation/class-wpml-media-save-translation.php:66
+msgid "You are not allowed to edit this item."
+msgstr "אינך מורשה לערוך פריט זה."
+
+#: classes/media-translation/class-wpml-media-set-posts-media-flag.php:45
+msgid "Running setup..."
+msgstr "מפעיל הגדרה..."
+
+#: classes/media-translation/class-wpml-media-set-posts-media-flag.php:79
+msgid "Setup complete!"
+msgstr "ההגדרה הושלמה!"
+
+#: classes/media-translation/class-wpml-media-set-posts-media-flag.php:102
+msgid "Setup in progress: %d%% complete..."
+msgstr "הגדרה בתהליך: %d%% הושלמה..."
+
+#: classes/menus/wpml-media-help-tab.php:14
+msgid "WPML &raquo; Media Translation"
+msgstr "WPML &laquo; תרגום מדיה"
+
+#: classes/menus/wpml-media-help-tab.php:15
+msgid "WPML &raquo; Translation Management"
+msgstr "WPML &laquo; ניהול תרגומים"
+
+#: classes/menus/wpml-media-help-tab.php:19
+msgid "Translating Media"
+msgstr "מתרגם מדיה"
+
+#: classes/menus/wpml-media-help-tab.php:21
+msgid "There are two ways for you to translate Media:"
+msgstr "ישנן שתי דרכים לתרגם מדיה:"
+
+#: classes/menus/wpml-media-help-tab.php:24
+msgid "Use the dashboard on the %s page to translate your images and other media files."
+msgstr "השתמש בלוח הבקרה בדף %s כדי לתרגם את התמונות וקבצי המדיה האחרים שלך."
+
+#: classes/menus/wpml-media-help-tab.php:28
+msgid "Use the dashboard on the %s page to send pages that contain media, for translation."
+msgstr "השתמש בלוח הבקרה בדף %s כדי לשלוח דפים המכילים מדיה, לתרגום."
+
+#: classes/menus/wpml-media-help-tab.php:32
+msgid "Learn more about WPML Media Translation"
+msgstr "למידע נוסף על WPML Media Translation"
+
+#: classes/menus/wpml-media-menus.php:72
+msgid "Cancel"
+msgstr "ביטול"
+
+#: classes/menus/wpml-media-menus.php:73
+msgid "Save media translation"
+msgstr "שמור תרגום מדיה"
+
+#: classes/menus/wpml-media-menus.php:79
+msgid "Scan complete!"
+msgstr "הסריקה הושלמה!"
+
+#. translators: used to build a link in the "Click here to finish the setup"
+#: classes/menus/wpml-media-posts-media-flag-notice.php:70
+msgctxt "Used to build a link in the \"Click here to finish the setup\""
+msgid "here"
+msgstr "כאן"
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:75
+msgid "The %1$s setup is almost complete. Click %2$s to finish the setup."
+msgstr "הגדרת %1$s כמעט הושלמה. לחץ %2$s כדי לסיים את ההגדרה."
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:97
+msgid "Setup required"
+msgstr "נדרשת הגדרה"
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:111
+msgid "In order to get WPML Media Translation fully working, you need to run this set up which takes only a few moments depending on the total number of posts in your WordPress install."
+msgstr "כדי ש-WPML Media Translation יעבוד באופן מלא, עליך להפעיל את ההגדרה הזו, אשר אורכת רק כמה רגעים בהתאם למספר הכולל של הפוסטים בהתקנת וורדפרס שלך."
+
+#: classes/menus/wpml-media-posts-media-flag-notice.php:114
+msgid "Finish setup"
+msgstr "סיים הגדרה"
+
+#: classes/menus/wpml-media-translations-ui.php:72
+msgid "Filter by date"
+msgstr "סנן לפי תאריך"
+
+#: classes/menus/wpml-media-translations-ui.php:73
+msgid "All dates"
+msgstr "כל התאריכים"
+
+#: classes/menus/wpml-media-translations-ui.php:76
+msgid "Filter by translation status"
+msgstr "סנן לפי סטטוס תרגום"
+
+#: classes/menus/wpml-media-translations-ui.php:77
+msgid "All translation statuses"
+msgstr "כל סטטוסי התרגום"
+
+#: classes/menus/wpml-media-translations-ui.php:78
+msgid "Media file not translated"
+msgstr "קובץ מדיה לא מתורגם"
+
+#: classes/menus/wpml-media-translations-ui.php:79
+msgid "Translated media uploaded"
+msgstr "מדיה מתורגמת הועלתה"
+
+#: classes/menus/wpml-media-translations-ui.php:80
+msgid "Translation in progress"
+msgstr "תרגום בתהליך"
+
+#: classes/menus/wpml-media-translations-ui.php:81
+msgid "Needs media file translation"
+msgstr "דורש תרגום קובץ מדיה"
+
+#: classes/menus/wpml-media-translations-ui.php:82
+msgid "Filter by language"
+msgstr "סנן לפי שפה"
+
+#: classes/menus/wpml-media-translations-ui.php:83
+msgid "Any language"
+msgstr "כל שפה"
+
+#: classes/menus/wpml-media-translations-ui.php:84
+msgid "Search Media:"
+msgstr "חפש מדיה:"
+
+#: classes/menus/wpml-media-translations-ui.php:85
+msgid "Title, caption or description"
+msgstr "כותרת, כיתוב או תיאור"
+
+#: classes/menus/wpml-media-translations-ui.php:86
+msgid "Filter"
+msgstr "סנן"
+
+#: classes/menus/wpml-media-translations-ui.php:87
+msgid "Original language"
+msgstr "שפת מקור"
+
+#: classes/menus/wpml-media-translations-ui.php:88
+msgid "Media Type"
+msgstr "סוג מדיה"
+
+#: classes/menus/wpml-media-translations-ui.php:89
+msgid "Copied media"
+msgstr "מדיה שהועתקה"
+
+#: classes/menus/wpml-media-translations-ui.php:90
+msgid "Connected media"
+msgstr "מדיה מחוברת"
+
+#: classes/menus/wpml-media-translations-ui.php:91
+msgid "This media text is a copy"
+msgstr "טקסט מדיה זה הוא עותק"
+
+#: classes/menus/wpml-media-translations-ui.php:93
+msgid "Some builders like Block Editor, the Divi Image module, or WooCommerce product images, copy the image texts (alt, caption, title) into the translations as soon as you insert the image. Each translation then keeps its own copy of these texts. Changing the translations here will not update those existing translations automatically."
+msgstr "בוני אתרים מסוימים, כמו Block Editor, מודול התמונות של Divi, או תמונות מוצר של WooCommerce, מעתיקים את טקסטים התמונה (alt, כיתוב, כותרת) לתרגומים ברגע שאתה מכניס את התמונה. כל תרגום שומר אז עותק משלו של טקסטים אלה. שינוי התרגומים כאן לא יעדכן את התרגומים הקיימים באופן אוטומטי."
+
+#: classes/menus/wpml-media-translations-ui.php:97
+msgid "This is connected media text"
+msgstr "זהו טקסט מדיה מחובר"
+
+#: classes/menus/wpml-media-translations-ui.php:98
+msgid "Most builders, like Elementor, Beaver Builder, Cornerstone, and many gallery plugins, simply point to the text in the Media library every time a page loads. When you update the texts here, every page (and its translations) will instantly reflect the changes."
+msgstr "רוב בוני האתרים, כמו Elementor, Beaver Builder, Cornerstone, ותוספי גלריה רבים, פשוט מצביעים על הטקסט בספריית המדיה בכל פעם שדף נטען. כאשר אתה מעדכן את הטקסטים כאן, כל דף (ותרגומיו) ישקף מיד את השינויים."
+
+#: classes/menus/wpml-media-translations-ui.php:102
+msgid "This media text is both copied and connected"
+msgstr "טקסט מדיה זה גם הועתק וגם מחובר"
+
+#: classes/menus/wpml-media-translations-ui.php:103
+msgid "When you update the media texts here, every page (and its translations) will instantly reflect the changes."
+msgstr "כאשר אתה מעדכן את טקסטים המדיה כאן, כל דף (ותרגומיו) ישקף מיד את השינויים."
+
+#: classes/menus/wpml-media-translations-ui.php:107
+msgid "This media's texts were automatically translated, and you cannot edit them here. Instead, use the Advanced Translation Editor to edit the translation of the page where this image is inserted."
+msgstr "טקסטים המדיה של מדיה זו תורגמו אוטומטית, ואינך יכול לערוך אותם כאן. במקום זאת, השתמש בעורך התרגום המתקדם כדי לערוך את תרגום הדף שבו תמונה זו מוכנסת."
+
+#: classes/menus/wpml-media-translations-ui.php:111
+msgid "No attachments found"
+msgstr "לא נמצאו קבצים מצורפים"
+
+#: classes/menus/wpml-media-translations-ui.php:112
+msgid "Add media file translation"
+msgstr "הוסף תרגום קובץ מדיה"
+
+#. translators: %s - language name.
+#: classes/menus/wpml-media-translations-ui.php:114
+msgid "Edit %s translation"
+msgstr "ערוך תרגום %s"
+
+#: classes/menus/wpml-media-translations-ui.php:115
+msgid "Original:"
+msgstr "מקור:"
+
+#: classes/menus/wpml-media-translations-ui.php:116
+msgid "Translation:"
+msgstr "תרגום:"
+
+#: classes/menus/wpml-media-translations-ui.php:117
+msgid "File"
+msgstr "קובץ"
+
+#: classes/menus/wpml-media-translations-ui.php:118
+msgid "Name"
+msgstr "שם"
+
+#: classes/menus/wpml-media-translations-ui.php:119
+msgid "Caption"
+msgstr "כיתוב"
+
+#: classes/menus/wpml-media-translations-ui.php:120
+msgid "Alt text"
+msgstr "טקסט חלופי"
+
+#: classes/menus/wpml-media-translations-ui.php:121
+msgid "Description"
+msgstr "תיאור"
+
+#: classes/menus/wpml-media-translations-ui.php:122
+msgid "Copy from original"
+msgstr "העתק מהמקור"
+
+#: classes/menus/wpml-media-translations-ui.php:123
+msgid "Upload translated media file"
+msgstr "העלה קובץ מדיה מתורגם"
+
+#: classes/menus/wpml-media-translations-ui.php:124
+msgid "Use a different file"
+msgstr "השתמש בקובץ אחר"
+
+#: classes/menus/wpml-media-translations-ui.php:125
+msgid "Revert to original"
+msgstr "חזור למקור"
+
+#: classes/menus/wpml-media-translations-ui.php:126
+msgid "Restore original media file"
+msgstr "שחזר קובץ מדיה מקורי"
+
+#: classes/menus/wpml-media-translations-ui.php:128
+msgid "Any changes you make to the text here will not affect any previous publications of this media on your website. This edited version will only appear if you select it from the library to be embedded."
+msgstr "כל שינוי שתבצע בטקסט כאן לא ישפיע על פרסומים קודמים של מדיה זו באתר שלך. גרסה ערוכה זו תופיע רק אם תבחר אותה מהספרייה להטמעה."
+
+#: classes/menus/wpml-media-translations-ui.php:161
+msgid "Not translated"
+msgstr "לא תורגם"
+
+#: classes/menus/wpml-media-translations-ui.php:162
+msgid "In progress"
+msgstr "בתהליך"
+
+#: classes/menus/wpml-media-translations-ui.php:163
+msgid "Translated"
+msgstr "תורגם"
+
+#: classes/menus/wpml-media-translations-ui.php:164
+msgid "Needs translation"
+msgstr "דורש תרגום"
+
+#: classes/menus/wpml-media-translations-ui.php:393
+msgid "Navigation"
+msgstr "ניווט"
+
+#: classes/menus/wpml-media-translations-ui.php:394
+msgid "of"
+msgstr "מתוך"
+
+#: classes/menus/wpml-media-translations-ui.php:398
+msgid "First page"
+msgstr "עמוד ראשון"
+
+#: classes/menus/wpml-media-translations-ui.php:401
+msgid "Previous page"
+msgstr "עמוד קודם"
+
+#: classes/menus/wpml-media-translations-ui.php:407
+msgid "Next page"
+msgstr "עמוד הבא"
+
+#: classes/menus/wpml-media-translations-ui.php:410
+msgid "Last page"
+msgstr "עמוד אחרון"
+
+#: classes/menus/wpml-media-translations-ui.php:425
+msgid "Close"
+msgstr "סגור"
+
+#: classes/menus/wpml-media-translations-ui.php:426
+msgid "The media that you uploaded was replaced in these translated posts:"
+msgstr "המדיה שהעלית הוחלפה בפוסטים מתורגמים אלה:"
+
+#: classes/menus/wpml-media-translations-ui.php:427
+msgid "The same media might be used in other posts too. Do you want to scan and replace it?"
+msgstr "ייתכן שאותה מדיה משמשת גם בפוסטים אחרים. האם ברצונך לסרוק ולהחליף אותה?"
+
+#: classes/menus/wpml-media-translations-ui.php:428
+msgid "The media that you uploaded will be used in future post translations. The same media might be used in already existing posts. Do you want to scan and replace it now?"
+msgstr "המדיה שהעלית תשמש בתרגומי פוסטים עתידיים. ייתכן שאותה מדיה משמשת בפוסטים קיימים. האם ברצונך לסרוק ולהחליף אותה כעת?"
+
+#: classes/menus/wpml-media-translations-ui.php:429
+msgid "Scan for content that has specifically this media (faster)"
+msgstr "סרוק תוכן שיש בו מדיה זו באופן ספציפי (מהיר יותר)"
+
+#: classes/menus/wpml-media-translations-ui.php:430
+msgid "Scan for content that has any of the media files that I translated (takes more time)"
+msgstr "סרוק תוכן שיש בו אחד מקבצי המדיה שתרגמתי (לוקח יותר זמן)"
+
+#: classes/menus/wpml-media-translations-ui.php:431
+msgctxt "Button label (verb)"
+msgid "Scan & Replace"
+msgstr "סרוק והחלף"
+
+#: classes/privacy/class-wpml-media-privacy-content.php:19
+msgid "WPML Media Translation will send the email address and name of each manager and assigned translator as well as the content itself to Advanced Translation Editor and to the translation services which are used."
+msgstr "WPML Media Translation ישלח את כתובת הדוא\"ל והשם של כל מנהל ומתרגם שהוקצה, כמו גם את התוכן עצמו, לעורך התרגום המתקדם ולשירותי התרגום המשמשים."
+
+#: classes/setup/class-wpml-media-set-initial-language.php:34
+msgid "Setting language to media: done!"
+msgstr "הגדרת שפה למדיה: בוצע!"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:77
+msgid "Upgrade required"
+msgstr "נדרש שדרוג"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:83
+msgid "The %1$sWPML Media%2$s database needs updating. Please run the updater and leave the tab open until it completes."
+msgstr "מסד הנתונים של %1$sWPML Media%2$s דורש עדכון. אנא הפעל את העדכון והשאר את הלשונית פתוחה עד לסיומו."
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:89
+msgctxt "Update button label"
+msgid "Update"
+msgstr "עדכן"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:119
+msgid "Reset new content duplication settings"
+msgstr "אפס הגדרות שכפול תוכן חדש"
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:130
+msgid "Updating attachments translation status: %d remaining."
+msgstr "מעדכן סטטוס תרגום קבצים מצורפים: %d נותרו."
+
+#: classes/upgrade/class-wpml-media-2-3-0-migration.php:137
+msgid "Update complete!"
+msgstr "העדכון הושלם!"
+
+#: inc/wpml-media-dependencies.class.php:29
+msgid "WPML Media is enabled but not effective. It requires <a href=\"%s\">WPML</a> in order to work."
+msgstr "WPML Media מופעל אך אינו יעיל. הוא דורש <a href=\"%s\">WPML</a> כדי לעבוד."

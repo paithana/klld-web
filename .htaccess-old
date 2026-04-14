@@ -1,0 +1,121 @@
+# BEGIN LSCACHE
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+<IfModule LiteSpeed>
+RewriteEngine on
+CacheLookup on
+RewriteRule .* - [E=Cache-Control:autoflush]
+RewriteRule litespeed/debug/.*\.log$ - [F,L]
+RewriteRule \.litespeed_conf\.dat - [F,L]
+
+### marker ASYNC start ###
+RewriteCond %{REQUEST_URI} ^/wp-admin/admin-ajax\.php$ [NC]
+RewriteRule .* - [E=Cache-Control:no-cache,E=noabort:1,L]
+### marker ASYNC end ###
+
+### marker MOBILE start ###
+RewriteCond %{HTTP_USER_AGENT} Mobile|Android|Silk/|Kindle|BlackBerry|Opera\ Mini|Opera\ Mobi [NC]
+RewriteRule .* - [E=Cache-Control:vary=%{ENV:LSCACHE_VARY_VALUE}+ismobile]
+### marker MOBILE end ###
+
+### marker NOCACHE COOKIES start ###
+RewriteCond %{HTTP_COOKIE} (woocommerce_items_in_cart|wp\-hooks|jquery\-core|jquery\-migrate|wordpress_logged_in) [NC]
+RewriteRule .* - [E=Cache-Control:no-cache]
+### marker NOCACHE COOKIES end ###
+
+### marker LOGIN COOKIE start ###
+RewriteRule .? - [E="Cache-Vary:wp-hooks,jquery-core,jquery-migrate,admin-ajax,woocommerce_cart_hash"]
+### marker LOGIN COOKIE end ###
+
+### marker WEBP start ###
+RewriteCond %{HTTP_ACCEPT} image/webp [OR]
+RewriteCond %{HTTP_USER_AGENT} iPhone\ OS\ (1[4-9]|[2-9][0-9]) [OR]
+RewriteCond %{HTTP_USER_AGENT} Firefox/([6-9][0-9]|[1-9][0-9]{2,})
+RewriteRule .* - [E=Cache-Control:vary=%{ENV:LSCACHE_VARY_VALUE}+webp]
+### marker WEBP end ###
+
+### marker DROPQS start ###
+CacheKeyModify -qs:fbclid
+CacheKeyModify -qs:gclid
+CacheKeyModify -qs:utm*
+CacheKeyModify -qs:_ga
+CacheKeyModify -qs:mc_cid
+CacheKeyModify -qs:mc_eid
+### marker DROPQS end ###
+
+</IfModule>
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+# END LSCACHE
+
+# BEGIN NON_LSCACHE
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+### marker BROWSER CACHE start ###
+<IfModule mod_expires.c>
+ExpiresActive on
+ExpiresByType application/pdf A2592000
+ExpiresByType image/x-icon A2592000
+ExpiresByType image/vnd.microsoft.icon A2592000
+ExpiresByType image/svg+xml A2592000
+ExpiresByType image/jpg A2592000
+ExpiresByType image/jpeg A2592000
+ExpiresByType image/png A2592000
+ExpiresByType image/gif A2592000
+ExpiresByType image/webp A2592000
+ExpiresByType image/avif A2592000
+ExpiresByType video/ogg A2592000
+ExpiresByType audio/ogg A2592000
+ExpiresByType video/mp4 A2592000
+ExpiresByType video/webm A2592000
+ExpiresByType text/css A2592000
+ExpiresByType text/javascript A2592000
+ExpiresByType application/javascript A2592000
+ExpiresByType application/x-javascript A2592000
+ExpiresByType application/x-font-ttf A2592000
+ExpiresByType application/x-font-woff A2592000
+ExpiresByType application/font-woff A2592000
+ExpiresByType application/font-woff2 A2592000
+ExpiresByType application/vnd.ms-fontobject A2592000
+ExpiresByType font/ttf A2592000
+ExpiresByType font/otf A2592000
+ExpiresByType font/woff A2592000
+ExpiresByType font/woff2 A2592000
+</IfModule>
+### marker BROWSER CACHE end ###
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+# END NON_LSCACHE
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Fix Authorization Headers
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Multilingual wp-login redirects
+RewriteRule ^en/wp-login\.php$ /wp-login.php [QSA,L]
+RewriteRule ^fr/wp-login\.php$ /wp-login.php [QSA,L]
+RewriteRule ^de/wp-login\.php$ /wp-login.php [QSA,L]
+
+# Standard WordPress routing
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+# Security & Performance
+<IfModule mod_headers.c>
+    # Allow AJAX from same origin
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes +FollowSymLinks
+
+# Increase limits for admin-ajax
+<IfModule mod_fcgid.c>
+    FcgidMaxRequestLen 1073741824
+</IfModule>
