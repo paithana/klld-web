@@ -111,23 +111,32 @@ class OTAReviewSync {
             echo "Processing: {$tour->post_title} (#{$tour->ID})\n";
             
             $mode = 'auto';
-            if (php_sapi_name() === 'cli') {
+            if (php_sapi_name() === 'cli' || PHP_SAPI === 'cli') {
                 global $_CLI;
                 $mode = $_CLI['mode'] ?? 'auto';
             } else {
                 $mode = $_GET['mode'] ?? 'auto';
             }
+            echo "  [DEBUG] Selected Mode: $mode\n";
 
             $gyg_id = get_post_meta($tour->ID, '_gyg_activity_id', true);
             $via_id = get_post_meta($tour->ID, '_viator_activity_id', true);
 
             global $force_sync;
-            $mode = isset($_GET['mode']) ? sanitize_text_field($_GET['mode']) : 'auto';
-            if ($gyg_id) {
-                $this->sync_gyg($tour->ID, $gyg_id, $target_limit, $force_sync, $mode);
-            }
-            if ($via_id) {
-                $this->sync_viator($tour->ID, $via_id, $target_limit, $force_sync);
+            /**
+             * Multilingual Duplication:
+             * For each tour, we find all associated translation post IDs (EN, DE, FR, etc.)
+             * and sync reviews to each one.
+             */
+            $localized_ids = $this->get_translated_post_ids($tour->ID);
+            
+            foreach ($localized_ids as $target_post_id) {
+                if ($gyg_id) {
+                    $this->sync_gyg($target_post_id, $gyg_id, $target_limit, $force_sync, $mode);
+                }
+                if ($via_id) {
+                    $this->sync_viator($target_post_id, $via_id, $target_limit, $force_sync);
+                }
             }
 
             // Recalculate summary
@@ -206,6 +215,7 @@ class OTAReviewSync {
             // 3. Trying Travelers-API fallback (Only if mode is 'auto' or 'traveler')
             if (!$response_body && ($mode === 'auto' || $mode === 'traveler')) {
                 $fallback_url = "https://travelers-api.getyourguide.com/activities/{$activity_id}/reviews?limit={$batch}";
+                echo "  [GYG] Trying Travelers-API Fallback: $fallback_url\n";
                 $resp = wp_remote_get($fallback_url, [
                     'timeout' => 20,
                     'headers' => [
@@ -323,14 +333,18 @@ class OTAReviewSync {
         echo "  - Viator: Sync'd $total_imported reviews for $product_code\n";
     }
 
-    private function upsert_review($post_id, $source, $remote_id, $data) {
+    public function upsert_review($post_id, $source, $remote_id, $data) {
         global $wpdb;
         $meta_key = $source . '_review_id';
         
-        // Check if exists
+        // Check if exists for THIS specific post
         $comment_id = $wpdb->get_var($wpdb->prepare(
-            "SELECT comment_id FROM $wpdb->commentmeta WHERE meta_key = %s AND meta_value = %s LIMIT 1",
-            $meta_key, $remote_id
+            "SELECT cm.comment_id 
+             FROM {$wpdb->commentmeta} cm
+             JOIN {$wpdb->comments} c ON c.comment_ID = cm.comment_id
+             WHERE cm.meta_key = %s AND cm.meta_value = %s AND c.comment_post_ID = %d 
+             LIMIT 1",
+            $meta_key, $remote_id, $post_id
         ));
 
         if ($comment_id) return false;
@@ -339,12 +353,17 @@ class OTAReviewSync {
         $title = !empty($data['title']) ? $data['title'] : wp_trim_words($data['content'], 6, '...');
         if (!$title) $title = "Expert tour from " . ucfirst($source);
 
+        // Prepare localized sub-rating labels
+        $lang = $this->get_post_language($post_id);
+        $labels = $this->get_sub_rating_labels($lang);
+
         // Prepare serialized stats for Traveler Theme
         $stats = [
-            'Itinerary' => $rating,
-            'Tour guide' => $rating,
-            'Service' => $rating,
-            'Driver' => $rating
+            $labels['statItinerary'] => (float)($data['statItinerary'] ?? $rating),
+            $labels['statGuide']      => (float)($data['statGuide'] ?? $rating),
+            $labels['statService']    => (float)($data['statService'] ?? $rating),
+            $labels['statDriver']     => (float)($data['statDriver'] ?? $rating),
+            $labels['statFood']       => (float)($data['statFood'] ?? $rating)
         ];
         $serialized_stats = serialize($stats);
 
@@ -365,10 +384,13 @@ class OTAReviewSync {
             update_comment_meta($new_id, 'comment_rate', $rating);
             update_comment_meta($new_id, 'comment_title', $title);
             update_comment_meta($new_id, 'st_review_stats', $serialized_stats);
-            update_comment_meta($new_id, 'st_stat_itinerary', $rating);
-            update_comment_meta($new_id, 'st_stat_tour-guide', $rating);
-            update_comment_meta($new_id, 'st_stat_service', $rating);
-            update_comment_meta($new_id, 'st_stat_driver', $rating);
+            
+            // Sub-rating individual keys (localized)
+            foreach ($stats as $label => $val) {
+                $meta_key_sub = 'st_stat_' . sanitize_title($label);
+                update_comment_meta($new_id, $meta_key_sub, $val);
+            }
+
             update_comment_meta($new_id, $meta_key, $remote_id);
             update_comment_meta($new_id, 'ota_source', $source);
             update_comment_meta($new_id, '_comment_like_count', 0);
@@ -379,13 +401,13 @@ class OTAReviewSync {
         return false;
     }
 
-    private function normalize_date($d) {
+    public function normalize_date($d) {
         if (!$d) return current_time('mysql');
         $time = strtotime($d);
         return $time ? date('Y-m-d H:i:s', $time) : current_time('mysql');
     }
 
-    private function update_summary($post_id) {
+    public function update_summary($post_id) {
         global $wpdb;
         $stats = $wpdb->get_row($wpdb->prepare(
             "SELECT COUNT(*) as total, AVG(CAST(m.meta_value AS DECIMAL(10,1))) as avg 
@@ -400,19 +422,77 @@ class OTAReviewSync {
             update_post_meta($post_id, 'rate_review', round($stats->avg, 1));
         }
     }
+
+    public function get_translated_post_ids($post_id) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'icl_translations';
+        
+        $trid = $wpdb->get_var($wpdb->prepare(
+            "SELECT trid FROM {$table} WHERE element_id = %d AND element_type = 'post_st_tours' LIMIT 1",
+            $post_id
+        ));
+
+        if (!$trid) return [$post_id];
+
+        $ids = $wpdb->get_col($wpdb->prepare(
+            "SELECT element_id FROM {$table} WHERE trid = %d AND element_type = 'post_st_tours'",
+            $trid
+        ));
+
+        return !empty($ids) ? $ids : [$post_id];
+    }
+
+    public function get_post_language($post_id) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'icl_translations';
+        $lang = $wpdb->get_var($wpdb->prepare(
+            "SELECT language_code FROM {$table} WHERE element_id = %d AND element_type = 'post_st_tours' LIMIT 1",
+            $post_id
+        ));
+        return $lang ?: 'en';
+    }
+
+    public function get_sub_rating_labels($lang = 'en') {
+        $labels = [
+            'en' => [
+                'statGuide' => 'Tour guide',
+                'statDriver' => 'Transportation',
+                'statService' => 'Service',
+                'statItinerary' => 'Organization',
+                'statFood' => 'Food'
+            ],
+            'de' => [
+                'statGuide' => 'Reiseleiter',
+                'statDriver' => 'Transport',
+                'statService' => 'Service',
+                'statItinerary' => 'Organisation',
+                'statFood' => 'Essen'
+            ],
+            'fr' => [
+                'statGuide' => 'Guide touristique',
+                'statDriver' => 'Transport',
+                'statService' => 'Service',
+                'statItinerary' => 'Organisation',
+                'statFood' => 'Nourriture'
+            ]
+        ];
+        return isset($labels[$lang]) ? $labels[$lang] : $labels['en'];
+    }
 }
 
-$sync = new OTAReviewSync();
-$results = $sync->run();
+if ( ! defined( 'KLLD_SYNC_NO_RUN' ) ) {
+    $sync = new OTAReviewSync();
+    $results = $sync->run();
 
-if (isset($_GET['format']) && $_GET['format'] === 'json') {
-    $log = ob_get_clean();
-    header('Content-Type: application/json');
-    echo json_encode([
-        'success' => true,
-        'log' => $log,
-        'results' => $results,
-        'timestamp' => date('Y-m-d H:i:s')
-    ]);
-    exit;
+    if (isset($_GET['format']) && $_GET['format'] === 'json') {
+        $log = ob_get_clean();
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'log' => $log,
+            'results' => $results,
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        exit;
+    }
 }

@@ -33,7 +33,7 @@
 
             $badge_html = '';
             if ($is_gyg) {
-                $badge_html = '<span class="ota-badge badge-gyg" style="display:inline-flex; align-items:center; padding:4px 6px; background:#ff5533; color:#fff; border-radius:4px;" title="GetYourGuide"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M12 11c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></svg></span>';
+                $badge_html = '<span class="ota-badge badge-gyg" style="display:inline-flex; align-items:center; padding:4px 6px; background:#ff5533; color:#fff; border-radius:4px;" title="GetYourGuide"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 17.6c-4.197 0-7.6-3.403-7.6-7.6s3.403-7.6 7.6-7.6 7.6 3.403 7.6 7.6-3.403 7.6-7.6 7.6z"/><circle cx="9" cy="9.5" r="1.8"/><circle cx="15" cy="9.5" r="1.8"/></svg></span>';
             } elseif ($is_via) {
                 $badge_html = '<span class="ota-badge badge-viator" style="display:inline-flex; align-items:center; padding:4px 6px; background:#00af87; color:#fff; border-radius:4px;" title="Viator"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M12 2L2 19h20L12 2zm0 4.5l6.5 11h-13L12 6.5z"/></svg></span>';
             } elseif ($is_tri) {
@@ -52,34 +52,22 @@
                 <div class="media d-flex align-items-center">
                     <div class="media-left">
                         <?php 
+                        $img_dir = get_stylesheet_directory_uri() . '/inc/ota-tools/img/';
                         if ($is_gyg || $is_via || $is_tri || $is_gmb || $is_tp) {
-                            $avatar_bg = '#eee';
-                            $avatar_svg = '';
-                            $avatar_color = '#fff';
-                            
-                            if ($is_gyg) { 
-                                $avatar_bg = '#ff5533'; 
-                                $avatar_svg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M12 11c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></svg>';
-                            } elseif ($is_via) { 
-                                $avatar_bg = '#00af87'; 
-                                $avatar_svg = '<svg viewBox="0 0 24 24"><path d="M12 2L2 19h20L12 2zm0 4.5l6.5 11h-13L12 6.5z"/></svg>';
-                            } elseif ($is_tri) { 
-                                $avatar_bg = '#34e0a1'; 
-                                $avatar_color = '#000';
-                                $avatar_svg = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.34.02-.67.07-1 .59-3.95 3.96-6.9 7.93-6.9a8.006 8.006 0 010 16z"/><circle cx="8" cy="12" r="2" fill="currentColor"/><circle cx="16" cy="12" r="2" fill="currentColor"/></svg>';
-                            } elseif ($is_gmb) { 
-                                $avatar_bg = '#4285F4'; 
-                                $avatar_svg = '<svg viewBox="0 0 24 24"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 1.56-1.56 2.73-3.21 2.73a3.98 3.98 0 01-3.98-3.98c0-2.19 1.79-3.98 3.98-3.98 1.06 0 1.97.41 2.65 1.05l2.1-2.1C18.98 6.3 17.15 5.5 15.12 5.5a8.49 8.49 0 100 17c4.71 0 8.48-3.41 8.48-8.5 0-.64-.08-1.26-.25-1.9z"/></svg>';
-                            } elseif ($is_tp) { 
-                                $avatar_bg = '#00b67a'; 
-                                $avatar_svg = '<svg viewBox="0 0 24 24"><path d="M12 2l2.45 7.55h7.94l-6.43 4.67 2.46 7.55-6.42-4.66-6.42 4.66 2.45-7.55-6.43-4.67h7.94L12 2z"/></svg>';
-                            }
+                            $avatar_url = '';
+                            if ($is_gyg) $avatar_url = $img_dir . 'avatar-gyg.svg';
+                            elseif ($is_via) $avatar_url = $img_dir . 'avatar-viator.svg';
+                            elseif ($is_tri) $avatar_url = $img_dir . 'avatar-tripadvisor.svg';
+                            elseif ($is_gmb) $avatar_url = $img_dir . 'avatar-google.svg';
+                            elseif ($is_tp)  $avatar_url = $img_dir . 'avatar-trustpilot.svg';
 
-                            echo '<div class="ota-avatar" style="width:50px; height:50px; border-radius:50%; background:'.esc_attr($avatar_bg).'; display:flex; align-items:center; justify-content:center; color:'.esc_attr($avatar_color).'; fill:currentColor;">';
-                            echo str_replace('<svg', '<svg style="width:28px; height:28px;"', $avatar_svg);
-                            echo '</div>';
+                            if ($avatar_url) {
+                                echo '<img src="' . esc_url($avatar_url) . '" alt="OTA Avatar" class="avatar ota-avatar" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">';
+                            } else {
+                                echo st_get_profile_avatar($comment->user_id, 50);
+                            }
                         } else {
-                            echo st_get_profile_avatar( $user_id, 50 );
+                            echo st_get_profile_avatar($comment->user_id, 50);
                         }
                         ?>
                     </div>

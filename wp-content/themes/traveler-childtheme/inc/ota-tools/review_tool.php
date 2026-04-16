@@ -9,8 +9,35 @@ if ( ! defined( 'ABSPATH' ) ) {
     require_once( dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/wp-load.php' );
 }
 
-if ( ! current_user_can( 'manage_options' ) ) {
+if ( ! current_user_can( 'manage_options' ) && ! defined('KLLD_TOOL_RUN') ) {
     wp_die( '<h1>Unauthorized</h1><p>You need Administrator privileges to access this tool.</p>' );
+}
+
+/**
+ * Helper: Find all translations of a tour post
+ */
+function klld_get_translated_post_ids($post_id) {
+    global $wpdb;
+    $table = $wpdb->prefix . 'icl_translations';
+    
+    // Check if table exists (WPML might be inactive)
+    if ($wpdb->get_var("SHOW TABLES LIKE '$table'") !== $table) {
+        return [$post_id];
+    }
+
+    $trid = $wpdb->get_var($wpdb->prepare(
+        "SELECT trid FROM {$table} WHERE element_id = %d AND element_type = 'post_st_tours' LIMIT 1",
+        $post_id
+    ));
+
+    if (!$trid) return [$post_id];
+
+    $ids = $wpdb->get_col($wpdb->prepare(
+        "SELECT element_id FROM {$table} WHERE trid = %d AND element_type = 'post_st_tours'",
+        $trid
+    ));
+
+    return !empty($ids) ? $ids : [$post_id];
 }
 
 // ── AJAX Handler: Save Mappings ──────────────────────────────────────────
@@ -288,6 +315,21 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
             }
         }
         wp_send_json_success(['message' => "Re-mapped $mapped orphan reviews using keywords."]);
+    } elseif ($job === 'refresh_ratings') {
+        // Recalculate all ratings for all mapped tours
+        $tour_ids = [37796, 14528, 14583, 14625, 14755, 14761, 14789, 14790, 14791, 15162, 15166, 15168, 16171, 49149, 16255, 16271, 16299, 16321, 16352, 16371, 27793, 28002, 28139, 14353, 52439];
+        $total_updated = 0;
+        
+        foreach ($tour_ids as $id) {
+            $localized_ids = klld_get_translated_post_ids($id);
+            foreach ($localized_ids as $tid) {
+                if (function_exists('st_helper_update_total_review')) {
+                    st_helper_update_total_review($tid);
+                    $total_updated++;
+                }
+            }
+        }
+        wp_send_json_success(['message' => "Successfully refreshed aggregate ratings for $total_updated localized tour pages."]);
     }
     wp_send_json_error('Unknown maintenance job.');
 }
@@ -300,70 +342,89 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
     global $wpdb;
     $count = 0;
     foreach ($batch as $entry) {
-        $post_id  = intval($entry['postId'] ?? 0);
+        $post_id   = intval($entry['postId'] ?? 0);
         $review_id = sanitize_text_field($entry['reviewId'] ?? '');
         $meta_key  = sanitize_text_field($entry['metaKey'] ?? '');
+        
         if (!$post_id || !$review_id || !$meta_key) continue;
 
-        // 1. DEDUPLICATION: Remove old version of this OTA review
-        $old_id = $wpdb->get_var($wpdb->prepare("SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = %s AND meta_value = %s LIMIT 1", $meta_key, $review_id));
-        if ($old_id) {
-            wp_delete_comment($old_id, true);
-        }
+        $localized_ids = klld_get_translated_post_ids($post_id);
 
-        // 2. INSERT: Add new comment
-        $comment_data = [
-            'comment_post_ID'      => $post_id,
-            'comment_author'       => sanitize_text_field($entry['author'] ?? 'Traveler'),
-            'comment_author_email' => sanitize_email($entry['email'] ?? 'traveler@getyourguide.com'),
-            'comment_content'      => wp_kses_post($entry['content'] ?? ''),
-            'comment_type'         => 'st_reviews',
-            'comment_parent'       => 0,
-            'user_id'              => 0,
-            'comment_author_IP'    => '127.0.0.1',
-            'comment_agent'        => 'KLLD OTA Importer',
-            'comment_date'         => sanitize_text_field($entry['dateStr'] ?? current_time('mysql')),
-            'comment_approved'     => 1,
-        ];
-        $new_id = wp_insert_comment($comment_data);
-
-        if ($new_id) {
-            // 3. PERSIST META
-            update_comment_meta($new_id, $meta_key, $review_id);
-            update_comment_meta($new_id, 'st_category_name', 'st_tours');
-            update_comment_meta($new_id, 'comment_rate', intval($entry['rating'] ?? 5));
-            
-            // Serialized Traveler Stats (language-aware)
-            $lang = $entry['targetLang'] ?? 'en';
-            $labels = [
-                'en' => ['iti' => 'Itinerary', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Driver'],
-                'de' => ['iti' => 'Reiseverlauf', 'guide' => 'Reiseleiter', 'svc' => 'Service', 'drv' => 'Fahrer'],
-                'da' => ['iti' => 'Rejseplan', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Chauff\u00f8r'],
-                'no' => ['iti' => 'Reiseplan', 'guide' => 'Turguide', 'svc' => 'Service', 'drv' => 'Sj\u00e5f\u00f8r'],
-                'sv' => ['iti' => 'Resplan', 'guide' => 'Reseledare', 'svc' => 'Service', 'drv' => 'F\u00f6rare'],
-                'fr' => ['iti' => 'Itin\u00e9raire', 'guide' => 'Guide touristique', 'svc' => 'Service', 'drv' => 'Chauffeur'],
-                'nl' => ['iti' => 'Reisroute', 'guide' => 'Gids', 'svc' => 'Service', 'drv' => 'Bestuurder'],
-            ];
-            $l = $labels[$lang] ?? $labels['en'];
-            
-            $stats = [
-                $l['iti']   => intval($entry['statItinerary'] ?? $entry['rating']),
-                $l['guide'] => intval($entry['statGuide']     ?? $entry['rating']),
-                $l['svc']   => intval($entry['statService']   ?? $entry['rating']),
-                $l['drv']   => intval($entry['statDriver']    ?? $entry['rating']),
-            ];
-            update_comment_meta($new_id, 'st_stat_itinerary', $stats[$l['iti']]);
-            update_comment_meta($new_id, 'st_stat_tour-guide', $stats[$l['guide']]);
-            update_comment_meta($new_id, 'st_stat_service', $stats[$l['svc']]);
-            update_comment_meta($new_id, 'st_stat_driver', $stats[$l['drv']]);
-            
-            update_comment_meta($new_id, 'st_review_stats', serialize($stats));
-
-            // Sync total counts for post
-            if (function_exists('st_helper_update_total_review')) {
-                st_helper_update_total_review($post_id);
+        foreach ($localized_ids as $target_post_id) {
+            // 1. DEDUPLICATION: Remove old version of this OTA review for THIS localized post
+            $old_id = $wpdb->get_var($wpdb->prepare("SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = %s AND meta_value = %s LIMIT 1", $meta_key, $review_id));
+            if ($old_id) {
+                // Verify if the old comment belongs to the target post to avoid accidental deletion
+                $old_comment = get_comment($old_id);
+                if ($old_comment && (int)$old_comment->comment_post_ID === (int)$target_post_id) {
+                    wp_delete_comment($old_id, true);
+                }
             }
-            $count++;
+
+            // 2. INSERT: Add new comment
+            $comment_data = [
+                'comment_post_ID'      => $target_post_id,
+                'comment_author'       => sanitize_text_field($entry['author'] ?? 'Traveler'),
+                'comment_author_email' => sanitize_email($entry['email'] ?? 'traveler@getyourguide.com'),
+                'comment_content'      => wp_kses_post($entry['content'] ?? ''),
+                'comment_type'         => 'st_reviews',
+                'comment_parent'       => 0,
+                'user_id'              => 0,
+                'comment_author_IP'    => '127.0.0.1',
+                'comment_agent'        => 'KLLD OTA Importer',
+                'comment_date'         => sanitize_text_field($entry['dateStr'] ?? current_time('mysql')),
+                'comment_approved'     => 1,
+            ];
+            $new_id = wp_insert_comment($comment_data);
+
+            if ($new_id) {
+                // 3. PERSIST META
+                update_comment_meta($new_id, $meta_key, $review_id);
+                update_comment_meta($new_id, 'st_category_name', 'st_tours');
+                update_comment_meta($new_id, 'comment_rate', intval($entry['rating'] ?? 5));
+                
+                // Serialized Traveler Stats (language-aware)
+                // We use the language of the target_post_id to determine labels
+                $target_lang = $wpdb->get_var($wpdb->prepare("SELECT language_code FROM {$wpdb->prefix}icl_translations WHERE element_id = %d AND element_type = 'post_st_tours' LIMIT 1", $target_post_id)) ?: 'en';
+                
+                $labels = [
+                    'en' => ['iti' => 'Itinerary', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Driver', 'food' => 'Food', 'trans' => 'Transport'],
+                    'de' => ['iti' => 'Reiseverlauf', 'guide' => 'Reiseleiter', 'svc' => 'Service', 'drv' => 'Fahrer', 'food' => 'Essen', 'trans' => 'Transport'],
+                    'da' => ['iti' => 'Rejseplan', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Chauff\u00f8r', 'food' => 'Mad', 'trans' => 'Transport'],
+                    'no' => ['iti' => 'Reiseplan', 'guide' => 'Turguide', 'svc' => 'Service', 'drv' => 'Sj\u00e5f\u00f8r', 'food' => 'Mat', 'trans' => 'Transport'],
+                    'sv' => ['iti' => 'Resplan', 'guide' => 'Reseledare', 'svc' => 'Service', 'drv' => 'F\u00f6rare', 'food' => 'Mat', 'trans' => 'Transport'],
+                    'fr' => ['iti' => 'Itin\u00e9raire', 'guide' => 'Guide touristique', 'svc' => 'Service', 'drv' => 'Chauffeur', 'food' => 'Nourriture', 'trans' => 'Transport'],
+                    'nl' => ['iti' => 'Reisroute', 'guide' => 'Gids', 'svc' => 'Service', 'drv' => 'Bestuurder', 'food' => 'Eten', 'trans' => 'Vervoer'],
+                ];
+                $l = $labels[$target_lang] ?? $labels['en'];
+                
+                $stats = [
+                    $l['iti']   => intval($entry['statItinerary'] ?? $entry['rating']),
+                    $l['guide'] => intval($entry['statGuide']     ?? $entry['rating']),
+                    $l['svc']   => intval($entry['statService']   ?? $entry['rating']),
+                    $l['drv']   => intval($entry['statDriver']    ?? $entry['rating']),
+                ];
+                // Add Food & Transport to serialized stats if provided
+                if (isset($entry['statFood'])) $stats[$l['food']] = intval($entry['statFood']);
+                if (isset($entry['statTransport'])) $stats[$l['trans']] = intval($entry['statTransport']);
+
+                update_comment_meta($new_id, 'st_stat_itinerary', $stats[$l['iti']]);
+                update_comment_meta($new_id, 'st_stat_tour-guide', $stats[$l['guide']]);
+                update_comment_meta($new_id, 'st_stat_service', $stats[$l['svc']]);
+                update_comment_meta($new_id, 'st_stat_driver', $stats[$l['drv']]);
+                
+                // New fields from user example
+                update_comment_meta($new_id, 'st_stat_food', intval($entry['statFood'] ?? $entry['rating']));
+                update_comment_meta($new_id, 'st_stat_transport', intval($entry['statTransport'] ?? $entry['rating']));
+
+                update_comment_meta($new_id, 'st_review_stats', serialize($stats));
+
+                // Sync total counts for post
+                if (function_exists('st_helper_update_total_review')) {
+                    st_helper_update_total_review($target_post_id);
+                }
+                $count++;
+            }
         }
     }
     wp_send_json_success(['message' => "Successfully imported $count reviews directly to database."]);
@@ -649,7 +710,18 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             <div class="k-card" style="border-left: 4px solid var(--warning);">
                 <h2>🛡 Manual JSON Fallback</h2>
                 <p class="text-sm text-muted mb-4">Paste raw API responses if the server is blocked or for custom imports.</p>
-                <textarea id="manual-json" class="k-input" style="height:100px; font-family:monospace;" placeholder="Paste JSON here..."></textarea>
+                <div class="flex gap-2 items-center mb-2">
+                    <label class="text-xs text-muted">Target Tour:</label>
+                    <select id="manual-post-id" class="k-input" style="width:300px;">
+                        <option value="">-- Select Tour --</option>
+                        <?php 
+                        foreach ($tour_ids as $tid) {
+                            echo '<option value="'.$tid.'">'.get_the_title($tid).' (#'.$tid.')</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <textarea id="manual-json" class="k-input" style="height:150px; font-family:monospace;" placeholder="Paste GYG JSON (Travelers or Official API format) here..."></textarea>
                 <div class="flex gap-2 mt-4">
                     <button onclick="manualImport()" class="k-btn k-btn-primary" style="background:var(--warning)">Process JSON</button>
                     <button onclick="document.getElementById('manual-json').value=''" class="k-btn k-btn-outline">Clear</button>
@@ -751,16 +823,23 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
 
         <!-- --- Tab: Maintenance --- -->
         <div id="maintenance" class="tab-content">
-            <div class="k-card">
+            <div class="k-card" style="border-left: 4px solid var(--danger);">
                 <h2>🛠 System Maintenance</h2>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <button onclick="runMaintenance('deduplicate')" class="k-btn k-btn-outline w-full">Deduplicate DB</button>
-                        <p class="stat-lbl">Removes identical reviews</p>
+                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3>🧹 Deduplicate</h3>
+                        <p class="text-xs text-muted mb-4">Remove identical reviews imported multiple times.</p>
+                        <button onclick="runMaintenance('deduplicate')" class="k-btn k-btn-outline w-full">Deduplicate Now</button>
                     </div>
-                    <div class="stat-box">
-                        <button onclick="runMaintenance('remap_orphans')" class="k-btn k-btn-outline w-full">Remap Post ID 0</button>
-                        <p class="stat-lbl">Matches reviews by keywords</p>
+                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3>📍 Remap Orphans</h3>
+                        <p class="text-xs text-muted mb-4">Match Post ID 0 reviews to correct tours by keyword.</p>
+                        <button onclick="runMaintenance('remap_orphans')" class="k-btn k-btn-outline w-full">Remap Now</button>
+                    </div>
+                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3>⭐ Refresh Ratings</h3>
+                        <p class="text-xs text-muted mb-4">Force recalculate all star ratings (Fixes 0-rating display).</p>
+                        <button onclick="runMaintenance('refresh_ratings')" class="k-btn k-btn-primary w-full">Refresh All Now</button>
                     </div>
                 </div>
             </div>
@@ -954,6 +1033,97 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     alert(data.success ? '✅ ' + data.data.message : '❌ ' + data.data);
                 } catch(e) { alert('Maintenance Error'); }
             });
+        }
+
+        async function manualImport() {
+            const jsonText = document.getElementById('manual-json').value.trim();
+            const postId = document.getElementById('manual-post-id').value;
+            const logBox = document.getElementById('sync-runner-log');
+
+            if (!jsonText) { alert('Please paste JSON data first.'); return; }
+            if (!postId) { alert('Please select a target tour.'); return; }
+
+            try {
+                const raw = JSON.parse(jsonText);
+                let reviews = [];
+                
+                // 1. Detect Format & Normalize
+                if (raw.reviews && Array.isArray(raw.reviews)) {
+                    // Travelers API or Official API v1
+                    reviews = raw.reviews.map(r => {
+                        // Official API v1 mapping
+                        if (r.review_id) {
+                            return {
+                                postId: postId,
+                                reviewId: r.review_id,
+                                metaKey: 'gyg_review_id',
+                                author: r.author_name || 'Traveler',
+                                content: r.review_content,
+                                rating: r.review_rating,
+                                dateStr: r.review_date,
+                                targetLang: 'en'
+                            };
+                        }
+                        // Travelers API mapping
+                        if (r.id) {
+                            const subStats = {};
+                            if (r.ratings && Array.isArray(r.ratings)) {
+                                r.ratings.forEach(sr => {
+                                    if (sr.ratingType === 'rating_guide') subStats.statGuide = sr.ratingValue;
+                                    if (sr.ratingType === 'rating_transport') subStats.statDriver = sr.ratingValue;
+                                    if (sr.ratingType === 'rating_overall') subStats.statService = sr.ratingValue;
+                                    if (sr.ratingType === 'rating_value') subStats.statItinerary = sr.ratingValue;
+                                });
+                            }
+
+                            return {
+                                postId: postId,
+                                reviewId: r.id,
+                                metaKey: 'gyg_review_id',
+                                author: r.fullName || 'Traveler',
+                                content: r.message,
+                                rating: r.rating,
+                                dateStr: r.created,
+                                statGuide: subStats.statGuide,
+                                statDriver: subStats.statDriver,
+                                statService: subStats.statService,
+                                statItinerary: subStats.statItinerary,
+                                statTransport: subStats.statDriver, // Map transport to driver if available
+                                targetLang: 'en'
+                            };
+                        }
+                        return null;
+                    }).filter(r => r !== null);
+                }
+
+                if (reviews.length === 0) {
+                    alert('No reviews found in the provided JSON format.');
+                    return;
+                }
+
+                if (!confirm(`Found ${reviews.length} reviews. Import them now?`)) return;
+
+                State.setState({ isSyncing: true, currentTab: 'sync' });
+                logBox.innerHTML = `<b>Manually Importing ${reviews.length} reviews...</b><br>`;
+
+                const formData = new FormData();
+                formData.append('action', 'ota_direct_import');
+                formData.append('batch', JSON.stringify(reviews));
+
+                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                const data = await resp.json();
+
+                if (data.success) {
+                    logBox.innerHTML += `<div style="color:var(--success);">${data.data.message}</div>`;
+                } else {
+                    logBox.innerHTML += `<div style="color:var(--danger);">Import Error: ${data.data}</div>`;
+                }
+
+            } catch (e) {
+                alert('Invalid JSON: ' + e.message);
+            }
+            State.setState({ isSyncing: false });
+            logBox.scrollTop = logBox.scrollHeight;
         }
 
         function clearAll() {
