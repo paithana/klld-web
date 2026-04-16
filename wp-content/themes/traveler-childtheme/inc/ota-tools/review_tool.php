@@ -330,8 +330,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
             }
         }
         wp_send_json_success(['message' => "Successfully refreshed aggregate ratings for $total_updated localized tour pages."]);
+    } elseif ($job === 'approve_all') {
+        // Approve all st_reviews
+        $updated = $wpdb->query("UPDATE {$wpdb->comments} SET comment_approved = '1' WHERE comment_type = 'st_reviews' AND comment_approved = '0'");
+        wp_send_json_success(['message' => "Successfully approved $updated tour reviews."]);
     }
     wp_send_json_error('Unknown maintenance job.');
+}
+
+// ── AJAX Handler: System Health Check ────────────────────────────────────
+if (isset($_POST['action']) && $_POST['action'] === 'run_system_health_check') {
+    ob_start();
+    include(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/test_ota_suite.php');
+    $results = ob_get_clean();
+    wp_send_json_success(['results' => $results]);
 }
 
 // ── AJAX Handler: Direct Import from UI ──────────────────────────────────
@@ -841,6 +853,20 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         <p class="text-xs text-muted mb-4">Force recalculate all star ratings (Fixes 0-rating display).</p>
                         <button onclick="runMaintenance('refresh_ratings')" class="k-btn k-btn-primary w-full">Refresh All Now</button>
                     </div>
+                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3>✅ Approve Reviews</h3>
+                        <p class="text-xs text-muted mb-4">Set status to 'Approved' for all imported tour reviews.</p>
+                        <button onclick="runMaintenance('approve_all')" class="k-btn k-btn-outline w-full" style="color:var(--success); border-color:var(--success);">Approve All</button>
+                    </div>
+                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3>🧬 Health Check</h3>
+                        <p class="text-xs text-muted mb-4">Run the project-wide integration test suite.</p>
+                        <button onclick="runHealthCheck()" class="k-btn k-btn-primary w-full">Run Suite</button>
+                    </div>
+                </div>
+                <div id="health-check-results" style="margin-top:1.5rem; display:none;">
+                    <h3 style="font-size:0.9rem; color:var(--primary);">System Health Results:</h3>
+                    <pre id="health-log" style="background:#020617; padding:15px; border-radius:8px; font-size:11px; color:var(--text-muted); border:1px solid var(--border); overflow:auto; max-height:300px;"></pre>
                 </div>
             </div>
         </div>
@@ -1030,9 +1056,28 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     formData.append('job', job);
                     const resp = await fetch(window.location.href, { method: 'POST', body: formData });
                     const data = await resp.json();
-                    alert(data.success ? '✅ ' + data.data.message : '❌ ' + data.data);
+                    alert(data.success ? '✅ ' + data.data.message : '❌ ' + (data.data.message || data.data));
                 } catch(e) { alert('Maintenance Error'); }
             });
+        }
+
+        async function runHealthCheck() {
+            const logPanel = document.getElementById('health-check-results');
+            const logPre = document.getElementById('health-log');
+            logPanel.style.display = 'block';
+            logPre.textContent = 'Running suite...';
+            
+            try {
+                const formData = new FormData();
+                formData.append('action', 'run_system_health_check');
+                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                const data = await resp.json();
+                if (data.success) {
+                    logPre.textContent = data.data.results;
+                } else {
+                    logPre.textContent = 'Health check failed to run.';
+                }
+            } catch(e) { logPre.textContent = 'Error: ' + e.message; }
         }
 
         async function manualImport() {
