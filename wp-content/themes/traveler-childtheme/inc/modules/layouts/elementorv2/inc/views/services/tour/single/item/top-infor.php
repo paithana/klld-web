@@ -19,7 +19,7 @@
 									<?php echo esc_html( $review_rate ); ?>
 								</span>
 								<span class="summary">
-									(<?php echo sprintf(_n('<span class="rate" itemprop="reviewCount" name="review-count">%s</span> Review', '<span class="rate" itemprop="reviewCount" name="review-count">%s</span> Reviews', get_comments_number(), 'traveler'), get_comments_number())?>)
+									<?php echo sprintf(__(' of %s Reviews', 'traveler'), get_comments_number()); ?>
 								</span>
 							</div>
                             <?php if(!empty($review_rate) && $review_rate > 0){ ?>

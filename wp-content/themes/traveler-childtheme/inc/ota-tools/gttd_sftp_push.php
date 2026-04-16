@@ -12,13 +12,20 @@ $sftp_key  = '/home/u451564824/.ssh/gttd_rsa';
 $target_file = 'tours_feed.xml';
 $local_temp = __DIR__ . '/tours_feed.tmp.xml';
 
-// ── Load Dependencies ──────────────────────────────────────────────────────
-$base_dir = dirname(dirname(dirname(dirname(__FILE__))));
-$autoload = $base_dir . '/wp-content/plugins/google-listings-and-ads/vendor/autoload.php';
-if (!file_exists($autoload)) {
-    // Fallback if the path is different
-    $autoload = ABSPATH . 'wp-content/plugins/google-listings-and-ads/vendor/autoload.php';
+// ── Load WordPress ─────────────────────────────────────────────────────────
+$wp_load = __DIR__ . '/../../../../../wp-load.php';
+if (file_exists($wp_load)) {
+    require_once $wp_load;
+} else {
+    // Fallback search
+    $wp_load = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php';
+    if (file_exists($wp_load)) require_once $wp_load;
 }
+
+if (!defined('ABSPATH')) die('Error: Could not load WordPress environment.');
+
+// ── Load Dependencies ──────────────────────────────────────────────────────
+$autoload = ABSPATH . 'wp-content/plugins/google-listings-and-ads/vendor/autoload.php';
 if (file_exists($autoload)) {
     require_once $autoload;
 }

@@ -166,6 +166,8 @@ class OTAReviewSync {
             $headers['Authorization'] = 'Basic ' . base64_encode("$user:$pass");
         }
 
+        $offset = 0;
+        $batch = 50;
         while ($offset < $limit_total) {
             $response_body = '';
             
@@ -214,7 +216,7 @@ class OTAReviewSync {
 
             // 3. Trying Travelers-API fallback (Only if mode is 'auto' or 'traveler')
             if (!$response_body && ($mode === 'auto' || $mode === 'traveler')) {
-                $fallback_url = "https://travelers-api.getyourguide.com/activities/{$activity_id}/reviews?limit={$batch}";
+                $fallback_url = "https://travelers-api.getyourguide.com/activities/{$activity_id}/reviews?limit={$batch}&offset={$offset}&sort=date:desc";
                 echo "  [GYG] Trying Travelers-API Fallback: $fallback_url\n";
                 $resp = wp_remote_get($fallback_url, [
                     'timeout' => 20,
@@ -235,7 +237,22 @@ class OTAReviewSync {
 
             $data = json_decode($response_body, true);
             $reviews = $data['reviews'] ?? $data['data']['reviews'] ?? $data['data'] ?? [];
-            if (empty($reviews)) break;
+            
+            // Dynamic Limit Detection
+            if ($offset === 0) {
+                $found_total = $data['totalCount'] ?? $data['total_reviews'] ?? $data['meta']['total_count'] ?? 0;
+                echo "  [DEBUG] API reports totalCount: $found_total\n";
+                if ($found_total > $limit_total) {
+                    echo "  [GYG] Found $found_total total reviews. Extending sync limit.\n";
+                    $limit_total = $found_total;
+                }
+            }
+
+            if (empty($reviews)) {
+                echo "  [DEBUG] No reviews found in response. Data keys: " . implode(',', array_keys((array)$data)) . "\n";
+                break;
+            }
+            echo "  [DEBUG] Processing " . count($reviews) . " reviews (Offset: $offset)\n";
 
             foreach ($reviews as $r) {
                 $review_id = (string)($r['reviewId'] ?? $r['id'] ?? '');
@@ -275,7 +292,7 @@ class OTAReviewSync {
 
     private function sync_viator($post_id, $product_code, $limit_total = 100, $force = false) {
         $offset = 0;
-        $batch = 50;
+        $batch = 50; // Optimized for GYG API limits
         $total_imported = 0;
         $consecutive_existing = 0;
         $max_skipped = $force ? 9999 : 5;

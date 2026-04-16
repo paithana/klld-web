@@ -44,7 +44,7 @@ if (!is_admin() && PHP_SAPI !== 'cli' && isset($_GET['key']) && $_GET['key'] !==
 
 // Detect CLI vs Browser and parse arguments
 if (PHP_SAPI === 'cli') {
-    $args = [];
+    $args = $_GET; // Support manual overrides if included internally
     if (isset($argv)) {
         foreach ($argv as $arg) {
             if (strpos($arg, '=') !== false) {
@@ -80,12 +80,12 @@ if ($query->have_posts()) {
         $id = get_the_ID();
         
         // Basic Info
-        $title = get_the_title();
+        $title = html_entity_decode(get_the_title(), ENT_QUOTES, 'UTF-8');
         $permalink = get_the_permalink();
         $excerpt = get_the_excerpt();
         $content = get_the_content();
         $description = !empty($excerpt) ? $excerpt : wp_trim_words($content, 60, '...');
-        $description = strip_tags(strip_shortcodes($description));
+        $description = html_entity_decode(strip_tags(strip_shortcodes($description)), ENT_QUOTES, 'UTF-8');
 
         // Price Logic
         // Traveler theme stores price in 'st_tour_price' or 'price'
@@ -148,6 +148,17 @@ if ($query->have_posts()) {
             ),
             'merchant_id' => $merchant_id,
             'inventory_types' => array('INVENTORY_TYPE_OPERATOR_DIRECT'),
+            'admission_ticket_type' => 'tours',
+            'booking_options' => array(
+                'adult' => array(
+                    'price' => (float)get_post_meta($id, 'adult_price', true),
+                    'currency' => $currency
+                ),
+                'child' => array(
+                    'price' => (float)get_post_meta($id, 'child_price', true),
+                    'currency' => $currency
+                )
+            ),
             'ota_ids' => array(
                 'getyourguide' => $gyg_id,
                 'viator' => $viator_id,
@@ -155,6 +166,13 @@ if ($query->have_posts()) {
             ),
             'last_updated' => get_the_modified_date('c')
         );
+
+        // Map through string values and decode entities
+        foreach ($product as $key => $value) {
+            if (is_string($value)) {
+                $product[$key] = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
+            }
+        }
 
         $feed[] = apply_filters('klld_gttd_product', $product, $id);
     }
@@ -241,13 +259,22 @@ if ($format === 'xml') {
     foreach ($feed as $p) {
         $item = $channel->addChild('item');
         $item->addChild('g:id', $p['id'], 'http://base.google.com/ns/1.0');
-        $item->addChild('title', htmlspecialchars($p['title']));
-        $item->addChild('description', htmlspecialchars($p['description']));
+        
+        // Use a safe way to add text nodes to avoid entity issues
+        $title_node = $item->addChild('title');
+        $title_node[0] = $p['title'];
+        
+        $desc_node = $item->addChild('description');
+        $desc_node[0] = $p['description'];
+
         $item->addChild('link', $p['link']);
         $item->addChild('g:image_link', $p['image_link'], 'http://base.google.com/ns/1.0');
         $item->addChild('g:price', $p['price']['amount'] . ' ' . $p['price']['currency'], 'http://base.google.com/ns/1.0');
         $item->addChild('g:brand', $p['brand'], 'http://base.google.com/ns/1.0');
-        $item->addChild('g:google_product_category', htmlspecialchars($p['google_product_category']), 'http://base.google.com/ns/1.0');
+        
+        // Category should also be safe
+        $cat_node = $item->addChild('g:google_product_category', null, 'http://base.google.com/ns/1.0');
+        $cat_node[0] = $p['google_product_category'];
         $item->addChild('g:availability', $p['availability'], 'http://base.google.com/ns/1.0');
         
         // Custom attributes for GTTD
@@ -261,6 +288,15 @@ if ($format === 'xml') {
         
         $item->addChild('g:merchant_id', $merchant_id, 'http://base.google.com/ns/1.0');
         $item->addChild('g:inventory_type', 'INVENTORY_TYPE_OPERATOR_DIRECT', 'http://base.google.com/ns/1.0');
+        $item->addChild('g:admission_ticket_type', $p['admission_ticket_type'], 'http://base.google.com/ns/1.0');
+        
+        // Structured Booking Options (Adult/Child)
+        foreach ($p['booking_options'] as $type => $opt) {
+            if ($opt['price'] > 0) {
+                // We use the price extension for individual ticket types
+                $item->addChild('g:'.$type.'_price', $opt['price'] . ' ' . $opt['currency'], 'http://base.google.com/ns/1.0');
+            }
+        }
     }
     echo $xml->asXML();
 } else {

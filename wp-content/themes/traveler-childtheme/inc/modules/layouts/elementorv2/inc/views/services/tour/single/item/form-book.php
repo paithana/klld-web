@@ -25,9 +25,9 @@
                                     </span>
                                     <meta itemprop="bestRating" content="5" />
                                     <meta itemprop="worstRating" content="1" />
-                                    <span class="reviewCount" itemprop="reviewCount"><?php echo get_comments_number(); ?></span>
+                                    <span class="reviewCount" itemprop="reviewCount" style="display:none;"><?php echo get_comments_number(); ?></span>
                                     <span class="summary">
-                                        (<?php comments_number(esc_html__('No Review', 'traveler'), esc_html__('1 Review', 'traveler'), get_comments_number() . ' ' . esc_html__('Reviews', 'traveler')); ?>)
+                                        <?php echo sprintf(__(' of %s Reviews', 'traveler'), get_comments_number()); ?>
                                     </span>
                                 </div>
                             <?php } else { ?>
@@ -37,7 +37,7 @@
                                         <?php echo esc_html($review_rate); ?>
                                     </span>
                                     <span class="summary">
-                                        (<?php comments_number(esc_html__('No Review', 'traveler'), esc_html__('1 Review', 'traveler'), get_comments_number() . ' ' . esc_html__('Reviews', 'traveler')); ?>)
+                                        <?php echo sprintf(__(' of %s Reviews', 'traveler'), get_comments_number()); ?>
                                     </span>
                                 </div>
                             <?php } ?>
