@@ -115,6 +115,10 @@ class Hooks {
             return;
         }
 
+        if ( defined( 'REST_REQUEST' ) && REST_REQUEST && empty( $_SERVER['HTTP_X_WP_NONCE'] ) ) {
+            return;
+        }
+
         $amplitude_events = new Amplitude();
 
         if ( $amplitude_events->can_send_edit_amplitude_event() ) {

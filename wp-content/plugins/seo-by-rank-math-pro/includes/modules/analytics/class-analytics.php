@@ -273,7 +273,7 @@ class Analytics {
 	 */
 	public function data_retention_period() {
 		if ( ProAdminHelper::is_business_plan() ) {
-			return 360;
+			return 365;
 		}
 
 		return 'pro' === Admin_Helper::get_user_plan() ? 180 : 1000;
@@ -457,7 +457,7 @@ class Analytics {
 		return sprintf(
 			/* translators: %d: number of days */
 			__( 'Enter the number of days to keep Analytics data in your database. The maximum allowed days are %d. Though, 2x data will be stored in the DB for calculating the difference properly.', 'rank-math-pro' ),
-			ProAdminHelper::is_business_plan() ? 360 : 180
+			ProAdminHelper::is_business_plan() ? 365 : 180
 		);
 	}
 

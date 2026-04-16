@@ -3,7 +3,7 @@ Tags: onboarding, hostinger
 Requires at least: 5.5
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 2.1.7
+Stable tag: 2.1.17
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -586,3 +586,54 @@ Watching for Changes: During development, you can use "npm run watch" to continu
 2.1.7 (2026-02-24)
 - Fix: Update installation location
 - Fix: wordpress/vips package
+
+2.1.8 (2026-03-03)
+- Feature: AI builder selection for premium plans (a/b test)
+- Fix:  Back button visible on premium plans
+- Fix:  Amplitude events once not always working
+
+2.1.9 (2026-03-13)
+- Feature: A/B redirect on start to AI theme
+- Feature: AI first flow updates
+- Fix: Runtime store import error
+- Fix: Update navigation for experiment
+- Fix: Blank screen issues
+- Fix: Redirect loading
+- Fix: Affiliate theme not installed
+- Fix: Add Go to WP button in templates
+- Tweak: Update dependencies
+- Dev: Prevent Changelog automation in canary
+
+2.1.10 (2026-03-17)
+- Feature: Remove onboarding experiment
+- Feature: Overlay loader
+- Fix: Added data-qa attribute
+
+2.1.11 (2026-03-18)
+- Fix: Update dependencies
+
+2.1.12 (2026-03-20)
+- Feature: Send exposure events
+
+2.1.13 (2026-03-24)
+- Feature: Onboarding failsafe
+
+2.1.14 (2026-03-31)
+- Fix: Exposure event on control
+- Tweak: Update dependencies
+- Dev: Release Automation workflows
+
+2.1.15 (2026-04-02)
+- Fix: Menu icons alignment issue
+- Tweak: Update Amplitude events
+
+2.1.16 (2026-04-09)
+- Fix: Add summary finished event when onboarding closed
+
+2.1.17 (2026-04-14)
+
+- Feature: Translations
+- Feature: Change themes CTA
+- Fix: run event only on manual actions
+- Fix: Added edit count property
+- Fix: Autocomplete website created step

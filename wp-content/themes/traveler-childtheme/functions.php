@@ -562,3 +562,8 @@ function klld_ota_review_image_lazyload( $text, $comment ) {
 
     return $text;
 }
+
+/* ── Consolidate Tools into Child Theme ──────────────────────────── */
+if (is_admin()) {
+    require_once get_stylesheet_directory() . '/inc/ota-tools/admin-tools-loader.php';
+}

@@ -15,10 +15,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-05-06T11:48:04+00:00\n"
-"PO-Revision-Date: 2026-02-02 12:22+0000\n"
+"PO-Revision-Date: 2026-04-14 06:39+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hostinger-easy-onboarding\n"
-"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.2.29\n"
+"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.2.29\n"
 "Language: id_ID\n"
 "Plural-Forms: nplurals=1; plural=0;"
 
@@ -32,20 +32,18 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:66
-#, fuzzy
 msgid " Please refresh the page and try again."
-msgstr " Silakan refresh halaman dan coba lagi."
+msgstr "Refresh halaman dan coba lagi."
 
 #. translators: %s plugin slug
-#: includes/Rest/StepRoutes.php:161
+#: includes/Rest/StepRoutes.php:177
 #, php-format
 msgid "%s is already active"
 msgstr "%s sudah aktif"
 
 #. translators: %s field name that is missing
-#. translators: %s missing field slug
-#: includes/Rest/StepRoutes.php:67 includes/Rest/StepRoutes.php:72
-#: includes/Rest/StepRoutes.php:153 includes/Rest/StepRoutes.php:215
+#: includes/Rest/StepRoutes.php:83 includes/Rest/StepRoutes.php:88
+#: includes/Rest/StepRoutes.php:169 includes/Rest/StepRoutes.php:231
 #: includes/Rest/WooRoutes.php:39 includes/WooCommerce/SetupHandler.php:34
 #: includes/WooCommerce/SetupHandler.php:44
 #, php-format
@@ -77,34 +75,28 @@ msgstr ""
 "<strong>Gunakan metode pengiriman bawaan</strong> tanpa plugin tambahan."
 
 #: includes/Admin/Assets.php:326
-#, fuzzy
 msgid "A minimum order amount"
-msgstr "Jumlah pesanan minimum"
+msgstr "Jumlah minimum pesanan"
 
 #: includes/Admin/Assets.php:329
-#, fuzzy
 msgid "A minimum order amount AND coupon"
-msgstr "Jumlah pesanan minimum DAN kupon"
+msgstr "Jumlah minimum pesanan DAN kupon"
 
 #: includes/Admin/Assets.php:328
-#, fuzzy
 msgid "A minimum order amount OR coupon"
-msgstr "Jumlah pesanan minimum ATAU kupon"
+msgstr "Jumlah minimum pesanan ATAU kupon"
 
-#: includes/Admin/Assets.php:465
-#, fuzzy
+#: includes/Admin/Assets.php:467
 msgid ""
 "A theme controls your WordPress site’s appearance and layout, including "
 "colors and fonts. You’ll need to build and customize the pages yourself."
 msgstr ""
-"Tema mengontrol tampilan dan tata letak situs WordPress Anda, termasuk warna "
-"dan jenis huruf. Anda harus membuat dan menyesuaikan halaman-halamannya "
-"sendiri."
+"Tema menentukan tampilan dan layout website WordPress Anda, termasuk warna "
+"dan font. Halaman perlu dibuat dan disesuaikan secara manual."
 
 #: includes/Admin/Assets.php:327
-#, fuzzy
 msgid "A valid free shipping coupon"
-msgstr "Kupon pengiriman gratis yang valid"
+msgstr "Kupon gratis ongkir yang valid"
 
 #: includes/Admin/Onboarding/PluginManager.php:30
 msgid "Accept payments via credit card. Manage transactions within WordPress."
@@ -113,7 +105,7 @@ msgstr ""
 
 #: includes/Admin/Assets.php:277
 msgid "Access site identity and edit title"
-msgstr "Buka  dan edit judul"
+msgstr "Buka identitas website dan edit judul"
 
 #: includes/Errors.php:14
 msgid "Action Failed. Try again or contact support. Apologies."
@@ -121,7 +113,6 @@ msgstr "Maaf, terjadi kesalahan. Silakan coba lagi atau hubungi tim support."
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:44
-#, fuzzy
 msgid "Actions"
 msgstr "Tindakan"
 
@@ -141,7 +132,7 @@ msgstr "Aktif"
 msgid "Add"
 msgstr "Tambahkan"
 
-#: includes/Admin/Onboarding/Onboarding.php:470
+#: includes/Admin/Onboarding/Onboarding.php:476
 msgid "Add a domain"
 msgstr "Tambahkan domain"
 
@@ -153,11 +144,16 @@ msgstr "Tambahkan halaman baru"
 msgid "Add a title"
 msgstr "Tambahkan judul"
 
+#: includes/Admin/Assets.php:477
+#, fuzzy
+msgid "Add and manage WooCommerce products"
+msgstr "Menambah dan mengelola produk WooCommerce"
+
 #: includes/Admin/Assets.php:344
 msgid "Add content"
 msgstr "Tambahkan konten"
 
-#: includes/Admin/Onboarding/Onboarding.php:472
+#: includes/Admin/Onboarding/Onboarding.php:478
 msgid "Add domain"
 msgstr "Tambahkan domain"
 
@@ -165,12 +161,11 @@ msgstr "Tambahkan domain"
 msgid "Add plugin"
 msgstr "Tambahkan plugin"
 
-#: includes/Admin/Assets.php:435
-#, fuzzy
+#: includes/Admin/Assets.php:437
 msgid "Add plugins to your site"
-msgstr "Menambahkan plugin ke situs Anda"
+msgstr "Tambahkan plugin ke website"
 
-#: includes/Admin/Onboarding/Onboarding.php:634
+#: includes/Admin/Onboarding/Onboarding.php:640
 #| msgid "Add products"
 msgid "Add product"
 msgstr "Tambahkan produk"
@@ -179,7 +174,7 @@ msgstr "Tambahkan produk"
 msgid "Add shipping method"
 msgstr "Tambahkan metode pengiriman"
 
-#: includes/Admin/Onboarding/Onboarding.php:606
+#: includes/Admin/Onboarding/Onboarding.php:612
 msgid "Add store details"
 msgstr "Tambahkan detail toko"
 
@@ -190,14 +185,14 @@ msgid ""
 "should be descriptive of the information the page will have."
 msgstr ""
 "Tambahkan judul halaman, misalnya halaman Tentang Kami. Klik Tambahkan Judul "
-"untuk menambahkan judul pada teks. Judul halaman harus menggambarkan isi "
+"untuk menambahkan judul pada teks. Judul halaman harus menjelaskan isi "
 "konten yang akan ditulis."
 
 #: includes/Admin/Assets.php:205
 msgid "Add your first product"
 msgstr "Tambahkan produk pertama Anda"
 
-#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:630
+#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:636
 msgid "Add your first product or service"
 msgstr "Tambahkan produk atau layanan pertama Anda"
 
@@ -212,7 +207,7 @@ msgid ""
 "href=\"https://logo.hostinger.com/?ref=wordpress-onboarding\" style=\"text-"
 "decoration:none; font-weight:bold; color:#673de6\">AI Logo Maker.</a>"
 msgstr ""
-"Tambahkan logo untuk membangun identitas situs atau memberikan informasi "
+"Tambahkan logo untuk membangun identitas website atau memberikan informasi "
 "tentang brand. Anda dapat menggunakan logo yang sudah ada atau membuat logo "
 "baru menggunakan <a href=\"https://logo.hostinger.com/?ref=wordpress-"
 "onboarding\" style=\"text-decoration:none; font-weight:bold; color:#673de6\">"
@@ -228,20 +223,17 @@ msgid ""
 msgstr ""
 "Adiciona PagSeguro como meio de pagamento (com desconto nas taxas oficiais)."
 
-#: includes/Admin/Assets.php:472
-#, fuzzy
+#: includes/Admin/Assets.php:483
 msgid "Affiliate marketing"
-msgstr "Pemasaran afiliasi"
+msgstr "Affiliate marketing"
 
-#: includes/Admin/Assets.php:431 includes/Admin/Assets.php:469
-#, fuzzy
+#: includes/Admin/Assets.php:433 includes/Admin/Assets.php:480
 msgid "All"
 msgstr "Semua"
 
 #: includes/Admin/Assets.php:316
-#, fuzzy
 msgid "Allow customers to pick up orders themselves."
-msgstr "Izinkan pelanggan untuk mengambil sendiri pesanan mereka."
+msgstr "Izinkan pelanggan mengambil sendiri pesanannya."
 
 #: includes/Admin/Onboarding/PluginManager.php:39
 msgid ""
@@ -249,15 +241,14 @@ msgid ""
 "buyer interactions with Amazon Pay and Login with Amazon take place in "
 "embedded widgets so that the buyer never leaves your site. "
 msgstr ""
-"Amazon Pay secara otomatis ditambahkan ke situs Anda. Pembayaran dengan "
-"Amazon Pay dan login ke Amzon dapat dilakukan dari widget yang tersedia "
-"sehingga pembeli tidak perlu keluar dari situs Anda."
+"Amazon Pay secara otomatis ditambahkan ke website Anda. Pembayaran dengan "
+"Amazon Pay dan login ke Amazon dapat dilakukan dari widget yang tersedia "
+"sehingga pembeli tidak perlu keluar dari website Anda."
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:106
-#, fuzzy
 msgid "An error occurred while deleting the page."
-msgstr "Terjadi kesalahan saat menghapus halaman."
+msgstr "Terjadi error saat menghapus halaman."
 
 #: includes/Errors.php:17
 msgid "An unexpected error occurred. Please try again or contact support."
@@ -265,9 +256,8 @@ msgstr "Maaf, terjadi kesalahan. Silakan coba lagi atau hubungi tim support."
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:76
-#, fuzzy
 msgid "An unexpected error occurred. Please try again."
-msgstr "Terjadi kesalahan yang tidak diharapkan. Silakan coba lagi."
+msgstr "Terjadi error tidak terduga. Coba lagi."
 
 #: includes/Admin/Onboarding/PluginManager.php:83
 msgid ""
@@ -277,22 +267,20 @@ msgstr ""
 "WooCommerce"
 
 #: includes/Admin/Assets.php:422
-#, fuzzy
 msgid "Apply minimum order rule before discount"
-msgstr "Terapkan aturan pemesanan minimum sebelum diskon"
+msgstr "Gunakan minimum pesanan sebelum diskon"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:31
-#, fuzzy
 msgid "Are you sure you want to delete this page?"
-msgstr "Apakah Anda yakin ingin menghapus halaman ini?"
+msgstr "Yakin ingin menghapus halaman ini?"
 
 #: includes/Admin/Assets.php:352
 msgid "Are you sure?"
 msgstr "Apakah Anda yakin?"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 msgid "Attention:"
 msgstr "Perhatian:"
 
@@ -313,32 +301,38 @@ msgid ""
 "Before publishing, you can preview your created page by clicking on the "
 "Preview button. If you are happy with the result, click the Publish button."
 msgstr ""
-"Klik Pratinjau untuk melihat halaman sebelum diterbitkan. Jika sudah puas, "
-"Anda bisa klik tombol Terbitkan."
+"Klik Pratinjau untuk melihat halaman sebelum dionlinekan. Jika sudah puas, "
+"Anda bisa klik tombol Onlinekan."
 
 #: includes/Admin/Assets.php:404
 msgid "Being reviewed"
 msgstr "Sedang ditinjau"
 
-#: includes/Admin/Assets.php:473
-#, fuzzy
+#: includes/Admin/Assets.php:484
 msgid "Blog"
 msgstr "Blog"
 
-#: includes/Admin/Onboarding/Onboarding.php:271
+#: includes/Admin/Assets.php:430
+#, fuzzy
+msgid "Browse our vast library of handpicked pre built websites and themes."
+msgstr ""
+"Jelajahi perpustakaan kami yang luas berisi situs web dan tema yang telah "
+"dibuat sebelumnya."
+
+#: includes/Admin/Onboarding/Onboarding.php:273
 msgid ""
 "Build a custom-designed site in minutes with professional templates. You’ll "
 "be ready to go live in a few clicks."
 msgstr ""
-"Buat situs khusus praktis dengan template profesional. Situs langsung online "
-"dalam beberapa klik."
+"Buat website kustom dengan template profesional. Bisa langsung online dalam "
+"beberapa klik."
 
-#: includes/Admin/Onboarding/Onboarding.php:263
+#: includes/Admin/Onboarding/Onboarding.php:265
 msgid ""
 "Build a professional, custom-designed site in moments. Choose from 140+ "
 "templates or use AI."
 msgstr ""
-"Buat situs profesional khusus dalam sekejap. Pilih dari 140+ template atau "
+"Buat website profesional kustom dalam sekejap. Pilih dari 140+ template atau "
 "gunakan AI."
 
 #: includes/Admin/Onboarding/Onboarding.php:166
@@ -346,19 +340,15 @@ msgid ""
 "Build a professional, custom-designed site in moments. Just a few clicks and "
 "AI handles the rest."
 msgstr ""
-"Buat situs profesional khusus dalam sekejap. Cukup beberapa klik, AI akan "
+"Buat website profesional khusus dalam sekejap. Cukup beberapa klik, AI akan "
 "membuatkan website untuk Anda."
 
-#: includes/Admin/Assets.php:428
-#, fuzzy
+#: includes/Admin/Assets.php:429
 msgid ""
 "Build a website from scratch, with the help of pre-built websites or themes."
-msgstr ""
-"Buat situs web dari awal, dengan bantuan situs web atau tema yang telah "
-"dibuat sebelumnya."
+msgstr "Buat website dari awal dengan tema atau website siap pakai."
 
-#: includes/Admin/Assets.php:470
-#, fuzzy
+#: includes/Admin/Assets.php:481
 msgid "Business"
 msgstr "Bisnis"
 
@@ -375,14 +365,10 @@ msgstr "Batalkan"
 msgid "Cash on delivery"
 msgstr "Bayar di tempat (COD)"
 
-#: includes/Admin/Assets.php:410
-msgid "Change domain"
-msgstr "Ubah domain"
-
 #: includes/Admin/Assets.php:314
-#, fuzzy
 msgid "Charge a fixed rate for shipping regardless of the order."
-msgstr "Mengenakan tarif tetap untuk pengiriman, berapa pun jumlah pesanannya."
+msgstr ""
+"Tetapkan tarif pengiriman tetap untuk semua pesanan, berapa pun jumlahnya."
 
 #: includes/Admin/Assets.php:409
 msgid "Check guide"
@@ -396,47 +382,43 @@ msgstr "Parameter pilihan hilang atau kosong"
 msgid "Choice parameter missing or invalid"
 msgstr "Parameter pilihan hilang atau tidak valid"
 
-#: includes/Admin/Assets.php:429
-#, fuzzy
+#: includes/Admin/Assets.php:431
 msgid "Choose a pre-built website"
-msgstr "Pilih situs web yang telah dibuat sebelumnya"
+msgstr "Pilih website siap pakai"
 
-#: includes/Admin/Onboarding/Onboarding.php:243
+#: includes/Admin/Onboarding/Onboarding.php:245
 msgid "Choose a template"
 msgstr "Pilih template"
 
-#: includes/Admin/Assets.php:432
-#, fuzzy
+#: includes/Admin/Assets.php:434
 msgid "Choose a theme"
 msgstr "Pilih tema"
 
-#: includes/Admin/Onboarding/Onboarding.php:208
+#: includes/Admin/Onboarding/Onboarding.php:210
 msgid "Choose another template"
 msgstr "Pilih template lain"
 
 #: includes/Admin/Assets.php:426
-#, fuzzy
 msgid "Choose how you’d like to build your website"
-msgstr "Pilih bagaimana Anda ingin membangun situs web Anda"
+msgstr "Pilih cara buat website"
 
-#: includes/Admin/Onboarding/Onboarding.php:272
+#: includes/Admin/Onboarding/Onboarding.php:274
 msgid "Choose template"
 msgstr "Pilih template"
 
-#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:679
+#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:685
 msgid ""
 "Choose the ways you'd like to ship orders to customers. You can always add "
 "others later."
 msgstr ""
-"Pilih metode pengiriman pesanan ke pelanggan Anda. Anda dapat menambahkan "
-"metode pengiriman lainnya kapan saja."
+"Pilih metode pengiriman pesanan ke pelanggan. Anda bisa menambahkan metode "
+"pengiriman lainnya kapan saja."
 
-#: includes/Admin/Assets.php:460
-#, fuzzy
+#: includes/Admin/Assets.php:462
 msgid "Close"
 msgstr "Tutup"
 
-#: includes/Admin/Onboarding/Onboarding.php:439
+#: includes/Admin/Onboarding/Onboarding.php:445
 msgid ""
 "Collect emails from forms on your site and start sending on-brand email "
 "campaigns with Hostinger Reach – all powered by AI."
@@ -454,14 +436,13 @@ msgstr ""
 
 #: includes/Admin/Assets.php:244
 msgid "Complete"
-msgstr "Lengkap"
+msgstr "Selesai"
 
 #: includes/Admin/Assets.php:249
 msgid "Completed steps"
 msgstr "Langkah yang telah diselesaikan"
 
-#: includes/Admin/Assets.php:456
-#, fuzzy
+#: includes/Admin/Assets.php:458
 msgid "Completed!"
 msgstr "Selesai!"
 
@@ -477,39 +458,39 @@ msgstr ""
 "Konfigurasikan opsi pembayaran dan terima pembayaran dengan kartu, tiket, "
 "dan uang dari akun Mercado Pago."
 
-#: includes/Admin/Assets.php:440
-#, fuzzy
+#: includes/Admin/Assets.php:442
 msgid "conflicts with"
-msgstr "konflik dengan"
+msgstr "tidak kompatibel dengan"
 
-#: includes/Admin/Hooks.php:517
+#: includes/Admin/Hooks.php:537
 msgid "Congrats, you have connected WooPayments!"
 msgstr "Selamat, WooPayments berhasil terhubung!"
 
 #: includes/Admin/Assets.php:245
 msgid "Congrats, you're ready to show off your site!"
-msgstr "Selamat, website Anda berhasil online!"
+msgstr "Selamat, website Anda sudah siap dibagikan!"
 
-#: includes/Admin/Hooks.php:510
+#: includes/Admin/Hooks.php:530
 msgid "Congrats, you’re ready to show off your site!"
-msgstr "Selamat, Anda sudah siap untuk memamerkan situs Anda!"
+msgstr "Selamat, website Anda sudah siap dibagikan!"
 
 #: includes/Admin/Assets.php:284
 msgid "Connect"
 msgstr "Hubungkan"
 
-#: includes/Admin/Onboarding/Onboarding.php:542
+#: includes/Admin/Onboarding/Onboarding.php:548
 msgid "Connect Amazon to site"
-msgstr "Hubungkan Amazon ke situs"
+msgstr "Hubungkan Amazon ke website"
+
+#: includes/Admin/Assets.php:410 includes/Admin/Onboarding/Onboarding.php:482
+#: includes/Admin/Onboarding/Onboarding.php:495
+#, fuzzy
+msgid "Connect domain"
+msgstr "Hubungkan domain"
 
 #: includes/Admin/Assets.php:261
 msgid "Connect domain now"
 msgstr "Hubungkan domain sekarang"
-
-#: includes/Admin/Onboarding/Onboarding.php:476
-#: includes/Admin/Onboarding/Onboarding.php:489
-msgid "Connect on hPanel"
-msgstr "Terhubung di hPanel"
 
 #: includes/Admin/Assets.php:291 includes/Admin/Onboarding/WelcomeCards.php:29
 msgid ""
@@ -518,28 +499,28 @@ msgstr ""
 "Hubungkan akun <strong>Amazon Associate</strong> Anda untuk mendapatkan "
 "detail API."
 
-#: includes/Admin/Onboarding/Onboarding.php:534
+#: includes/Admin/Onboarding/Onboarding.php:540
 msgid "Connect your Amazon account to the site"
-msgstr "Hubungkan akun Amazon Anda ke situs"
+msgstr "Hubungkan akun Amazon Anda ke website"
 
 #: includes/Admin/Assets.php:233
 msgid "Connect your domain"
 msgstr "Hubungkan domain"
 
-#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:723
+#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:729
 msgid "Connect your domain first"
-msgstr "Hubungkan domain Anda terlebih dahulu"
+msgstr "Hubungkan domain Anda terlebih dulu"
 
 #: includes/Admin/Assets.php:211 includes/Admin/Assets.php:214
 #: includes/Admin/Assets.php:357
 msgid "Connect your domain to Hostinger"
 msgstr "Hubungkan domain Anda ke Hostinger"
 
-#: includes/Admin/Onboarding/Onboarding.php:494
+#: includes/Admin/Onboarding/Onboarding.php:500
 msgid "Connected a domain"
 msgstr "Menghubungkan domain"
 
-#: includes/Admin/Onboarding/Onboarding.php:537
+#: includes/Admin/Onboarding/Onboarding.php:543
 msgid "Connected your Amazon account"
 msgstr "Menghubungkan akun Amazon Anda"
 
@@ -554,14 +535,14 @@ msgid ""
 "the page."
 msgstr ""
 "Konten dapat berupa teks, gambar, video, tabel, dan lain-lain. Klik tanda "
-"tambah untuk memilih blok untuk halaman Anda."
+"tambah untuk memilih blok yang ingin ditambahkan ke halaman."
 
 #: includes/Admin/Assets.php:186 includes/Admin/Assets.php:424
 msgid "Continue"
 msgstr "Lanjutkan"
 
-#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:507
-#: includes/Admin/Hooks.php:520
+#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:527
+#: includes/Admin/Hooks.php:540
 msgid "Continue setup"
 msgstr "Lanjutkan setup"
 
@@ -571,65 +552,65 @@ msgstr "Buat logo"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/CreatePageButton.js:23
-#, fuzzy
 msgid "Create a new Page"
-msgstr "Membuat Halaman baru"
+msgstr "Buat halaman baru"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/CreatePageButton.js:26
-#, fuzzy
 msgid "Create a new page"
-msgstr "Membuat halaman baru"
+msgstr "Buat halaman baru"
 
 #: includes/Admin/Onboarding/Onboarding.php:165
 msgid "Create a site with AI"
-msgstr "Membuat situs dengan AI"
+msgstr "Buat situs dengan AI"
 
 #: includes/Admin/Assets.php:300
 msgid "Create a website with AI"
-msgstr "Buat situs dengan AI"
+msgstr "Buat website dengan AI"
 
 #: includes/Admin/Onboarding/PluginManager.php:67
 msgid ""
 "Create additional shipment methods in WooCommerce and enable pricing based "
 "on cart weight or total."
 msgstr ""
-"Buat metode pengiriman tambahan di WooCommerce dan aktifkan penetapan harga "
-"berdasarkan berat atau total keranjang."
+"Tambahkan metode pengiriman di WooCommerce dengan tarif berdasarkan berat "
+"atau total belanja."
+
+#: includes/Admin/Assets.php:474
+#, fuzzy
+msgid "Create and edit pages or posts"
+msgstr "Membuat dan mengedit halaman atau postingan"
 
 #: includes/Admin/Onboarding/PluginManager.php:79
 msgid "Create Chronopost & Mondial relay shipping labels and send them easily."
-msgstr ""
-"Buat label pengiriman estafet Chronopost & Mondial dan kirimkan dengan mudah."
+msgstr "Buat label Chronopost & Mondial Relay dan kirim pesanan tanpa ribet."
 
 #: includes/Admin/Onboarding/Onboarding.php:184
-#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:237
 msgid "Create new site"
 msgstr "Buat situs baru"
 
-#: includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:266
 msgid "Create site"
 msgstr "Buat situs"
 
 #: includes/Admin/Onboarding/Onboarding.php:169
 msgid "Create site with AI"
-msgstr "Buat situs dengan AI"
+msgstr "Buat situs pakai AI"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:59
-#, fuzzy
 msgid "Current page"
 msgstr "Halaman saat ini"
 
 #: includes/Admin/Assets.php:319
-#, fuzzy
 #| msgid "Current page"
 msgid "Current zone"
-msgstr "Halaman saat ini"
+msgstr "Area saat ini"
 
 #: includes/Admin/Assets.php:246
 msgid "Customize the way your site looks and start welcoming visitors."
-msgstr "Sesuaikan tampilan situs Anda dan mulai sambut pengunjung Anda."
+msgstr "Sesuaikan tampilan website Anda dan mulai datangkan pengunjung."
 
 #: includes/Admin/Assets.php:394
 msgid "Database limit almost reached"
@@ -639,24 +620,27 @@ msgstr "Database hampir mencapai limit"
 msgid "Database limit reached"
 msgstr "Database mencapai limit"
 
-#: includes/Admin/Assets.php:434
-#, fuzzy
+#: includes/Admin/Assets.php:436
 msgid "Default"
 msgstr "Default"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:123
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:125
-#, fuzzy
 msgid "Delete page"
-msgstr "Menghapus halaman"
+msgstr "Hapus halaman"
 
-#: includes/Admin/Assets.php:437
+#: includes/Admin/Assets.php:428
 #, fuzzy
-msgid "Deselect all"
-msgstr "Batalkan pilihan semua"
+msgid "Describe your idea and watch AI build your site with custom content"
+msgstr ""
+"Jelaskan ide Anda dan saksikan AI membangun situs Anda dengan konten khusus"
 
-#: includes/Admin/Assets.php:515
+#: includes/Admin/Assets.php:439
+msgid "Deselect all"
+msgstr "Batalkan semua pilihan"
+
+#: includes/Admin/Assets.php:530
 msgid "Digital products"
 msgstr "Produk digital"
 
@@ -666,7 +650,7 @@ msgstr "Transfer bank langsung"
 
 #: includes/Admin/Assets.php:169
 msgid "Discover add-ons"
-msgstr "Temukan add-ons"
+msgstr "Temukan add-on"
 
 #: includes/Admin/Assets.php:390
 msgid "Disk usage limit almost reached"
@@ -680,10 +664,9 @@ msgstr "Disk usage mencapai limit"
 msgid "Dismiss"
 msgstr "Tutup"
 
-#: includes/Admin/Assets.php:475
-#, fuzzy
+#: includes/Admin/Assets.php:486
 msgid "Do not install plugins"
-msgstr "Jangan memasang plugin"
+msgstr "Jangan instal plugin"
 
 #: includes/Admin/Surveys.php:49
 msgid "Do you have any comments/suggestions to improve our AI tools?"
@@ -731,9 +714,8 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:19
-#, fuzzy
 msgid "Edit"
-msgstr "Sunting"
+msgstr "Edit"
 
 #: includes/Admin/Assets.php:273
 msgid "Edit an image"
@@ -743,23 +725,21 @@ msgstr "Edit gambar"
 msgid "Edit description"
 msgstr "Edit deskripsi"
 
-#: includes/Hooks.php:292
+#: includes/Hooks.php:296
 msgid "Edit Home Page"
 msgstr "Edit Beranda"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:12
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:14
-#, fuzzy
 msgid "Edit Page"
-msgstr "Halaman Edit"
+msgstr "Edit halaman"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/index.js:139
 #: gutenberg/edit-pages-panel/src/index.js:145
-#, fuzzy
 msgid "Edit Pages"
-msgstr "Mengedit Halaman"
+msgstr "Edit halaman"
 
 #: includes/Admin/Assets.php:265
 msgid "Edit post"
@@ -779,14 +759,13 @@ msgstr "Edit judul situs"
 
 #: includes/Admin/Assets.php:170
 msgid "Efficient site management with WordPress add-ons"
-msgstr "Kelola situs lebih efisien dengan WordPress add-ons"
+msgstr "Kelola situs lebih efisien dengan add-on WordPress"
 
 #: includes/Admin/Assets.php:242
 msgid ""
 "Enter your store details so we can help you set up your online store faster."
 msgstr ""
-"Masukkan detail toko Anda agar kami dapat menyiapkan toko online Anda lebih "
-"cepat."
+"Masukkan detail toko agar kami dapat menyiapkan toko online Anda lebih cepat."
 
 #: includes/Admin/Onboarding/PluginManager.php:82
 #| msgid ""
@@ -804,11 +783,10 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:46
-#, fuzzy
 msgid "Error:"
-msgstr "Kesalahan:"
+msgstr "Error:"
 
-#: includes/Admin/Onboarding/Onboarding.php:498
+#: includes/Admin/Onboarding/Onboarding.php:504
 #| msgid ""
 #| "Every website needs a domain that makes it easy to access and remember. "
 #| "Get ours in just a few clicks."
@@ -824,8 +802,8 @@ msgid ""
 "Expand your audience with the help of Omnisend. Create email campaigns that "
 "drive sales."
 msgstr ""
-"Perluas audiens Anda dengan bantuan Omnisend. Buat email promosi untuk "
-"meningkatkan penjualan."
+"Jangkau lebih banyak audiens dengan bantuan Omnisend. Buat email campaign "
+"untuk meningkatkan penjualan."
 
 #: includes/Admin/Assets.php:386
 msgid "Expired"
@@ -839,38 +817,33 @@ msgstr "Berakhir pada"
 msgid "Extends WooCommerce with a RedSys gateway."
 msgstr "Kembangkan WooCommerce dengan gateway RedSys."
 
-#: includes/Rest/StepRoutes.php:305
-#, fuzzy
+#: includes/Rest/StepRoutes.php:373
 msgid "Failed to download theme."
-msgstr "Gagal mengunduh tema."
+msgstr "Gagal mendownload tema."
 
-#: includes/Rest/StepRoutes.php:321
-#, fuzzy
+#: includes/Rest/StepRoutes.php:389
 msgid "Failed to install theme."
 msgstr "Gagal menginstal tema."
 
-#: includes/Admin/Assets.php:458
-#, fuzzy
+#: includes/Admin/Assets.php:460
 msgid "Failed!"
-msgstr "Gagal!"
+msgstr "Gagal."
 
-#: includes/Admin/Assets.php:454
-#, fuzzy
+#: includes/Admin/Assets.php:456
 msgid "Finalizing..."
 msgstr "Menyelesaikan..."
 
 #: includes/Admin/Assets.php:368
 msgid "Find the answers you need in our Knowledge Base"
-msgstr "Temukan jawaban yang Anda butuhkan di Pengetahuan Dasar kami"
+msgstr "Temukan jawaban yang Anda butuhkan di Knowledge Base kami"
 
 #: includes/Admin/Assets.php:269
 msgid "Find the Media page"
 msgstr "Temukan halaman Media"
 
 #: includes/Admin/Assets.php:332
-#, fuzzy
 msgid "Finish"
-msgstr "Selesai"
+msgstr "Selesaikan"
 
 #: includes/Admin/Assets.php:407
 msgid "Finish registration"
@@ -878,12 +851,10 @@ msgstr "Selesaikan registrasi"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/StoreSetupButton.js:26
-#, fuzzy
 msgid "Finish Setup"
-msgstr "Selesaikan Penyiapan"
+msgstr "Selesaikan Setup"
 
 #: includes/Admin/Assets.php:313
-#, fuzzy
 msgid "Flat rate"
 msgstr "Tarif tetap"
 
@@ -892,24 +863,20 @@ msgid "Follow these steps to complete your setup"
 msgstr "Ikuti langkah-langkah berikut untuk menyelesaikan setup"
 
 #: includes/Admin/Assets.php:311
-#, fuzzy
 msgid "Free shipping"
-msgstr "Gratis ongkos kirim"
+msgstr "Gratis ongkir"
 
 #: includes/Admin/Assets.php:312
-#, fuzzy
 msgid "Free shipping is a great way to increase conversions."
-msgstr "Gratis ongkos kirim adalah cara terbaik untuk meningkatkan konversi."
+msgstr "Gratis ongkir bisa menjadi cara efektif untuk meningkatkan konversi."
 
 #: includes/Admin/Assets.php:321
-#, fuzzy
 msgid "Free shipping requires"
-msgstr "Pengiriman gratis membutuhkan"
+msgstr "Gratis ongkir membutuhkan"
 
 #: includes/Admin/Menu.php:109 includes/Admin/Menu.php:110
-#, fuzzy
 msgid "Full Screen Onboarding"
-msgstr "Penyiapan Layar Penuh"
+msgstr "Onboarding Full Screen"
 
 #: includes/Admin/Assets.php:286
 msgid "Generate content"
@@ -928,13 +895,13 @@ msgstr "Dapatkan domain"
 msgid "Get deal"
 msgstr "Ambil promo"
 
-#: includes/Admin/Hooks.php:362
+#: includes/Admin/Hooks.php:382
 msgid "Get Discount"
 msgstr "Klaim Diskon"
 
-#: includes/Admin/Onboarding/Onboarding.php:704
+#: includes/Admin/Onboarding/Onboarding.php:710
 msgid "Get found on Google"
-msgstr "Ditemukan di Google"
+msgstr "Mudah ditemukan di Google"
 
 #: includes/Admin/Assets.php:289
 msgid ""
@@ -950,7 +917,7 @@ msgstr "Dapatkan gambar, teks, dan keyword SEO khusus untuk Anda dengan cepat."
 
 #: includes/Admin/Assets.php:376
 msgid "Get in touch with our live specialists"
-msgstr "Hubungi spesialis kami secara langsung"
+msgstr "Hubungi tim spesialis kami secara langsung"
 
 #: includes/Admin/Assets.php:204
 msgid ""
@@ -960,7 +927,7 @@ msgstr ""
 "Saatnya terima pembayaran dari pelanggan untuk produk dan layanan Anda "
 "dengan mudah."
 
-#: includes/Admin/Onboarding/Onboarding.php:657
+#: includes/Admin/Onboarding/Onboarding.php:663
 msgid ""
 "Get ready to sell online. Add your first product, then set up payments and "
 "shipping."
@@ -968,7 +935,7 @@ msgstr ""
 "Mulai jualan online. Tambahkan produk pertama Anda, lalu atur pembayaran dan "
 "pengiriman."
 
-#: includes/Admin/Onboarding/Onboarding.php:561
+#: includes/Admin/Onboarding/Onboarding.php:567
 msgid ""
 "Get ready to sell online. Add your first product, then set up shipping and "
 "payments."
@@ -976,11 +943,11 @@ msgstr ""
 "Mulai jualan online. Tambahkan produk pertama Anda, lalu atur pengiriman dan "
 "pembayaran."
 
-#: includes/Admin/Onboarding/Onboarding.php:563
-#: includes/Admin/Onboarding/Onboarding.php:610
+#: includes/Admin/Onboarding/Onboarding.php:569
+#: includes/Admin/Onboarding/Onboarding.php:616
 #| msgid "Get Started"
 msgid "Get started"
-msgstr "Coba Sekarang"
+msgstr "Coba sekarang"
 
 #: includes/Admin/Assets.php:239
 msgid "Get started!"
@@ -992,14 +959,13 @@ msgstr "Menyiapkan fitur Anda"
 
 #: includes/Admin/Assets.php:263
 msgid "Go to Posts"
-msgstr "Ke Postingan"
+msgstr "Buka Postingan"
 
 #: includes/Admin/Assets.php:235 includes/Admin/Assets.php:275
 msgid "Go to the Customize page"
-msgstr "Ke halaman Customize"
+msgstr "Buka halaman Sesuaikan"
 
 #: includes/Admin/Assets.php:425
-#, fuzzy
 msgid "Go to WordPress"
 msgstr "Buka WordPress"
 
@@ -1013,15 +979,20 @@ msgstr ""
 
 #: includes/Admin/Assets.php:262
 msgid "Got it!"
-msgstr "OK!"
+msgstr "Oke!"
 
 #: includes/Admin/Assets.php:369
 msgid "Help Center"
 msgstr "Bantuan Pelanggan"
 
+#: includes/Admin/Assets.php:471
+#, fuzzy
+msgid "Hey,"
+msgstr "Hei,"
+
 #: includes/Admin/Assets.php:260
 msgid "Hide completed"
-msgstr "Berhasil disembunyikan"
+msgstr "Sembunyikan yang sudah selesai"
 
 #: includes/Admin/Assets.php:253
 msgid "Hide list"
@@ -1052,6 +1023,11 @@ msgstr "Hostinger"
 msgid "Hostinger Academy"
 msgstr "Hostinger Academy"
 
+#: includes/Rest/StepRoutes.php:261
+#, fuzzy
+msgid "Hostinger AI theme is not currently active."
+msgstr "Tema AI Hostinger saat ini tidak aktif."
+
 #. Plugin Name of the plugin
 #: hostinger-easy-onboarding.php
 msgid "Hostinger Easy Onboarding"
@@ -1068,12 +1044,12 @@ msgid ""
 "to open the post editor."
 msgstr ""
 "Arahkan kursor ke postingan yang diinginkan untuk melihat menu opsi. Klik "
-"tombol Sunting untuk membuka editor pos."
+"tombol Edit untuk membuka editor postingan."
 
 #: includes/Admin/Surveys.php:42
 msgid "How could we make it easier to create a new WordPress website?"
 msgstr ""
-"Bagaimana kami dapat membantu mempermudah permbuatan situs WordPress baru?"
+"Apa yang bisa kami lakukan agar pembuatan website WordPress jadi lebih mudah?"
 
 #: includes/Admin/Assets.php:364
 msgid "How to Back Up a WordPress Site"
@@ -1085,7 +1061,7 @@ msgstr "Cara Membuat Landing Page yang EFEKTIF dengan WordPress (2024)"
 
 #: includes/Admin/Assets.php:360
 msgid "How to Create a WordPress Contact Us Page"
-msgstr "Cara Buat Halaman Hubungi Kami di WordPress"
+msgstr "Cara Membuat Halaman Hubungi Kami di WordPress"
 
 #: includes/Admin/Assets.php:152
 msgid "How to Create a WordPress Website in 10 Minutes Using Hostinger"
@@ -1097,11 +1073,11 @@ msgstr "Cara Membuat Halaman Segera Hadir di WordPress (2024)"
 
 #: includes/Admin/Assets.php:365
 msgid "How to Import Images Into WordPress Website"
-msgstr "Cara Impor Gambar Ke Situs WordPress"
+msgstr "Cara Impor Gambar ke Situs WordPress"
 
 #: includes/Admin/Assets.php:358 includes/Admin/Assets.php:382
 msgid "How to Make a Website (2024): Simple, Quick, & Easy Tutorial"
-msgstr "Cara Membuat Website (2024): Tutorial Sederhana, Cepat, & Mudah"
+msgstr "Cara Membuat Website (2024): Tutorial Praktis, Cepat & Mudah"
 
 #: includes/Admin/Assets.php:217
 msgid "How to Point Domain Name to Web Hosting"
@@ -1165,13 +1141,12 @@ msgid ""
 "If you wish to edit the image, click on the chosen image and click the Edit "
 "Image button. You can now crop, rotate, flip or scale the selected image."
 msgstr ""
-"Untuk mengubah gambar, klik gambar dan klik tombol Sunting Gambar. Anda bisa "
+"Untuk mengubah gambar, klik gambar dan klik tombol Edit Gambar. Anda bisa "
 "memotong, memutar, membalik, atau mengatur ukuran gambar."
 
-#: includes/Admin/Assets.php:441
-#, fuzzy
+#: includes/Admin/Assets.php:443
 msgid "in terms of functionality."
-msgstr "dalam hal fungsionalitas."
+msgstr "dari segi fungsionalitas."
 
 #: includes/Admin/Assets.php:227 includes/Admin/Assets.php:276
 msgid ""
@@ -1179,7 +1154,7 @@ msgid ""
 "section, click Customize. The Customize page will open."
 msgstr ""
 "Di sidebar kiri, klik Tampilan untuk melihat menu lainnya. Di menu Tampilan, "
-"klik Editor. Halaman Editor akan terbuka."
+"klik Sesuaikan. Halaman editor akan terbuka."
 
 #: includes/Admin/Assets.php:278
 msgid "In the left sidebar, click Site Identity and edit your site title."
@@ -1198,8 +1173,8 @@ msgid ""
 "In the left sidebar, find the Media button. Click on the Library button to "
 "see all the images you have uploaded to your website."
 msgstr ""
-"Di sidebar kiri, klik tombol Media. Klik tombol Pustaka untuk melihat semua "
-"gambar yang sudah Anda upload ke website Anda."
+"Di sidebar kiri, klik tombol Media. Klik tombol Galeri untuk melihat semua "
+"gambar yang sudah Anda upload ke website."
 
 #: includes/Admin/Assets.php:293
 #| msgid ""
@@ -1220,15 +1195,15 @@ msgid ""
 "In the left sidebar, find the Posts button. Click on the All Posts button "
 "and find the post for which you want to change the description."
 msgstr ""
-"Di sidebar kiri, klik tombol Pos. Klik tombol Semua Pos dan klik postingan "
-"yang ingin diubah deskripsinya."
+"Di sidebar kiri, klik tombol Postingan. Klik tombol Semua Postingan dan klik "
+"postingan yang ingin diubah deskripsinya."
 
 #: includes/Admin/Assets.php:209
 msgid ""
 "Increase your sites visibility by enabling its discoverability in the Google "
 "search engine."
 msgstr ""
-"Meningkatkan visibilitas situs dengan membuatnya ditemukan di pencarian "
+"Meningkatkan visibilitas situs dengan menampilkannya di hasil penelusuran "
 "Google."
 
 #: includes/Admin/Assets.php:392
@@ -1238,6 +1213,16 @@ msgstr "Inode hampir mencapai limit"
 #: includes/Admin/Assets.php:393
 msgid "Inodes limit reached"
 msgstr "Inode mencapai limit"
+
+#: includes/Admin/Assets.php:478
+#, fuzzy
+msgid "Install Kodee"
+msgstr "Instal Kodee"
+
+#: includes/Admin/Assets.php:473
+#, fuzzy
+msgid "Install me, so I can help you:"
+msgstr "Instal saya, agar saya dapat membantu Anda:"
 
 #: includes/Admin/Assets.php:174
 msgid "Install plugin"
@@ -1251,29 +1236,25 @@ msgstr "Instalasi gagal"
 msgid "Installed"
 msgstr "Terinstal"
 
-#: includes/Admin/Assets.php:451
-#, fuzzy
+#: includes/Admin/Assets.php:453
 msgid "Installing plugins..."
 msgstr "Menginstal plugin..."
 
-#: includes/Admin/Assets.php:452
-#, fuzzy
+#: includes/Admin/Assets.php:454
 msgid "Installing template..."
-msgstr "Menginstal templat..."
+msgstr "Menginstal template..."
 
-#: includes/Admin/Assets.php:453
-#, fuzzy
+#: includes/Admin/Assets.php:455
 msgid "Installing theme..."
 msgstr "Menginstal tema..."
 
 #: includes/Admin/Assets.php:220
 msgid "Invite a Friend, Earn Up to $100"
-msgstr "Undang Teman, Dapat Komisi $100"
+msgstr "Ajak Teman, Dapat Komisi $100"
 
 #: includes/Admin/Assets.php:323
-#, fuzzy
 msgid "Is shipping cost taxable?"
-msgstr "Apakah biaya pengiriman dikenakan pajak?"
+msgstr "Apakah ongkir dikenai pajak?"
 
 #: includes/Admin/Onboarding/PluginManager.php:42
 msgid ""
@@ -1285,23 +1266,27 @@ msgstr ""
 "aplikasi UPI seperti BHIM, Google Pay, Paytm, PhonePe, atau aplikasi UPI "
 "Perbankan tanpa tambahan biaya transaksi."
 
-#: includes/Admin/Hooks.php:504
+#: includes/Admin/Assets.php:472
+#, fuzzy
+msgid "I’m Kodee – your AI WordPress assistant"
+msgstr "Saya Kodee - asisten AI WordPress Anda"
+
+#: includes/Admin/Hooks.php:524
 msgid "Just a few more steps to launch your online store"
 msgstr "Tinggal beberapa langkah lagi untuk mengaktifkan toko online Anda"
 
 #: includes/Admin/Onboarding/Onboarding.php:180
-#: includes/Admin/Onboarding/Onboarding.php:203
-#: includes/Admin/Onboarding/Onboarding.php:233
-#: includes/Admin/Onboarding/Onboarding.php:241
+#: includes/Admin/Onboarding/Onboarding.php:205
+#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:243
 msgid "Keep current site"
 msgstr "Pertahankan situs saat ini"
 
 #: includes/Admin/Assets.php:367
 msgid "Knowledge Base"
-msgstr "Pengetahuan Dasar"
+msgstr "Knowledge Base"
 
-#: includes/Admin/Assets.php:447
-#, fuzzy
+#: includes/Admin/Assets.php:449
 msgid "Laptop"
 msgstr "Laptop"
 
@@ -1314,12 +1299,10 @@ msgid "Learn WordPress"
 msgstr "Tutorial WordPress"
 
 #: includes/Admin/Assets.php:427
-#, fuzzy
 msgid "Let AI build a website that fit your business needs."
-msgstr ""
-"Biarkan AI membangun situs web yang sesuai dengan kebutuhan bisnis Anda."
+msgstr "Pakai AI untuk buat website sesuai kebutuhan bisnis Anda."
 
-#: includes/Admin/Onboarding/Onboarding.php:585
+#: includes/Admin/Onboarding/Onboarding.php:591
 msgid ""
 "Let AI explore, understand, and interact with your site. All content updates "
 "are auto-tracked so AI tools stay in sync with your site’s latest version."
@@ -1328,12 +1311,12 @@ msgstr ""
 "otomatis terlacak agar semua tool AI selalu sinkron dengan versi terbaru "
 "website."
 
-#: includes/Admin/Onboarding/Onboarding.php:540
+#: includes/Admin/Onboarding/Onboarding.php:546
 msgid ""
 "Link your Amazon Associates account to your website, start promoting "
 "products, and earn rewards. No API key required."
 msgstr ""
-"Tautkan akun Amazon Associates Anda ke website Anda. Mulai promosikan produk "
+"Hubungkan akun Amazon Associates ke website Anda. Mulai promosikan produk "
 "dan dapatkan komisi. Tak perlu API key."
 
 #: includes/Admin/Assets.php:363
@@ -1342,7 +1325,6 @@ msgstr "LiteSpeed Cache: Tool Optimasi Efektif untuk Performa Website"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:27
-#, fuzzy
 msgid "Loading..."
 msgstr "Memuat..."
 
@@ -1351,29 +1333,33 @@ msgid "Loading…"
 msgstr "Memuat.."
 
 #: includes/Admin/Assets.php:315
-#, fuzzy
 msgid "Local pickup"
-msgstr "Penjemputan lokal"
+msgstr "Ambil langsung di lokasi"
 
-#: includes/Admin/Onboarding/Onboarding.php:706
+#: includes/Admin/Onboarding/Onboarding.php:712
 msgid ""
 "Make sure that your website shows up when visitors are looking for your "
 "business on Google."
 msgstr ""
 "Pastikan website Anda muncul saat pengunjung mencari bisnis Anda di Google."
 
-#: includes/Admin/Onboarding/Onboarding.php:583
+#: includes/Admin/Onboarding/Onboarding.php:589
 msgid "Make your site discoverable by AI"
 msgstr "Pastikan website Anda mudah ditemukan AI"
 
-#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:713
+#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:719
 msgid "Manage"
 msgstr "Kelola"
 
 #: includes/Admin/Assets.php:188 includes/Admin/Assets.php:318
-#: includes/Admin/Onboarding/Onboarding.php:677
+#: includes/Admin/Onboarding/Onboarding.php:683
 msgid "Manage shipping"
 msgstr "Kelola pengiriman"
+
+#: includes/Admin/Assets.php:475
+#, fuzzy
+msgid "Manage users and permissions"
+msgstr "Mengelola pengguna dan izin"
 
 #: includes/Admin/Assets.php:187
 msgid "Market your business"
@@ -1388,16 +1374,14 @@ msgstr ""
 "gateway online."
 
 #: includes/Admin/Assets.php:324
-#, fuzzy
 msgid "Minimum spend for free shipping"
-msgstr "Pembelanjaan minimum untuk pengiriman gratis"
+msgstr "Minimum belanja untuk gratis ongkir"
 
 #: includes/Admin/Assets.php:420
 msgid "More info"
 msgstr "Info selengkapnya"
 
 #: includes/Admin/Assets.php:322
-#, fuzzy
 msgid "Most popular"
 msgstr "Paling populer"
 
@@ -1406,32 +1390,32 @@ msgid "Nameserver"
 msgstr "Nameserver"
 
 #: includes/Admin/Assets.php:423
-#, fuzzy
 msgid "Next"
 msgstr "Berikutnya"
 
+#: includes/Rest/StepRoutes.php:293
+#, fuzzy
+msgid "No default theme available to switch to."
+msgstr "Tidak ada tema default yang tersedia untuk diganti."
+
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:33
-#, fuzzy
 msgid "No pages found."
-msgstr "Tidak ada halaman yang ditemukan."
+msgstr "Halaman tidak ditemukan."
 
 #: includes/Helper.php:295
 msgid "No PHP files found in plugin directory"
-msgstr "Tidak ada file PHP yang ditemukan di direktori plugin"
+msgstr "File PHP tidak ditemukan di direktori plugin"
 
-#: includes/Admin/Assets.php:446
-#, fuzzy
+#: includes/Admin/Assets.php:448
 msgid "No plugin image"
 msgstr "Tidak ada gambar plugin"
 
-#: includes/Admin/Assets.php:444
-#, fuzzy
+#: includes/Admin/Assets.php:446
 msgid "No plugins found"
-msgstr "Tidak ada plugin yang ditemukan"
+msgstr "Plugin tidak ditemukan"
 
 #: includes/Admin/Assets.php:325
-#, fuzzy
 msgid "No requirement"
 msgstr "Tidak ada persyaratan"
 
@@ -1443,19 +1427,19 @@ msgstr "Belum dihubungkan"
 msgid "Not interested"
 msgstr "Tidak tertarik"
 
-#: includes/Admin/Onboarding/Onboarding.php:445
-#: includes/Admin/Onboarding/Onboarding.php:590
-#: includes/Admin/Onboarding/Onboarding.php:687
-#: includes/Admin/Onboarding/Onboarding.php:718
+#: includes/Admin/Onboarding/Onboarding.php:451
+#: includes/Admin/Onboarding/Onboarding.php:596
+#: includes/Admin/Onboarding/Onboarding.php:693
+#: includes/Admin/Onboarding/Onboarding.php:724
 msgid "Not needed"
 msgstr "Tidak perlu"
 
 #: includes/Admin/Onboarding/Onboarding.php:173
-#: includes/Admin/Onboarding/Onboarding.php:266
-#: includes/Admin/Onboarding/Onboarding.php:275
-#: includes/Admin/Onboarding/Onboarding.php:638
+#: includes/Admin/Onboarding/Onboarding.php:268
+#: includes/Admin/Onboarding/Onboarding.php:277
+#: includes/Admin/Onboarding/Onboarding.php:644
 msgid "Not now"
-msgstr "Tidak sekarang"
+msgstr "Lain kali"
 
 #: includes/Admin/Assets.php:402
 msgid "Not purchased"
@@ -1465,10 +1449,9 @@ msgstr "Belum dibeli"
 msgid "Not registered"
 msgstr "Belum didaftarkan"
 
-#: includes/Admin/Assets.php:443
-#, fuzzy
+#: includes/Admin/Assets.php:445
 msgid "Nothing found"
-msgstr "Tidak ada yang ditemukan"
+msgstr "Hasil tidak ditemukan"
 
 #: includes/Admin/Assets.php:256
 #| msgid "Now <strong>finish setting up</strong> the plugins you’ve installed."
@@ -1480,17 +1463,15 @@ msgstr "<strong>Selesaikan setup</strong> untuk plugin yang sudah diinstal."
 msgid "Onboarding"
 msgstr "Onboarding"
 
-#: includes/Admin/Assets.php:455
-#, fuzzy
+#: includes/Admin/Assets.php:457
 msgid "Onboarding Wordpress being built"
-msgstr "Proses orientasi Wordpress sedang dibangun"
+msgstr "Onboarding WordPress sedang dibuat"
 
-#: includes/Admin/Assets.php:471
-#, fuzzy
+#: includes/Admin/Assets.php:482
 msgid "Online store"
 msgstr "Toko online"
 
-#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:369
+#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:371
 msgid "Online store setup"
 msgstr "Setup toko online"
 
@@ -1499,7 +1480,7 @@ msgid ""
 "Opt-in to receive tips, discounts, and recommendations from the WooCommerce "
 "team directly in your inbox."
 msgstr ""
-"Opt-in untuk menerima tips, diskon, dan rekomendasi dari tim WooCommerce "
+"Setujui untuk menerima tips, diskon, dan rekomendasi dari tim WooCommerce "
 "langsung dari email Anda."
 
 #: includes/Admin/Assets.php:339
@@ -1510,13 +1491,12 @@ msgstr "Atau gunakan plugin pembayaran"
 msgid "Or use shipping plugins"
 msgstr "Atau gunakan plugin pengiriman"
 
-#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:474
+#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:485
 msgid "Other"
 msgstr "Lainnya"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:41
-#, fuzzy
 msgid "Page title:"
 msgstr "Judul halaman:"
 
@@ -1551,9 +1531,8 @@ msgid "Pending phone verification"
 msgstr "Menunggu verifikasi nomor telepon"
 
 #: includes/Admin/Assets.php:331
-#, fuzzy
 msgid "Pickup cost"
-msgstr "Biaya penjemputan"
+msgstr "Biaya pengambilan barang"
 
 #: includes/Admin/Assets.php:218
 msgid "Play on YouTube"
@@ -1587,29 +1566,26 @@ msgstr "Plugin berhasil diaktifkan"
 msgid "Plugin sucessfully installed"
 msgstr "Plugin berhasil diinstal"
 
-#: includes/Admin/Assets.php:467
-#, fuzzy
+#: includes/Admin/Assets.php:469
 msgid ""
 "Plugins are apps that can be installed on your WordPress website. Each "
 "plugin lets you add a new feature, such as forms, SEO tools, or social media "
 "buttons. All of these plugins are free."
 msgstr ""
-"Plugin adalah aplikasi yang dapat diinstal di situs web WordPress Anda. "
-"Setiap plugin memungkinkan Anda menambahkan fitur baru, seperti formulir, "
-"alat SEO, atau tombol media sosial. Semua plugin ini gratis."
+"Plugin adalah aplikasi yang bisa diinstal di website WordPress. Dengan "
+"plugin, Anda bisa menambahkan fitur baru seperti formulir, tool SEO, atau "
+"tombol media sosial. Semua plugin ini gratis."
 
 #: includes/Admin/Assets.php:306
 msgid "Pre-built websites and themes"
-msgstr "Situs dan tema yang dibuat sebelumnya"
+msgstr "Tema dan website siap pakai"
 
-#: includes/Admin/Assets.php:468
-#, fuzzy
+#: includes/Admin/Assets.php:470
 msgid "Premium template"
-msgstr "Templat premium"
+msgstr "Template premium"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PreviewPageButton.js:37
-#, fuzzy
 msgid "Preview"
 msgstr "Pratinjau"
 
@@ -1621,22 +1597,21 @@ msgstr "Lihat situs"
 msgid "Preview website"
 msgstr "Pratinjau situs"
 
-#: includes/Admin/Onboarding/Onboarding.php:528
+#: includes/Admin/Onboarding/Onboarding.php:534
 msgid "Promote products on your site"
 msgstr "Promosikan produk di website Anda"
 
 #: includes/Admin/Assets.php:346
 msgid "Publish the page"
-msgstr "Terbitkan laman"
+msgstr "Onlinekan halaman"
 
 #: includes/Admin/Assets.php:304
 msgid "Recommended for you"
-msgstr "Direkomendasikan untuk Anda"
+msgstr "Rekomendasi untuk Anda"
 
-#: includes/Admin/Assets.php:436
-#, fuzzy
+#: includes/Admin/Assets.php:438
 msgid "Recommended plugins"
-msgstr "Plugin yang direkomendasikan"
+msgstr "Rekomendasi plugin"
 
 #: includes/Admin/Assets.php:403
 msgid "Registered at another provider"
@@ -1649,6 +1624,11 @@ msgstr "Memproses registrasi"
 #: includes/Admin/Assets.php:405
 msgid "Registration didn't work"
 msgstr "Registrasi gagal"
+
+#: includes/Admin/Assets.php:479
+#, fuzzy
+msgid "Remind me later"
+msgstr "Ingatkan aku nanti"
 
 #: includes/Admin/Assets.php:388
 msgid "Renew"
@@ -1664,56 +1644,49 @@ msgstr "Jalankan situs Amazon Affiliate"
 
 #: includes/Admin/Assets.php:189
 msgid "Run email marketing campaigns"
-msgstr "Menjalankan email marketing campaign"
+msgstr "Jalankan email marketing campaign"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:62
-#, fuzzy
 msgid "Save"
 msgstr "Simpan"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:59
-#, fuzzy
 msgid "Saving"
-msgstr "Menabung"
+msgstr "Menyimpan"
 
-#: includes/Admin/Assets.php:450
-#, fuzzy
+#: includes/Admin/Assets.php:452
 msgid "Search for a plugin"
-msgstr "Mencari plugin"
+msgstr "Cari plugin"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/SearchBar.js:7
 #: gutenberg/edit-pages-panel/src/components/SearchBar.js:8
-#, fuzzy
 msgid "Search pages"
-msgstr "Halaman pencarian"
+msgstr "Cari halaman"
 
 #: includes/Admin/Onboarding/PluginManager.php:36
 msgid ""
 "Securely accept payments, synchronize sales, and seamlessly manage inventory "
 "and product data between WooCommerce and Square POS."
 msgstr ""
-"Menerima pembayaran dengan aman, menyinkronkan penjualan, dan mengelola "
-"inventaris dan data produk di WooCommerce dan Square POS dengan lancar."
+"Terima pembayaran, sinkronkan penjualan, serta kelola stok dan data produk "
+"di WooCommerce dan Square POS dengan mudah dan aman."
 
-#: includes/Admin/Assets.php:438
-#, fuzzy
+#: includes/Admin/Assets.php:440
 msgid "Select all"
 msgstr "Pilih semua"
 
-#: includes/Admin/Assets.php:442
-#, fuzzy
+#: includes/Admin/Assets.php:444
 msgid "Select one for best experience"
-msgstr "Pilih salah satu untuk pengalaman terbaik"
+msgstr "Pilih salah satu untuk hasil terbaik"
 
-#: includes/Admin/Assets.php:439
-#, fuzzy
+#: includes/Admin/Assets.php:441
 msgid "Selected plugins conflict with each other"
-msgstr "Plugin yang dipilih saling bertentangan satu sama lain"
+msgstr "Beberapa plugin yang dipilih tidak kompatibel"
 
-#: includes/Admin/Onboarding/Onboarding.php:632
+#: includes/Admin/Onboarding/Onboarding.php:638
 msgid ""
 "Sell products, services and digital downloads. Set up and customize each "
 "item to fit your business needs."
@@ -1736,17 +1709,17 @@ msgstr "Setup metode pembayaran"
 #: includes/Admin/Onboarding/WelcomeCards.php:17
 #| msgid "Set up your online store"
 msgid "Set up an online store"
-msgstr "Setup toko online Anda"
+msgstr "Setup toko online"
 
-#: includes/Admin/Onboarding/Onboarding.php:708
+#: includes/Admin/Onboarding/Onboarding.php:714
 msgid "Set up Google Site Kit"
 msgstr "Setup Google Site Kit"
 
-#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:659
+#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:665
 msgid "Set up payment method"
 msgstr "Setup metode pembayaran"
 
-#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:655
+#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:661
 msgid "Set up payments"
 msgstr "Setup pembayaran"
 
@@ -1754,7 +1727,7 @@ msgstr "Setup pembayaran"
 msgid "Set up shipping"
 msgstr "Setup pengiriman"
 
-#: includes/Admin/Onboarding/Onboarding.php:681
+#: includes/Admin/Onboarding/Onboarding.php:687
 msgid "Set up shipping method"
 msgstr "Setup metode pengiriman"
 
@@ -1762,13 +1735,13 @@ msgstr "Setup metode pengiriman"
 msgid "Set up Site Kit"
 msgstr "Setup Site Kit"
 
-#: includes/Admin/Onboarding/Onboarding.php:559
+#: includes/Admin/Onboarding/Onboarding.php:565
 msgid "Set up your online store"
 msgstr "Setup toko online Anda"
 
 #: includes/Admin/Assets.php:337
 msgid "Set up your site"
-msgstr "Setup situs Anda"
+msgstr "Setup situs"
 
 #: includes/Admin/Assets.php:157
 msgid "Setting up..."
@@ -1796,7 +1769,7 @@ msgstr "Setup toko online"
 
 #: includes/Admin/Assets.php:247
 msgid "Setup website"
-msgstr "Setup situs"
+msgstr "Setup website"
 
 #: includes/Admin/Assets.php:219
 msgid ""
@@ -1808,24 +1781,21 @@ msgstr ""
 
 #: includes/Admin/Assets.php:191
 msgid "Ship products with ease"
-msgstr "Mengirim produk dengan mudah"
+msgstr "Kirim produk dengan mudah"
 
 #: includes/Admin/Assets.php:330
-#, fuzzy
 msgid "Shipping cost"
-msgstr "Biaya pengiriman"
+msgstr "Ongkir"
 
 #: includes/Admin/Assets.php:336
-#, fuzzy
 msgid "Shipping method saved successfully!"
-msgstr "Metode pengiriman berhasil disimpan!"
+msgstr "Metode pengiriman berhasil disimpan."
 
 #: includes/Admin/Assets.php:192
 msgid "Shipping methods"
 msgstr "Metode pengiriman"
 
 #: includes/Admin/Assets.php:320
-#, fuzzy
 msgid "Shipping option"
 msgstr "Opsi pengiriman"
 
@@ -1857,28 +1827,27 @@ msgstr ""
 msgid "Skip"
 msgstr "Lewati"
 
-#: includes/Admin/Assets.php:449
-#, fuzzy
+#: includes/Admin/Assets.php:451
 msgid "Smartphone"
-msgstr "Ponsel cerdas"
+msgstr "Smartphone"
 
 #: includes/Admin/Assets.php:421
 msgid "Something went wrong"
 msgstr "Terjadi error"
 
-#: includes/Rest/StepRoutes.php:184
+#: includes/Rest/StepRoutes.php:200
 msgid "Sorry, there are activation errors."
 msgstr "Maaf, aktivasi gagal."
 
-#: includes/Rest/StepRoutes.php:78 includes/Rest/StepRoutes.php:171
-#: includes/Rest/StepRoutes.php:221 includes/Rest/StepRoutes.php:260
-#: includes/Rest/StepRoutes.php:276 includes/Rest/WooRoutes.php:51
+#: includes/Rest/StepRoutes.php:94 includes/Rest/StepRoutes.php:187
+#: includes/Rest/StepRoutes.php:237 includes/Rest/StepRoutes.php:328
+#: includes/Rest/StepRoutes.php:344 includes/Rest/WooRoutes.php:51
 #: includes/Rest/WooRoutes.php:94
 msgid "Sorry, there are validation errors."
 msgstr "Maaf, validasi gagal."
 
-#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:262
-#: includes/Admin/Onboarding/Onboarding.php:270
+#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:272
 #| msgid "Started creating your site"
 msgid "Start creating your site"
 msgstr "Mulai buat situs Anda"
@@ -1887,17 +1856,22 @@ msgstr "Mulai buat situs Anda"
 msgid "Start earning"
 msgstr "Bagikan link"
 
-#: includes/Admin/Onboarding/Onboarding.php:532
+#: includes/Admin/Assets.php:432
+#, fuzzy
+msgid "Start from a theme (advanced users)"
+msgstr "Mulai dari tema (pengguna tingkat lanjut)"
+
+#: includes/Admin/Onboarding/Onboarding.php:538
 msgid "Start promoting"
 msgstr "Mulai promosi"
 
-#: includes/Admin/Onboarding/Onboarding.php:530
+#: includes/Admin/Onboarding/Onboarding.php:536
 msgid ""
 "Start promoting affiliate products and earn rewards. It’s quick and easy to "
 "get started."
-msgstr "Mulai raih komisi dengan promosikan affiliate produk. Cepat dan mudah."
+msgstr "Mulai raih komisi dengan promosikan produk affiliate. Cepat dan mudah."
 
-#: includes/Rest/StepRoutes.php:97
+#: includes/Rest/StepRoutes.php:113
 msgid "Step category and/or step does not exist."
 msgstr "Kategori langkah dan/atau langkah tidak tersedia."
 
@@ -1905,12 +1879,16 @@ msgstr "Kategori langkah dan/atau langkah tidak tersedia."
 msgid "Store location locale not found"
 msgstr "Lokasi toko tidak ditemukan"
 
+#: includes/Admin/Assets.php:476
+#, fuzzy
+msgid "Summarize your store or site performance"
+msgstr "Rangkum kinerja toko atau situs Anda"
+
 #: includes/Admin/Assets.php:397
 msgid "Suspended"
 msgstr "Ditangguhkan"
 
-#: includes/Admin/Assets.php:448
-#, fuzzy
+#: includes/Admin/Assets.php:450
 msgid "Tablet"
 msgstr "Tablet"
 
@@ -1923,12 +1901,10 @@ msgid "Take me there"
 msgstr "Buka"
 
 #: includes/Admin/Assets.php:308
-#, fuzzy
 msgid "Take payments in cash upon delivery."
-msgstr "Menerima pembayaran secara tunai pada saat pengiriman."
+msgstr "Terima pembayaran tunai saat barang diterima."
 
 #: includes/Admin/Assets.php:310
-#, fuzzy
 msgid "Take payments via bank transfer."
 msgstr "Terima pembayaran melalui transfer bank."
 
@@ -1971,7 +1947,7 @@ msgid ""
 msgstr "Diskon <span style=\"color: #8C85FF\">Black Friday</span> terbesar!"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 #, php-format
 msgid ""
 "The Hostinger Easy Onboarding plugin requires minimum PHP version of <b>"
@@ -1981,9 +1957,8 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:49
-#, fuzzy
 msgid "The page was deleted!"
-msgstr "Halaman tersebut telah dihapus!"
+msgstr "Halaman telah dihapus."
 
 #: includes/Admin/Onboarding/PluginManager.php:54
 msgid "The plugin allows you to accept digital payments from Satispay users."
@@ -2027,18 +2002,16 @@ msgstr "Tema berhasil diinstal"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:62
-#, fuzzy
 msgid "There was an error."
-msgstr "Terjadi kesalahan."
+msgstr "Terjadi error."
 
-#: includes/Admin/Assets.php:463
-#, fuzzy
+#: includes/Admin/Assets.php:465
 msgid ""
 "These are ready-to-go sites that you can quickly customize to fit your brand "
 "and needs. You won’t have to build from scratch."
 msgstr ""
-"Ini adalah situs siap pakai yang bisa Anda sesuaikan dengan cepat agar "
-"sesuai dengan merek dan kebutuhan Anda. Anda tidak perlu membangun dari awal."
+"Website siap pakai ini bisa langsung disesuaikan dengan brand dan kebutuhan "
+"Anda, tanpa perlu mendesain dari awal."
 
 #: includes/Admin/Onboarding/PluginManager.php:57
 msgid ""
@@ -2058,14 +2031,12 @@ msgstr ""
 msgid "This field is required"
 msgstr "Kolom ini wajib diisi"
 
-#: includes/Admin/Assets.php:461
-#, fuzzy
+#: includes/Admin/Assets.php:463
 msgid "This might take a few minutes"
-msgstr "Ini mungkin membutuhkan waktu beberapa menit"
+msgstr "Proses in perlu beberapa menit"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:41
-#, fuzzy
 msgid "Title"
 msgstr "Judul"
 
@@ -2085,12 +2056,11 @@ msgstr "Transfer"
 msgid "Try again"
 msgstr "Coba lagi"
 
-#: includes/Admin/Assets.php:445
-#, fuzzy
+#: includes/Admin/Assets.php:447
 msgid "Try another search term."
 msgstr "Coba istilah pencarian lain."
 
-#: includes/Admin/Onboarding/Onboarding.php:441
+#: includes/Admin/Onboarding/Onboarding.php:447
 msgid "Try free for 1 year"
 msgstr "Coba gratis selama 1 tahun"
 
@@ -2098,7 +2068,7 @@ msgstr "Coba gratis selama 1 tahun"
 msgid "Try Omnisend"
 msgstr "Coba Omnisend"
 
-#: includes/Admin/Onboarding/Onboarding.php:587
+#: includes/Admin/Onboarding/Onboarding.php:593
 msgid "Turn on"
 msgstr "Aktifkan"
 
@@ -2106,7 +2076,7 @@ msgstr "Aktifkan"
 msgid "Turn site visitors into loyal customers"
 msgstr "Ubah pengunjung jadi pelanggan setia"
 
-#: includes/Admin/Onboarding/Onboarding.php:437
+#: includes/Admin/Onboarding/Onboarding.php:443
 msgid "Turn site visitors into subscribers"
 msgstr "Ubah pengunjung jadi subscriber"
 
@@ -2126,23 +2096,16 @@ msgstr "Upload gambar"
 msgid "Upload your logo"
 msgstr "Upload logo Anda"
 
-#: includes/Admin/Assets.php:433
-#, fuzzy
+#: includes/Admin/Assets.php:435
 #| msgid ""
 #| "Use a black site or apply a starter from one of our vendors to get "
 #| "started."
 msgid ""
 "Use a blank site or apply a starter from one of our vendors to get started."
 msgstr ""
-"Gunakan situs hitam atau gunakan starter dari salah satu vendor kami untuk "
-"memulai."
+"Mulai dengan website kosong atau gunakan starter dari salah satu vendor kami."
 
-#: includes/Admin/Assets.php:430
-#, fuzzy
-msgid "Use a theme instead"
-msgstr "Gunakan tema sebagai gantinya"
-
-#: includes/Admin/Hooks.php:358
+#: includes/Admin/Hooks.php:378
 msgid ""
 "Use the special discount code <b>ONLYHOSTINGER30</b> to get 30% off on "
 "Omnisend for 6 months when you upgrade."
@@ -2154,19 +2117,19 @@ msgstr ""
 msgid "Verify phone"
 msgstr "Verifikasi nomor telepon"
 
-#: includes/Admin/Hooks.php:513
+#: includes/Admin/Hooks.php:533
 msgid "View checklist"
 msgstr "Lihat checklist"
 
 #: includes/Admin/Assets.php:259
 msgid "View completed"
-msgstr "Lihat selesai"
+msgstr "Lihat yang sudah selesai"
 
 #: includes/Admin/Assets.php:334
 msgid "View less"
 msgstr "Lihat lebih sedikit"
 
-#: includes/Admin/Onboarding/Onboarding.php:568
+#: includes/Admin/Onboarding/Onboarding.php:574
 msgid "View list"
 msgstr "Lihat daftar"
 
@@ -2178,13 +2141,13 @@ msgstr "Lihat lebih banyak"
 msgid "View plugins"
 msgstr "Lihat plugin"
 
-#: includes/Admin/Onboarding/Onboarding.php:480
+#: includes/Admin/Onboarding/Onboarding.php:486
 msgid ""
 "Visit hPanel and connect a real domain. If you already did this, please wait "
 "up to 24h until the domain fully connects"
 msgstr ""
-"Kunjungi hPanel dan hubungkan domain asli. Jika Anda telah melakukannya, "
-"tunggu hingga 24 jam hingga domain terhubung sepenuhnya"
+"Kunjungi hPanel dan hubungkan domain asli. Jika sudah, tunggu hingga 24 jam "
+"hingga domain terhubung sepenuhnya"
 
 #: includes/Admin/Assets.php:212
 msgid "Wait for domain propagation"
@@ -2194,15 +2157,15 @@ msgstr "Tunggu propagasi domain"
 msgid "Want to create a new AI site?"
 msgstr "Ingin membuat situs AI baru?"
 
-#: includes/Admin/Onboarding/Onboarding.php:198
+#: includes/Admin/Onboarding/Onboarding.php:200
 msgid "Want to create a new site on a different template?"
 msgstr "Ingin buat situs baru dengan template lain?"
 
-#: includes/Admin/Onboarding/Onboarding.php:239
+#: includes/Admin/Onboarding/Onboarding.php:241
 msgid "Want to create a new site on a pre-built template?"
 msgstr "Ingin buat situs baru dengan template yang dibuat sebelumnya?"
 
-#: includes/Admin/Onboarding/Onboarding.php:231
+#: includes/Admin/Onboarding/Onboarding.php:233
 msgid "Want to create a new site?"
 msgstr "Ingin buat situs baru?"
 
@@ -2216,11 +2179,11 @@ msgstr ""
 "ketidaknyamanan ini. Silakan coba lagi nanti atau hubungi tim support kami "
 "untuk mendapatkan bantuan."
 
-#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:608
+#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:614
 msgid "We'll use this information to help you set up your store faster."
 msgstr "Kami akan menggunakan informasi ini untuk setup toko Anda lebih cepat."
 
-#: includes/Admin/Onboarding/Onboarding.php:332
+#: includes/Admin/Onboarding/Onboarding.php:334
 msgid "Website setup"
 msgstr "Setup situs"
 
@@ -2236,18 +2199,15 @@ msgstr "Selamat datang di WordPress!"
 msgid "What type of products or services will you sell?"
 msgstr "Jenis produk atau layanan apa yang ingin dijual?"
 
-#: includes/Admin/Assets.php:466
-#, fuzzy
+#: includes/Admin/Assets.php:468
 msgid "What’s a plugin?"
 msgstr "Apa itu plugin?"
 
-#: includes/Admin/Assets.php:462
-#, fuzzy
-msgid "What’s a pre-built website?"
-msgstr "Apa yang dimaksud dengan situs web yang dibuat sebelumnya?"
-
 #: includes/Admin/Assets.php:464
-#, fuzzy
+msgid "What’s a pre-built website?"
+msgstr "Apa itu website siap pakai?"
+
+#: includes/Admin/Assets.php:466
 msgid "What’s a theme?"
 msgstr "Apa itu tema?"
 
@@ -2264,7 +2224,7 @@ msgid "Yes, skip step"
 msgstr "Ya, lewati"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:81
+#: hostinger-easy-onboarding.php:85
 #, php-format
 msgid "You are running <b>%s</b> PHP version."
 msgstr "Anda menggunakan versi PHP <b>%s</b>."
@@ -2325,7 +2285,7 @@ msgstr "Setup toko online sudah selesai!"
 msgid "Your business email"
 msgstr "Email bisnis Anda"
 
-#: includes/Admin/Onboarding/Onboarding.php:232
+#: includes/Admin/Onboarding/Onboarding.php:234
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates or use AI."
@@ -2333,8 +2293,8 @@ msgstr ""
 "Situs baru Anda akan menggantikan situs saat ini. Pilih dari 140+ template "
 "profesional atau gunakan AI."
 
-#: includes/Admin/Onboarding/Onboarding.php:199
-#: includes/Admin/Onboarding/Onboarding.php:240
+#: includes/Admin/Onboarding/Onboarding.php:201
+#: includes/Admin/Onboarding/Onboarding.php:242
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates."
@@ -2358,10 +2318,9 @@ msgstr "Progres Anda"
 msgid "Your store name"
 msgstr "Nama toko Anda"
 
-#: includes/Admin/Assets.php:459
-#, fuzzy
+#: includes/Admin/Assets.php:461
 msgid "Your website failed to build. Please try again."
-msgstr "Situs web Anda gagal dibuat. Silakan coba lagi."
+msgstr "Gagal membuat website. Coba lagi."
 
 #: includes/Admin/Assets.php:225
 msgid ""
@@ -2371,10 +2330,9 @@ msgstr ""
 "Website Anda berhasil online dan dapat diakses menggunakan subdomain gratis "
 "sementara dari Hostinger. Berikut adalah URL website Anda saat ini:"
 
-#: includes/Admin/Assets.php:457
-#, fuzzy
+#: includes/Admin/Assets.php:459
 msgid "Your website is ready"
-msgstr "Situs web Anda sudah siap"
+msgstr "Website Anda sudah siap"
 
 #: includes/Admin/Assets.php:223
 msgid "👋 Welcome to WordPress"

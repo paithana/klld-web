@@ -156,6 +156,26 @@ class Hooks {
                 z-index: 100000;
                 pointer-events: none;
             }
+            body.hostinger-onboarding-white-overlay-loader::after {
+                content: "";
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: 76px;
+                height: 76px;
+                margin-top: -38px;
+                margin-left: -38px;
+                border: 4px solid #EBE4FF;
+                border-top-color: #673DE6;
+                border-radius: 50%;
+                z-index: 100001;
+                pointer-events: none;
+                animation: hostinger-overlay-spin 0.8s linear infinite;
+                background-color: #ffffff;
+            }
+            @keyframes hostinger-overlay-spin {
+                to { transform: rotate(360deg); }
+            }
             <?php if ( ! $helper->is_woocommerce_onboarding_completed() ) : ?>
             .post-php.post-type-product #wpadminbar .wpforms-menu-notification-counter,
             .post-php.post-type-product #wpadminbar .aioseo-menu-notification-counter,
@@ -567,6 +587,7 @@ class Hooks {
 
         if ( $this->is_onboarding_action_page() ) {
             $classes .= ' hostinger-onboarding-white-overlay';
+            $classes .= ' hostinger-onboarding-white-overlay-loader';
         }
 
         return $classes;

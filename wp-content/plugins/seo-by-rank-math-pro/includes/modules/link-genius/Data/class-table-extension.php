@@ -348,12 +348,13 @@ class Table_Extension {
 		// Add foreign key constraint if table was just created and parent table exists.
 		if ( $created && DB::check_table_exists( 'rank_math_link_genius_maps' ) ) {
 			global $wpdb;
-			$table      = $wpdb->prefix . 'rank_math_link_genius_map_variations';
-			$maps_table = $wpdb->prefix . 'rank_math_link_genius_maps';
+			$table           = $wpdb->prefix . 'rank_math_link_genius_map_variations';
+			$maps_table      = $wpdb->prefix . 'rank_math_link_genius_maps';
+			$current_site_id = get_current_blog_id();
 
 			DB::query(
 				"ALTER TABLE `{$table}`
-				ADD CONSTRAINT `fk_variation_keyword_map_id`
+				ADD CONSTRAINT `fk_variation_keyword_map_id_{$current_site_id}`
 				FOREIGN KEY (`keyword_map_id`)
 				REFERENCES `{$maps_table}` (`id`)
 				ON DELETE CASCADE"

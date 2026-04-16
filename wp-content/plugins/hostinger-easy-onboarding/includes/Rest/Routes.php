@@ -242,6 +242,17 @@ class Routes {
             )
         );
 
+        // Deactivate AI theme.
+        register_rest_route(
+            HOSTINGER_EASY_ONBOARDING_REST_API_BASE,
+            'deactivate-ai-theme',
+            array(
+                'methods'             => 'POST',
+                'callback'            => array( $this->step_routes, 'deactivate_ai_theme' ),
+                'permission_callback' => array( $this, 'permission_check' ),
+            )
+        );
+
         // Install AI theme.
         register_rest_route(
             HOSTINGER_EASY_ONBOARDING_REST_API_BASE,

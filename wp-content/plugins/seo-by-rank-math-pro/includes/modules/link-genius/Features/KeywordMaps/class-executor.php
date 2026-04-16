@@ -204,9 +204,6 @@ class Executor {
 			];
 		}
 
-		$target_url   = $keyword_map->target_url;
-		$max_per_post = ! empty( $keyword_map->max_links_per_post ) ? (int) $keyword_map->max_links_per_post : 3;
-
 		// Process all posts using optimized method.
 		$all_changes = [];
 		$total_links = 0;
@@ -216,11 +213,6 @@ class Executor {
 			// Analyze content once per post.
 			$content          = $post->post_content;
 			$content_analysis = Content_Analyzer::analyze( $content );
-
-			// Skip if post already has target link.
-			if ( Content_Analyzer::has_target_link( $content_analysis, $target_url ) ) {
-				continue;
-			}
 
 			// Apply links (content is modified by reference, but we don't save it).
 			$result = $this->apply_links_to_content(
@@ -257,7 +249,7 @@ class Executor {
 			$unique_posts[ $change['post_id'] ] = true;
 		}
 
-		// If no link opportunities were found (e.g., all posts already have the target link).
+		// If no link opportunities were found (e.g., all matches were already inside existing links, fell in unsafe ranges, or max_links_per_post was exhausted).
 		if ( 0 === $total_links ) {
 			return [
 				'success'        => true,
@@ -265,7 +257,7 @@ class Executor {
 				'total_posts'    => 0,
 				'sample_changes' => [],
 				'warnings'       => [],
-				'message'        => __( 'No new link opportunities found. The matching posts already contain the target link.', 'rank-math-pro' ),
+				'message'        => __( 'No new link opportunities found. All keyword matches are already linked or in content that cannot be modified.', 'rank-math-pro' ),
 			];
 		}
 
@@ -316,13 +308,15 @@ class Executor {
 		$target_url = $keyword_map->target_url;
 		$max_links  = ! empty( $keyword_map->max_links_per_post ) ? (int) $keyword_map->max_links_per_post : 3;
 
-		// Check if post already has a link to the target URL.
-		if ( Content_Analyzer::has_target_link( $content_analysis, $target_url ) ) {
+		// Subtract links that already point to the target URL so the cap applies
+		// to the total number of target-URL links in the post, not just new ones.
+		$existing_target_links = Content_Analyzer::count_target_links( $content_analysis, $target_url, $variations );
+		$max_links             = max( 0, $max_links - $existing_target_links );
+
+		if ( 0 === $max_links ) {
 			return [
 				'links_added' => 0,
 				'changes'     => [],
-				'skipped'     => true,
-				'reason'      => __( 'Post already contains a link to the target URL.', 'rank-math-pro' ),
 			];
 		}
 

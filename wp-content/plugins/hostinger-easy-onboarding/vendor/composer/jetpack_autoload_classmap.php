@@ -271,43 +271,43 @@ return array(
 		'path'    => $baseDir . '/includes/Errors.php'
 	),
 	'Hostinger\\Surveys\\Ajax' => array(
-		'version' => '1.1.19.0',
+		'version' => '1.1.20.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-surveys/src/Ajax.php'
 	),
 	'Hostinger\\Surveys\\Assets' => array(
-		'version' => '1.1.19.0',
+		'version' => '1.1.20.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-surveys/src/Assets.php'
 	),
 	'Hostinger\\Surveys\\Loader' => array(
-		'version' => '1.1.19.0',
+		'version' => '1.1.20.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-surveys/src/Loader.php'
 	),
 	'Hostinger\\Surveys\\Rest' => array(
-		'version' => '1.1.19.0',
+		'version' => '1.1.20.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-surveys/src/Rest.php'
 	),
 	'Hostinger\\Surveys\\SurveyLoader' => array(
-		'version' => '1.1.19.0',
+		'version' => '1.1.20.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-surveys/src/SurveyLoader.php'
 	),
 	'Hostinger\\Surveys\\SurveyManager' => array(
-		'version' => '1.1.19.0',
+		'version' => '1.1.20.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-surveys/src/SurveyManager.php'
 	),
 	'Hostinger\\WpHelper\\Config' => array(
-		'version' => '1.0.12.0',
+		'version' => '1.0.13.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-helper/src/Config.php'
 	),
 	'Hostinger\\WpHelper\\Constants' => array(
-		'version' => '1.0.12.0',
+		'version' => '1.0.13.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-helper/src/Constants.php'
 	),
 	'Hostinger\\WpHelper\\Requests\\Client' => array(
-		'version' => '1.0.12.0',
+		'version' => '1.0.13.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-helper/src/Requests/Client.php'
 	),
 	'Hostinger\\WpHelper\\Utils' => array(
-		'version' => '1.0.12.0',
+		'version' => '1.0.13.0',
 		'path'    => $vendorDir . '/hostinger/hostinger-wp-helper/src/Utils.php'
 	),
 	'Hostinger\\WpMenuManager\\Assets' => array(

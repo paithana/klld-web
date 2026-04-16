@@ -15,12 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-05-06T11:48:04+00:00\n"
-"PO-Revision-Date: 2026-02-02 12:23+0000\n"
+"PO-Revision-Date: 2026-04-14 06:40+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hostinger-easy-onboarding\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Language: es_AR\n"
-"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.2.29"
+"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.2.29"
 
 #: includes/Admin/Assets.php:216
 msgid ""
@@ -32,20 +32,18 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:66
-#, fuzzy
 msgid " Please refresh the page and try again."
-msgstr " Por favor, actualice la página e inténtelo de nuevo."
+msgstr " Por favor, actualizá la página e intentalo de nuevo."
 
 #. translators: %s plugin slug
-#: includes/Rest/StepRoutes.php:161
+#: includes/Rest/StepRoutes.php:177
 #, php-format
 msgid "%s is already active"
 msgstr "%s ya está activo"
 
 #. translators: %s field name that is missing
-#. translators: %s missing field slug
-#: includes/Rest/StepRoutes.php:67 includes/Rest/StepRoutes.php:72
-#: includes/Rest/StepRoutes.php:153 includes/Rest/StepRoutes.php:215
+#: includes/Rest/StepRoutes.php:83 includes/Rest/StepRoutes.php:88
+#: includes/Rest/StepRoutes.php:169 includes/Rest/StepRoutes.php:231
 #: includes/Rest/WooRoutes.php:39 includes/WooCommerce/SetupHandler.php:34
 #: includes/WooCommerce/SetupHandler.php:44
 #, php-format
@@ -79,34 +77,29 @@ msgstr ""
 "adicionales."
 
 #: includes/Admin/Assets.php:326
-#, fuzzy
 msgid "A minimum order amount"
 msgstr "Un importe mínimo de pedido"
 
 #: includes/Admin/Assets.php:329
-#, fuzzy
 msgid "A minimum order amount AND coupon"
 msgstr "Un importe mínimo de pedido Y cupón"
 
 #: includes/Admin/Assets.php:328
-#, fuzzy
 msgid "A minimum order amount OR coupon"
 msgstr "Un importe mínimo de pedido O cupón"
 
-#: includes/Admin/Assets.php:465
-#, fuzzy
+#: includes/Admin/Assets.php:467
 msgid ""
 "A theme controls your WordPress site’s appearance and layout, including "
 "colors and fonts. You’ll need to build and customize the pages yourself."
 msgstr ""
-"Un tema controla la apariencia y el diseño de tu sitio WordPress, incluidos "
-"los colores y las fuentes. Tendrás que crear y personalizar las páginas tú "
-"mismo."
+"Un tema es lo que dispone la estética y el diseño de tu sitio WordPress, "
+"incluidos los colores y las fuentes. Vas a tener que crear y personalizar "
+"las páginas vos mismo."
 
 #: includes/Admin/Assets.php:327
-#, fuzzy
 msgid "A valid free shipping coupon"
-msgstr "Un cupón de envío gratuito válido"
+msgstr "Un cupón válido de envío gratis"
 
 #: includes/Admin/Onboarding/PluginManager.php:30
 msgid "Accept payments via credit card. Manage transactions within WordPress."
@@ -126,7 +119,6 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:44
-#, fuzzy
 msgid "Actions"
 msgstr "Acciones"
 
@@ -146,7 +138,7 @@ msgstr "Activo"
 msgid "Add"
 msgstr "Agregar"
 
-#: includes/Admin/Onboarding/Onboarding.php:470
+#: includes/Admin/Onboarding/Onboarding.php:476
 msgid "Add a domain"
 msgstr "Agregar un dominio"
 
@@ -158,11 +150,16 @@ msgstr "Agregar una nueva página"
 msgid "Add a title"
 msgstr "Agregar un título"
 
+#: includes/Admin/Assets.php:477
+#, fuzzy
+msgid "Add and manage WooCommerce products"
+msgstr "Añadir y gestionar productos WooCommerce"
+
 #: includes/Admin/Assets.php:344
 msgid "Add content"
 msgstr "Agregar contenido"
 
-#: includes/Admin/Onboarding/Onboarding.php:472
+#: includes/Admin/Onboarding/Onboarding.php:478
 msgid "Add domain"
 msgstr "Agregar dominio"
 
@@ -170,12 +167,11 @@ msgstr "Agregar dominio"
 msgid "Add plugin"
 msgstr "Agregar plugin"
 
-#: includes/Admin/Assets.php:435
-#, fuzzy
+#: includes/Admin/Assets.php:437
 msgid "Add plugins to your site"
-msgstr "Añada plugins a su sitio web"
+msgstr "Agregá plugins a su sitio web"
 
-#: includes/Admin/Onboarding/Onboarding.php:634
+#: includes/Admin/Onboarding/Onboarding.php:640
 #| msgid "Add products"
 msgid "Add product"
 msgstr "Agregar producto"
@@ -184,7 +180,7 @@ msgstr "Agregar producto"
 msgid "Add shipping method"
 msgstr "Agregar método de envío"
 
-#: includes/Admin/Onboarding/Onboarding.php:606
+#: includes/Admin/Onboarding/Onboarding.php:612
 msgid "Add store details"
 msgstr "Agregá detalles de la tienda"
 
@@ -202,7 +198,7 @@ msgstr ""
 msgid "Add your first product"
 msgstr "Agregá tu primer producto"
 
-#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:630
+#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:636
 msgid "Add your first product or service"
 msgstr "Agregá tu primer producto o servicio"
 
@@ -234,20 +230,17 @@ msgstr ""
 "Agregá PagSeguro como método de pago (con descuento sobre las tarifas "
 "oficiales)."
 
-#: includes/Admin/Assets.php:472
-#, fuzzy
+#: includes/Admin/Assets.php:483
 msgid "Affiliate marketing"
-msgstr "Marketing de afiliación"
+msgstr "Marketing de afiliados"
 
-#: includes/Admin/Assets.php:431 includes/Admin/Assets.php:469
-#, fuzzy
+#: includes/Admin/Assets.php:433 includes/Admin/Assets.php:480
 msgid "All"
 msgstr "Todos"
 
 #: includes/Admin/Assets.php:316
-#, fuzzy
 msgid "Allow customers to pick up orders themselves."
-msgstr "Permita que los clientes recojan ellos mismos los pedidos."
+msgstr "Habilitá que los clientes recojan ellos mismos los pedidos."
 
 #: includes/Admin/Onboarding/PluginManager.php:39
 msgid ""
@@ -261,7 +254,6 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:106
-#, fuzzy
 msgid "An error occurred while deleting the page."
 msgstr "Se ha producido un error al borrar la página."
 
@@ -273,9 +265,8 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:76
-#, fuzzy
 msgid "An unexpected error occurred. Please try again."
-msgstr "Se ha producido un error inesperado. Por favor, inténtalo de nuevo."
+msgstr "Se ha producido un error inesperado. Por favor, intentalo de nuevo."
 
 #: includes/Admin/Onboarding/PluginManager.php:83
 msgid ""
@@ -285,22 +276,20 @@ msgstr ""
 "Anteraja"
 
 #: includes/Admin/Assets.php:422
-#, fuzzy
 msgid "Apply minimum order rule before discount"
 msgstr "Aplicar regla de pedido mínimo antes del descuento"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:31
-#, fuzzy
 msgid "Are you sure you want to delete this page?"
-msgstr "¿Seguro que quieres borrar esta página?"
+msgstr "¿Seguro querés borrar esta página?"
 
 #: includes/Admin/Assets.php:352
 msgid "Are you sure?"
 msgstr "¿Seguro?"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 msgid "Attention:"
 msgstr "Atención:"
 
@@ -329,12 +318,17 @@ msgstr ""
 msgid "Being reviewed"
 msgstr "En revisión"
 
-#: includes/Admin/Assets.php:473
-#, fuzzy
+#: includes/Admin/Assets.php:484
 msgid "Blog"
 msgstr "Blog"
 
-#: includes/Admin/Onboarding/Onboarding.php:271
+#: includes/Admin/Assets.php:430
+#, fuzzy
+msgid "Browse our vast library of handpicked pre built websites and themes."
+msgstr ""
+"Navegue por nuestra amplia biblioteca de sitios web y temas prediseñados."
+
+#: includes/Admin/Onboarding/Onboarding.php:273
 msgid ""
 "Build a custom-designed site in minutes with professional templates. You’ll "
 "be ready to go live in a few clicks."
@@ -342,7 +336,7 @@ msgstr ""
 "Creá un sitio web personalizado en minutos con plantillas profesionales. "
 "Solo te va a llevar unos clics."
 
-#: includes/Admin/Onboarding/Onboarding.php:263
+#: includes/Admin/Onboarding/Onboarding.php:265
 msgid ""
 "Build a professional, custom-designed site in moments. Choose from 140+ "
 "templates or use AI."
@@ -358,18 +352,16 @@ msgstr ""
 "Creá un sitio profesional diseñado a medida en instantes, con un par de "
 "clics. La IA se encarga de casi todo."
 
-#: includes/Admin/Assets.php:428
-#, fuzzy
+#: includes/Admin/Assets.php:429
 msgid ""
 "Build a website from scratch, with the help of pre-built websites or themes."
 msgstr ""
-"Cree un sitio web desde cero, con la ayuda de sitios web o temas "
-"preconstruidos."
+"Creá un sitio web desde cero, con la ayuda de sitios web o temas "
+"prediseñados."
 
-#: includes/Admin/Assets.php:470
-#, fuzzy
+#: includes/Admin/Assets.php:481
 msgid "Business"
-msgstr "Empresas"
+msgstr "Negocios"
 
 #: includes/Admin/Assets.php:411
 msgid "Buy domain"
@@ -384,12 +376,7 @@ msgstr "Cancelar"
 msgid "Cash on delivery"
 msgstr "Contrarreembolso"
 
-#: includes/Admin/Assets.php:410
-msgid "Change domain"
-msgstr "Cambiar dominio"
-
 #: includes/Admin/Assets.php:314
-#, fuzzy
 msgid "Charge a fixed rate for shipping regardless of the order."
 msgstr "Cobrar una tarifa fija por el envío independientemente del pedido."
 
@@ -405,34 +392,31 @@ msgstr "Falta el parámetro de elección o está vacío"
 msgid "Choice parameter missing or invalid"
 msgstr "El parámetro de elección falta o no es válido"
 
-#: includes/Admin/Assets.php:429
-#, fuzzy
+#: includes/Admin/Assets.php:431
 msgid "Choose a pre-built website"
-msgstr "Elija un sitio web prediseñado"
+msgstr "Elegí un sitio web prediseñado"
 
-#: includes/Admin/Onboarding/Onboarding.php:243
+#: includes/Admin/Onboarding/Onboarding.php:245
 msgid "Choose a template"
 msgstr "Elegí una plantilla"
 
-#: includes/Admin/Assets.php:432
-#, fuzzy
+#: includes/Admin/Assets.php:434
 msgid "Choose a theme"
-msgstr "Elija un tema"
+msgstr "Elegí un tema"
 
-#: includes/Admin/Onboarding/Onboarding.php:208
+#: includes/Admin/Onboarding/Onboarding.php:210
 msgid "Choose another template"
 msgstr "Elegí otra plantilla"
 
 #: includes/Admin/Assets.php:426
-#, fuzzy
 msgid "Choose how you’d like to build your website"
-msgstr "Elija cómo desea crear su sitio web"
+msgstr "Elegí cómo crear tu sitio web"
 
-#: includes/Admin/Onboarding/Onboarding.php:272
+#: includes/Admin/Onboarding/Onboarding.php:274
 msgid "Choose template"
 msgstr "Elegir plantilla"
 
-#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:679
+#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:685
 msgid ""
 "Choose the ways you'd like to ship orders to customers. You can always add "
 "others later."
@@ -440,12 +424,11 @@ msgstr ""
 "Elegí cómo querés enviar los pedidos a los clientes. Siempre podés añadir "
 "otros métodos más adelante."
 
-#: includes/Admin/Assets.php:460
-#, fuzzy
+#: includes/Admin/Assets.php:462
 msgid "Close"
 msgstr "Cerrar"
 
-#: includes/Admin/Onboarding/Onboarding.php:439
+#: includes/Admin/Onboarding/Onboarding.php:445
 msgid ""
 "Collect emails from forms on your site and start sending on-brand email "
 "campaigns with Hostinger Reach – all powered by AI."
@@ -469,10 +452,9 @@ msgstr "Completado"
 msgid "Completed steps"
 msgstr "Pasos completados"
 
-#: includes/Admin/Assets.php:456
-#, fuzzy
+#: includes/Admin/Assets.php:458
 msgid "Completed!"
-msgstr "¡Terminado!"
+msgstr "¡Completado!"
 
 #: includes/Admin/Assets.php:283
 msgid "Configure"
@@ -486,12 +468,11 @@ msgstr ""
 "Configurá las opciones de pago y aceptá pagos con tarjetas, ticket y dinero "
 "en cuenta de Mercado Pago."
 
-#: includes/Admin/Assets.php:440
-#, fuzzy
+#: includes/Admin/Assets.php:442
 msgid "conflicts with"
 msgstr "conflictos con"
 
-#: includes/Admin/Hooks.php:517
+#: includes/Admin/Hooks.php:537
 msgid "Congrats, you have connected WooPayments!"
 msgstr "¡Felicitaciones! Conectaste WooPayments"
 
@@ -499,7 +480,7 @@ msgstr "¡Felicitaciones! Conectaste WooPayments"
 msgid "Congrats, you're ready to show off your site!"
 msgstr "¡Felicitaciones! Todo listo para que le muestres tu página al mundo."
 
-#: includes/Admin/Hooks.php:510
+#: includes/Admin/Hooks.php:530
 msgid "Congrats, you’re ready to show off your site!"
 msgstr "¡Felicitaciones! Está todo listo para que muestres tu sitio web."
 
@@ -507,18 +488,19 @@ msgstr "¡Felicitaciones! Está todo listo para que muestres tu sitio web."
 msgid "Connect"
 msgstr "Conectar"
 
-#: includes/Admin/Onboarding/Onboarding.php:542
+#: includes/Admin/Onboarding/Onboarding.php:548
 msgid "Connect Amazon to site"
 msgstr "Conectar Amazon al sitio"
+
+#: includes/Admin/Assets.php:410 includes/Admin/Onboarding/Onboarding.php:482
+#: includes/Admin/Onboarding/Onboarding.php:495
+#, fuzzy
+msgid "Connect domain"
+msgstr "Conectar dominio"
 
 #: includes/Admin/Assets.php:261
 msgid "Connect domain now"
 msgstr "Conectar dominio ahora"
-
-#: includes/Admin/Onboarding/Onboarding.php:476
-#: includes/Admin/Onboarding/Onboarding.php:489
-msgid "Connect on hPanel"
-msgstr "Conectar en hPanel"
 
 #: includes/Admin/Assets.php:291 includes/Admin/Onboarding/WelcomeCards.php:29
 msgid ""
@@ -527,7 +509,7 @@ msgstr ""
 "Conectá tu cuenta de <strong>Amazon Asociados</strong> para obtener los "
 "detalles de la API."
 
-#: includes/Admin/Onboarding/Onboarding.php:534
+#: includes/Admin/Onboarding/Onboarding.php:540
 msgid "Connect your Amazon account to the site"
 msgstr "Conectá tu cuenta de Amazon al sitio"
 
@@ -535,7 +517,7 @@ msgstr "Conectá tu cuenta de Amazon al sitio"
 msgid "Connect your domain"
 msgstr "Conectá tu dominio"
 
-#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:723
+#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:729
 msgid "Connect your domain first"
 msgstr "Primero conectá tu dominio"
 
@@ -544,11 +526,11 @@ msgstr "Primero conectá tu dominio"
 msgid "Connect your domain to Hostinger"
 msgstr "Conectá tu dominio a Hostinger"
 
-#: includes/Admin/Onboarding/Onboarding.php:494
+#: includes/Admin/Onboarding/Onboarding.php:500
 msgid "Connected a domain"
 msgstr "Conectado a un dominio"
 
-#: includes/Admin/Onboarding/Onboarding.php:537
+#: includes/Admin/Onboarding/Onboarding.php:543
 msgid "Connected your Amazon account"
 msgstr "Conectada tu cuenta de Amazon"
 
@@ -570,8 +552,8 @@ msgstr ""
 msgid "Continue"
 msgstr "Continuar"
 
-#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:507
-#: includes/Admin/Hooks.php:520
+#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:527
+#: includes/Admin/Hooks.php:540
 msgid "Continue setup"
 msgstr "Continuar la configuración"
 
@@ -581,13 +563,11 @@ msgstr "Crear un logo"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/CreatePageButton.js:23
-#, fuzzy
 msgid "Create a new Page"
 msgstr "Crear una nueva página"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/CreatePageButton.js:26
-#, fuzzy
 msgid "Create a new page"
 msgstr "Crear una nueva página"
 
@@ -607,17 +587,22 @@ msgstr ""
 "Creá métodos de envío adicionales en WooCommerce y activá la fijación de "
 "precios basada en el peso o el total del carrito."
 
+#: includes/Admin/Assets.php:474
+#, fuzzy
+msgid "Create and edit pages or posts"
+msgstr "Crear y editar páginas o entradas"
+
 #: includes/Admin/Onboarding/PluginManager.php:79
 msgid "Create Chronopost & Mondial relay shipping labels and send them easily."
 msgstr ""
 "Creá etiquetas de envío de Chronopost y Mondial Relay y mandalas fácilmente."
 
 #: includes/Admin/Onboarding/Onboarding.php:184
-#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:237
 msgid "Create new site"
 msgstr "Crear un nuevo sitio"
 
-#: includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:266
 msgid "Create site"
 msgstr "Crear sitio web"
 
@@ -627,12 +612,10 @@ msgstr "Crear sitio con IA"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:59
-#, fuzzy
 msgid "Current page"
 msgstr "Página actual"
 
 #: includes/Admin/Assets.php:319
-#, fuzzy
 #| msgid "Current page"
 msgid "Current zone"
 msgstr "Página actual"
@@ -649,24 +632,27 @@ msgstr "Límite de la base de datos casi alcanzado"
 msgid "Database limit reached"
 msgstr "Se alcanzó el límite de la base de datos"
 
-#: includes/Admin/Assets.php:434
-#, fuzzy
+#: includes/Admin/Assets.php:436
 msgid "Default"
 msgstr "Por defecto"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:123
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:125
-#, fuzzy
 msgid "Delete page"
 msgstr "Borrar página"
 
-#: includes/Admin/Assets.php:437
+#: includes/Admin/Assets.php:428
 #, fuzzy
+msgid "Describe your idea and watch AI build your site with custom content"
+msgstr ""
+"Describa su idea y vea cómo AI construye su sitio con contenido personalizado"
+
+#: includes/Admin/Assets.php:439
 msgid "Deselect all"
 msgstr "Deseleccionar todo"
 
-#: includes/Admin/Assets.php:515
+#: includes/Admin/Assets.php:530
 msgid "Digital products"
 msgstr "Productos digitales"
 
@@ -690,8 +676,7 @@ msgstr "Límite de uso de disco alcanzado"
 msgid "Dismiss"
 msgstr "Desestimar"
 
-#: includes/Admin/Assets.php:475
-#, fuzzy
+#: includes/Admin/Assets.php:486
 msgid "Do not install plugins"
 msgstr "No instalar plugins"
 
@@ -745,7 +730,6 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:19
-#, fuzzy
 msgid "Edit"
 msgstr "Editar"
 
@@ -757,21 +741,19 @@ msgstr "Editar una imagen"
 msgid "Edit description"
 msgstr "Editar la descripción"
 
-#: includes/Hooks.php:292
+#: includes/Hooks.php:296
 msgid "Edit Home Page"
 msgstr "Editar página de inicio"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:12
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:14
-#, fuzzy
 msgid "Edit Page"
 msgstr "Editar página"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/index.js:139
 #: gutenberg/edit-pages-panel/src/index.js:145
-#, fuzzy
 msgid "Edit Pages"
 msgstr "Editar páginas"
 
@@ -814,11 +796,10 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:46
-#, fuzzy
 msgid "Error:"
 msgstr "Error:"
 
-#: includes/Admin/Onboarding/Onboarding.php:498
+#: includes/Admin/Onboarding/Onboarding.php:504
 #| msgid ""
 #| "Every website needs a domain that makes it easy to access and remember. "
 #| "Get ours in just a few clicks."
@@ -849,23 +830,19 @@ msgstr "Caduca el"
 msgid "Extends WooCommerce with a RedSys gateway."
 msgstr "Amplía WooCommerce con una pasarela RedSys."
 
-#: includes/Rest/StepRoutes.php:305
-#, fuzzy
+#: includes/Rest/StepRoutes.php:373
 msgid "Failed to download theme."
 msgstr "No se ha podido descargar el tema."
 
-#: includes/Rest/StepRoutes.php:321
-#, fuzzy
+#: includes/Rest/StepRoutes.php:389
 msgid "Failed to install theme."
 msgstr "Error al instalar el tema."
 
-#: includes/Admin/Assets.php:458
-#, fuzzy
+#: includes/Admin/Assets.php:460
 msgid "Failed!"
-msgstr "¡Fracasado!"
+msgstr "Falló"
 
-#: includes/Admin/Assets.php:454
-#, fuzzy
+#: includes/Admin/Assets.php:456
 msgid "Finalizing..."
 msgstr "Finalizando..."
 
@@ -879,9 +856,8 @@ msgid "Find the Media page"
 msgstr "Encontrá la página Medios"
 
 #: includes/Admin/Assets.php:332
-#, fuzzy
 msgid "Finish"
-msgstr "Acabado"
+msgstr "Finalizado"
 
 #: includes/Admin/Assets.php:407
 msgid "Finish registration"
@@ -889,12 +865,10 @@ msgstr "Finalizar el registro"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/StoreSetupButton.js:26
-#, fuzzy
 msgid "Finish Setup"
-msgstr "Acabado"
+msgstr "Finalizar setup"
 
 #: includes/Admin/Assets.php:313
-#, fuzzy
 msgid "Flat rate"
 msgstr "Tarifa plana"
 
@@ -903,22 +877,18 @@ msgid "Follow these steps to complete your setup"
 msgstr "Seguí estos pasos para completar la configuración"
 
 #: includes/Admin/Assets.php:311
-#, fuzzy
 msgid "Free shipping"
-msgstr "Envío gratuito"
+msgstr "Envío gratis"
 
 #: includes/Admin/Assets.php:312
-#, fuzzy
 msgid "Free shipping is a great way to increase conversions."
 msgstr "El envío gratuito es una excelente forma de aumentar las conversiones."
 
 #: includes/Admin/Assets.php:321
-#, fuzzy
 msgid "Free shipping requires"
-msgstr "El envío gratuito requiere"
+msgstr "El envío gratis requiere"
 
 #: includes/Admin/Menu.php:109 includes/Admin/Menu.php:110
-#, fuzzy
 msgid "Full Screen Onboarding"
 msgstr "Onboarding a pantalla completa"
 
@@ -939,11 +909,11 @@ msgstr "Obtener un dominio"
 msgid "Get deal"
 msgstr "Obtener oferta"
 
-#: includes/Admin/Hooks.php:362
+#: includes/Admin/Hooks.php:382
 msgid "Get Discount"
 msgstr "Obtener descuento"
 
-#: includes/Admin/Onboarding/Onboarding.php:704
+#: includes/Admin/Onboarding/Onboarding.php:710
 msgid "Get found on Google"
 msgstr "Posicionate en Google"
 
@@ -973,7 +943,7 @@ msgstr ""
 "Preparate para aceptar pagos de clientes. Permitiles pagar tus productos y "
 "servicios con facilidad."
 
-#: includes/Admin/Onboarding/Onboarding.php:657
+#: includes/Admin/Onboarding/Onboarding.php:663
 msgid ""
 "Get ready to sell online. Add your first product, then set up payments and "
 "shipping."
@@ -981,7 +951,7 @@ msgstr ""
 "Preparate para vender en Internet. Agregá tu primer producto y configurá los "
 "pagos y el envío."
 
-#: includes/Admin/Onboarding/Onboarding.php:561
+#: includes/Admin/Onboarding/Onboarding.php:567
 msgid ""
 "Get ready to sell online. Add your first product, then set up shipping and "
 "payments."
@@ -989,8 +959,8 @@ msgstr ""
 "Preparate para vender en Internet. Agregá tu primer producto y configurá los "
 "pagos y el envío."
 
-#: includes/Admin/Onboarding/Onboarding.php:563
-#: includes/Admin/Onboarding/Onboarding.php:610
+#: includes/Admin/Onboarding/Onboarding.php:569
+#: includes/Admin/Onboarding/Onboarding.php:616
 #| msgid "Get Started"
 msgid "Get started"
 msgstr "Empezar"
@@ -1012,7 +982,6 @@ msgid "Go to the Customize page"
 msgstr "Ir a la página Personalizar"
 
 #: includes/Admin/Assets.php:425
-#, fuzzy
 msgid "Go to WordPress"
 msgstr "Ir a WordPress"
 
@@ -1031,6 +1000,11 @@ msgstr "¡Entiendo!"
 #: includes/Admin/Assets.php:369
 msgid "Help Center"
 msgstr "Centro de ayuda"
+
+#: includes/Admin/Assets.php:471
+#, fuzzy
+msgid "Hey,"
+msgstr "Hola,"
 
 #: includes/Admin/Assets.php:260
 msgid "Hide completed"
@@ -1064,6 +1038,11 @@ msgstr "Hostinger"
 #: includes/Admin/Assets.php:372
 msgid "Hostinger Academy"
 msgstr "Academia de Hostinger"
+
+#: includes/Rest/StepRoutes.php:261
+#, fuzzy
+msgid "Hostinger AI theme is not currently active."
+msgstr "El tema Hostinger AI no está activo actualmente."
 
 #. Plugin Name of the plugin
 #: hostinger-easy-onboarding.php
@@ -1184,8 +1163,7 @@ msgstr ""
 "imagen. Ahora podés recortar, girar, voltear o escalar la imagen "
 "seleccionada."
 
-#: includes/Admin/Assets.php:441
-#, fuzzy
+#: includes/Admin/Assets.php:443
 msgid "in terms of functionality."
 msgstr "en términos de funcionalidad."
 
@@ -1260,6 +1238,16 @@ msgstr "Límite de inodos casi alcanzado"
 msgid "Inodes limit reached"
 msgstr "Límite de inodos alcanzado"
 
+#: includes/Admin/Assets.php:478
+#, fuzzy
+msgid "Install Kodee"
+msgstr "Instalar Kodee"
+
+#: includes/Admin/Assets.php:473
+#, fuzzy
+msgid "Install me, so I can help you:"
+msgstr "Instálame para que pueda ayudarte:"
+
 #: includes/Admin/Assets.php:174
 msgid "Install plugin"
 msgstr "Instalar plugin"
@@ -1272,18 +1260,15 @@ msgstr "Error de instalación"
 msgid "Installed"
 msgstr "Instalado"
 
-#: includes/Admin/Assets.php:451
-#, fuzzy
+#: includes/Admin/Assets.php:453
 msgid "Installing plugins..."
 msgstr "Instalando plugins..."
 
-#: includes/Admin/Assets.php:452
-#, fuzzy
+#: includes/Admin/Assets.php:454
 msgid "Installing template..."
 msgstr "Instalando plantilla..."
 
-#: includes/Admin/Assets.php:453
-#, fuzzy
+#: includes/Admin/Assets.php:455
 msgid "Installing theme..."
 msgstr "Instalando tema..."
 
@@ -1292,7 +1277,6 @@ msgid "Invite a Friend, Earn Up to $100"
 msgstr "Invitá a un amigo y ganá hasta 100 dólares"
 
 #: includes/Admin/Assets.php:323
-#, fuzzy
 msgid "Is shipping cost taxable?"
 msgstr "¿Los gastos de envío están sujetos a impuestos?"
 
@@ -1306,14 +1290,19 @@ msgstr ""
 "como BHIM, Google Pay, Paytm, PhonePe o cualquier aplicación UPI bancaria. "
 "Evitá los gastos de pasarela de pago."
 
-#: includes/Admin/Hooks.php:504
+#: includes/Admin/Assets.php:472
+#, fuzzy
+msgid "I’m Kodee – your AI WordPress assistant"
+msgstr "Soy Kodee, tu asistente de AI para WordPress"
+
+#: includes/Admin/Hooks.php:524
 msgid "Just a few more steps to launch your online store"
 msgstr "Solo unos pocos pasos más para publicar tu tienda online"
 
 #: includes/Admin/Onboarding/Onboarding.php:180
-#: includes/Admin/Onboarding/Onboarding.php:203
-#: includes/Admin/Onboarding/Onboarding.php:233
-#: includes/Admin/Onboarding/Onboarding.php:241
+#: includes/Admin/Onboarding/Onboarding.php:205
+#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:243
 msgid "Keep current site"
 msgstr "Mantener el sitio actual"
 
@@ -1321,10 +1310,9 @@ msgstr "Mantener el sitio actual"
 msgid "Knowledge Base"
 msgstr "Biblioteca de conocimiento"
 
-#: includes/Admin/Assets.php:447
-#, fuzzy
+#: includes/Admin/Assets.php:449
 msgid "Laptop"
-msgstr "Portátil"
+msgstr "Laptop"
 
 #: includes/Admin/Assets.php:400
 msgid "Learn more"
@@ -1335,13 +1323,12 @@ msgid "Learn WordPress"
 msgstr "Aprendé WordPress"
 
 #: includes/Admin/Assets.php:427
-#, fuzzy
 msgid "Let AI build a website that fit your business needs."
 msgstr ""
-"Deje que AI construya un sitio web que se adapte a las necesidades de su "
+"Hacé que la IA te arme un sitio web que se adapte a las necesidades de tu "
 "negocio."
 
-#: includes/Admin/Onboarding/Onboarding.php:585
+#: includes/Admin/Onboarding/Onboarding.php:591
 msgid ""
 "Let AI explore, understand, and interact with your site. All content updates "
 "are auto-tracked so AI tools stay in sync with your site’s latest version."
@@ -1350,7 +1337,7 @@ msgstr ""
 "actualizaciones de contenido se registran automáticamente para que las "
 "herramientas de IA estén siempre sincronizadas con tu última versión."
 
-#: includes/Admin/Onboarding/Onboarding.php:540
+#: includes/Admin/Onboarding/Onboarding.php:546
 msgid ""
 "Link your Amazon Associates account to your website, start promoting "
 "products, and earn rewards. No API key required."
@@ -1364,7 +1351,6 @@ msgstr "LiteSpeed Cache: cómo optimizar WordPress al 100%"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:27
-#, fuzzy
 msgid "Loading..."
 msgstr "Cargando..."
 
@@ -1373,11 +1359,10 @@ msgid "Loading…"
 msgstr "Cargando.."
 
 #: includes/Admin/Assets.php:315
-#, fuzzy
 msgid "Local pickup"
-msgstr "Recogida local"
+msgstr "Retiro en tienda"
 
-#: includes/Admin/Onboarding/Onboarding.php:706
+#: includes/Admin/Onboarding/Onboarding.php:712
 msgid ""
 "Make sure that your website shows up when visitors are looking for your "
 "business on Google."
@@ -1385,18 +1370,23 @@ msgstr ""
 "Asegurate de que tu sitio web aparezca cuando los visitantes busquen tu "
 "empresa en Google."
 
-#: includes/Admin/Onboarding/Onboarding.php:583
+#: includes/Admin/Onboarding/Onboarding.php:589
 msgid "Make your site discoverable by AI"
 msgstr "Hacé que tu sitio sea detectable para las IA"
 
-#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:713
+#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:719
 msgid "Manage"
 msgstr "Administrar"
 
 #: includes/Admin/Assets.php:188 includes/Admin/Assets.php:318
-#: includes/Admin/Onboarding/Onboarding.php:677
+#: includes/Admin/Onboarding/Onboarding.php:683
 msgid "Manage shipping"
 msgstr " Administrar envíos"
+
+#: includes/Admin/Assets.php:475
+#, fuzzy
+msgid "Manage users and permissions"
+msgstr "Gestionar usuarios y permisos"
 
 #: includes/Admin/Assets.php:187
 msgid "Market your business"
@@ -1411,7 +1401,6 @@ msgstr ""
 "online."
 
 #: includes/Admin/Assets.php:324
-#, fuzzy
 msgid "Minimum spend for free shipping"
 msgstr "Gasto mínimo para envío gratuito"
 
@@ -1420,7 +1409,6 @@ msgid "More info"
 msgstr "Más info"
 
 #: includes/Admin/Assets.php:322
-#, fuzzy
 msgid "Most popular"
 msgstr "Más populares"
 
@@ -1429,13 +1417,16 @@ msgid "Nameserver"
 msgstr "Nameserver"
 
 #: includes/Admin/Assets.php:423
-#, fuzzy
 msgid "Next"
 msgstr "Siguiente"
 
+#: includes/Rest/StepRoutes.php:293
+#, fuzzy
+msgid "No default theme available to switch to."
+msgstr "No hay tema predeterminado disponible para cambiar."
+
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:33
-#, fuzzy
 msgid "No pages found."
 msgstr "No se han encontrado páginas."
 
@@ -1443,18 +1434,15 @@ msgstr "No se han encontrado páginas."
 msgid "No PHP files found in plugin directory"
 msgstr "No se encontraron archivos PHP en el directorio del plugin"
 
-#: includes/Admin/Assets.php:446
-#, fuzzy
+#: includes/Admin/Assets.php:448
 msgid "No plugin image"
 msgstr "No hay imagen del plugin"
 
-#: includes/Admin/Assets.php:444
-#, fuzzy
+#: includes/Admin/Assets.php:446
 msgid "No plugins found"
 msgstr "No se han encontrado plugins"
 
 #: includes/Admin/Assets.php:325
-#, fuzzy
 msgid "No requirement"
 msgstr "Ningún requisito"
 
@@ -1466,17 +1454,17 @@ msgstr "No conectado"
 msgid "Not interested"
 msgstr "No me interesa"
 
-#: includes/Admin/Onboarding/Onboarding.php:445
-#: includes/Admin/Onboarding/Onboarding.php:590
-#: includes/Admin/Onboarding/Onboarding.php:687
-#: includes/Admin/Onboarding/Onboarding.php:718
+#: includes/Admin/Onboarding/Onboarding.php:451
+#: includes/Admin/Onboarding/Onboarding.php:596
+#: includes/Admin/Onboarding/Onboarding.php:693
+#: includes/Admin/Onboarding/Onboarding.php:724
 msgid "Not needed"
 msgstr "No es necesario"
 
 #: includes/Admin/Onboarding/Onboarding.php:173
-#: includes/Admin/Onboarding/Onboarding.php:266
-#: includes/Admin/Onboarding/Onboarding.php:275
-#: includes/Admin/Onboarding/Onboarding.php:638
+#: includes/Admin/Onboarding/Onboarding.php:268
+#: includes/Admin/Onboarding/Onboarding.php:277
+#: includes/Admin/Onboarding/Onboarding.php:644
 msgid "Not now"
 msgstr "Ahora no"
 
@@ -1488,8 +1476,7 @@ msgstr "No comprado"
 msgid "Not registered"
 msgstr "No registrado"
 
-#: includes/Admin/Assets.php:443
-#, fuzzy
+#: includes/Admin/Assets.php:445
 msgid "Nothing found"
 msgstr "No se ha encontrado nada"
 
@@ -1503,17 +1490,15 @@ msgstr "Ahora términa de configura los plugins que instalaste."
 msgid "Onboarding"
 msgstr "Configuración inicial"
 
-#: includes/Admin/Assets.php:455
-#, fuzzy
+#: includes/Admin/Assets.php:457
 msgid "Onboarding Wordpress being built"
 msgstr "Onboarding Wordpress en construcción"
 
-#: includes/Admin/Assets.php:471
-#, fuzzy
+#: includes/Admin/Assets.php:482
 msgid "Online store"
-msgstr "Tienda en línea"
+msgstr "Tienda online"
 
-#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:369
+#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:371
 msgid "Online store setup"
 msgstr "Configuración de la tienda online"
 
@@ -1533,13 +1518,12 @@ msgstr "O usá plugins de pagos"
 msgid "Or use shipping plugins"
 msgstr "O usá plugins para envíos"
 
-#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:474
+#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:485
 msgid "Other"
 msgstr "Otro"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:41
-#, fuzzy
 msgid "Page title:"
 msgstr "Título de la página:"
 
@@ -1574,9 +1558,8 @@ msgid "Pending phone verification"
 msgstr "Verificación de teléfono pendiente"
 
 #: includes/Admin/Assets.php:331
-#, fuzzy
 msgid "Pickup cost"
-msgstr "Coste de recogida"
+msgstr "Costo de retiro"
 
 #: includes/Admin/Assets.php:218
 msgid "Play on YouTube"
@@ -1610,8 +1593,7 @@ msgstr "Plugin activado correctamente"
 msgid "Plugin sucessfully installed"
 msgstr "Plugin instalado correctamente"
 
-#: includes/Admin/Assets.php:467
-#, fuzzy
+#: includes/Admin/Assets.php:469
 msgid ""
 "Plugins are apps that can be installed on your WordPress website. Each "
 "plugin lets you add a new feature, such as forms, SEO tools, or social media "
@@ -1626,14 +1608,12 @@ msgstr ""
 msgid "Pre-built websites and themes"
 msgstr "Sitios web y temas prediseñados"
 
-#: includes/Admin/Assets.php:468
-#, fuzzy
+#: includes/Admin/Assets.php:470
 msgid "Premium template"
 msgstr "Plantilla Premium"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PreviewPageButton.js:37
-#, fuzzy
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -1645,7 +1625,7 @@ msgstr "Vista previa del sitio"
 msgid "Preview website"
 msgstr "Vista previa del sitio web"
 
-#: includes/Admin/Onboarding/Onboarding.php:528
+#: includes/Admin/Onboarding/Onboarding.php:534
 msgid "Promote products on your site"
 msgstr "Promocioná productos en tu sitio web"
 
@@ -1657,8 +1637,7 @@ msgstr "Publicá la página"
 msgid "Recommended for you"
 msgstr "Recomendado para vos"
 
-#: includes/Admin/Assets.php:436
-#, fuzzy
+#: includes/Admin/Assets.php:438
 msgid "Recommended plugins"
 msgstr "Plugins recomendados"
 
@@ -1673,6 +1652,11 @@ msgstr "Registrando"
 #: includes/Admin/Assets.php:405
 msgid "Registration didn't work"
 msgstr "El registro no funcionó"
+
+#: includes/Admin/Assets.php:479
+#, fuzzy
+msgid "Remind me later"
+msgstr "Recuérdamelo más tarde"
 
 #: includes/Admin/Assets.php:388
 msgid "Renew"
@@ -1692,27 +1676,23 @@ msgstr "Hacé campañas de marketing por email"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:62
-#, fuzzy
 msgid "Save"
 msgstr "Guardar"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:59
-#, fuzzy
 msgid "Saving"
 msgstr "Guardar"
 
-#: includes/Admin/Assets.php:450
-#, fuzzy
+#: includes/Admin/Assets.php:452
 msgid "Search for a plugin"
 msgstr "Buscar un plugin"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/SearchBar.js:7
 #: gutenberg/edit-pages-panel/src/components/SearchBar.js:8
-#, fuzzy
 msgid "Search pages"
-msgstr "Páginas de búsqueda"
+msgstr "Buscar páginas"
 
 #: includes/Admin/Onboarding/PluginManager.php:36
 msgid ""
@@ -1722,22 +1702,19 @@ msgstr ""
 "Recibí pagos de forma segura, sincronizá ventas y administrá sin problemas "
 "el stock y los datos de los productos entre WooCommerce y Square POS."
 
-#: includes/Admin/Assets.php:438
-#, fuzzy
+#: includes/Admin/Assets.php:440
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: includes/Admin/Assets.php:442
-#, fuzzy
+#: includes/Admin/Assets.php:444
 msgid "Select one for best experience"
-msgstr "Seleccione uno para disfrutar de la mejor experiencia"
+msgstr "Seleccioná uno para una experiencia óptima"
 
-#: includes/Admin/Assets.php:439
-#, fuzzy
+#: includes/Admin/Assets.php:441
 msgid "Selected plugins conflict with each other"
 msgstr "Los plugins seleccionados entran en conflicto entre sí"
 
-#: includes/Admin/Onboarding/Onboarding.php:632
+#: includes/Admin/Onboarding/Onboarding.php:638
 msgid ""
 "Sell products, services and digital downloads. Set up and customize each "
 "item to fit your business needs."
@@ -1762,15 +1739,15 @@ msgstr "Establecé un medio de pago"
 msgid "Set up an online store"
 msgstr "Configurá tu tienda online"
 
-#: includes/Admin/Onboarding/Onboarding.php:708
+#: includes/Admin/Onboarding/Onboarding.php:714
 msgid "Set up Google Site Kit"
 msgstr "Configurá Google Site Kit"
 
-#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:659
+#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:665
 msgid "Set up payment method"
 msgstr "Configurar medio de pago"
 
-#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:655
+#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:661
 msgid "Set up payments"
 msgstr "Configurá los pagos"
 
@@ -1778,7 +1755,7 @@ msgstr "Configurá los pagos"
 msgid "Set up shipping"
 msgstr "Configurá los envíos"
 
-#: includes/Admin/Onboarding/Onboarding.php:681
+#: includes/Admin/Onboarding/Onboarding.php:687
 msgid "Set up shipping method"
 msgstr "Configurá el método de envío"
 
@@ -1786,7 +1763,7 @@ msgstr "Configurá el método de envío"
 msgid "Set up Site Kit"
 msgstr "Configurá Site Kit"
 
-#: includes/Admin/Onboarding/Onboarding.php:559
+#: includes/Admin/Onboarding/Onboarding.php:565
 msgid "Set up your online store"
 msgstr "Creá tu tienda online"
 
@@ -1835,12 +1812,10 @@ msgid "Ship products with ease"
 msgstr "Envía productos con facilidad"
 
 #: includes/Admin/Assets.php:330
-#, fuzzy
 msgid "Shipping cost"
 msgstr "Gastos de envío"
 
 #: includes/Admin/Assets.php:336
-#, fuzzy
 msgid "Shipping method saved successfully!"
 msgstr "¡Método de envío guardado correctamente!"
 
@@ -1849,7 +1824,6 @@ msgid "Shipping methods"
 msgstr "Métodos de envío"
 
 #: includes/Admin/Assets.php:320
-#, fuzzy
 msgid "Shipping option"
 msgstr "Opción de envío"
 
@@ -1882,28 +1856,27 @@ msgstr ""
 msgid "Skip"
 msgstr "Saltar"
 
-#: includes/Admin/Assets.php:449
-#, fuzzy
+#: includes/Admin/Assets.php:451
 msgid "Smartphone"
-msgstr "Teléfono inteligente"
+msgstr "Smartphone"
 
 #: includes/Admin/Assets.php:421
 msgid "Something went wrong"
 msgstr "Algo salió mal"
 
-#: includes/Rest/StepRoutes.php:184
+#: includes/Rest/StepRoutes.php:200
 msgid "Sorry, there are activation errors."
 msgstr "Hay errores de activación."
 
-#: includes/Rest/StepRoutes.php:78 includes/Rest/StepRoutes.php:171
-#: includes/Rest/StepRoutes.php:221 includes/Rest/StepRoutes.php:260
-#: includes/Rest/StepRoutes.php:276 includes/Rest/WooRoutes.php:51
+#: includes/Rest/StepRoutes.php:94 includes/Rest/StepRoutes.php:187
+#: includes/Rest/StepRoutes.php:237 includes/Rest/StepRoutes.php:328
+#: includes/Rest/StepRoutes.php:344 includes/Rest/WooRoutes.php:51
 #: includes/Rest/WooRoutes.php:94
 msgid "Sorry, there are validation errors."
 msgstr "Hay errores de validación."
 
-#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:262
-#: includes/Admin/Onboarding/Onboarding.php:270
+#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:272
 #| msgid "Started creating your site"
 msgid "Start creating your site"
 msgstr "Empezá a crear tu sitio web"
@@ -1912,18 +1885,23 @@ msgstr "Empezá a crear tu sitio web"
 msgid "Start earning"
 msgstr "Empezá a ganar"
 
-#: includes/Admin/Onboarding/Onboarding.php:532
+#: includes/Admin/Assets.php:432
+#, fuzzy
+msgid "Start from a theme (advanced users)"
+msgstr "Empezar desde un tema (usuarios avanzados)"
+
+#: includes/Admin/Onboarding/Onboarding.php:538
 msgid "Start promoting"
 msgstr "Empezá a promocionar"
 
-#: includes/Admin/Onboarding/Onboarding.php:530
+#: includes/Admin/Onboarding/Onboarding.php:536
 msgid ""
 "Start promoting affiliate products and earn rewards. It’s quick and easy to "
 "get started."
 msgstr ""
 "Empezá a promocionar productos y ganá comisiones. Empezar es fácil y rápido."
 
-#: includes/Rest/StepRoutes.php:97
+#: includes/Rest/StepRoutes.php:113
 msgid "Step category and/or step does not exist."
 msgstr "El paso o la categoría de pasos no existe."
 
@@ -1931,14 +1909,18 @@ msgstr "El paso o la categoría de pasos no existe."
 msgid "Store location locale not found"
 msgstr "No se encontró la configuración regional de la tienda"
 
+#: includes/Admin/Assets.php:476
+#, fuzzy
+msgid "Summarize your store or site performance"
+msgstr "Resuma el rendimiento de su tienda o sitio web"
+
 #: includes/Admin/Assets.php:397
 msgid "Suspended"
 msgstr "Suspendido"
 
-#: includes/Admin/Assets.php:448
-#, fuzzy
+#: includes/Admin/Assets.php:450
 msgid "Tablet"
-msgstr "Tableta"
+msgstr "Tablet"
 
 #: includes/Admin/Onboarding/PluginManager.php:24
 msgid "Take credit card payments on your store using Stripe."
@@ -1949,14 +1931,12 @@ msgid "Take me there"
 msgstr "Llevame allí"
 
 #: includes/Admin/Assets.php:308
-#, fuzzy
 msgid "Take payments in cash upon delivery."
-msgstr "Aceptamos pagos en efectivo en el momento de la entrega."
+msgstr "Aceptá pagos en efectivo en el momento de la entrega."
 
 #: includes/Admin/Assets.php:310
-#, fuzzy
 msgid "Take payments via bank transfer."
-msgstr "Acepte pagos por transferencia bancaria."
+msgstr "Aceptá pagos por transferencia bancaria."
 
 #: includes/Admin/Assets.php:374
 msgid "Tell us a bit about your business"
@@ -1997,7 +1977,7 @@ msgid ""
 msgstr "¡La mejor <span style=\"color: #8C85FF\">cyberoferta</span>!"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 #, php-format
 msgid ""
 "The Hostinger Easy Onboarding plugin requires minimum PHP version of <b>"
@@ -2008,7 +1988,6 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:49
-#, fuzzy
 msgid "The page was deleted!"
 msgstr "La página ha sido borrada"
 
@@ -2055,18 +2034,16 @@ msgstr "Tema instalado correctamente"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:62
-#, fuzzy
 msgid "There was an error."
-msgstr "Ha habido un error."
+msgstr "Hubo un error."
 
-#: includes/Admin/Assets.php:463
-#, fuzzy
+#: includes/Admin/Assets.php:465
 msgid ""
 "These are ready-to-go sites that you can quickly customize to fit your brand "
 "and needs. You won’t have to build from scratch."
 msgstr ""
-"Se trata de sitios listos para usar que puede personalizar rápidamente para "
-"adaptarlos a su marca y sus necesidades. No tendrá que empezar desde cero."
+"Son sitios listos para usar que podés personalizar rápidamente para "
+"adaptarlos a tu marca y necesidades, así no tenés que empezar de cero."
 
 #: includes/Admin/Onboarding/PluginManager.php:57
 msgid ""
@@ -2086,14 +2063,12 @@ msgstr ""
 msgid "This field is required"
 msgstr "Este campo es obligatorio"
 
-#: includes/Admin/Assets.php:461
-#, fuzzy
+#: includes/Admin/Assets.php:463
 msgid "This might take a few minutes"
 msgstr "Puede tardar unos minutos"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:41
-#, fuzzy
 msgid "Title"
 msgstr "Título"
 
@@ -2113,12 +2088,11 @@ msgstr "Transferir"
 msgid "Try again"
 msgstr "Intentalo de nuevo"
 
-#: includes/Admin/Assets.php:445
-#, fuzzy
+#: includes/Admin/Assets.php:447
 msgid "Try another search term."
-msgstr "Prueba con otro término de búsqueda."
+msgstr "Probá con otro término de búsqueda."
 
-#: includes/Admin/Onboarding/Onboarding.php:441
+#: includes/Admin/Onboarding/Onboarding.php:447
 msgid "Try free for 1 year"
 msgstr "Probalo gratis por 1 año"
 
@@ -2126,7 +2100,7 @@ msgstr "Probalo gratis por 1 año"
 msgid "Try Omnisend"
 msgstr "Probá Omnisend"
 
-#: includes/Admin/Onboarding/Onboarding.php:587
+#: includes/Admin/Onboarding/Onboarding.php:593
 msgid "Turn on"
 msgstr "Activar"
 
@@ -2134,7 +2108,7 @@ msgstr "Activar"
 msgid "Turn site visitors into loyal customers"
 msgstr "Convertí visitantes en clientes fieles"
 
-#: includes/Admin/Onboarding/Onboarding.php:437
+#: includes/Admin/Onboarding/Onboarding.php:443
 msgid "Turn site visitors into subscribers"
 msgstr "Convertí visitantes en suscriptores"
 
@@ -2154,23 +2128,17 @@ msgstr "Subí una imagen"
 msgid "Upload your logo"
 msgstr "Subí tu logo"
 
-#: includes/Admin/Assets.php:433
-#, fuzzy
+#: includes/Admin/Assets.php:435
 #| msgid ""
 #| "Use a black site or apply a starter from one of our vendors to get "
 #| "started."
 msgid ""
 "Use a blank site or apply a starter from one of our vendors to get started."
 msgstr ""
-"Utilice un sitio negro o aplique un iniciador de uno de nuestros proveedores "
+"Usá un sitio en blanco o aplicá un iniciador de uno de nuestros proveedores "
 "para empezar."
 
-#: includes/Admin/Assets.php:430
-#, fuzzy
-msgid "Use a theme instead"
-msgstr "Utiliza un tema"
-
-#: includes/Admin/Hooks.php:358
+#: includes/Admin/Hooks.php:378
 msgid ""
 "Use the special discount code <b>ONLYHOSTINGER30</b> to get 30% off on "
 "Omnisend for 6 months when you upgrade."
@@ -2182,7 +2150,7 @@ msgstr ""
 msgid "Verify phone"
 msgstr "Verificar teléfono"
 
-#: includes/Admin/Hooks.php:513
+#: includes/Admin/Hooks.php:533
 msgid "View checklist"
 msgstr "Ver checklist"
 
@@ -2194,7 +2162,7 @@ msgstr "Vista completa"
 msgid "View less"
 msgstr "Ver menos"
 
-#: includes/Admin/Onboarding/Onboarding.php:568
+#: includes/Admin/Onboarding/Onboarding.php:574
 msgid "View list"
 msgstr "Ver lista"
 
@@ -2206,7 +2174,7 @@ msgstr "Ver más"
 msgid "View plugins"
 msgstr "Ver plugins"
 
-#: includes/Admin/Onboarding/Onboarding.php:480
+#: includes/Admin/Onboarding/Onboarding.php:486
 msgid ""
 "Visit hPanel and connect a real domain. If you already did this, please wait "
 "up to 24h until the domain fully connects"
@@ -2222,15 +2190,15 @@ msgstr "Aguardá a la propagación del dominio"
 msgid "Want to create a new AI site?"
 msgstr "¿Querés crear un nuevo sitio con IA?"
 
-#: includes/Admin/Onboarding/Onboarding.php:198
+#: includes/Admin/Onboarding/Onboarding.php:200
 msgid "Want to create a new site on a different template?"
 msgstr "¿Querés crear un nuevo sitio web con otra plantilla?"
 
-#: includes/Admin/Onboarding/Onboarding.php:239
+#: includes/Admin/Onboarding/Onboarding.php:241
 msgid "Want to create a new site on a pre-built template?"
 msgstr "¿Querés crear un sitio nuevo a partir de una plantilla prediseñada?"
 
-#: includes/Admin/Onboarding/Onboarding.php:231
+#: includes/Admin/Onboarding/Onboarding.php:233
 msgid "Want to create a new site?"
 msgstr "¿Querés crear un nuevo sitio web?"
 
@@ -2244,13 +2212,13 @@ msgstr ""
 "el proceso de generación de contenido con IA. Por favor, intentalo de nuevo "
 "más tarde y, si el problema continúa, contactate con soporte."
 
-#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:608
+#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:614
 msgid "We'll use this information to help you set up your store faster."
 msgstr ""
 "Vamos a usar esta información para ayudarte a configurar tu tienda más "
 "rápidamente."
 
-#: includes/Admin/Onboarding/Onboarding.php:332
+#: includes/Admin/Onboarding/Onboarding.php:334
 msgid "Website setup"
 msgstr "Configuración del sitio web"
 
@@ -2266,18 +2234,15 @@ msgstr "¡Te damos la bienvenida a WordPress!"
 msgid "What type of products or services will you sell?"
 msgstr "¿Qué tipo de productos o servicios vas a vender?"
 
-#: includes/Admin/Assets.php:466
-#, fuzzy
+#: includes/Admin/Assets.php:468
 msgid "What’s a plugin?"
 msgstr "¿Qué es un plugin?"
 
-#: includes/Admin/Assets.php:462
-#, fuzzy
-msgid "What’s a pre-built website?"
-msgstr "¿Qué es un sitio web prefabricado?"
-
 #: includes/Admin/Assets.php:464
-#, fuzzy
+msgid "What’s a pre-built website?"
+msgstr "¿Qué es un sitio web prearmado?"
+
+#: includes/Admin/Assets.php:466
 msgid "What’s a theme?"
 msgstr "¿Qué es un tema?"
 
@@ -2294,7 +2259,7 @@ msgid "Yes, skip step"
 msgstr "Sí, omitir el paso"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:81
+#: hostinger-easy-onboarding.php:85
 #, php-format
 msgid "You are running <b>%s</b> PHP version."
 msgstr "Estás ejecutando la versión de PHP <b>%s</b>."
@@ -2355,7 +2320,7 @@ msgstr "¡Ya terminaste de configurar tu tienda online!"
 msgid "Your business email"
 msgstr "Tu email empresarial"
 
-#: includes/Admin/Onboarding/Onboarding.php:232
+#: includes/Admin/Onboarding/Onboarding.php:234
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates or use AI."
@@ -2363,8 +2328,8 @@ msgstr ""
 "Tu nuevo sitio web sustituirá al actual. Podés elegir entre más de 140 "
 "plantillas profesionales o usar la IA."
 
-#: includes/Admin/Onboarding/Onboarding.php:199
-#: includes/Admin/Onboarding/Onboarding.php:240
+#: includes/Admin/Onboarding/Onboarding.php:201
+#: includes/Admin/Onboarding/Onboarding.php:242
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates."
@@ -2388,10 +2353,9 @@ msgstr "Tu progreso"
 msgid "Your store name"
 msgstr "Nombre de tu tienda"
 
-#: includes/Admin/Assets.php:459
-#, fuzzy
+#: includes/Admin/Assets.php:461
 msgid "Your website failed to build. Please try again."
-msgstr "No se ha podido crear su sitio web. Por favor, inténtelo de nuevo."
+msgstr "No se ha podido crear su sitio web. Por favor, intentalo de nuevo."
 
 #: includes/Admin/Assets.php:225
 msgid ""
@@ -2401,10 +2365,9 @@ msgstr ""
 "Tu sitio web ya está publicado y se puede acceder a través de un subdominio "
 "temporal libre de Hostinger. Aquí está la URL actual de tu sitio web:"
 
-#: includes/Admin/Assets.php:457
-#, fuzzy
+#: includes/Admin/Assets.php:459
 msgid "Your website is ready"
-msgstr "Su sitio web está listo"
+msgstr "Tu sitio web está listo"
 
 #: includes/Admin/Assets.php:223
 msgid "👋 Welcome to WordPress"

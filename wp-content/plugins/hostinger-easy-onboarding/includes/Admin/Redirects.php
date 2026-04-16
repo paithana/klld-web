@@ -66,39 +66,10 @@ class Redirects {
                     $redirect_url = admin_url( 'admin.php?page=hostinger' );
                 }
 
-                /**
-                 * Fetch experiment data from API and check if new onboarding process is enabled.
-                 * Skip for existing websites where the first admin user was created more than 1 day ago,
-                 * as these sites were likely onboarded before this option existed.
-                 */
+                // Onboarding redirect.
                 $hostinger_onboarding_completed = get_option( 'hostinger_onboarding_completed', false );
                 if ( $hostinger_onboarding_completed === false && $this->is_new_website() ) {
-                    try {
-                        $helper         = new Helper();
-                        $config_handler = new Config();
-                        $client         = new Client(
-                            $config_handler->getConfigValue(
-                                'base_rest_uri',
-                                Constants::HOSTINGER_REST_URI
-                            ),
-                            array(
-                                Config::TOKEN_HEADER  => $helper::getApiToken(),
-                                Config::DOMAIN_HEADER => $helper->getHostInfo(),
-                            )
-                        );
-
-                        $request = $client->get( '/v3/wordpress/amplitude/experiments', array( 'domain' => $helper->getHostInfo() ) );
-
-                        if ( ! empty( $request['body'] ) ) {
-                            $response = json_decode( $request['body'], true );
-
-                            if ( ! empty( $response['data']['wordpress-new-onboarding-process'] ) ) {
-                                $redirect_url = admin_url( 'admin.php?page=hostinger&action=onboarding' );
-                            }
-                        }
-                    } catch ( Exception $e ) {
-                        error_log( 'Hostinger Onboarding: Failed to fetch experiment data - ' . $e->getMessage() );
-                    }
+                    $redirect_url = admin_url( 'admin.php?page=hostinger&action=onboarding' );
                 }
 
                 wp_safe_redirect( $redirect_url );

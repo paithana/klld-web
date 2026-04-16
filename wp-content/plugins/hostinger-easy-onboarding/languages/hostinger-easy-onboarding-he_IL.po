@@ -11,12 +11,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-08-19T08:23:05+00:00\n"
-"PO-Revision-Date: 2026-02-02 12:22+0000\n"
+"PO-Revision-Date: 2026-04-14 06:39+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hostinger-easy-onboarding\n"
 "Language: he_IL\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Loco-Version: 2.8.1; wp-6.9; php-8.2.29"
+"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.2.29"
 
 #: includes/Admin/Assets.php:216
 msgid ""
@@ -32,15 +32,14 @@ msgid " Please refresh the page and try again."
 msgstr " נא לרענן את הדף ונסה שוב."
 
 #. translators: %s plugin slug
-#: includes/Rest/StepRoutes.php:161
+#: includes/Rest/StepRoutes.php:177
 #, php-format
 msgid "%s is already active"
 msgstr "%s כבר פעיל"
 
 #. translators: %s field name that is missing
-#. translators: %s missing field slug
-#: includes/Rest/StepRoutes.php:67 includes/Rest/StepRoutes.php:72
-#: includes/Rest/StepRoutes.php:153 includes/Rest/StepRoutes.php:215
+#: includes/Rest/StepRoutes.php:83 includes/Rest/StepRoutes.php:88
+#: includes/Rest/StepRoutes.php:169 includes/Rest/StepRoutes.php:231
 #: includes/Rest/WooRoutes.php:39 includes/WooCommerce/SetupHandler.php:34
 #: includes/WooCommerce/SetupHandler.php:44
 #, php-format
@@ -81,7 +80,7 @@ msgstr "סכום הזמנה מינימלי וקופון"
 msgid "A minimum order amount OR coupon"
 msgstr "סכום הזמנה מינימלי או קופון"
 
-#: includes/Admin/Assets.php:465
+#: includes/Admin/Assets.php:467
 msgid ""
 "A theme controls your WordPress site’s appearance and layout, including "
 "colors and fonts. You’ll need to build and customize the pages yourself."
@@ -126,7 +125,7 @@ msgstr "פעיל"
 msgid "Add"
 msgstr "הוספה"
 
-#: includes/Admin/Onboarding/Onboarding.php:470
+#: includes/Admin/Onboarding/Onboarding.php:476
 msgid "Add a domain"
 msgstr "הוספת דומיין"
 
@@ -138,11 +137,16 @@ msgstr "הוספת דף חדש"
 msgid "Add a title"
 msgstr "הוספת כותרת"
 
+#: includes/Admin/Assets.php:477
+#, fuzzy
+msgid "Add and manage WooCommerce products"
+msgstr "הוספה וניהול של מוצרי WooCommerce"
+
 #: includes/Admin/Assets.php:344
 msgid "Add content"
 msgstr "הוספת תוכן"
 
-#: includes/Admin/Onboarding/Onboarding.php:472
+#: includes/Admin/Onboarding/Onboarding.php:478
 msgid "Add domain"
 msgstr "הוספת דומיין"
 
@@ -150,11 +154,11 @@ msgstr "הוספת דומיין"
 msgid "Add plugin"
 msgstr "הוספת תוסף"
 
-#: includes/Admin/Assets.php:435
+#: includes/Admin/Assets.php:437
 msgid "Add plugins to your site"
 msgstr "הוסיפו תוספים לאתר שלכם"
 
-#: includes/Admin/Onboarding/Onboarding.php:634
+#: includes/Admin/Onboarding/Onboarding.php:640
 msgid "Add product"
 msgstr "הוספת מוצר"
 
@@ -162,7 +166,7 @@ msgstr "הוספת מוצר"
 msgid "Add shipping method"
 msgstr "הוספת שיטת משלוח"
 
-#: includes/Admin/Onboarding/Onboarding.php:606
+#: includes/Admin/Onboarding/Onboarding.php:612
 msgid "Add store details"
 msgstr "הוספת פרטי חנות"
 
@@ -180,7 +184,7 @@ msgstr ""
 msgid "Add your first product"
 msgstr "הוסיפו את המוצר הראשון שלכם"
 
-#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:630
+#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:636
 msgid "Add your first product or service"
 msgstr "הוסיפו את המוצר או השירות הראשונים שלכם"
 
@@ -209,11 +213,11 @@ msgid ""
 "Adiciona PagSeguro como meio de pagamento (com desconto nas taxas oficiais)."
 msgstr "הוסיפו את PagSeguro כאמצעי תשלום (עם הנחה על העמלות הרשמיות)."
 
-#: includes/Admin/Assets.php:472
+#: includes/Admin/Assets.php:483
 msgid "Affiliate marketing"
 msgstr "שיווק שותפים"
 
-#: includes/Admin/Assets.php:431 includes/Admin/Assets.php:469
+#: includes/Admin/Assets.php:433 includes/Admin/Assets.php:480
 msgid "All"
 msgstr "הכל"
 
@@ -264,7 +268,7 @@ msgid "Are you sure?"
 msgstr "האם אתם בטוחים?"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 msgid "Attention:"
 msgstr "שימו לב:"
 
@@ -292,11 +296,16 @@ msgstr ""
 msgid "Being reviewed"
 msgstr "בבדיקה"
 
-#: includes/Admin/Assets.php:473
+#: includes/Admin/Assets.php:484
 msgid "Blog"
 msgstr "בלוג"
 
-#: includes/Admin/Onboarding/Onboarding.php:271
+#: includes/Admin/Assets.php:430
+#, fuzzy
+msgid "Browse our vast library of handpicked pre built websites and themes."
+msgstr "עיינו בספרייה הענקית שלנו של אתרים ועיצובים מוכנים שנבחרו בקפידה."
+
+#: includes/Admin/Onboarding/Onboarding.php:273
 msgid ""
 "Build a custom-designed site in minutes with professional templates. You’ll "
 "be ready to go live in a few clicks."
@@ -304,7 +313,7 @@ msgstr ""
 "הקימו אתר בעיצוב אישי תוך דקות – עם תבניות מקצועיות. תהיו מוכנים לעלות "
 "לאוויר בכמה קליקים בלבד."
 
-#: includes/Admin/Onboarding/Onboarding.php:263
+#: includes/Admin/Onboarding/Onboarding.php:265
 msgid ""
 "Build a professional, custom-designed site in moments. Choose from 140+ "
 "templates or use AI."
@@ -320,12 +329,12 @@ msgstr ""
 "בנו אתר מקצועי ומעוצב-אישית תוך דקות ספורות. רק כמה קליקים ו-AI דואג לכל "
 "השאר."
 
-#: includes/Admin/Assets.php:428
+#: includes/Admin/Assets.php:429
 msgid ""
 "Build a website from scratch, with the help of pre-built websites or themes."
 msgstr "בנו אתר מאפס, בעזרת אתרים או ערכות נושא מוכנים מראש."
 
-#: includes/Admin/Assets.php:470
+#: includes/Admin/Assets.php:481
 msgid "Business"
 msgstr "עסק"
 
@@ -341,10 +350,6 @@ msgstr "ביטול"
 #: includes/Admin/Assets.php:307
 msgid "Cash on delivery"
 msgstr "תשלום במזומן בעת קבלה"
-
-#: includes/Admin/Assets.php:410
-msgid "Change domain"
-msgstr "שינוי דומיין"
 
 #: includes/Admin/Assets.php:314
 msgid "Charge a fixed rate for shipping regardless of the order."
@@ -362,19 +367,19 @@ msgstr "פרמטר בחירה חסרה או ריקה"
 msgid "Choice parameter missing or invalid"
 msgstr "פרמטר בחירה חסר או לא תקני"
 
-#: includes/Admin/Assets.php:429
+#: includes/Admin/Assets.php:431
 msgid "Choose a pre-built website"
 msgstr "בחרו אתר אינטרנט מוכן מראש"
 
-#: includes/Admin/Onboarding/Onboarding.php:243
+#: includes/Admin/Onboarding/Onboarding.php:245
 msgid "Choose a template"
 msgstr "בחרו תבנית"
 
-#: includes/Admin/Assets.php:432
+#: includes/Admin/Assets.php:434
 msgid "Choose a theme"
 msgstr "בחר ערכת נושא"
 
-#: includes/Admin/Onboarding/Onboarding.php:208
+#: includes/Admin/Onboarding/Onboarding.php:210
 msgid "Choose another template"
 msgstr "בחרו תבנית אחרת"
 
@@ -382,11 +387,11 @@ msgstr "בחרו תבנית אחרת"
 msgid "Choose how you’d like to build your website"
 msgstr "בחרו כיצד ברצונך לבנות את האתר שלכם"
 
-#: includes/Admin/Onboarding/Onboarding.php:272
+#: includes/Admin/Onboarding/Onboarding.php:274
 msgid "Choose template"
 msgstr "בחרו תבנית"
 
-#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:679
+#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:685
 msgid ""
 "Choose the ways you'd like to ship orders to customers. You can always add "
 "others later."
@@ -394,11 +399,11 @@ msgstr ""
 "בחרו בדרכים בהם תרצו לשלוח הזמנות ללקוחות. תוכלו תמיד להוסיף דרכים נוספות "
 "אחר כך."
 
-#: includes/Admin/Assets.php:460
+#: includes/Admin/Assets.php:462
 msgid "Close"
 msgstr "סגור"
 
-#: includes/Admin/Onboarding/Onboarding.php:439
+#: includes/Admin/Onboarding/Onboarding.php:445
 msgid ""
 "Collect emails from forms on your site and start sending on-brand email "
 "campaigns with Hostinger Reach – all powered by AI."
@@ -422,7 +427,7 @@ msgstr "השלמה"
 msgid "Completed steps"
 msgstr "צעדים שהושלמו"
 
-#: includes/Admin/Assets.php:456
+#: includes/Admin/Assets.php:458
 msgid "Completed!"
 msgstr "הושלם!"
 
@@ -438,11 +443,11 @@ msgstr ""
 "הגדירו את אפשרויות התשלום וקבלו תשלומים בכרטיסים, כרטיסיות וכסף של חשבון "
 "Mercado Pago."
 
-#: includes/Admin/Assets.php:440
+#: includes/Admin/Assets.php:442
 msgid "conflicts with"
 msgstr "מתנגש עם"
 
-#: includes/Admin/Hooks.php:517
+#: includes/Admin/Hooks.php:537
 msgid "Congrats, you have connected WooPayments!"
 msgstr "מזל טוב, חיברתם את WooPayments!"
 
@@ -450,7 +455,7 @@ msgstr "מזל טוב, חיברתם את WooPayments!"
 msgid "Congrats, you're ready to show off your site!"
 msgstr "מזל טוב, אתם מוכנים להציג את האתר שלכם!"
 
-#: includes/Admin/Hooks.php:510
+#: includes/Admin/Hooks.php:530
 msgid "Congrats, you’re ready to show off your site!"
 msgstr "מזל טוב, אתם מוכנים להציג את האתר שלכם!"
 
@@ -458,18 +463,19 @@ msgstr "מזל טוב, אתם מוכנים להציג את האתר שלכם!"
 msgid "Connect"
 msgstr "התחברות"
 
-#: includes/Admin/Onboarding/Onboarding.php:542
+#: includes/Admin/Onboarding/Onboarding.php:548
 msgid "Connect Amazon to site"
 msgstr "חיבור Amazon לאתר"
+
+#: includes/Admin/Assets.php:410 includes/Admin/Onboarding/Onboarding.php:482
+#: includes/Admin/Onboarding/Onboarding.php:495
+#, fuzzy
+msgid "Connect domain"
+msgstr "חבר דומיין"
 
 #: includes/Admin/Assets.php:261
 msgid "Connect domain now"
 msgstr "חבר דומיין עכשיו"
-
-#: includes/Admin/Onboarding/Onboarding.php:476
-#: includes/Admin/Onboarding/Onboarding.php:489
-msgid "Connect on hPanel"
-msgstr "חיבור על hPanel"
 
 #: includes/Admin/Assets.php:291 includes/Admin/Onboarding/WelcomeCards.php:29
 msgid ""
@@ -477,7 +483,7 @@ msgid ""
 msgstr ""
 "חברו את חשבון <strong>Amazon Associate</strong> שלכם כדי להשיב פרטי API."
 
-#: includes/Admin/Onboarding/Onboarding.php:534
+#: includes/Admin/Onboarding/Onboarding.php:540
 msgid "Connect your Amazon account to the site"
 msgstr "חברו את חשבון Amazon שלכם לאתר"
 
@@ -485,7 +491,7 @@ msgstr "חברו את חשבון Amazon שלכם לאתר"
 msgid "Connect your domain"
 msgstr "חברו את הדומיין שלכם"
 
-#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:723
+#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:729
 msgid "Connect your domain first"
 msgstr "חברו את הדומיין שלכם קודם"
 
@@ -494,11 +500,11 @@ msgstr "חברו את הדומיין שלכם קודם"
 msgid "Connect your domain to Hostinger"
 msgstr "בחרו את הדומיין שלכם ל-Hostinger"
 
-#: includes/Admin/Onboarding/Onboarding.php:494
+#: includes/Admin/Onboarding/Onboarding.php:500
 msgid "Connected a domain"
 msgstr "דומיין חובר"
 
-#: includes/Admin/Onboarding/Onboarding.php:537
+#: includes/Admin/Onboarding/Onboarding.php:543
 msgid "Connected your Amazon account"
 msgstr "חשבון Amazon שלכם חובר"
 
@@ -519,8 +525,8 @@ msgstr ""
 msgid "Continue"
 msgstr "המשך"
 
-#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:507
-#: includes/Admin/Hooks.php:520
+#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:527
+#: includes/Admin/Hooks.php:540
 msgid "Continue setup"
 msgstr "המשך הגדרה"
 
@@ -554,16 +560,21 @@ msgstr ""
 "צרו שיטות משלוח נוספות ב-WooCommerce ואפשרו תמחור על בסיס משקל עגלה או סך "
 "הכל."
 
+#: includes/Admin/Assets.php:474
+#, fuzzy
+msgid "Create and edit pages or posts"
+msgstr "ליצור ולערוך דפים או פוסטים"
+
 #: includes/Admin/Onboarding/PluginManager.php:79
 msgid "Create Chronopost & Mondial relay shipping labels and send them easily."
 msgstr "צרו תוויות משלוח של Chronopost ו-Mondial ושלחו אותם בקלות."
 
 #: includes/Admin/Onboarding/Onboarding.php:184
-#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:237
 msgid "Create new site"
 msgstr "צור אתר חדש"
 
-#: includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:266
 msgid "Create site"
 msgstr "צור אתר"
 
@@ -593,7 +604,7 @@ msgstr "כמעט הגעתם למגבלת מסד הנתונים"
 msgid "Database limit reached"
 msgstr "הגעתם למגבלת מסד הנתונים"
 
-#: includes/Admin/Assets.php:434
+#: includes/Admin/Assets.php:436
 msgid "Default"
 msgstr "ברירת מחדל"
 
@@ -603,11 +614,16 @@ msgstr "ברירת מחדל"
 msgid "Delete page"
 msgstr "מחיקת דף"
 
-#: includes/Admin/Assets.php:437
+#: includes/Admin/Assets.php:428
+#, fuzzy
+msgid "Describe your idea and watch AI build your site with custom content"
+msgstr "תאר את הרעיון שלך וצפה ב-AI בונה את האתר שלך עם תוכן מותאם אישית"
+
+#: includes/Admin/Assets.php:439
 msgid "Deselect all"
 msgstr "בטל את כל הבחירות"
 
-#: includes/Admin/Assets.php:515
+#: includes/Admin/Assets.php:530
 msgid "Digital products"
 msgstr "מוצרים דיגיטליים"
 
@@ -631,8 +647,7 @@ msgstr " הגעתם למגבלת השימוש בדיסק"
 msgid "Dismiss"
 msgstr "ביטול"
 
-#: includes/Admin/Assets.php:475
-#, fuzzy
+#: includes/Admin/Assets.php:486
 msgid "Do not install plugins"
 msgstr "אל תתקין תוספים"
 
@@ -691,7 +706,7 @@ msgstr "ערוך תמונה"
 msgid "Edit description"
 msgstr "ערוך תיאור"
 
-#: includes/Hooks.php:292
+#: includes/Hooks.php:296
 msgid "Edit Home Page"
 msgstr "ערוך דף בית"
 
@@ -752,7 +767,7 @@ msgstr ""
 msgid "Error:"
 msgstr "שגיאה:"
 
-#: includes/Admin/Onboarding/Onboarding.php:498
+#: includes/Admin/Onboarding/Onboarding.php:504
 #| msgid ""
 #| "Every website needs a domain that makes it easy to access and remember. "
 #| "Get ours in just a few clicks."
@@ -782,21 +797,19 @@ msgstr "פג תוקף בתאריך"
 msgid "Extends WooCommerce with a RedSys gateway."
 msgstr "מרחיב את WooCommerce עם שער RedSys."
 
-#: includes/Rest/StepRoutes.php:305
-#, fuzzy
+#: includes/Rest/StepRoutes.php:373
 msgid "Failed to download theme."
-msgstr "לא ניתן להוריד את העיצוב."
+msgstr "הורדת ערכת הנושא נכשלה."
 
-#: includes/Rest/StepRoutes.php:321
-#, fuzzy
+#: includes/Rest/StepRoutes.php:389
 msgid "Failed to install theme."
-msgstr "לא ניתן להתקין את העיצוב."
+msgstr "התקנת ערכת הנושא נכשלה."
 
-#: includes/Admin/Assets.php:458
+#: includes/Admin/Assets.php:460
 msgid "Failed!"
 msgstr "נכשל!"
 
-#: includes/Admin/Assets.php:454
+#: includes/Admin/Assets.php:456
 msgid "Finalizing..."
 msgstr "מסיים..."
 
@@ -861,11 +874,11 @@ msgstr "השג דומיין"
 msgid "Get deal"
 msgstr "השג הטבה"
 
-#: includes/Admin/Hooks.php:362
+#: includes/Admin/Hooks.php:382
 msgid "Get Discount"
 msgstr "השג הנחה"
 
-#: includes/Admin/Onboarding/Onboarding.php:704
+#: includes/Admin/Onboarding/Onboarding.php:710
 msgid "Get found on Google"
 msgstr "קבלו מציאות ב-Google"
 
@@ -892,7 +905,7 @@ msgid ""
 msgstr ""
 "התכוננו לקבל תשלומי לקוחות. אפשרו להם לשלם על המוצרים והשירותים שלכם בקלות."
 
-#: includes/Admin/Onboarding/Onboarding.php:657
+#: includes/Admin/Onboarding/Onboarding.php:663
 msgid ""
 "Get ready to sell online. Add your first product, then set up payments and "
 "shipping."
@@ -900,7 +913,7 @@ msgstr ""
 "התכוננו למכור אונליין: הוסיפו את המוצר הראשון שלכם, ואז הגדירו את אפשרויות "
 "התשלום והמשלוח."
 
-#: includes/Admin/Onboarding/Onboarding.php:561
+#: includes/Admin/Onboarding/Onboarding.php:567
 msgid ""
 "Get ready to sell online. Add your first product, then set up shipping and "
 "payments."
@@ -908,8 +921,8 @@ msgstr ""
 "התכוננו למכור אונליין. הוסיפו את המוצר הראשון שלכם, ואז הגדירו משלוחים "
 "ותשלומים."
 
-#: includes/Admin/Onboarding/Onboarding.php:563
-#: includes/Admin/Onboarding/Onboarding.php:610
+#: includes/Admin/Onboarding/Onboarding.php:569
+#: includes/Admin/Onboarding/Onboarding.php:616
 msgid "Get started"
 msgstr "התחילו"
 
@@ -949,6 +962,11 @@ msgstr "יש!"
 msgid "Help Center"
 msgstr "מרכז תמיכה"
 
+#: includes/Admin/Assets.php:471
+#, fuzzy
+msgid "Hey,"
+msgstr "היי,"
+
 #: includes/Admin/Assets.php:260
 msgid "Hide completed"
 msgstr "הסתר פריטים שהושלמו"
@@ -981,6 +999,11 @@ msgstr "Hostinger"
 #: includes/Admin/Assets.php:372
 msgid "Hostinger Academy"
 msgstr "אקדמיית Hostinger"
+
+#: includes/Rest/StepRoutes.php:261
+#, fuzzy
+msgid "Hostinger AI theme is not currently active."
+msgstr "ערכת הנושא Hostinger AI אינה פעילה כרגע."
 
 #. Plugin Name of the plugin
 #: hostinger-easy-onboarding.php
@@ -1096,7 +1119,7 @@ msgstr ""
 "אם אתם רוצים לערוך את התמונה, הקליקו על התמונה הרצויה ולחצו על כפתור 'ערוך "
 "תמונה'. עכשיו תוכלו לחתוך, לסובב, להפוך או להגדיל את התמונה הנבחרת."
 
-#: includes/Admin/Assets.php:441
+#: includes/Admin/Assets.php:443
 msgid "in terms of functionality."
 msgstr "מבחינת הפונקציונליות."
 
@@ -1164,6 +1187,16 @@ msgstr "כמעט הגעתם למגבלת ה-inodes"
 msgid "Inodes limit reached"
 msgstr "הגעתם למגבלת ה-inodes"
 
+#: includes/Admin/Assets.php:478
+#, fuzzy
+msgid "Install Kodee"
+msgstr "התקן את Kodee"
+
+#: includes/Admin/Assets.php:473
+#, fuzzy
+msgid "Install me, so I can help you:"
+msgstr "התקן אותי, כדי שאוכל לעזור לך:"
+
 #: includes/Admin/Assets.php:174
 msgid "Install plugin"
 msgstr "התקנת תוסף"
@@ -1176,15 +1209,15 @@ msgstr "ההתקנה כשלה"
 msgid "Installed"
 msgstr "מותקן"
 
-#: includes/Admin/Assets.php:451
+#: includes/Admin/Assets.php:453
 msgid "Installing plugins..."
 msgstr "מתקין תוספים..."
 
-#: includes/Admin/Assets.php:452
+#: includes/Admin/Assets.php:454
 msgid "Installing template..."
 msgstr "מתקין תבנית..."
 
-#: includes/Admin/Assets.php:453
+#: includes/Admin/Assets.php:455
 msgid "Installing theme..."
 msgstr "מתקין ערכת נושא..."
 
@@ -1205,14 +1238,19 @@ msgstr ""
 "זה מאפשר לאתר WooCommerce לקבל תשלומים דרך יישומי UPI כגון BHIM, Google Pay, "
 "Paytm, PhonePe, או כל יישום Banking UPI. הימנעו מעמלות שער תשלום."
 
-#: includes/Admin/Hooks.php:504
+#: includes/Admin/Assets.php:472
+#, fuzzy
+msgid "I’m Kodee – your AI WordPress assistant"
+msgstr "שמי קודי – העוזרת הווירטואלית שלכם בוורדפרס"
+
+#: includes/Admin/Hooks.php:524
 msgid "Just a few more steps to launch your online store"
 msgstr "רק עוד כמה צעדים להשקת החנות המקוונת שלכם"
 
 #: includes/Admin/Onboarding/Onboarding.php:180
-#: includes/Admin/Onboarding/Onboarding.php:203
-#: includes/Admin/Onboarding/Onboarding.php:233
-#: includes/Admin/Onboarding/Onboarding.php:241
+#: includes/Admin/Onboarding/Onboarding.php:205
+#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:243
 msgid "Keep current site"
 msgstr "שמור אתר נוכחי"
 
@@ -1220,7 +1258,7 @@ msgstr "שמור אתר נוכחי"
 msgid "Knowledge Base"
 msgstr "מאגר ידע"
 
-#: includes/Admin/Assets.php:447
+#: includes/Admin/Assets.php:449
 msgid "Laptop"
 msgstr "מחשב נייד"
 
@@ -1236,7 +1274,7 @@ msgstr "למדו WordPress"
 msgid "Let AI build a website that fit your business needs."
 msgstr "תנו ל-AI לבנות אתר שמתאים לצרכי העסק שלכם."
 
-#: includes/Admin/Onboarding/Onboarding.php:585
+#: includes/Admin/Onboarding/Onboarding.php:591
 msgid ""
 "Let AI explore, understand, and interact with your site. All content updates "
 "are auto-tracked so AI tools stay in sync with your site’s latest version."
@@ -1244,7 +1282,7 @@ msgstr ""
 "תנו ל-AI לחקור, להבין, ולהתממשק עם האתר שלכם. כל עדכוני התוכן מנוטרים "
 "אוטומטית, כך שכלי ה-AI נשארים מסונכרנים עם הגרסה העדכנית של האתר.\n"
 
-#: includes/Admin/Onboarding/Onboarding.php:540
+#: includes/Admin/Onboarding/Onboarding.php:546
 msgid ""
 "Link your Amazon Associates account to your website, start promoting "
 "products, and earn rewards. No API key required."
@@ -1269,24 +1307,29 @@ msgstr "טוען..."
 msgid "Local pickup"
 msgstr "איסוף מקומי"
 
-#: includes/Admin/Onboarding/Onboarding.php:706
+#: includes/Admin/Onboarding/Onboarding.php:712
 msgid ""
 "Make sure that your website shows up when visitors are looking for your "
 "business on Google."
 msgstr "ודאו שהאתר שלכם מופיע למבקרים כשהם מחפשים את העסק שלכם ב-Google."
 
-#: includes/Admin/Onboarding/Onboarding.php:583
+#: includes/Admin/Onboarding/Onboarding.php:589
 msgid "Make your site discoverable by AI"
 msgstr "הפכו את האתר שלכם לניתן לגילוי על ידי AI"
 
-#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:713
+#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:719
 msgid "Manage"
 msgstr "ניהול"
 
 #: includes/Admin/Assets.php:188 includes/Admin/Assets.php:318
-#: includes/Admin/Onboarding/Onboarding.php:677
+#: includes/Admin/Onboarding/Onboarding.php:683
 msgid "Manage shipping"
 msgstr "ניהול משלוחים"
+
+#: includes/Admin/Assets.php:475
+#, fuzzy
+msgid "Manage users and permissions"
+msgstr "ניהול משתמשים והרשאות"
 
 #: includes/Admin/Assets.php:187
 msgid "Market your business"
@@ -1320,6 +1363,11 @@ msgstr "שרת שמות"
 msgid "Next"
 msgstr "הבא"
 
+#: includes/Rest/StepRoutes.php:293
+#, fuzzy
+msgid "No default theme available to switch to."
+msgstr "אין ערכת נושא ברירת מחדל שאפשר לעבור אליה."
+
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:33
 msgid "No pages found."
@@ -1329,11 +1377,11 @@ msgstr "לא נמצאו דפים."
 msgid "No PHP files found in plugin directory"
 msgstr "לא נמצאו קבצי PHP בספריית התוספים"
 
-#: includes/Admin/Assets.php:446
+#: includes/Admin/Assets.php:448
 msgid "No plugin image"
 msgstr "אין תמונה של תוסף"
 
-#: includes/Admin/Assets.php:444
+#: includes/Admin/Assets.php:446
 msgid "No plugins found"
 msgstr "לא נמצאו תוספים"
 
@@ -1349,17 +1397,17 @@ msgstr "לא מחובר"
 msgid "Not interested"
 msgstr "לא מעוניין"
 
-#: includes/Admin/Onboarding/Onboarding.php:445
-#: includes/Admin/Onboarding/Onboarding.php:590
-#: includes/Admin/Onboarding/Onboarding.php:687
-#: includes/Admin/Onboarding/Onboarding.php:718
+#: includes/Admin/Onboarding/Onboarding.php:451
+#: includes/Admin/Onboarding/Onboarding.php:596
+#: includes/Admin/Onboarding/Onboarding.php:693
+#: includes/Admin/Onboarding/Onboarding.php:724
 msgid "Not needed"
 msgstr "לא נחוץ"
 
 #: includes/Admin/Onboarding/Onboarding.php:173
-#: includes/Admin/Onboarding/Onboarding.php:266
-#: includes/Admin/Onboarding/Onboarding.php:275
-#: includes/Admin/Onboarding/Onboarding.php:638
+#: includes/Admin/Onboarding/Onboarding.php:268
+#: includes/Admin/Onboarding/Onboarding.php:277
+#: includes/Admin/Onboarding/Onboarding.php:644
 msgid "Not now"
 msgstr "לא עכשיו"
 
@@ -1371,7 +1419,7 @@ msgstr "לא נרכש"
 msgid "Not registered"
 msgstr "לא רשום"
 
-#: includes/Admin/Assets.php:443
+#: includes/Admin/Assets.php:445
 msgid "Nothing found"
 msgstr "לא נמצא דבר"
 
@@ -1385,15 +1433,15 @@ msgstr "עכשיו <strong>סיימו להגדיר</strong> את התוספים 
 msgid "Onboarding"
 msgstr "קליטה"
 
-#: includes/Admin/Assets.php:455
+#: includes/Admin/Assets.php:457
 msgid "Onboarding Wordpress being built"
 msgstr "Onboarding Wordpress נבנה"
 
-#: includes/Admin/Assets.php:471
+#: includes/Admin/Assets.php:482
 msgid "Online store"
 msgstr "חנות מקוונת"
 
-#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:369
+#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:371
 msgid "Online store setup"
 msgstr "הגדרת חנות מקוונת"
 
@@ -1413,7 +1461,7 @@ msgstr "או השתמשו בתוספי תשלומים"
 msgid "Or use shipping plugins"
 msgstr "או השתמשו בתוספי משלוחים"
 
-#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:474
+#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:485
 msgid "Other"
 msgstr "אחר"
 
@@ -1488,7 +1536,7 @@ msgstr "התוסף הופעל בהצלחה"
 msgid "Plugin sucessfully installed"
 msgstr "התוסף הותקן בהצלחה"
 
-#: includes/Admin/Assets.php:467
+#: includes/Admin/Assets.php:469
 msgid ""
 "Plugins are apps that can be installed on your WordPress website. Each "
 "plugin lets you add a new feature, such as forms, SEO tools, or social media "
@@ -1502,7 +1550,7 @@ msgstr ""
 msgid "Pre-built websites and themes"
 msgstr "אתרים וערכות נושא מוכנים מראש"
 
-#: includes/Admin/Assets.php:468
+#: includes/Admin/Assets.php:470
 msgid "Premium template"
 msgstr "תבנית פרימיום"
 
@@ -1519,7 +1567,7 @@ msgstr "תצוגה מקדימה לאתר"
 msgid "Preview website"
 msgstr "תצוגה מקדימה לאתר"
 
-#: includes/Admin/Onboarding/Onboarding.php:528
+#: includes/Admin/Onboarding/Onboarding.php:534
 msgid "Promote products on your site"
 msgstr "קדמו מוצרים באתר שלכם"
 
@@ -1531,7 +1579,7 @@ msgstr "פרסם את העמוד"
 msgid "Recommended for you"
 msgstr "מומלץ עבורכם"
 
-#: includes/Admin/Assets.php:436
+#: includes/Admin/Assets.php:438
 msgid "Recommended plugins"
 msgstr "תוספים מומלצים"
 
@@ -1546,6 +1594,11 @@ msgstr "בהרשמה"
 #: includes/Admin/Assets.php:405
 msgid "Registration didn't work"
 msgstr "ההרשמה לא הצליחה"
+
+#: includes/Admin/Assets.php:479
+#, fuzzy
+msgid "Remind me later"
+msgstr "תזכיר לי מאוחר יותר"
 
 #: includes/Admin/Assets.php:388
 msgid "Renew"
@@ -1573,7 +1626,7 @@ msgstr "שמירה"
 msgid "Saving"
 msgstr "שומר"
 
-#: includes/Admin/Assets.php:450
+#: includes/Admin/Assets.php:452
 msgid "Search for a plugin"
 msgstr "חפש תוסף"
 
@@ -1591,19 +1644,19 @@ msgstr ""
 "קבלו בבטחה תשלומים, סנכרנו מכירות, ונהלו מלאים ונתוני מוצרים באופן חלק בין "
 "WooCommerce ו-Square POS."
 
-#: includes/Admin/Assets.php:438
+#: includes/Admin/Assets.php:440
 msgid "Select all"
 msgstr "בחר הכל"
 
-#: includes/Admin/Assets.php:442
+#: includes/Admin/Assets.php:444
 msgid "Select one for best experience"
 msgstr "בחרו אחד לקבלת החוויה הטובה ביותר"
 
-#: includes/Admin/Assets.php:439
+#: includes/Admin/Assets.php:441
 msgid "Selected plugins conflict with each other"
 msgstr "התוספים שנבחרו מתנגשים זה עם זה"
 
-#: includes/Admin/Onboarding/Onboarding.php:632
+#: includes/Admin/Onboarding/Onboarding.php:638
 msgid ""
 "Sell products, services and digital downloads. Set up and customize each "
 "item to fit your business needs."
@@ -1627,15 +1680,15 @@ msgstr "הגדר אמצעי תשלום"
 msgid "Set up an online store"
 msgstr "הגדר חנות מקוונת"
 
-#: includes/Admin/Onboarding/Onboarding.php:708
+#: includes/Admin/Onboarding/Onboarding.php:714
 msgid "Set up Google Site Kit"
 msgstr "הגדרת Google Site Kit"
 
-#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:659
+#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:665
 msgid "Set up payment method"
 msgstr "הגדר אמצעי תשלום"
 
-#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:655
+#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:661
 msgid "Set up payments"
 msgstr "הגדר תשלומים"
 
@@ -1643,7 +1696,7 @@ msgstr "הגדר תשלומים"
 msgid "Set up shipping"
 msgstr "הגדר משלוחים"
 
-#: includes/Admin/Onboarding/Onboarding.php:681
+#: includes/Admin/Onboarding/Onboarding.php:687
 msgid "Set up shipping method"
 msgstr "הגדרת שיטת משלוח"
 
@@ -1651,7 +1704,7 @@ msgstr "הגדרת שיטת משלוח"
 msgid "Set up Site Kit"
 msgstr "הגדרת Site Kit"
 
-#: includes/Admin/Onboarding/Onboarding.php:559
+#: includes/Admin/Onboarding/Onboarding.php:565
 msgid "Set up your online store"
 msgstr "הגדרת החנות המקוונת שלכם"
 
@@ -1738,7 +1791,7 @@ msgstr ""
 msgid "Skip"
 msgstr "דלג"
 
-#: includes/Admin/Assets.php:449
+#: includes/Admin/Assets.php:451
 msgid "Smartphone"
 msgstr "סמארטפון"
 
@@ -1746,19 +1799,19 @@ msgstr "סמארטפון"
 msgid "Something went wrong"
 msgstr "משהו השתבש"
 
-#: includes/Rest/StepRoutes.php:184
+#: includes/Rest/StepRoutes.php:200
 msgid "Sorry, there are activation errors."
 msgstr "מצטערים, יש שגיאות הפעלה."
 
-#: includes/Rest/StepRoutes.php:78 includes/Rest/StepRoutes.php:171
-#: includes/Rest/StepRoutes.php:221 includes/Rest/StepRoutes.php:260
-#: includes/Rest/StepRoutes.php:276 includes/Rest/WooRoutes.php:51
+#: includes/Rest/StepRoutes.php:94 includes/Rest/StepRoutes.php:187
+#: includes/Rest/StepRoutes.php:237 includes/Rest/StepRoutes.php:328
+#: includes/Rest/StepRoutes.php:344 includes/Rest/WooRoutes.php:51
 #: includes/Rest/WooRoutes.php:94
 msgid "Sorry, there are validation errors."
 msgstr "מצטערים, יש שגיאות אימות."
 
-#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:262
-#: includes/Admin/Onboarding/Onboarding.php:270
+#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:272
 #| msgid "Started creating your site"
 msgid "Start creating your site"
 msgstr "התחילו ליצור את האתר שלכם"
@@ -1767,17 +1820,22 @@ msgstr "התחילו ליצור את האתר שלכם"
 msgid "Start earning"
 msgstr "התחילו להרוויח"
 
-#: includes/Admin/Onboarding/Onboarding.php:532
+#: includes/Admin/Assets.php:432
+#, fuzzy
+msgid "Start from a theme (advanced users)"
+msgstr "התחילו מנושא (למשתמשים מתקדמים)"
+
+#: includes/Admin/Onboarding/Onboarding.php:538
 msgid "Start promoting"
 msgstr "התחילו לקדם"
 
-#: includes/Admin/Onboarding/Onboarding.php:530
+#: includes/Admin/Onboarding/Onboarding.php:536
 msgid ""
 "Start promoting affiliate products and earn rewards. It’s quick and easy to "
 "get started."
 msgstr "התחילו לקדם מוצרי שותפים ולקבל תגמולים. ההתחלה מהירה וקלה."
 
-#: includes/Rest/StepRoutes.php:97
+#: includes/Rest/StepRoutes.php:113
 msgid "Step category and/or step does not exist."
 msgstr "קטגוריית צעד ו/או צעד לא קיימים."
 
@@ -1785,11 +1843,16 @@ msgstr "קטגוריית צעד ו/או צעד לא קיימים."
 msgid "Store location locale not found"
 msgstr "מיקום לוקאל חנות לא נמצא"
 
+#: includes/Admin/Assets.php:476
+#, fuzzy
+msgid "Summarize your store or site performance"
+msgstr "סכם את ביצועי החנות או האתר שלך"
+
 #: includes/Admin/Assets.php:397
 msgid "Suspended"
 msgstr "מושעה"
 
-#: includes/Admin/Assets.php:448
+#: includes/Admin/Assets.php:450
 msgid "Tablet"
 msgstr "טאבלט"
 
@@ -1854,7 +1917,7 @@ msgstr ""
 "מבצע <span style=\"color: #8C85FF\">וויט פריידי</span> הגדול בכל הזמנים!"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 #, php-format
 msgid ""
 "The Hostinger Easy Onboarding plugin requires minimum PHP version of <b>"
@@ -1911,7 +1974,7 @@ msgstr "ערכת הנושא הותקנה בהצלחה"
 msgid "There was an error."
 msgstr "אירעה שגיאה."
 
-#: includes/Admin/Assets.php:463
+#: includes/Admin/Assets.php:465
 msgid ""
 "These are ready-to-go sites that you can quickly customize to fit your brand "
 "and needs. You won’t have to build from scratch."
@@ -1935,7 +1998,7 @@ msgstr "תוסף זה מאפשר לכם להשתמש בשיטות המשלוח �
 msgid "This field is required"
 msgstr "שדה זה הכרחי"
 
-#: includes/Admin/Assets.php:461
+#: includes/Admin/Assets.php:463
 msgid "This might take a few minutes"
 msgstr "זה עשוי לקחת כמה דקות"
 
@@ -1959,11 +2022,11 @@ msgstr "העברה"
 msgid "Try again"
 msgstr "נסו שוב"
 
-#: includes/Admin/Assets.php:445
+#: includes/Admin/Assets.php:447
 msgid "Try another search term."
 msgstr "נסו מונח חיפוש אחר."
 
-#: includes/Admin/Onboarding/Onboarding.php:441
+#: includes/Admin/Onboarding/Onboarding.php:447
 msgid "Try free for 1 year"
 msgstr "נסו בחינם למשך שנה"
 
@@ -1971,7 +2034,7 @@ msgstr "נסו בחינם למשך שנה"
 msgid "Try Omnisend"
 msgstr "נסו את Omnisend"
 
-#: includes/Admin/Onboarding/Onboarding.php:587
+#: includes/Admin/Onboarding/Onboarding.php:593
 msgid "Turn on"
 msgstr "הפעלה"
 
@@ -1979,7 +2042,7 @@ msgstr "הפעלה"
 msgid "Turn site visitors into loyal customers"
 msgstr "הפכו את המבקרים באתר ללקוחות נאמנים"
 
-#: includes/Admin/Onboarding/Onboarding.php:437
+#: includes/Admin/Onboarding/Onboarding.php:443
 msgid "Turn site visitors into subscribers"
 msgstr "הפכו את המבקרים באתר למנויים"
 
@@ -1999,20 +2062,15 @@ msgstr "העלו תמונה"
 msgid "Upload your logo"
 msgstr "העלו את הלוגו שלכם"
 
-#: includes/Admin/Assets.php:433
-#, fuzzy
+#: includes/Admin/Assets.php:435
 #| msgid ""
 #| "Use a black site or apply a starter from one of our vendors to get "
 #| "started."
 msgid ""
 "Use a blank site or apply a starter from one of our vendors to get started."
-msgstr "השתמש באתר ריק או הפעילו אתר התחלתי מאחד הספקים שלנו כדי להתחיל."
+msgstr "כדי להתחיל, יש להשתמש באתר ריק או להפעיל אתר התחלתי מאחד הספקים שלנו ."
 
-#: includes/Admin/Assets.php:430
-msgid "Use a theme instead"
-msgstr "השתמשו בערכת נושא במקום"
-
-#: includes/Admin/Hooks.php:358
+#: includes/Admin/Hooks.php:378
 msgid ""
 "Use the special discount code <b>ONLYHOSTINGER30</b> to get 30% off on "
 "Omnisend for 6 months when you upgrade."
@@ -2024,7 +2082,7 @@ msgstr ""
 msgid "Verify phone"
 msgstr "אמתו את מספר הטלפון"
 
-#: includes/Admin/Hooks.php:513
+#: includes/Admin/Hooks.php:533
 msgid "View checklist"
 msgstr "הצג צ'ק-ליסט"
 
@@ -2036,7 +2094,7 @@ msgstr "הצג פריטים שהושלמו"
 msgid "View less"
 msgstr "הצג פחות"
 
-#: includes/Admin/Onboarding/Onboarding.php:568
+#: includes/Admin/Onboarding/Onboarding.php:574
 msgid "View list"
 msgstr "הצג רשימה"
 
@@ -2048,7 +2106,7 @@ msgstr "הצג יותר"
 msgid "View plugins"
 msgstr "הצג תוספים"
 
-#: includes/Admin/Onboarding/Onboarding.php:480
+#: includes/Admin/Onboarding/Onboarding.php:486
 msgid ""
 "Visit hPanel and connect a real domain. If you already did this, please wait "
 "up to 24h until the domain fully connects"
@@ -2064,15 +2122,15 @@ msgstr "המתינו לעדכון דומיין"
 msgid "Want to create a new AI site?"
 msgstr "רוצים ליצור אתר AI חדש?"
 
-#: includes/Admin/Onboarding/Onboarding.php:198
+#: includes/Admin/Onboarding/Onboarding.php:200
 msgid "Want to create a new site on a different template?"
 msgstr "רוצים ליצור אתר חדש על בסיס תבנית שונה?"
 
-#: includes/Admin/Onboarding/Onboarding.php:239
+#: includes/Admin/Onboarding/Onboarding.php:241
 msgid "Want to create a new site on a pre-built template?"
 msgstr "רוצים ליצור אתר חדש על בסיס תבנית מוכנה מראש?"
 
-#: includes/Admin/Onboarding/Onboarding.php:231
+#: includes/Admin/Onboarding/Onboarding.php:233
 msgid "Want to create a new site?"
 msgstr "רוצים ליצור אתר חדש?"
 
@@ -2085,11 +2143,11 @@ msgstr ""
 "אנחנו מתנצלים על אי-הנוחות. תהליך יצירת התוכן AI נתקל בשגיאת שרת. אנא נסו "
 "שנית מאוחר יותר, ואם הבעיה נמשכת, אנא צרו קשר עם צוות התמיכה שלנו."
 
-#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:608
+#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:614
 msgid "We'll use this information to help you set up your store faster."
 msgstr "אנחנו נשתמש במידע הזה כדי לעזור לכם להגדיר את החנות שלכם מהר יותר."
 
-#: includes/Admin/Onboarding/Onboarding.php:332
+#: includes/Admin/Onboarding/Onboarding.php:334
 msgid "Website setup"
 msgstr "הגדרת אתר"
 
@@ -2105,15 +2163,15 @@ msgstr "ברוכים הבאים ל-WordPress!"
 msgid "What type of products or services will you sell?"
 msgstr "אילו סוגים של מוצרים או שירותים תמכרו?"
 
-#: includes/Admin/Assets.php:466
+#: includes/Admin/Assets.php:468
 msgid "What’s a plugin?"
 msgstr "מהו תוסף?"
 
-#: includes/Admin/Assets.php:462
+#: includes/Admin/Assets.php:464
 msgid "What’s a pre-built website?"
 msgstr "מהו אתר אינטרנט מוכן מראש?"
 
-#: includes/Admin/Assets.php:464
+#: includes/Admin/Assets.php:466
 msgid "What’s a theme?"
 msgstr "מהי ערכת נושא?"
 
@@ -2130,7 +2188,7 @@ msgid "Yes, skip step"
 msgstr "כן, דלג צעד"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:81
+#: hostinger-easy-onboarding.php:85
 #, php-format
 msgid "You are running <b>%s</b> PHP version."
 msgstr "אתם מריצים <b>%s</b> גרסת PHP."
@@ -2187,7 +2245,7 @@ msgstr "סיימתם להגדיר את החנות המקוונת שלכם!"
 msgid "Your business email"
 msgstr "האימייל העסקי שלכם"
 
-#: includes/Admin/Onboarding/Onboarding.php:232
+#: includes/Admin/Onboarding/Onboarding.php:234
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates or use AI."
@@ -2195,8 +2253,8 @@ msgstr ""
 "האתר החדש שלכם יחליף את האתר הנוכחי. בחרו מבין יותר מ־140 תבניות מקצועיות או "
 "השתמשו בעוזר ה-AI."
 
-#: includes/Admin/Onboarding/Onboarding.php:199
-#: includes/Admin/Onboarding/Onboarding.php:240
+#: includes/Admin/Onboarding/Onboarding.php:201
+#: includes/Admin/Onboarding/Onboarding.php:242
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates."
@@ -2217,7 +2275,7 @@ msgstr "ההתקדמות שלכם"
 msgid "Your store name"
 msgstr "שם החנות שלכם"
 
-#: includes/Admin/Assets.php:459
+#: includes/Admin/Assets.php:461
 msgid "Your website failed to build. Please try again."
 msgstr "בניית האתר שלכם נכשלה. נא לנסות שנית."
 
@@ -2229,7 +2287,7 @@ msgstr ""
 "האתר שלכם כבר הושק וניתן לגשת אליו באמצעות תת-דומיין זמני בחינם של Hostinger "
 "כבר עכשיו. הנה ה-URL הנוכחי של האתר שלכם:"
 
-#: includes/Admin/Assets.php:457
+#: includes/Admin/Assets.php:459
 msgid "Your website is ready"
 msgstr "האתר שלכם מוכן"
 

@@ -332,7 +332,9 @@ msgid "Cash on delivery"
 msgstr "कैश ऑन डिलीवरी"
 
 #: includes/Admin/Assets.php:401
-msgid "Change domain"
+#: includes/Admin/Onboarding/Onboarding.php:475
+#: includes/Admin/Onboarding/Onboarding.php:488
+msgid "Connect domain"
 msgstr "डोमेन बदलें"
 
 #: includes/Admin/Assets.php:305
@@ -461,11 +463,6 @@ msgstr "Amazon को साइट से कनेक्ट करें"
 #: includes/Admin/Assets.php:252
 msgid "Connect domain now"
 msgstr "अभी डोमेन कनेक्ट करें"
-
-#: includes/Admin/Onboarding/Onboarding.php:475
-#: includes/Admin/Onboarding/Onboarding.php:488
-msgid "Connect on hPanel"
-msgstr "hPanel पर कनेक्ट करें"
 
 #: includes/Admin/Assets.php:282 includes/Admin/Onboarding/WelcomeCards.php:29
 msgid ""

@@ -64,8 +64,8 @@ class Admin {
 			}
 
 			// Translators: placeholder is the new label.
-			$item[0] = sprintf( esc_html__( 'Link Genius %s', 'rank-math-pro' ), $new_label );
-			$item[3] = esc_html__( 'Link Genius', 'rank-math-pro' );
+			$item[0] = sprintf( esc_html__( 'AI Link Genius %s', 'rank-math-pro' ), $new_label );
+			$item[3] = esc_html__( 'AI Link Genius', 'rank-math-pro' );
 
 			break;
 		}

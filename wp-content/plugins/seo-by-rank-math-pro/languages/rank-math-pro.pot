@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: Rank Math\n"
 "Last-Translator: Rank Math\n"
-"POT-Creation-Date: 2026-03-26 07:01+0000\n"
+"POT-Creation-Date: 2026-04-15 04:36+0000\n"
 "Project-Id-Version: undefined\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -2181,7 +2181,10 @@ msgid "New!"
 msgstr ""
 
 #. translators: placeholder is the new label.
-msgid "Link Genius %s"
+msgid "AI Link Genius %s"
+msgstr ""
+
+msgid "AI Link Genius"
 msgstr ""
 
 msgid "Filters to apply (is_internal, unchecked_only, etc.)."
@@ -3143,7 +3146,7 @@ msgstr ""
 msgid "No posts found containing the specified keywords."
 msgstr ""
 
-msgid "No new link opportunities found. The matching posts already contain the target link."
+msgid "No new link opportunities found. All keyword matches are already linked or in content that cannot be modified."
 msgstr ""
 
 #. translators: 1: number of links, 2: number of posts
@@ -3151,9 +3154,6 @@ msgid "Found %1$d link opportunity in %2$d post."
 msgid_plural "Found %1$d link opportunities in %2$d posts."
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Post already contains a link to the target URL."
-msgstr ""
 
 msgid "Preview data is required to execute keyword map."
 msgstr ""

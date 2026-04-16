@@ -28,15 +28,20 @@ class Content_Analyzer {
 	public static function analyze( $content ) {
 		$link_ranges    = [];
 		$existing_hrefs = [];
+		$href_counts    = [];
 
-		// Single regex scan to get all links with their positions and hrefs.
-		if ( preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\'][^>]*>.*?<\/a>/is', $content, $matches, PREG_OFFSET_CAPTURE ) ) {
+		// Single regex scan to get all links with their positions, hrefs, and anchor text.
+		if ( preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is', $content, $matches, PREG_OFFSET_CAPTURE ) ) {
 			foreach ( $matches[0] as $index => $match ) {
-				$link_ranges[]    = [
-					'start' => $match[1],
-					'end'   => $match[1] + strlen( $match[0] ),
+				$link_ranges[]              = [
+					'start'       => $match[1],
+					'end'         => $match[1] + strlen( $match[0] ),
+					'href'        => self::normalize_url( $matches[1][ $index ][0] ),
+					'anchor_text' => strtolower( trim( wp_strip_all_tags( $matches[2][ $index ][0] ) ) ),
 				];
-				$existing_hrefs[] = self::normalize_url( $matches[1][ $index ][0] );
+				$normalized                 = self::normalize_url( $matches[1][ $index ][0] );
+				$existing_hrefs[]           = $normalized;
+				$href_counts[ $normalized ] = ( $href_counts[ $normalized ] ?? 0 ) + 1;
 			}
 		}
 
@@ -46,6 +51,7 @@ class Content_Analyzer {
 		return [
 			'link_ranges'    => $link_ranges,
 			'existing_hrefs' => array_unique( $existing_hrefs ),
+			'href_counts'    => $href_counts,
 			'unsafe_ranges'  => $unsafe_ranges,
 		];
 	}
@@ -107,6 +113,30 @@ class Content_Analyzer {
 	public static function has_target_link( $content_analysis, $target_url ) {
 		$normalized = self::normalize_url( $target_url );
 		return in_array( $normalized, $content_analysis['existing_hrefs'], true );
+	}
+
+	/**
+	 * Count existing links that point to the target URL with a matching keyword variation as anchor text.
+	 *
+	 * @param array  $content_analysis Pre-computed analysis.
+	 * @param string $target_url       Target URL to match.
+	 * @param array  $variations       Keyword variations to match against anchor text.
+	 * @return int Number of existing keyword-matched links to the target URL.
+	 */
+	public static function count_target_links( $content_analysis, $target_url, $variations ) {
+		$normalized_url      = self::normalize_url( $target_url );
+		$normalized_variants = array_map( 'strtolower', $variations );
+		$count               = 0;
+
+		foreach ( $content_analysis['link_ranges'] as $range ) {
+			if ( isset( $range['href'] ) && $range['href'] === $normalized_url
+				&& isset( $range['anchor_text'] ) && in_array( $range['anchor_text'], $normalized_variants, true )
+			) {
+				++$count;
+			}
+		}
+
+		return $count;
 	}
 
 	/**

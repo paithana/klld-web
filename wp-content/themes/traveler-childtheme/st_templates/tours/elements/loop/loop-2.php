@@ -21,6 +21,19 @@ $url=st_get_link_with_search(get_permalink(),array('start','end','duration','peo
 if(empty($taxonomy)) $taxonomy=false;
 ?>
 <div class="col-md-<?php echo esc_attr($col) ?> col-sm-6 col-xs-12 style_box has-matchHeight" itemscope itemtype="http://schema.org/TouristAttraction">
+    <meta itemprop="name" content="<?php the_title(); ?>">
+    <meta itemprop="description" content="<?php echo esc_attr(strip_tags(get_the_excerpt())); ?>">
+    <meta itemprop="image" content="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>">
+    <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+        <meta itemprop="ratingValue" content="<?php echo STReview::get_avg_rate(); ?>">
+        <meta itemprop="reviewCount" content="<?php $comments = wp_count_comments(get_the_ID()); echo $comments->approved; ?>">
+    </div>
+    <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <meta itemprop="price" content="<?php echo $info_price['price_new']; ?>">
+        <meta itemprop="priceCurrency" content="<?php echo TravelHelper::get_default_currency(); ?>">
+        <link itemprop="availability" href="http://schema.org/InStock">
+        <meta itemprop="url" content="<?php the_permalink(); ?>">
+    </div>
     <?php echo STFeatured::get_featured(); ?>
     <div class="thumb">
         <?php if(!empty( $info_price['discount'] ) and $info_price['discount']>0 and $info_price['price_new'] >0) { ?>

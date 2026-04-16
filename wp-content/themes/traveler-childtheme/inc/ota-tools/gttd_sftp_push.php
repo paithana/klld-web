@@ -1,0 +1,84 @@
+<?php
+/**
+ * GTTD SFTP Push - Automated Feed Delivery
+ * This script captures the Google Things to Do feed and uploads it via SFTP.
+ */
+
+// ── Configuration ──────────────────────────────────────────────────────────
+$sftp_host = 'partnerupload.google.com'; 
+$sftp_port = 19321;
+$sftp_user = 'mc-sftp-5520609361'; 
+$sftp_key  = '/home/u451564824/.ssh/gttd_rsa';
+$target_file = 'tours_feed.xml';
+$local_temp = __DIR__ . '/tours_feed.tmp.xml';
+
+// ── Load Dependencies ──────────────────────────────────────────────────────
+$base_dir = dirname(dirname(dirname(dirname(__FILE__))));
+$autoload = $base_dir . '/wp-content/plugins/google-listings-and-ads/vendor/autoload.php';
+if (!file_exists($autoload)) {
+    // Fallback if the path is different
+    $autoload = ABSPATH . 'wp-content/plugins/google-listings-and-ads/vendor/autoload.php';
+}
+if (file_exists($autoload)) {
+    require_once $autoload;
+}
+
+use phpseclib3\Net\SFTP;
+use phpseclib3\Crypt\PublicKeyLoader;
+
+if ( defined( 'KLLD_TOOL_RUN' ) ) {
+    echo '<div class="wrap"><h1>Google Things to Do Feed Delivery</h1>';
+    echo '<p>Push the latest product feed to Google servers via SFTP.</p>';
+    if ( ! isset( $_POST['run_push'] ) ) {
+        echo '<form method="post"><input type="submit" name="run_push" class="button button-primary" value="Run SFTP Push Now"></form>';
+        return; // Stop here if not running
+    }
+    echo '<pre style="background:#f0f0f0; padding:15px; border:1px solid #ccc; margin-top:10px;">';
+}
+
+// ── Generate Feed Data ─────────────────────────────────────────────────────
+if (!PHP_SAPI === 'cli' && !current_user_can('manage_options')) die('Unauthorized.');
+
+echo "Generating feed data...\n";
+$_GET['format'] = 'xml';
+ob_start();
+include __DIR__ . '/google-tours-feed.php';
+$xml_content = ob_get_clean();
+
+if (empty($xml_content)) {
+    die("Error: Failed to generate XML feed content.\n");
+}
+
+file_put_contents($local_temp, $xml_content);
+echo "Feed saved locally to $local_temp (" . strlen($xml_content) . " bytes).\n";
+
+// ── SFTP Upload ────────────────────────────────────────────────────────────
+echo "Connecting to $sftp_host:$sftp_port as $sftp_user...\n";
+
+try {
+    $sftp = new SFTP($sftp_host, $sftp_port);
+    
+    // Load the private key
+    $key_content = file_get_contents($sftp_key);
+    $key = PublicKeyLoader::load($key_content);
+
+    if (!$sftp->login($sftp_user, $key)) {
+        die("SFTP Login Failed using key at $sftp_key\n");
+    }
+
+    echo "Login successful. Uploading $target_file...\n";
+    
+    if ($sftp->put($target_file, $local_temp, SFTP::SOURCE_LOCAL_FILE)) {
+        echo "Upload successful!\n";
+        @unlink($local_temp);
+    } else {
+        echo "Upload failed.\n";
+    }
+
+} catch (\Exception $e) {
+    echo "Error during SFTP upload: " . $e->getMessage() . "\n";
+}
+
+if ( defined( 'KLLD_TOOL_RUN' ) ) {
+    echo '</pre></div>';
+}

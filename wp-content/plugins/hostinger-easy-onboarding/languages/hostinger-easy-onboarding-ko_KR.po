@@ -11,12 +11,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-12-03T07:13:05+00:00\n"
-"PO-Revision-Date: 2026-02-02 12:22+0000\n"
+"PO-Revision-Date: 2026-04-14 06:40+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hostinger-easy-onboarding\n"
 "Language: ko_KR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.2.29"
+"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.2.29"
 
 #: includes/Admin/Assets.php:216
 msgid ""
@@ -26,20 +26,18 @@ msgstr " 단계별 가이드가 담긴 유튜브 튜토리얼을 통해 도메�
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:66
-#, fuzzy
 msgid " Please refresh the page and try again."
 msgstr " 페이지를 새로고침하고 다시 시도하세요."
 
 #. translators: %s plugin slug
-#: includes/Rest/StepRoutes.php:161
+#: includes/Rest/StepRoutes.php:177
 #, php-format
 msgid "%s is already active"
 msgstr "%s가 이미 활성화되었습니다"
 
 #. translators: %s field name that is missing
-#. translators: %s missing field slug
-#: includes/Rest/StepRoutes.php:67 includes/Rest/StepRoutes.php:72
-#: includes/Rest/StepRoutes.php:153 includes/Rest/StepRoutes.php:215
+#: includes/Rest/StepRoutes.php:83 includes/Rest/StepRoutes.php:88
+#: includes/Rest/StepRoutes.php:169 includes/Rest/StepRoutes.php:231
 #: includes/Rest/WooRoutes.php:39 includes/WooCommerce/SetupHandler.php:34
 #: includes/WooCommerce/SetupHandler.php:44
 #, php-format
@@ -68,29 +66,24 @@ msgid ""
 msgstr "<strong>기본 제공 배송 방법 사용</strong> - 추가 플러그인이 필요하지 않습니다."
 
 #: includes/Admin/Assets.php:326
-#, fuzzy
 msgid "A minimum order amount"
 msgstr "최소 주문 금액"
 
 #: includes/Admin/Assets.php:329
-#, fuzzy
 msgid "A minimum order amount AND coupon"
 msgstr "최소 주문 금액 및 쿠폰"
 
 #: includes/Admin/Assets.php:328
-#, fuzzy
 msgid "A minimum order amount OR coupon"
 msgstr "최소 주문 금액 또는 쿠폰"
 
-#: includes/Admin/Assets.php:465
-#, fuzzy
+#: includes/Admin/Assets.php:467
 msgid ""
 "A theme controls your WordPress site’s appearance and layout, including "
 "colors and fonts. You’ll need to build and customize the pages yourself."
 msgstr "테마는 색상과 글꼴을 포함하여 워드프레스 사이트의 모양과 레이아웃을 제어합니다. 페이지를 직접 만들고 사용자 정의해야 합니다."
 
 #: includes/Admin/Assets.php:327
-#, fuzzy
 msgid "A valid free shipping coupon"
 msgstr "유효한 무료 배송 쿠폰"
 
@@ -108,7 +101,6 @@ msgstr "작업이 실패했습니다. 다시 시도하거나 지원팀에 문의
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:44
-#, fuzzy
 msgid "Actions"
 msgstr "작업"
 
@@ -128,7 +120,7 @@ msgstr "활성화"
 msgid "Add"
 msgstr "추가"
 
-#: includes/Admin/Onboarding/Onboarding.php:470
+#: includes/Admin/Onboarding/Onboarding.php:476
 msgid "Add a domain"
 msgstr "도메인 추가"
 
@@ -140,11 +132,16 @@ msgstr "새 페이지 추가"
 msgid "Add a title"
 msgstr "제목 추가"
 
+#: includes/Admin/Assets.php:477
+#, fuzzy
+msgid "Add and manage WooCommerce products"
+msgstr "WooCommerce 제품 추가 및 관리"
+
 #: includes/Admin/Assets.php:344
 msgid "Add content"
 msgstr "콘텐츠 추가"
 
-#: includes/Admin/Onboarding/Onboarding.php:472
+#: includes/Admin/Onboarding/Onboarding.php:478
 msgid "Add domain"
 msgstr "도메인 추가"
 
@@ -152,12 +149,11 @@ msgstr "도메인 추가"
 msgid "Add plugin"
 msgstr "플러그인 추가"
 
-#: includes/Admin/Assets.php:435
-#, fuzzy
+#: includes/Admin/Assets.php:437
 msgid "Add plugins to your site"
 msgstr "사이트에 플러그인 추가"
 
-#: includes/Admin/Onboarding/Onboarding.php:634
+#: includes/Admin/Onboarding/Onboarding.php:640
 msgid "Add product"
 msgstr "제품 추가"
 
@@ -165,7 +161,7 @@ msgstr "제품 추가"
 msgid "Add shipping method"
 msgstr "배송 방법 추가"
 
-#: includes/Admin/Onboarding/Onboarding.php:606
+#: includes/Admin/Onboarding/Onboarding.php:612
 msgid "Add store details"
 msgstr "스토어 세부 정보 추가"
 
@@ -182,7 +178,7 @@ msgstr ""
 msgid "Add your first product"
 msgstr "첫 번째 제품 추가"
 
-#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:630
+#: includes/Admin/Assets.php:206 includes/Admin/Onboarding/Onboarding.php:636
 msgid "Add your first product or service"
 msgstr "첫 번째 제품 또는 서비스 추가"
 
@@ -211,18 +207,15 @@ msgid ""
 "Adiciona PagSeguro como meio de pagamento (com desconto nas taxas oficiais)."
 msgstr "PagSeguro를 결제 수단으로 추가합니다(사무실 세금에서 제외됨)."
 
-#: includes/Admin/Assets.php:472
-#, fuzzy
+#: includes/Admin/Assets.php:483
 msgid "Affiliate marketing"
 msgstr "제휴 마케팅"
 
-#: includes/Admin/Assets.php:431 includes/Admin/Assets.php:469
-#, fuzzy
+#: includes/Admin/Assets.php:433 includes/Admin/Assets.php:480
 msgid "All"
 msgstr "모두"
 
 #: includes/Admin/Assets.php:316
-#, fuzzy
 msgid "Allow customers to pick up orders themselves."
 msgstr "고객이 직접 주문을 수령할 수 있도록 허용합니다."
 
@@ -237,7 +230,6 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:106
-#, fuzzy
 msgid "An error occurred while deleting the page."
 msgstr "페이지를 삭제하는 동안 오류가 발생했습니다."
 
@@ -247,7 +239,6 @@ msgstr "예기치 않은 오류가 발생했습니다. 다시 시도하거나 �
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:76
-#, fuzzy
 msgid "An unexpected error occurred. Please try again."
 msgstr "예기치 않은 오류가 발생했습니다. 다시 시도해 주세요."
 
@@ -257,13 +248,11 @@ msgid ""
 msgstr "Anteraja 플러그인은 Anteraja를 통합하기 위한 WooCommerce용 워드프레스 플러그인입니다"
 
 #: includes/Admin/Assets.php:422
-#, fuzzy
 msgid "Apply minimum order rule before discount"
 msgstr "할인 전 최소 주문 규칙 적용"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:31
-#, fuzzy
 msgid "Are you sure you want to delete this page?"
 msgstr "이 페이지를 삭제하시겠습니까?"
 
@@ -272,7 +261,7 @@ msgid "Are you sure?"
 msgstr "정말 진행할까요?"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 msgid "Attention:"
 msgstr "주의:"
 
@@ -296,18 +285,22 @@ msgstr "게시하기 전에 미리보기 버튼을 클릭하여 생성한 페이
 msgid "Being reviewed"
 msgstr "검토 중"
 
-#: includes/Admin/Assets.php:473
-#, fuzzy
+#: includes/Admin/Assets.php:484
 msgid "Blog"
 msgstr "블로그"
 
-#: includes/Admin/Onboarding/Onboarding.php:271
+#: includes/Admin/Assets.php:430
+#, fuzzy
+msgid "Browse our vast library of handpicked pre built websites and themes."
+msgstr "엄선된 사전 구축 웹사이트와 테마로 구성된 방대한 라이브러리를 살펴보세요."
+
+#: includes/Admin/Onboarding/Onboarding.php:273
 msgid ""
 "Build a custom-designed site in minutes with professional templates. You’ll "
 "be ready to go live in a few clicks."
 msgstr "전문 템플릿을 사용하여 몇 분 안에 맞춤형 디자인 사이트를 구축하세요. 몇 번의 클릭만으로 바로 시작할 수 있습니다."
 
-#: includes/Admin/Onboarding/Onboarding.php:263
+#: includes/Admin/Onboarding/Onboarding.php:265
 msgid ""
 "Build a professional, custom-designed site in moments. Choose from 140+ "
 "templates or use AI."
@@ -319,14 +312,12 @@ msgid ""
 "AI handles the rest."
 msgstr "전문적인 맞춤형 디자인 사이트를 순식간에 구축하세요. 몇 번의 클릭만으로 나머지는 AI가 알아서 처리합니다."
 
-#: includes/Admin/Assets.php:428
-#, fuzzy
+#: includes/Admin/Assets.php:429
 msgid ""
 "Build a website from scratch, with the help of pre-built websites or themes."
 msgstr "미리 구축된 웹사이트 또는 테마의 도움을 받아 처음부터 웹사이트를 구축하세요."
 
-#: includes/Admin/Assets.php:470
-#, fuzzy
+#: includes/Admin/Assets.php:481
 msgid "Business"
 msgstr "비즈니스"
 
@@ -343,12 +334,7 @@ msgstr "취소"
 msgid "Cash on delivery"
 msgstr "CoD"
 
-#: includes/Admin/Assets.php:410
-msgid "Change domain"
-msgstr "도메인 변경"
-
 #: includes/Admin/Assets.php:314
-#, fuzzy
 msgid "Charge a fixed rate for shipping regardless of the order."
 msgstr "주문에 관계없이 고정 요금으로 배송비를 청구합니다."
 
@@ -364,45 +350,41 @@ msgstr "선택 매개변수 누락 또는 비어 있음"
 msgid "Choice parameter missing or invalid"
 msgstr "선택 매개변수 누락 또는 유효하지 않음"
 
-#: includes/Admin/Assets.php:429
-#, fuzzy
+#: includes/Admin/Assets.php:431
 msgid "Choose a pre-built website"
 msgstr "사전 구축된 웹사이트 선택"
 
-#: includes/Admin/Onboarding/Onboarding.php:243
+#: includes/Admin/Onboarding/Onboarding.php:245
 msgid "Choose a template"
 msgstr "템플릿 선택"
 
-#: includes/Admin/Assets.php:432
-#, fuzzy
+#: includes/Admin/Assets.php:434
 msgid "Choose a theme"
 msgstr "테마 선택"
 
-#: includes/Admin/Onboarding/Onboarding.php:208
+#: includes/Admin/Onboarding/Onboarding.php:210
 msgid "Choose another template"
 msgstr "다른 템플릿 선택"
 
 #: includes/Admin/Assets.php:426
-#, fuzzy
 msgid "Choose how you’d like to build your website"
 msgstr "웹사이트 구축 방법을 선택하세요"
 
-#: includes/Admin/Onboarding/Onboarding.php:272
+#: includes/Admin/Onboarding/Onboarding.php:274
 msgid "Choose template"
 msgstr "템플릿 선택"
 
-#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:679
+#: includes/Admin/Assets.php:198 includes/Admin/Onboarding/Onboarding.php:685
 msgid ""
 "Choose the ways you'd like to ship orders to customers. You can always add "
 "others later."
 msgstr "고객에게 주문을 배송할 방법을 선택합니다. 나중에 언제든지 다른 방법을 추가할 수 있습니다."
 
-#: includes/Admin/Assets.php:460
-#, fuzzy
+#: includes/Admin/Assets.php:462
 msgid "Close"
 msgstr "닫기"
 
-#: includes/Admin/Onboarding/Onboarding.php:439
+#: includes/Admin/Onboarding/Onboarding.php:445
 msgid ""
 "Collect emails from forms on your site and start sending on-brand email "
 "campaigns with Hostinger Reach – all powered by AI."
@@ -422,8 +404,7 @@ msgstr "완료"
 msgid "Completed steps"
 msgstr "완료된 단계"
 
-#: includes/Admin/Assets.php:456
-#, fuzzy
+#: includes/Admin/Assets.php:458
 msgid "Completed!"
 msgstr "완료!"
 
@@ -437,12 +418,11 @@ msgid ""
 "money of Mercado Pago account."
 msgstr "결제 옵션을 구성하고 카드, 티켓, 메르카도 파고 계정의 현금으로 결제를 수락합니다."
 
-#: includes/Admin/Assets.php:440
-#, fuzzy
+#: includes/Admin/Assets.php:442
 msgid "conflicts with"
-msgstr "와 충돌"
+msgstr "다음과 충돌함:"
 
-#: includes/Admin/Hooks.php:517
+#: includes/Admin/Hooks.php:537
 msgid "Congrats, you have connected WooPayments!"
 msgstr "축하합니다, WooPayments를 연결하셨습니다!"
 
@@ -450,7 +430,7 @@ msgstr "축하합니다, WooPayments를 연결하셨습니다!"
 msgid "Congrats, you're ready to show off your site!"
 msgstr "축하합니다, 사이트를 자랑할 준비가 되었습니다!"
 
-#: includes/Admin/Hooks.php:510
+#: includes/Admin/Hooks.php:530
 msgid "Congrats, you’re ready to show off your site!"
 msgstr "축하합니다, 사이트를 자랑할 준비가 되었습니다!"
 
@@ -458,25 +438,26 @@ msgstr "축하합니다, 사이트를 자랑할 준비가 되었습니다!"
 msgid "Connect"
 msgstr "연결"
 
-#: includes/Admin/Onboarding/Onboarding.php:542
+#: includes/Admin/Onboarding/Onboarding.php:548
 msgid "Connect Amazon to site"
 msgstr "Amazon을 사이트에 연결"
+
+#: includes/Admin/Assets.php:410 includes/Admin/Onboarding/Onboarding.php:482
+#: includes/Admin/Onboarding/Onboarding.php:495
+#, fuzzy
+msgid "Connect domain"
+msgstr "도메인 연결"
 
 #: includes/Admin/Assets.php:261
 msgid "Connect domain now"
 msgstr "지금 도메인 연결"
-
-#: includes/Admin/Onboarding/Onboarding.php:476
-#: includes/Admin/Onboarding/Onboarding.php:489
-msgid "Connect on hPanel"
-msgstr "hPanel에 연결"
 
 #: includes/Admin/Assets.php:291 includes/Admin/Onboarding/WelcomeCards.php:29
 msgid ""
 "Connect your <strong>Amazon Associate</strong> account to fetch API details."
 msgstr "Amazon Associate 계정을 연결하여 API 세부 정보를 가져옵니다."
 
-#: includes/Admin/Onboarding/Onboarding.php:534
+#: includes/Admin/Onboarding/Onboarding.php:540
 msgid "Connect your Amazon account to the site"
 msgstr "Amazon 계정에 사이트에 연결"
 
@@ -484,7 +465,7 @@ msgstr "Amazon 계정에 사이트에 연결"
 msgid "Connect your domain"
 msgstr "도메인 연결"
 
-#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:723
+#: includes/Admin/Assets.php:353 includes/Admin/Onboarding/Onboarding.php:729
 msgid "Connect your domain first"
 msgstr "먼저 도메인을 연결하세요"
 
@@ -493,11 +474,11 @@ msgstr "먼저 도메인을 연결하세요"
 msgid "Connect your domain to Hostinger"
 msgstr "도메인을 호스팅어에 연결"
 
-#: includes/Admin/Onboarding/Onboarding.php:494
+#: includes/Admin/Onboarding/Onboarding.php:500
 msgid "Connected a domain"
 msgstr "도메인 연결"
 
-#: includes/Admin/Onboarding/Onboarding.php:537
+#: includes/Admin/Onboarding/Onboarding.php:543
 msgid "Connected your Amazon account"
 msgstr "아마존 계정 연결"
 
@@ -517,8 +498,8 @@ msgstr ""
 msgid "Continue"
 msgstr "계속"
 
-#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:507
-#: includes/Admin/Hooks.php:520
+#: includes/Admin/Assets.php:349 includes/Admin/Hooks.php:527
+#: includes/Admin/Hooks.php:540
 msgid "Continue setup"
 msgstr "설정 계속"
 
@@ -528,13 +509,11 @@ msgstr "로고 생성"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/CreatePageButton.js:23
-#, fuzzy
 msgid "Create a new Page"
 msgstr "새 페이지 만들기"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/CreatePageButton.js:26
-#, fuzzy
 msgid "Create a new page"
 msgstr "새 페이지 만들기"
 
@@ -552,16 +531,21 @@ msgid ""
 "on cart weight or total."
 msgstr "WooCommerce에서 추가 배송 방법을 생성하고 카트 무게 또는 총액을 기준으로 가격을 책정할 수 있습니다."
 
+#: includes/Admin/Assets.php:474
+#, fuzzy
+msgid "Create and edit pages or posts"
+msgstr "페이지 또는 글 만들기 및 편집"
+
 #: includes/Admin/Onboarding/PluginManager.php:79
 msgid "Create Chronopost & Mondial relay shipping labels and send them easily."
 msgstr "크로노포스트 및 몬디알 릴레이 배송 라벨을 생성하여 간편하게 발송하세요."
 
 #: includes/Admin/Onboarding/Onboarding.php:184
-#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:237
 msgid "Create new site"
 msgstr "새 사이트 생성"
 
-#: includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:266
 msgid "Create site"
 msgstr "사이트 만들기"
 
@@ -571,12 +555,10 @@ msgstr "AI로 사이트 생성"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:59
-#, fuzzy
 msgid "Current page"
 msgstr "현재 페이지"
 
 #: includes/Admin/Assets.php:319
-#, fuzzy
 #| msgid "Current page"
 msgid "Current zone"
 msgstr "현재 페이지"
@@ -593,24 +575,26 @@ msgstr "데이터베이스 한도에 거의 도달"
 msgid "Database limit reached"
 msgstr "데이터베이스 한도에 도달"
 
-#: includes/Admin/Assets.php:434
-#, fuzzy
+#: includes/Admin/Assets.php:436
 msgid "Default"
 msgstr "기본값"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:123
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:125
-#, fuzzy
 msgid "Delete page"
 msgstr "페이지 삭제"
 
-#: includes/Admin/Assets.php:437
+#: includes/Admin/Assets.php:428
 #, fuzzy
+msgid "Describe your idea and watch AI build your site with custom content"
+msgstr "아이디어를 설명하고 AI가 맞춤형 콘텐츠로 사이트를 구축하는 과정을 지켜보세요"
+
+#: includes/Admin/Assets.php:439
 msgid "Deselect all"
 msgstr "모두 선택 해제"
 
-#: includes/Admin/Assets.php:515
+#: includes/Admin/Assets.php:530
 msgid "Digital products"
 msgstr "디지털 제품"
 
@@ -634,8 +618,7 @@ msgstr "디스크 사용량 제한에 도달"
 msgid "Dismiss"
 msgstr "해지"
 
-#: includes/Admin/Assets.php:475
-#, fuzzy
+#: includes/Admin/Assets.php:486
 msgid "Do not install plugins"
 msgstr "플러그인 설치하지 않기"
 
@@ -681,7 +664,6 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:19
-#, fuzzy
 msgid "Edit"
 msgstr "편집"
 
@@ -693,21 +675,19 @@ msgstr "이미지 편집"
 msgid "Edit description"
 msgstr "설명 수정"
 
-#: includes/Hooks.php:292
+#: includes/Hooks.php:296
 msgid "Edit Home Page"
 msgstr "홈페이지 편집"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:12
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:14
-#, fuzzy
 msgid "Edit Page"
 msgstr "페이지 편집"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/index.js:139
 #: gutenberg/edit-pages-panel/src/index.js:145
-#, fuzzy
 msgid "Edit Pages"
 msgstr "페이지 편집"
 
@@ -751,11 +731,10 @@ msgstr ""
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:46
-#, fuzzy
 msgid "Error:"
 msgstr "오류:"
 
-#: includes/Admin/Onboarding/Onboarding.php:498
+#: includes/Admin/Onboarding/Onboarding.php:504
 msgid ""
 "Every website needs a domain that makes it easy to access and remember. Get "
 "yours in just a few clicks."
@@ -779,25 +758,21 @@ msgstr "만료일"
 msgid "Extends WooCommerce with a RedSys gateway."
 msgstr "RedSys 게이트웨이로 WooCommerce를 확장합니다."
 
-#: includes/Rest/StepRoutes.php:305
-#, fuzzy
+#: includes/Rest/StepRoutes.php:373
 msgid "Failed to download theme."
 msgstr "테마를 다운로드하지 못했습니다."
 
-#: includes/Rest/StepRoutes.php:321
-#, fuzzy
+#: includes/Rest/StepRoutes.php:389
 msgid "Failed to install theme."
 msgstr "테마를 설치하지 못했습니다."
 
-#: includes/Admin/Assets.php:458
-#, fuzzy
+#: includes/Admin/Assets.php:460
 msgid "Failed!"
 msgstr "실패했습니다!"
 
-#: includes/Admin/Assets.php:454
-#, fuzzy
+#: includes/Admin/Assets.php:456
 msgid "Finalizing..."
-msgstr "마무리..."
+msgstr "마무리 하는 중..."
 
 #: includes/Admin/Assets.php:368
 msgid "Find the answers you need in our Knowledge Base"
@@ -808,7 +783,6 @@ msgid "Find the Media page"
 msgstr "미디어 페이지 찾기"
 
 #: includes/Admin/Assets.php:332
-#, fuzzy
 msgid "Finish"
 msgstr "완료"
 
@@ -818,12 +792,10 @@ msgstr "등록 완료"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/StoreSetupButton.js:26
-#, fuzzy
 msgid "Finish Setup"
 msgstr "설정 완료"
 
 #: includes/Admin/Assets.php:313
-#, fuzzy
 msgid "Flat rate"
 msgstr "정액 요금"
 
@@ -832,22 +804,18 @@ msgid "Follow these steps to complete your setup"
 msgstr "설정을 완료하려면 다음 단계를 따르세요"
 
 #: includes/Admin/Assets.php:311
-#, fuzzy
 msgid "Free shipping"
 msgstr "무료 배송"
 
 #: includes/Admin/Assets.php:312
-#, fuzzy
 msgid "Free shipping is a great way to increase conversions."
 msgstr "무료 배송은 전환율을 높일 수 있는 좋은 방법입니다."
 
 #: includes/Admin/Assets.php:321
-#, fuzzy
 msgid "Free shipping requires"
 msgstr "무료 배송에는 다음이 필요합니다"
 
 #: includes/Admin/Menu.php:109 includes/Admin/Menu.php:110
-#, fuzzy
 msgid "Full Screen Onboarding"
 msgstr "전체 화면 온보딩"
 
@@ -867,11 +835,11 @@ msgstr "도메인 확보"
 msgid "Get deal"
 msgstr "혜택 받기"
 
-#: includes/Admin/Hooks.php:362
+#: includes/Admin/Hooks.php:382
 msgid "Get Discount"
 msgstr "할인 받기"
 
-#: includes/Admin/Onboarding/Onboarding.php:704
+#: includes/Admin/Onboarding/Onboarding.php:710
 msgid "Get found on Google"
 msgstr "구글에서 검색하기"
 
@@ -895,20 +863,20 @@ msgid ""
 "services with ease."
 msgstr "고객 결제를 받을 준비를 하세요. 고객이 손쉽게 제품과 서비스를 결제할 수 있도록 하세요."
 
-#: includes/Admin/Onboarding/Onboarding.php:657
+#: includes/Admin/Onboarding/Onboarding.php:663
 msgid ""
 "Get ready to sell online. Add your first product, then set up payments and "
 "shipping."
 msgstr "온라인 판매를 준비합니다. 첫 번째 제품을 추가한 다음 결제 및 배송을 설정합니다."
 
-#: includes/Admin/Onboarding/Onboarding.php:561
+#: includes/Admin/Onboarding/Onboarding.php:567
 msgid ""
 "Get ready to sell online. Add your first product, then set up shipping and "
 "payments."
 msgstr "온라인 판매를 준비합니다. 첫 번째 제품을 추가한 다음 배송 및 결제를 설정합니다."
 
-#: includes/Admin/Onboarding/Onboarding.php:563
-#: includes/Admin/Onboarding/Onboarding.php:610
+#: includes/Admin/Onboarding/Onboarding.php:569
+#: includes/Admin/Onboarding/Onboarding.php:616
 msgid "Get started"
 msgstr "시작하기"
 
@@ -929,7 +897,6 @@ msgid "Go to the Customize page"
 msgstr "사용자 지정 페이지로 이동합니다"
 
 #: includes/Admin/Assets.php:425
-#, fuzzy
 msgid "Go to WordPress"
 msgstr "워드프레스로 이동"
 
@@ -946,6 +913,11 @@ msgstr "알겠습니다!"
 #: includes/Admin/Assets.php:369
 msgid "Help Center"
 msgstr "지원 센터"
+
+#: includes/Admin/Assets.php:471
+#, fuzzy
+msgid "Hey,"
+msgstr "안녕하세요,"
 
 #: includes/Admin/Assets.php:260
 msgid "Hide completed"
@@ -977,6 +949,11 @@ msgstr "호스팅어"
 #: includes/Admin/Assets.php:372
 msgid "Hostinger Academy"
 msgstr "호스팅어 아카데미"
+
+#: includes/Rest/StepRoutes.php:261
+#, fuzzy
+msgid "Hostinger AI theme is not currently active."
+msgstr "Hostinger AI 테마는 현재 활성화되어 있지 않습니다."
 
 #. Plugin Name of the plugin
 #: hostinger-easy-onboarding.php
@@ -1086,8 +1063,7 @@ msgstr ""
 "이미지를 수정하려면 선택한 이미지를 클릭하고 이미지 수정 버튼을 클릭합니다. 이제 선택한 이미지를 자르고, 회전하고, 뒤집거나, 크기를 "
 "조정할 수 있습니다."
 
-#: includes/Admin/Assets.php:441
-#, fuzzy
+#: includes/Admin/Assets.php:443
 msgid "in terms of functionality."
 msgstr "기능적인 측면에서도 마찬가지입니다."
 
@@ -1147,6 +1123,16 @@ msgstr "아이노드 한계에 거의 도달"
 msgid "Inodes limit reached"
 msgstr "아이노드 한계에 도달"
 
+#: includes/Admin/Assets.php:478
+#, fuzzy
+msgid "Install Kodee"
+msgstr "Kodee 설치"
+
+#: includes/Admin/Assets.php:473
+#, fuzzy
+msgid "Install me, so I can help you:"
+msgstr "제가 도와드릴 수 있도록 설치해 주세요:"
+
 #: includes/Admin/Assets.php:174
 msgid "Install plugin"
 msgstr "플러그인 설치"
@@ -1159,18 +1145,15 @@ msgstr "설치 실패"
 msgid "Installed"
 msgstr "설치됨"
 
-#: includes/Admin/Assets.php:451
-#, fuzzy
+#: includes/Admin/Assets.php:453
 msgid "Installing plugins..."
 msgstr "플러그인 설치하기..."
 
-#: includes/Admin/Assets.php:452
-#, fuzzy
+#: includes/Admin/Assets.php:454
 msgid "Installing template..."
 msgstr "템플릿 설치 중..."
 
-#: includes/Admin/Assets.php:453
-#, fuzzy
+#: includes/Admin/Assets.php:455
 msgid "Installing theme..."
 msgstr "테마 설치 중..."
 
@@ -1179,7 +1162,6 @@ msgid "Invite a Friend, Earn Up to $100"
 msgstr "친구 초대, 최대 $100 적립하기"
 
 #: includes/Admin/Assets.php:323
-#, fuzzy
 msgid "Is shipping cost taxable?"
 msgstr "배송비는 과세 대상인가요?"
 
@@ -1192,14 +1174,19 @@ msgstr ""
 "이를 통해 WooCommerce 사이트에서 BHIM, Google Pay, Paytm, PhonePe 또는 모든 뱅킹 UPI 앱과 같은 "
 "UPI 앱을 통해 결제를 수락할 수 있습니다. 결제 게이트웨이 수수료 없이 이용하세요."
 
-#: includes/Admin/Hooks.php:504
+#: includes/Admin/Assets.php:472
+#, fuzzy
+msgid "I’m Kodee – your AI WordPress assistant"
+msgstr "인공지능 워드프레스 어시스턴트, Kodee입니다"
+
+#: includes/Admin/Hooks.php:524
 msgid "Just a few more steps to launch your online store"
 msgstr "온라인 스토어를 시작하기 위한 몇 단계만 더 거치면 됩니다"
 
 #: includes/Admin/Onboarding/Onboarding.php:180
-#: includes/Admin/Onboarding/Onboarding.php:203
-#: includes/Admin/Onboarding/Onboarding.php:233
-#: includes/Admin/Onboarding/Onboarding.php:241
+#: includes/Admin/Onboarding/Onboarding.php:205
+#: includes/Admin/Onboarding/Onboarding.php:235
+#: includes/Admin/Onboarding/Onboarding.php:243
 msgid "Keep current site"
 msgstr "현재 사이트 유지"
 
@@ -1207,8 +1194,7 @@ msgstr "현재 사이트 유지"
 msgid "Knowledge Base"
 msgstr "도움말"
 
-#: includes/Admin/Assets.php:447
-#, fuzzy
+#: includes/Admin/Assets.php:449
 msgid "Laptop"
 msgstr "노트북"
 
@@ -1221,11 +1207,10 @@ msgid "Learn WordPress"
 msgstr "워드프레스 배우기"
 
 #: includes/Admin/Assets.php:427
-#, fuzzy
 msgid "Let AI build a website that fit your business needs."
 msgstr "인공지능이 비즈니스 요구에 맞는 웹사이트를 구축해 드립니다."
 
-#: includes/Admin/Onboarding/Onboarding.php:585
+#: includes/Admin/Onboarding/Onboarding.php:591
 msgid ""
 "Let AI explore, understand, and interact with your site. All content updates "
 "are auto-tracked so AI tools stay in sync with your site’s latest version."
@@ -1233,7 +1218,7 @@ msgstr ""
 "AI가 사이트를 탐색하고, 이해하고, 상호 작용하도록 하세요. 모든 콘텐츠 업데이트가 자동으로 추적되므로 AI 도구가 사이트의 최신 "
 "버전과 동기화 상태를 유지합니다."
 
-#: includes/Admin/Onboarding/Onboarding.php:540
+#: includes/Admin/Onboarding/Onboarding.php:546
 msgid ""
 "Link your Amazon Associates account to your website, start promoting "
 "products, and earn rewards. No API key required."
@@ -1253,7 +1238,6 @@ msgstr "라이트스피드 캐시: 100% 워드프레스 최적화를 얻는 방�
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:27
-#, fuzzy
 msgid "Loading..."
 msgstr "로드 중..."
 
@@ -1262,28 +1246,32 @@ msgid "Loading…"
 msgstr "로드 중.."
 
 #: includes/Admin/Assets.php:315
-#, fuzzy
 msgid "Local pickup"
 msgstr "현지 픽업"
 
-#: includes/Admin/Onboarding/Onboarding.php:706
+#: includes/Admin/Onboarding/Onboarding.php:712
 msgid ""
 "Make sure that your website shows up when visitors are looking for your "
 "business on Google."
 msgstr "방문자가 Google에서 비즈니스를 검색할 때 웹사이트가 표시되도록 하세요."
 
-#: includes/Admin/Onboarding/Onboarding.php:583
+#: includes/Admin/Onboarding/Onboarding.php:589
 msgid "Make your site discoverable by AI"
 msgstr "AI가 검색 가능한 사이트 만들기"
 
-#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:713
+#: includes/Admin/Assets.php:389 includes/Admin/Onboarding/Onboarding.php:719
 msgid "Manage"
 msgstr "관리"
 
 #: includes/Admin/Assets.php:188 includes/Admin/Assets.php:318
-#: includes/Admin/Onboarding/Onboarding.php:677
+#: includes/Admin/Onboarding/Onboarding.php:683
 msgid "Manage shipping"
 msgstr "배송 관리"
+
+#: includes/Admin/Assets.php:475
+#, fuzzy
+msgid "Manage users and permissions"
+msgstr "사용자 및 권한 관리"
 
 #: includes/Admin/Assets.php:187
 msgid "Market your business"
@@ -1296,7 +1284,6 @@ msgid ""
 msgstr "Midtrans-WooCommerce는 Midtrans 공식 플러그인입니다. Midtrans는 온라인 결제 게이트웨이입니다."
 
 #: includes/Admin/Assets.php:324
-#, fuzzy
 msgid "Minimum spend for free shipping"
 msgstr "무료 배송을 위한 최소 구매 금액"
 
@@ -1305,7 +1292,6 @@ msgid "More info"
 msgstr "자세한 정보"
 
 #: includes/Admin/Assets.php:322
-#, fuzzy
 msgid "Most popular"
 msgstr "가장 인기 있는"
 
@@ -1314,13 +1300,16 @@ msgid "Nameserver"
 msgstr "네임서버"
 
 #: includes/Admin/Assets.php:423
-#, fuzzy
 msgid "Next"
 msgstr "다음"
 
+#: includes/Rest/StepRoutes.php:293
+#, fuzzy
+msgid "No default theme available to switch to."
+msgstr "전환할 수 있는 기본 테마가 없습니다."
+
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:33
-#, fuzzy
 msgid "No pages found."
 msgstr "페이지를 찾을 수 없습니다."
 
@@ -1328,18 +1317,15 @@ msgstr "페이지를 찾을 수 없습니다."
 msgid "No PHP files found in plugin directory"
 msgstr "플러그인 디렉토리에 PHP 파일이 없습니다"
 
-#: includes/Admin/Assets.php:446
-#, fuzzy
+#: includes/Admin/Assets.php:448
 msgid "No plugin image"
 msgstr "플러그인 이미지 없음"
 
-#: includes/Admin/Assets.php:444
-#, fuzzy
+#: includes/Admin/Assets.php:446
 msgid "No plugins found"
 msgstr "플러그인을 찾을 수 없습니다"
 
 #: includes/Admin/Assets.php:325
-#, fuzzy
 msgid "No requirement"
 msgstr "요구 사항 없음"
 
@@ -1351,17 +1337,17 @@ msgstr "연결되지 않음"
 msgid "Not interested"
 msgstr "관심 없음"
 
-#: includes/Admin/Onboarding/Onboarding.php:445
-#: includes/Admin/Onboarding/Onboarding.php:590
-#: includes/Admin/Onboarding/Onboarding.php:687
-#: includes/Admin/Onboarding/Onboarding.php:718
+#: includes/Admin/Onboarding/Onboarding.php:451
+#: includes/Admin/Onboarding/Onboarding.php:596
+#: includes/Admin/Onboarding/Onboarding.php:693
+#: includes/Admin/Onboarding/Onboarding.php:724
 msgid "Not needed"
 msgstr "필요 없음"
 
 #: includes/Admin/Onboarding/Onboarding.php:173
-#: includes/Admin/Onboarding/Onboarding.php:266
-#: includes/Admin/Onboarding/Onboarding.php:275
-#: includes/Admin/Onboarding/Onboarding.php:638
+#: includes/Admin/Onboarding/Onboarding.php:268
+#: includes/Admin/Onboarding/Onboarding.php:277
+#: includes/Admin/Onboarding/Onboarding.php:644
 msgid "Not now"
 msgstr "지금은 아닙니다"
 
@@ -1373,8 +1359,7 @@ msgstr "구매하지 않음"
 msgid "Not registered"
 msgstr "등록되지 않음"
 
-#: includes/Admin/Assets.php:443
-#, fuzzy
+#: includes/Admin/Assets.php:445
 msgid "Nothing found"
 msgstr "찾을 수 없음"
 
@@ -1388,17 +1373,15 @@ msgstr "이제 설치한 플러그인 설정을 <strong>완료합니다."
 msgid "Onboarding"
 msgstr "온보딩"
 
-#: includes/Admin/Assets.php:455
-#, fuzzy
+#: includes/Admin/Assets.php:457
 msgid "Onboarding Wordpress being built"
 msgstr "구축 중인 워드프레스 온보딩"
 
-#: includes/Admin/Assets.php:471
-#, fuzzy
+#: includes/Admin/Assets.php:482
 msgid "Online store"
 msgstr "온라인 스토어"
 
-#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:369
+#: includes/Admin/Assets.php:184 includes/Admin/Onboarding/Onboarding.php:371
 msgid "Online store setup"
 msgstr "온라인 스토어 설정"
 
@@ -1416,13 +1399,12 @@ msgstr "또는 결제 플러그인 사용"
 msgid "Or use shipping plugins"
 msgstr "또는 배송 플러그인 사용"
 
-#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:474
+#: includes/Admin/Assets.php:305 includes/Admin/Assets.php:485
 msgid "Other"
 msgstr "기타"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:41
-#, fuzzy
 msgid "Page title:"
 msgstr "페이지 제목:"
 
@@ -1456,7 +1438,6 @@ msgid "Pending phone verification"
 msgstr "대기 중인 전화 인증"
 
 #: includes/Admin/Assets.php:331
-#, fuzzy
 msgid "Pickup cost"
 msgstr "픽업 비용"
 
@@ -1492,8 +1473,7 @@ msgstr "플러그인이 성공적으로 활성화되었습니다"
 msgid "Plugin sucessfully installed"
 msgstr "플러그인이 성공적으로 설치되었습니다"
 
-#: includes/Admin/Assets.php:467
-#, fuzzy
+#: includes/Admin/Assets.php:469
 msgid ""
 "Plugins are apps that can be installed on your WordPress website. Each "
 "plugin lets you add a new feature, such as forms, SEO tools, or social media "
@@ -1506,14 +1486,12 @@ msgstr ""
 msgid "Pre-built websites and themes"
 msgstr "사전 구축된 웹사이트 및 테마"
 
-#: includes/Admin/Assets.php:468
-#, fuzzy
+#: includes/Admin/Assets.php:470
 msgid "Premium template"
 msgstr "프리미엄 템플릿"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PreviewPageButton.js:37
-#, fuzzy
 msgid "Preview"
 msgstr "미리 보기"
 
@@ -1525,7 +1503,7 @@ msgstr "사이트 미리보기"
 msgid "Preview website"
 msgstr "웹사이트 미리보기"
 
-#: includes/Admin/Onboarding/Onboarding.php:528
+#: includes/Admin/Onboarding/Onboarding.php:534
 msgid "Promote products on your site"
 msgstr "사이트에서 제품 홍보"
 
@@ -1537,8 +1515,7 @@ msgstr "페이지 게시"
 msgid "Recommended for you"
 msgstr "추천 상품"
 
-#: includes/Admin/Assets.php:436
-#, fuzzy
+#: includes/Admin/Assets.php:438
 msgid "Recommended plugins"
 msgstr "권장 플러그인"
 
@@ -1553,6 +1530,11 @@ msgstr "등록하기"
 #: includes/Admin/Assets.php:405
 msgid "Registration didn't work"
 msgstr "등록이 되지 않았습니다"
+
+#: includes/Admin/Assets.php:479
+#, fuzzy
+msgid "Remind me later"
+msgstr "나중에 알림"
 
 #: includes/Admin/Assets.php:388
 msgid "Renew"
@@ -1572,25 +1554,21 @@ msgstr "이메일 마케팅 캠페인 실행"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:62
-#, fuzzy
 msgid "Save"
 msgstr "저장"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PageForm.js:59
-#, fuzzy
 msgid "Saving"
-msgstr "저장"
+msgstr "저장 중"
 
-#: includes/Admin/Assets.php:450
-#, fuzzy
+#: includes/Admin/Assets.php:452
 msgid "Search for a plugin"
 msgstr "플러그인 검색"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/SearchBar.js:7
 #: gutenberg/edit-pages-panel/src/components/SearchBar.js:8
-#, fuzzy
 msgid "Search pages"
 msgstr "검색 페이지"
 
@@ -1601,22 +1579,19 @@ msgid ""
 msgstr ""
 "결제를 안전하게 수락하고, 판매를 동기화하며, 우커머스와 Square POS 간에 재고 및 제품 데이터를 원활하게 관리할 수 있습니다."
 
-#: includes/Admin/Assets.php:438
-#, fuzzy
+#: includes/Admin/Assets.php:440
 msgid "Select all"
 msgstr "모두 선택"
 
-#: includes/Admin/Assets.php:442
-#, fuzzy
+#: includes/Admin/Assets.php:444
 msgid "Select one for best experience"
 msgstr "최상의 경험을 위해 하나를 선택하세요"
 
-#: includes/Admin/Assets.php:439
-#, fuzzy
+#: includes/Admin/Assets.php:441
 msgid "Selected plugins conflict with each other"
 msgstr "선택한 플러그인이 서로 충돌합니다"
 
-#: includes/Admin/Onboarding/Onboarding.php:632
+#: includes/Admin/Onboarding/Onboarding.php:638
 msgid ""
 "Sell products, services and digital downloads. Set up and customize each "
 "item to fit your business needs."
@@ -1636,15 +1611,15 @@ msgstr "결제 방법 설정"
 msgid "Set up an online store"
 msgstr "온라인 스토어 설정"
 
-#: includes/Admin/Onboarding/Onboarding.php:708
+#: includes/Admin/Onboarding/Onboarding.php:714
 msgid "Set up Google Site Kit"
 msgstr "구글 사이트 키트 설정"
 
-#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:659
+#: includes/Admin/Assets.php:203 includes/Admin/Onboarding/Onboarding.php:665
 msgid "Set up payment method"
 msgstr "결제 방법 설정"
 
-#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:655
+#: includes/Admin/Assets.php:302 includes/Admin/Onboarding/Onboarding.php:661
 msgid "Set up payments"
 msgstr "결제 설정"
 
@@ -1652,7 +1627,7 @@ msgstr "결제 설정"
 msgid "Set up shipping"
 msgstr "배송 설정"
 
-#: includes/Admin/Onboarding/Onboarding.php:681
+#: includes/Admin/Onboarding/Onboarding.php:687
 msgid "Set up shipping method"
 msgstr "배송 방법 설정"
 
@@ -1660,7 +1635,7 @@ msgstr "배송 방법 설정"
 msgid "Set up Site Kit"
 msgstr "사이트 키트 설정"
 
-#: includes/Admin/Onboarding/Onboarding.php:559
+#: includes/Admin/Onboarding/Onboarding.php:565
 msgid "Set up your online store"
 msgstr "온라인 스토어 설정"
 
@@ -1701,12 +1676,10 @@ msgid "Ship products with ease"
 msgstr "간편하게 제품 배송"
 
 #: includes/Admin/Assets.php:330
-#, fuzzy
 msgid "Shipping cost"
 msgstr "배송비"
 
 #: includes/Admin/Assets.php:336
-#, fuzzy
 msgid "Shipping method saved successfully!"
 msgstr "배송 방법이 성공적으로 저장되었습니다!"
 
@@ -1715,7 +1688,6 @@ msgid "Shipping methods"
 msgstr "배송 방법"
 
 #: includes/Admin/Assets.php:320
-#, fuzzy
 msgid "Shipping option"
 msgstr "배송 옵션"
 
@@ -1745,8 +1717,7 @@ msgstr "Simpaisa는 Jazzcash & Easypaisa 디지털 결제 서비스를 쉽게 �
 msgid "Skip"
 msgstr "건너뛰기"
 
-#: includes/Admin/Assets.php:449
-#, fuzzy
+#: includes/Admin/Assets.php:451
 msgid "Smartphone"
 msgstr "스마트폰"
 
@@ -1754,19 +1725,19 @@ msgstr "스마트폰"
 msgid "Something went wrong"
 msgstr "문제가 발생했습니다"
 
-#: includes/Rest/StepRoutes.php:184
+#: includes/Rest/StepRoutes.php:200
 msgid "Sorry, there are activation errors."
 msgstr "죄송합니다, 활성화 오류가 발생했습니다."
 
-#: includes/Rest/StepRoutes.php:78 includes/Rest/StepRoutes.php:171
-#: includes/Rest/StepRoutes.php:221 includes/Rest/StepRoutes.php:260
-#: includes/Rest/StepRoutes.php:276 includes/Rest/WooRoutes.php:51
+#: includes/Rest/StepRoutes.php:94 includes/Rest/StepRoutes.php:187
+#: includes/Rest/StepRoutes.php:237 includes/Rest/StepRoutes.php:328
+#: includes/Rest/StepRoutes.php:344 includes/Rest/WooRoutes.php:51
 #: includes/Rest/WooRoutes.php:94
 msgid "Sorry, there are validation errors."
 msgstr "유효성 검사 오류가 발생했습니다."
 
-#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:262
-#: includes/Admin/Onboarding/Onboarding.php:270
+#: includes/Admin/Assets.php:299 includes/Admin/Onboarding/Onboarding.php:264
+#: includes/Admin/Onboarding/Onboarding.php:272
 #| msgid "Started creating your site"
 msgid "Start creating your site"
 msgstr "사이트 만들기 시작"
@@ -1775,17 +1746,22 @@ msgstr "사이트 만들기 시작"
 msgid "Start earning"
 msgstr "적립 시작"
 
-#: includes/Admin/Onboarding/Onboarding.php:532
+#: includes/Admin/Assets.php:432
+#, fuzzy
+msgid "Start from a theme (advanced users)"
+msgstr "테마에서 시작하기(고급 사용자)"
+
+#: includes/Admin/Onboarding/Onboarding.php:538
 msgid "Start promoting"
 msgstr "홍보 시작"
 
-#: includes/Admin/Onboarding/Onboarding.php:530
+#: includes/Admin/Onboarding/Onboarding.php:536
 msgid ""
 "Start promoting affiliate products and earn rewards. It’s quick and easy to "
 "get started."
 msgstr "제휴 제품 홍보를 시작하고 보상을 받으세요. 빠르고 쉽게 시작할 수 있습니다."
 
-#: includes/Rest/StepRoutes.php:97
+#: includes/Rest/StepRoutes.php:113
 msgid "Step category and/or step does not exist."
 msgstr "단계 카테고리 및/또는 단계가 존재하지 않습니다."
 
@@ -1793,12 +1769,16 @@ msgstr "단계 카테고리 및/또는 단계가 존재하지 않습니다."
 msgid "Store location locale not found"
 msgstr "상점 위치 정보를 찾을 수 없습니다"
 
+#: includes/Admin/Assets.php:476
+#, fuzzy
+msgid "Summarize your store or site performance"
+msgstr "스토어 또는 사이트 실적 요약"
+
 #: includes/Admin/Assets.php:397
 msgid "Suspended"
 msgstr "일시 중단됨"
 
-#: includes/Admin/Assets.php:448
-#, fuzzy
+#: includes/Admin/Assets.php:450
 msgid "Tablet"
 msgstr "태블릿"
 
@@ -1811,12 +1791,10 @@ msgid "Take me there"
 msgstr "바로가기"
 
 #: includes/Admin/Assets.php:308
-#, fuzzy
 msgid "Take payments in cash upon delivery."
 msgstr "배송 시 현금으로 결제하세요."
 
 #: includes/Admin/Assets.php:310
-#, fuzzy
 msgid "Take payments via bank transfer."
 msgstr "은행 송금을 통해 결제를 받습니다."
 
@@ -1859,7 +1837,7 @@ msgid ""
 msgstr "역대 최대 규모의 <span style=\"color: #8C85FF\">화이트 프라이데이</span> 세일!"
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:77
+#: hostinger-easy-onboarding.php:81
 #, php-format
 msgid ""
 "The Hostinger Easy Onboarding plugin requires minimum PHP version of <b>"
@@ -1868,7 +1846,6 @@ msgstr "호스팅어 간편 온보딩 플러그인에는 최소 PHP 버전 <b>%s
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:49
-#, fuzzy
 msgid "The page was deleted!"
 msgstr "페이지가 삭제되었습니다!"
 
@@ -1912,12 +1889,10 @@ msgstr "테마가 성공적으로 설치되었습니다"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/DeletePageButton.js:62
-#, fuzzy
 msgid "There was an error."
 msgstr "오류가 발생했습니다."
 
-#: includes/Admin/Assets.php:463
-#, fuzzy
+#: includes/Admin/Assets.php:465
 msgid ""
 "These are ready-to-go sites that you can quickly customize to fit your brand "
 "and needs. You won’t have to build from scratch."
@@ -1939,14 +1914,12 @@ msgstr "이 확장 기능을 사용하면 우커머스에서 Colissimo 배송 �
 msgid "This field is required"
 msgstr "이 필드는 필수 입력 사항입니다"
 
-#: includes/Admin/Assets.php:461
-#, fuzzy
+#: includes/Admin/Assets.php:463
 msgid "This might take a few minutes"
 msgstr "몇 분 정도 걸릴 수 있습니다"
 
 #: gutenberg/edit-pages-panel/build/index.js:1
 #: gutenberg/edit-pages-panel/src/components/PagesList.js:41
-#, fuzzy
 msgid "Title"
 msgstr "제목"
 
@@ -1964,12 +1937,11 @@ msgstr "이전"
 msgid "Try again"
 msgstr "다시 시도"
 
-#: includes/Admin/Assets.php:445
-#, fuzzy
+#: includes/Admin/Assets.php:447
 msgid "Try another search term."
 msgstr "다른 검색어를 사용해 보세요."
 
-#: includes/Admin/Onboarding/Onboarding.php:441
+#: includes/Admin/Onboarding/Onboarding.php:447
 msgid "Try free for 1 year"
 msgstr "1년간 무료 체험"
 
@@ -1977,7 +1949,7 @@ msgstr "1년간 무료 체험"
 msgid "Try Omnisend"
 msgstr "Omnisend 체험하기"
 
-#: includes/Admin/Onboarding/Onboarding.php:587
+#: includes/Admin/Onboarding/Onboarding.php:593
 msgid "Turn on"
 msgstr "켜기"
 
@@ -1985,7 +1957,7 @@ msgstr "켜기"
 msgid "Turn site visitors into loyal customers"
 msgstr "사이트 방문자를 충성도 높은 고객으로 전환"
 
-#: includes/Admin/Onboarding/Onboarding.php:437
+#: includes/Admin/Onboarding/Onboarding.php:443
 msgid "Turn site visitors into subscribers"
 msgstr "사이트 방문자를 구독자로 전환"
 
@@ -2005,8 +1977,7 @@ msgstr "이미지 업로드"
 msgid "Upload your logo"
 msgstr "로고 업로드"
 
-#: includes/Admin/Assets.php:433
-#, fuzzy
+#: includes/Admin/Assets.php:435
 #| msgid ""
 #| "Use a black site or apply a starter from one of our vendors to get "
 #| "started."
@@ -2014,12 +1985,7 @@ msgid ""
 "Use a blank site or apply a starter from one of our vendors to get started."
 msgstr "블랙 사이트를 사용하거나 공급업체에서 제공하는 스타터를 적용하여 시작하세요."
 
-#: includes/Admin/Assets.php:430
-#, fuzzy
-msgid "Use a theme instead"
-msgstr "대신 테마 사용"
-
-#: includes/Admin/Hooks.php:358
+#: includes/Admin/Hooks.php:378
 msgid ""
 "Use the special discount code <b>ONLYHOSTINGER30</b> to get 30% off on "
 "Omnisend for 6 months when you upgrade."
@@ -2031,7 +1997,7 @@ msgstr ""
 msgid "Verify phone"
 msgstr "휴대폰 인증"
 
-#: includes/Admin/Hooks.php:513
+#: includes/Admin/Hooks.php:533
 msgid "View checklist"
 msgstr "체크리스트 보기"
 
@@ -2043,7 +2009,7 @@ msgstr "보기 완료"
 msgid "View less"
 msgstr "적게 보기"
 
-#: includes/Admin/Onboarding/Onboarding.php:568
+#: includes/Admin/Onboarding/Onboarding.php:574
 msgid "View list"
 msgstr "목록 보기"
 
@@ -2055,7 +2021,7 @@ msgstr "자세히 보기"
 msgid "View plugins"
 msgstr "플러그인 보기"
 
-#: includes/Admin/Onboarding/Onboarding.php:480
+#: includes/Admin/Onboarding/Onboarding.php:486
 msgid ""
 "Visit hPanel and connect a real domain. If you already did this, please wait "
 "up to 24h until the domain fully connects"
@@ -2069,15 +2035,15 @@ msgstr "도메인 전파 대기"
 msgid "Want to create a new AI site?"
 msgstr "새로운 AI 사이트를 만들고 싶으신가요?"
 
-#: includes/Admin/Onboarding/Onboarding.php:198
+#: includes/Admin/Onboarding/Onboarding.php:200
 msgid "Want to create a new site on a different template?"
 msgstr "다른 템플릿으로 새 사이트를 만들고 싶으신가요?"
 
-#: includes/Admin/Onboarding/Onboarding.php:239
+#: includes/Admin/Onboarding/Onboarding.php:241
 msgid "Want to create a new site on a pre-built template?"
 msgstr "미리 빌드된 템플릿으로 새 사이트를 만들고 싶으신가요?"
 
-#: includes/Admin/Onboarding/Onboarding.php:231
+#: includes/Admin/Onboarding/Onboarding.php:233
 msgid "Want to create a new site?"
 msgstr "새 사이트를 만들고 싶으신가요?"
 
@@ -2090,11 +2056,11 @@ msgstr ""
 "불편을 드려 죄송합니다. AI 콘텐츠 생성 과정에서 서버 오류가 발생했습니다. 잠시 후 다시 시도해 보시고 문제가 지속되면 지원팀에 "
 "문의해 주세요."
 
-#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:608
+#: includes/Admin/Assets.php:375 includes/Admin/Onboarding/Onboarding.php:614
 msgid "We'll use this information to help you set up your store faster."
 msgstr "이 정보를 사용하여 스토어를 더 빠르게 설정할 수 있도록 도와드리겠습니다."
 
-#: includes/Admin/Onboarding/Onboarding.php:332
+#: includes/Admin/Onboarding/Onboarding.php:334
 msgid "Website setup"
 msgstr "웹사이트 설정"
 
@@ -2110,18 +2076,15 @@ msgstr "워드프레스에 오신 것을 환영합니다!"
 msgid "What type of products or services will you sell?"
 msgstr "어떤 유형의 제품이나 서비스를 판매할 예정인가요?"
 
-#: includes/Admin/Assets.php:466
-#, fuzzy
+#: includes/Admin/Assets.php:468
 msgid "What’s a plugin?"
 msgstr "플러그인이란 무엇인가요?"
 
-#: includes/Admin/Assets.php:462
-#, fuzzy
+#: includes/Admin/Assets.php:464
 msgid "What’s a pre-built website?"
 msgstr "사전 구축 웹사이트란 무엇인가요?"
 
-#: includes/Admin/Assets.php:464
-#, fuzzy
+#: includes/Admin/Assets.php:466
 msgid "What’s a theme?"
 msgstr "테마란 무엇인가요?"
 
@@ -2138,7 +2101,7 @@ msgid "Yes, skip step"
 msgstr "네, 이 단계를 건너뜁니다."
 
 #. translators: %s php version
-#: hostinger-easy-onboarding.php:81
+#: hostinger-easy-onboarding.php:85
 #, php-format
 msgid "You are running <b>%s</b> PHP version."
 msgstr "<b>%s</b> PHP 버전을 실행 중입니다."
@@ -2190,14 +2153,14 @@ msgstr "온라인 스토어 설정이 완료되었습니다!"
 msgid "Your business email"
 msgstr "비즈니스 이메일"
 
-#: includes/Admin/Onboarding/Onboarding.php:232
+#: includes/Admin/Onboarding/Onboarding.php:234
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates or use AI."
 msgstr "새 사이트가 현재 사이트를 대체합니다. 140개 이상의 전문 템플릿 중에서 선택하거나 AI를 사용하세요."
 
-#: includes/Admin/Onboarding/Onboarding.php:199
-#: includes/Admin/Onboarding/Onboarding.php:240
+#: includes/Admin/Onboarding/Onboarding.php:201
+#: includes/Admin/Onboarding/Onboarding.php:242
 msgid ""
 "Your new site will replace the current one. Choose from 140+ professional "
 "templates."
@@ -2217,8 +2180,7 @@ msgstr "진행 상황"
 msgid "Your store name"
 msgstr "스토어 이름"
 
-#: includes/Admin/Assets.php:459
-#, fuzzy
+#: includes/Admin/Assets.php:461
 msgid "Your website failed to build. Please try again."
 msgstr "웹사이트를 구축하지 못했습니다. 다시 시도하세요."
 
@@ -2230,8 +2192,7 @@ msgstr ""
 "웹사이트가 이미 게시되어 있으며 지금 바로 호스팅어 무료 임시 하위 도메인을 사용하여 액세스할 수 있습니다. 웹사이트의 현재 URL은 "
 "다음과 같습니다:"
 
-#: includes/Admin/Assets.php:457
-#, fuzzy
+#: includes/Admin/Assets.php:459
 msgid "Your website is ready"
 msgstr "웹사이트가 준비되었습니다"
 

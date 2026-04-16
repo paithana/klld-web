@@ -55,6 +55,8 @@ class AutocompleteSteps {
 
         add_action( 'astra_sites_import_complete', array( $this, 'astra_website_import_completed' ) );
 
+        add_action( 'admin_init', array( $this, 'check_ai_website_created' ) );
+
         add_action( 'admin_init', array( $this, 'check_ai_discovery_is_enabled' ) );
 
         if ( is_plugin_active( 'hostinger-reach/hostinger-reach.php' ) ) {
@@ -341,6 +343,35 @@ class AutocompleteSteps {
         }
 
         update_option( 'hostinger_onboarding_steps_was_completed', ( $this->onboarding->is_onboarding_completed_without_reach() ? 1 : 0 ) );
+    }
+
+    public function check_ai_website_created(): void {
+        $ai_website_created = get_option( 'hostinger_ai_website_created', false );
+        $is_ai_theme_active = get_stylesheet() === 'hostinger-ai-theme';
+
+        if ( empty( $ai_website_created ) && ! $is_ai_theme_active ) {
+            return;
+        }
+
+        $action      = Admin_Actions::AI_STEP;
+        $category_id = $this->find_category_from_actions( $action );
+
+        if ( empty( $category_id ) ) {
+            return;
+        }
+
+        if ( $this->onboarding->is_completed( $category_id, $action ) ) {
+            return;
+        }
+
+        $this->onboarding->complete_step( $category_id, $action );
+
+        $params = array(
+            'action'    => AmplitudeActions::ONBOARDING_ITEM_COMPLETED,
+            'step_type' => $action,
+        );
+
+        $this->amplitude->send_event( $params );
     }
 
     public function check_ai_discovery_is_enabled(): void {

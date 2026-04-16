@@ -186,8 +186,10 @@ class Onboarding {
                 $secondary_button->set_is_completable( false );
             }
 
-            $step->set_primary_button( $primary_button );
-            $step->set_secondary_button( $secondary_button );
+            if ( ! $this->is_completed( self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID, Actions::AI_STEP ) ) {
+                $step->set_primary_button( $primary_button );
+                $step->set_secondary_button( $secondary_button );
+            }
 
             return $step;
         }
@@ -398,15 +400,19 @@ class Onboarding {
             }
         }
 
-        $amplitude = new Amplitude();
-
-        $params = array( 'action' => $action );
-
-        $event = $amplitude->send_event( $params );
+        $should_send_event = true;
 
         if ( $once ) {
-            update_option( $option_name, true );
+            $should_send_event = add_option( $option_name, true );
         }
+
+        if ( ! $should_send_event ) {
+            return false;
+        }
+
+        $amplitude = new Amplitude();
+        $params    = array( 'action' => $action );
+        $event     = $amplitude->send_event( $params );
 
         return ! empty( $event );
     }
@@ -473,7 +479,7 @@ class Onboarding {
 
         if ( $this->helper->is_free_subdomain() || $this->helper->is_preview_domain() ) {
             if ( $this->is_completed( self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID, Actions::DOMAIN_IS_CONNECTED ) ) {
-                $step->set_title( __( 'Connect on hPanel', 'hostinger-easy-onboarding' ) );
+                $step->set_title( __( 'Connect domain', 'hostinger-easy-onboarding' ) );
             }
 
             $step->set_description(
@@ -486,7 +492,7 @@ class Onboarding {
             $site_url   = preg_replace( '#^https?://#', '', get_site_url() );
             $hpanel_url = self::HOSTINGER_WEBSITES_URL . '/' . $site_url;
 
-            $button->set_title( __( 'Connect on hPanel', 'hostinger-easy-onboarding' ) );
+            $button->set_title( __( 'Connect domain', 'hostinger-easy-onboarding' ) );
             $button->set_url( $hpanel_url );
 
         } else {

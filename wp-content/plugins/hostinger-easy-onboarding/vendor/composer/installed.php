@@ -3,7 +3,7 @@
         'name' => 'hostinger/hostinger-easy-onboarding',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'eb104b8189b72fb4d7d54890cd25c923d2ac1cce',
+        'reference' => '6985e44ceb586f8c673dd65636ef31cb948decad',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'automattic/jetpack-autoloader' => array(
             'pretty_version' => 'dev-trunk',
             'version' => 'dev-trunk',
-            'reference' => '168e5bba47f5f4e6b1659f89a831cae649a52def',
+            'reference' => '540e86b3f828e8307ee8ac7a29c00d559a9e0d6f',
             'type' => 'composer-plugin',
             'install_path' => __DIR__ . '/../automattic/jetpack-autoloader',
             'aliases' => array(
@@ -24,7 +24,7 @@
         'hostinger/hostinger-easy-onboarding' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'eb104b8189b72fb4d7d54890cd25c923d2ac1cce',
+            'reference' => '6985e44ceb586f8c673dd65636ef31cb948decad',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -40,9 +40,9 @@
             'dev_requirement' => false,
         ),
         'hostinger/hostinger-wp-helper' => array(
-            'pretty_version' => '1.0.12',
-            'version' => '1.0.12.0',
-            'reference' => 'f943461ffdd9df60c84e4d808ff1dd967dfa790d',
+            'pretty_version' => '1.0.13',
+            'version' => '1.0.13.0',
+            'reference' => '0f8c2eb4d9516a0bfe985f09770b66aa6d974136',
             'type' => 'library',
             'install_path' => __DIR__ . '/../hostinger/hostinger-wp-helper',
             'aliases' => array(),
@@ -58,9 +58,9 @@
             'dev_requirement' => false,
         ),
         'hostinger/hostinger-wp-surveys' => array(
-            'pretty_version' => '1.1.19',
-            'version' => '1.1.19.0',
-            'reference' => '21f18e3f413052565c845feb7afb09b0ad33d8e2',
+            'pretty_version' => '1.1.20',
+            'version' => '1.1.20.0',
+            'reference' => '2f6a79ffe112d661106ae8c2698805e0041de53c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../hostinger/hostinger-wp-surveys',
             'aliases' => array(),

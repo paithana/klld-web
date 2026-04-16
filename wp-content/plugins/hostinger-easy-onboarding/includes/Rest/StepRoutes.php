@@ -253,6 +253,57 @@ class StepRoutes {
         return $response;
     }
 
+    public function deactivate_ai_theme( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+        $current_theme = wp_get_theme();
+        if ( ! str_contains( $current_theme->get_stylesheet(), 'hostinger-ai-theme' ) ) {
+            return new WP_Error(
+                'theme_not_active',
+                __( 'Hostinger AI theme is not currently active.', 'hostinger-easy-onboarding' ),
+                array( 'status' => WP_Http::BAD_REQUEST )
+            );
+        }
+
+        $default_themes = apply_filters(
+            'hostinger_deactivate_ai_theme_fallback_themes',
+            array(
+                'twentytwentyfive',
+                'twentytwentyfour',
+                'twentytwentythree',
+                'twentytwentytwo',
+                'twentytwentyone',
+                'twentytwenty',
+                'twentynineteen',
+                'twentyseventeen',
+                'twentysixteen',
+            )
+        );
+
+        $fallback_theme = '';
+        foreach ( $default_themes as $theme_slug ) {
+            $theme = wp_get_theme( $theme_slug );
+            if ( $theme->exists() ) {
+                $fallback_theme = $theme_slug;
+                break;
+            }
+        }
+
+        if ( empty( $fallback_theme ) ) {
+            return new WP_Error(
+                'no_default_theme',
+                __( 'No default theme available to switch to.', 'hostinger-easy-onboarding' ),
+                array( 'status' => WP_Http::INTERNAL_SERVER_ERROR )
+            );
+        }
+
+        switch_theme( $fallback_theme );
+
+        $response = new WP_REST_Response( array( 'data' => array( 'theme' => $fallback_theme ) ) );
+        $response->set_headers( array( 'Cache-Control' => 'no-cache' ) );
+        $response->set_status( WP_Http::OK );
+
+        return $response;
+    }
+
     public function install_ai_theme( WP_REST_Request $request ): WP_REST_Response|WP_Error {
         return $this->install_theme( 'hostinger-ai-theme' );
     }
