@@ -351,16 +351,19 @@ class Controller extends Base_Controller {
 	}
 
 	/**
-	 *  Return the default settings of a banner.
+	 * Return the default settings of a banner.
 	 *
-	 * @param string $type Consent type. Default value "gdpr".
+	 * @param string $type    Consent type. Default value "gdpr".
+	 * @param string $version Template version. "6.2.0" for new users, "6.0.0" for legacy banners.
 	 * @return array
 	 */
-	public static function get_default_configs( $type = 'gdpr' ) {
-		$settings = wp_cache_get( 'default', 'cky_banner_settings_' . $type );
+	public static function get_default_configs( $type = 'gdpr', $version = '6.2.0' ) {
+		$cache_key = $version . '_' . $type;
+		$settings  = wp_cache_get( $cache_key, 'cky_banner_settings' );
 		if ( ! $settings ) {
-			$settings = cky_read_json_file( dirname( __FILE__ ) . '/configs/' . $type . '.json' );
-			wp_cache_set( 'default', $settings, 'cky_banner_settings_' . $type, 12 * HOUR_IN_SECONDS );
+			$config_dir = dirname( __FILE__ ) . '/configs/' . $version . '/';
+			$settings   = cky_read_json_file( $config_dir . $type . '.json' );
+			wp_cache_set( $cache_key, $settings, 'cky_banner_settings', 12 * HOUR_IN_SECONDS );
 		}
 		return $settings;
 	}

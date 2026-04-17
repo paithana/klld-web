@@ -10,6 +10,10 @@
  * @subpackage Cookie_Law_Info/admin
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The admin-specific functionality of the plugin.
  *

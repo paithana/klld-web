@@ -73,6 +73,12 @@
                         "confirm": "Mentse el a beállításokat"
                     }
                 },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "A sütik elutasítására vonatkozó beállítását alkalmaztuk.",
+                        "subtext": "A banner <span id=\"ckyCountdownTimer\"></span> s múlva automatikusan bezárul..."
+                    }
+                },
                 "closeButton": "Bezárás"
             }
         },
@@ -171,6 +177,12 @@
                     "elements": {
                         "cancel": "Mégse",
                         "confirm": "Mentse el a beállításokat"
+                    }
+                },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "A sütik elutasítására vonatkozó beállítását alkalmaztuk.",
+                        "subtext": "A banner <span id=\"ckyCountdownTimer\"></span> s múlva automatikusan bezárul..."
                     }
                 },
                 "closeButton": "Bezárás"

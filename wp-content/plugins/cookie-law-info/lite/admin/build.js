@@ -16,9 +16,17 @@ async function build() {
   try {
     console.log('📦 Copying plugin to build directory...');
 
-    const filter = (src) =>
-      !/node_modules/.test(src) &&
-      !/dist(-dev|-prod)?/.test(src);
+    const filter = (src) => {
+      const rel = path.relative(devRoot, src);
+      if (rel === 'scripts' || rel.startsWith(`scripts${path.sep}`)) {
+        return false;
+      }
+      return (
+        !/node_modules/.test(src) &&
+        !/dist(-dev|-prod)?/.test(src) &&
+        path.basename(src) !== 'bitbucket-pipelines.yml'
+      );
+    };
 
     await fs.copy(devRoot, buildRoot, { filter });
     console.log('✅ Copied to:', buildRoot);

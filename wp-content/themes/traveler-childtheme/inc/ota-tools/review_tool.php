@@ -6,7 +6,11 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
     // Basic fallback if called directly as a legacy endpoint
-    require_once( dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/wp-load.php' );
+    // Corrected: 6 levels up to reach public_html from inc/ota-tools/
+    $wp_load = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php';
+    if (file_exists($wp_load)) {
+        require_once($wp_load);
+    }
 }
 
 if ( ! current_user_can( 'manage_options' ) && ! defined('KLLD_TOOL_RUN') ) {
@@ -338,12 +342,16 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
     wp_send_json_error('Unknown maintenance job.');
 }
 
-// ── AJAX Handler: System Health Check ────────────────────────────────────
 if (isset($_POST['action']) && $_POST['action'] === 'run_system_health_check') {
-    ob_start();
-    include(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/test_ota_suite.php');
-    $results = ob_get_clean();
-    wp_send_json_success(['results' => $results]);
+    $test_suite = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/test_ota_suite.php';
+    if (file_exists($test_suite)) {
+        ob_start();
+        include($test_suite);
+        $results = ob_get_clean();
+        wp_send_json_success(['results' => $results]);
+    } else {
+        wp_send_json_error('Test suite file not found at: ' . $test_suite);
+    }
 }
 
 // ── AJAX Handler: Direct Import from UI ──────────────────────────────────

@@ -73,6 +73,12 @@
                         "confirm": "Speichern Sie meine Einstellungen"
                     }
                 },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Ihre Opt-out-Präferenz wurde berücksichtigt.",
+                        "subtext": "Das Banner schließt sich in <span id=\"ckyCountdownTimer\"></span> s automatisch."
+                    }
+                },
                 "closeButton": "Nah dran"
             }
         },
@@ -171,6 +177,12 @@
                     "elements": {
                         "cancel": "Stornieren",
                         "confirm": "Speichern Sie meine Einstellungen"
+                    }
+                },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Ihre Opt-out-Präferenz wurde berücksichtigt.",
+                        "subtext": "Das Banner schließt sich in <span id=\"ckyCountdownTimer\"></span> s automatisch."
                     }
                 },
                 "closeButton": "Nah dran"

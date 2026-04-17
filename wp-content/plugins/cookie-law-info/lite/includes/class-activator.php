@@ -11,6 +11,10 @@
 
 namespace CookieYes\Lite\Includes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use CookieYes\Lite\Admin\Modules\Banners\Includes\Banner;
 use CookieYes\Lite\Admin\Modules\Banners\Includes\Controller;
 
@@ -49,6 +53,9 @@ class Activator {
 		),
 		'3.4.0' => array(
 			'update_db_340',
+		),
+		'3.4.1' => array(
+			'update_db_341',
 		),
 	);
 	/**
@@ -155,7 +162,7 @@ class Activator {
 		foreach ( self::$db_updates as $version => $callbacks ) {
 			if ( version_compare( $current_version, $version, '<' ) ) {
 				foreach ( $callbacks as $callback ) {
-					self::$callback();
+					self::{$callback}();
 				}
 			}
 		}
@@ -260,6 +267,148 @@ class Activator {
 					$banner->set_settings( $settings );
 					$banner->save();
 				}
+			}
+		}
+	}
+
+	/**
+	 * Remove accessibilityOverrides from banners with versionID 6.0.0; refresh stored banner HTML and CCPA opt-out success data.
+	 *
+	 * @since 3.3.8
+	 * @return void
+	 */
+	public static function update_db_341() {
+		$controller = Controller::get_instance();
+		$controller->delete_cache();
+		$items = $controller->get_items();
+
+		if ( ! empty( $items ) ) {
+			foreach ( $items as $item ) {
+				self::maybe_strip_accessibility_overrides_341( $item );
+			}
+			self::seed_ccpa_optout_success_defaults( $items );
+		}
+
+		delete_option( 'cky_banner_template' );
+		Cache::delete( 'banner_template' );
+		$controller->delete_cache();
+	}
+
+	/**
+	 * Remove legacy accessibilityOverrides for 6.0.0 banners (or banners missing versionID).
+	 *
+	 * @param object $item Row from Controller::get_items(); settings are decoded JSON.
+	 * @return void
+	 */
+	private static function maybe_strip_accessibility_overrides_341( $item ) {
+		if ( ! isset( $item->banner_id, $item->settings ) || ! is_array( $item->settings ) ) {
+			return;
+		}
+
+		$raw_settings = $item->settings;
+
+		if ( ! isset( $raw_settings['config']['accessibilityOverrides'] ) ) {
+			return;
+		}
+
+		$version_id = isset( $raw_settings['settings']['versionID'] ) ? $raw_settings['settings']['versionID'] : '';
+		if ( '' !== $version_id && '6.0.0' !== $version_id ) {
+			return;
+		}
+
+		unset( $raw_settings['config']['accessibilityOverrides'] );
+
+		if ( '' === $version_id ) {
+			$raw_settings['settings']['versionID'] = '6.0.0';
+		}
+
+		$banner = new Banner( $item->banner_id );
+		$banner->set_settings( $raw_settings );
+		$banner->save();
+	}
+
+	/**
+	 * Ensure CCPA banners have optoutSuccess config + per-language strings (for old DBs missing them).
+	 *
+	 * @param array $items Rows from Controller::get_items().
+	 * @return void
+	 */
+	private static function seed_ccpa_optout_success_defaults( $items ) {
+		$optout_success_defaults = array(
+			'text'    => 'Your opt-out preference has been honored.',
+			'subtext' => 'Banner closes automatically in 15 s...',
+		);
+
+		foreach ( $items as $item ) {
+			if ( ! isset( $item->banner_id ) ) {
+				continue;
+			}
+
+			$banner = new Banner( $item->banner_id );
+			$law    = $banner->get_law();
+
+			if ( ! is_string( $law ) || false === stripos( $law, 'ccpa' ) ) {
+				continue;
+			}
+
+			$need     = false;
+			$settings = $banner->get_settings();
+			$opt_ok   = isset( $settings['config']['optoutPopup']['elements']['optoutSuccess'] )
+				&& is_array( $settings['config']['optoutPopup']['elements']['optoutSuccess'] );
+
+			if ( $opt_ok && ! isset( $settings['config']['optoutPopup']['elements']['optoutSuccess']['status'] ) ) {
+				$settings['config']['optoutPopup']['elements']['optoutSuccess']['status'] = true;
+				$banner->set_settings( $settings );
+				$need = true;
+			}
+
+			$contents = $banner->get_contents();
+
+			foreach ( $contents as $lang => $content ) {
+				if ( ! is_array( $content )
+					|| ! isset( $content['optoutPopup']['elements'] )
+					|| ! is_array( $content['optoutPopup']['elements'] ) ) {
+					continue;
+				}
+
+				$elements = &$content['optoutPopup']['elements'];
+
+				if ( ! isset( $elements['optoutSuccess'] ) || ! is_array( $elements['optoutSuccess'] ) ) {
+					$elements['optoutSuccess'] = array(
+						'elements' => array(
+							'text'    => $optout_success_defaults['text'],
+							'subtext' => $optout_success_defaults['subtext'],
+						),
+					);
+					$need = true;
+				} else {
+					if ( ! isset( $elements['optoutSuccess']['elements'] ) || ! is_array( $elements['optoutSuccess']['elements'] ) ) {
+						$elements['optoutSuccess']['elements'] = array();
+						$need = true;
+					}
+
+					$success_els = &$elements['optoutSuccess']['elements'];
+
+					if ( ! isset( $success_els['text'] ) || '' === trim( (string) $success_els['text'] ) ) {
+						$success_els['text'] = $optout_success_defaults['text'];
+						$need                = true;
+					}
+					if ( ! isset( $success_els['subtext'] ) || '' === trim( (string) $success_els['subtext'] ) ) {
+						$success_els['subtext'] = $optout_success_defaults['subtext'];
+						$need                   = true;
+					}
+
+					unset( $success_els );
+				}
+
+				unset( $elements );
+
+				$contents[ $lang ] = $content;
+			}
+
+			if ( $need ) {
+				$banner->set_contents( $contents );
+				$banner->save();
 			}
 		}
 	}

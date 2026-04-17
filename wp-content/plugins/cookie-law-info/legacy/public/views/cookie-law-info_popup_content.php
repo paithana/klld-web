@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 $overview                 = get_option( 'cookielawinfo_privacy_overview_content_settings' );
 $default_privacy_settings = Cookie_Law_Info_Admin::get_privacy_defaults();
 

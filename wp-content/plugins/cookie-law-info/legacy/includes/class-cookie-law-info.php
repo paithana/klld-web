@@ -12,6 +12,10 @@
  * @subpackage Cookie_Law_Info/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The core plugin class.
  *
@@ -73,7 +77,7 @@ class Cookie_Law_Info {
 		if ( defined( 'CLI_VERSION' ) ) {
 			$this->version = CLI_VERSION;
 		} else {
-			$this->version = '3.4.0';
+			$this->version = '3.4.1';
 		}
 		$this->plugin_name = 'cookie-law-info';
 

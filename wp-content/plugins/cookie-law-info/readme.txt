@@ -1,19 +1,19 @@
 === CookieYes – Cookie Banner for Cookie Consent (Easy to setup GDPR/CCPA Compliant Cookie Notice) ===
 Contributors: webtoffee, cookieyesdev
 Donate link: https://www.cookieyes.com/ 
-Tags: cookie notice, cookie consent, cookie banner, cookie, gdpr
+Tags: cookie consent, cookie banner, cookie notice, gdpr, ccpa
 Requires at least: 5.0.0
-Tested up to: 6.9
+Tested up to: 7
 Requires PHP: 5.6
-Stable tag: 3.4.0
+Stable tag: 3.4.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Easily set up cookie banner or notice in WordPress, and policy pages for compliance with global cookie laws (GDPR, DSGVO, RGPD, CCPA/CPRA, etc).
+Cookie banner plugin and CMP for GDPR cookie consent and CCPA cookie compliance. Easily set up cookie consent banner, cookie notice, and policy pages.
 
 == Description ==
 
-CookieYes is the leading WordPress plugin for cookie consent and privacy compliance. It supports GDPR (DSGVO), CCPA/CPRA, ePrivacy, UK GDPR & PECR, LGPD (Brazil), PIPEDA (Canada), POPIA (South Africa) and other global laws.
+CookieYes is a Consent Management Platform (CMP) and the leading WordPress cookie plugin for cookie consent and cookie compliance. Add a cookie banner, cookie popup, or cookie notice to your site for GDPR cookie consent and CCPA cookie compliance. Also supports ePrivacy Directive, UK GDPR & PECR, LGPD (Brazil), PIPEDA (Canada), POPIA (South Africa) and other global laws.
 
 The plugin offers a customizable cookie banner that blocks non-essential scripts until consent is given and generates a tailored Cookie Policy page.
 
@@ -21,7 +21,7 @@ The plugin offers a customizable cookie banner that blocks non-essential scripts
 
 **Consent Management**
 
-- **Cookie Consent Banner:** Show banner with Accept/Reject options for GDPR and CCPA cookie consent.
+- **Cookie Consent Banner:** Show a cookie banner with Accept/Reject options for GDPR cookie consent and CCPA cookie compliance.
 
 - **Automatic Cookie Blocking:** Block non-essential cookies until users give explicit consent for cookie compliance in WordPress.
 
@@ -41,7 +41,7 @@ The plugin offers a customizable cookie banner that blocks non-essential scripts
 
 **Banner Customization**
 
-- **Layout Options:** Choose top/bottom bar, box, or popup layouts for your WordPress cookie banner.
+- **Layout Options:** Choose top/bottom bar, box, or cookie popup layouts for your WordPress cookie banner.
 
 - **Reload page on consent action:** Automatically reload the page when users click “Accept All” or “Reject All”.
 
@@ -200,6 +200,9 @@ Yes. CookieYes includes features like subdomain consent sharing, multi-user mana
 = Does CookieYes integrate with WP Consent API? =
 Yes, CookieYes integrates with [WP Consent API](https://wordpress.org/plugins/wp-consent-api), allowing it to share user consent states with compatible plugins and improve compliance consistency.
 
+= What is a CMP? =
+A CMP (Consent Management Platform) is a tool that helps websites collect, manage, and store user consent for cookies and tracking. CookieYes is a CMP that simplifies GDPR cookie consent and CCPA cookie compliance for WordPress sites.
+
 = The cookie notice header does not work on my browser. What should I do? =
 Please report the issue on the support forum. Include:
 * Your website URL
@@ -256,52 +259,19 @@ Every time we update the plugin, you will see a notification on the installed pl
 
 == Changelog ==
 
-= 3.4.0 =
+= 3.4.1 =
 
-[Add] - Trial model experimentation
-[Tweak] - Color customization is now a paid feature. Existing custom colors will continue to work.
-
-= 3.3.9.1 =
-
-[Fix] - BF & CM banner not removed after deadline.
-
-= 3.3.9 =
-
-[Fix] - Updated scanner API in legacy plugin.
-[Add] - Redirect to plugin dashboard on Activate.
-[Add] - Handled auth token expiry case in Web App connection.
-[Enhancement] - Extra pageviews reporting in Pageviews graph.
-[Tweak] - IAB TCF v2.3 related updates in UI.
-
-= 3.3.8 =
-
-[Compatibility] – Tested OK with WordPress version 6.9
-
-= 3.3.7 =
-
-[Enhancement] - Try Pro for free option in Upgrade nudges.
-[Fix] - Minor fixes.
-[Tweak] - Updated review banner behaviour.
-
-= 3.3.6 =
-
-[Fix] - Revisit icon text's french translation.
-[Enhancement] - GCM - Update consent based on cookie's value.
-[Enhancement] - Banner dark theme accessibility.
-[Fix] - Admin screen translation not working.
-
-= 3.3.5 =
-
-[Fix] - Fixed minor security vulnerabilities.
-[Enhancement] - UI/UX improvements.
-[Fix] - Mismatch in consent chart data.
+[Add] - Opt-Out Confirmation in US State Laws banner
+[Fix] - Minor bugs and security fixes.
+[Compatibility] - Tested OK with WordPress version 7
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to the [changelog.txt](https://github.com/cookieyeshq/cookie-law-info/blob/main/changelog.txt).
 
 == Upgrade Notice ==
 
-= 3.4.0 =
+= 3.4.1 =
 
-[Add] - Trial model experimentation
-[Tweak] - Color customization is now a paid feature. Existing custom colors will continue to work.
+[Add] - Opt-Out Confirmation in US State Laws banner
+[Fix] - Minor bugs and security fixes.
+[Compatibility] - Tested OK with WordPress version 7

@@ -70,7 +70,7 @@
                         "states": {
                             "active": {
                                 "styles": {
-                                    "background-color": "#1578F7"
+                                    "background-color": "#1863DC"
                                 }
                             },
                             "inactive": {
@@ -226,6 +226,35 @@
                             "description": {
                                 "styles": {
                                     "color": "#212121"
+                                }
+                            }
+                        }
+                    },
+                    "optoutSuccess": {
+                        "styles": {
+                            "background-color": "#E5F4EF",
+                            "border-color": "inherit"
+                        },
+                        "elements": {
+                            "icon": {
+                                "styles": {
+                                    "color": "#00754E",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "text": {
+                                "styles": {
+                                    "color": "#14142A",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "subtext": {
+                                "styles": {
+                                    "color": "#4E4B66",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
                                 }
                             }
                         }
@@ -546,6 +575,35 @@
                             "description": {
                                 "styles": {
                                     "color": "#d0d0d0"
+                                }
+                            }
+                        }
+                    },
+                    "optoutSuccess": {
+                        "styles": {
+                            "background-color": "#E5F4EF",
+                            "border-color": "inherit"
+                        },
+                        "elements": {
+                            "icon": {
+                                "styles": {
+                                    "color": "#00754E",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "text": {
+                                "styles": {
+                                    "color": "#14142A",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "subtext": {
+                                "styles": {
+                                    "color": "#4E4B66",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
                                 }
                             }
                         }

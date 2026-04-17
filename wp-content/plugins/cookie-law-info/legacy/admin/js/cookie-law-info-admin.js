@@ -356,7 +356,7 @@ var wtCliAdminFunctions = {
 		if ( heading !== '') {
 			headingHtml = '<div class="wt-cli-modal-header"><h4>' + heading + '</h4></div>';
 		}
-		html  = '<div class="wt-cli-modal on" id="">';
+		let html  = '<div class="wt-cli-modal on" id="">';
 		html += '<span class="wt-cli-modal-js-close">×</span>';
 		html += headingHtml;
 		html += '<div class="wt-cli-modal-body">';
@@ -367,7 +367,7 @@ var wtCliAdminFunctions = {
 		this.addOverlay();
 	},
 	addOverlay: function(){
-		html = '<div class="wt-cli-modal-js-overlay"></div>';
+		const html = '<div class="wt-cli-modal-js-overlay"></div>';
 		jQuery( 'body' ).append( html );
 	},
 	closeOverlay: function(){

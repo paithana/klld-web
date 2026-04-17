@@ -10,6 +10,10 @@
  * @subpackage Cookie_Law_Info/includes
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Fired during plugin activation.
  *

@@ -1078,12 +1078,12 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 	 */
 	protected function insert_categories( $categories ) {
 		global $wpdb;
-		$category_table = $wpdb->prefix . $this->category_table;
+		$category_table = $wpdb->prefix . $this->category_table; // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter
 		foreach ( $categories as $id => $category_data ) {
 			$category    = ( isset( $category_data['category'] ) ? esc_sql( sanitize_text_field( $category_data['category'] ) ) : '' );
 			$description = ( isset( $category_data['category_desc'] ) ? esc_sql( addslashes( wp_kses_post( $category_data['category_desc'] ) ) ) : '' );
 			// Check if the entry already exists
-			$existing_entry = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$existing_entry = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					"SELECT * FROM $category_table WHERE cli_cookie_category_name = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					$category
@@ -1112,7 +1112,7 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 	 */
 	protected function insert_cookies( $scan_id, $urls, $cookie_data, $category ) {
 		global $wpdb;
-		$cookies_table = $wpdb->prefix . $this->cookies_table;
+		$cookies_table = $wpdb->prefix . $this->cookies_table; // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter
 		foreach ( $cookie_data as $cookies ) {
 			if ( is_array( $cookies ) && ! empty( $cookies ) ) {
 				$cookie_id   = isset( $cookies['cookie_id'] ) ? esc_sql( sanitize_text_field( $cookies['cookie_id'] ) ) : '';
@@ -1126,7 +1126,7 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 				$category_id = esc_sql( absint( $category_id ) );
 
 				// Check if the entry already exists
-				$existing_entry = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$existing_entry = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 					$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 						"SELECT * FROM $cookies_table WHERE cookie_id = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						$cookie_id

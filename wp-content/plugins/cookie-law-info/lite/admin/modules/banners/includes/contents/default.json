@@ -72,6 +72,12 @@
                     "confirm": ""
                 }
             },
+            "optoutSuccess": {
+                "elements": {
+                    "text": "",
+                    "subtext": ""
+                }
+            },
             "closeButton": ""
         }
     },

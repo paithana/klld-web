@@ -14,6 +14,10 @@
 
 namespace CookieYes\Lite\Includes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use CookieYes\Lite\Includes\Loader;
 use CookieYes\Lite\Includes\I18n;
 use CookieYes\Lite\Admin\Admin;
@@ -86,7 +90,7 @@ class CLI {
 		if ( defined( 'CLI_VERSION' ) ) {
 			$this->version = CLI_VERSION;
 		} else {
-			$this->version = '3.4.0';
+			$this->version = '3.4.1';
 		}
 		$this->plugin_name = 'cookie-law-info';
 
@@ -115,6 +119,8 @@ class CLI {
 	 * @access   private
 	 */
 	private function load_dependencies() {
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/cross-promotion-banners/class-wbte-cross-promotion-banners.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing

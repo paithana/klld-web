@@ -1,4 +1,9 @@
-<?php $assets_path = CLI_PLUGIN_URL . 'images/'; ?>
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+$assets_path = CLI_PLUGIN_URL . 'images/';
+?>
 <style>
 /************/
 

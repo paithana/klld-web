@@ -3,6 +3,10 @@
  * Load legacy files.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! function_exists( 'cky_define_constants' ) ) {
 	/**
 	 * Return parsed URL

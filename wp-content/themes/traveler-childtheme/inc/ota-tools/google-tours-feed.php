@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
     
     if (!$found) {
-        $abs_path = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php';
+        $abs_path = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php';
         if (file_exists($abs_path)) {
             require_once $abs_path;
         } else {

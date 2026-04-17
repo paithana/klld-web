@@ -4,7 +4,9 @@
  * Verifies Sync, Feed, and Mapping health as required by the /run-tests workflow.
  */
 
-require_once('wp-load.php');
+if (!defined('ABSPATH')) {
+    require_once('wp-load.php');
+}
 define('KLLD_TOOL_RUN', true);
 
 echo "==========================================\n";

@@ -11,6 +11,10 @@
 
 namespace CookieYes\Lite\Frontend;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use CookieYes\Lite\Admin\Modules\Banners\Includes\Controller;
 use CookieYes\Lite\Admin\Modules\Settings\Includes\Settings;
 use CookieYes\Lite\Admin\Modules\Gcm\Includes\Gcm_Settings;

@@ -73,6 +73,12 @@
                         "confirm": "Tallenna asetukset"
                     }
                 },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Valintaasi kieltäytyä on kunnioitettu.",
+                        "subtext": "Banneri sulkeutuu automaattisesti <span id=\"ckyCountdownTimer\"></span> s kuluttua..."
+                    }
+                },
                 "closeButton": "kiinni"
             }
         },
@@ -171,6 +177,12 @@
                     "elements": {
                         "cancel": "Peruuttaa",
                         "confirm": "Tallenna asetukset"
+                    }
+                },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Valintaasi kieltäytyä on kunnioitettu.",
+                        "subtext": "Banneri sulkeutuu automaattisesti <span id=\"ckyCountdownTimer\"></span> s kuluttua..."
                     }
                 },
                 "closeButton": "kiinni"

@@ -1,8 +1,8 @@
-CLI_ACCEPT_COOKIE_NAME = (typeof CLI_ACCEPT_COOKIE_NAME !== 'undefined' ? CLI_ACCEPT_COOKIE_NAME : 'viewed_cookie_policy');
-CLI_PREFERENCE_COOKIE = (typeof CLI_PREFERENCE_COOKIE !== 'undefined' ? CLI_PREFERENCE_COOKIE : 'CookieLawInfoConsent');
-CLI_ACCEPT_COOKIE_EXPIRE = (typeof CLI_ACCEPT_COOKIE_EXPIRE !== 'undefined' ? CLI_ACCEPT_COOKIE_EXPIRE : 365);
-CLI_COOKIEBAR_AS_POPUP = (typeof CLI_COOKIEBAR_AS_POPUP !== 'undefined' ? CLI_COOKIEBAR_AS_POPUP : false);
-var CLI_Cookie = {
+const CLI_ACCEPT_COOKIE_NAME = (window.CLI_ACCEPT_COOKIE_NAME !== undefined ? window.CLI_ACCEPT_COOKIE_NAME : 'viewed_cookie_policy');
+const CLI_PREFERENCE_COOKIE = (window.CLI_PREFERENCE_COOKIE !== undefined ? window.CLI_PREFERENCE_COOKIE : 'CookieLawInfoConsent');
+const CLI_ACCEPT_COOKIE_EXPIRE = (window.CLI_ACCEPT_COOKIE_EXPIRE !== undefined ? window.CLI_ACCEPT_COOKIE_EXPIRE : 365);
+let CLI_COOKIEBAR_AS_POPUP = (window.CLI_COOKIEBAR_AS_POPUP !== undefined ? window.CLI_COOKIEBAR_AS_POPUP : false);
+const CLI_Cookie = {
 	set: function (name, value, days) {
 		var secure = "";
 		if (true === Boolean(Cli_Data.secure_cookies)) {
@@ -17,7 +17,7 @@ var CLI_Cookie = {
 		}
 		document.cookie = name + "=" + value + secure + expires + "; path=/";
 		if (days < 1) {
-			host_name = window.location.hostname;
+			let host_name = window.location.hostname;
 			document.cookie = name + "=" + value + expires + "; path=/; domain=." + host_name + ";";
 			if (host_name.indexOf("www") != 1) {
 				var host_name_withoutwww = host_name.replace('www', '');
@@ -177,8 +177,8 @@ var CLI =
 		jQuery('.cli-user-preference-checkbox').each(
 			function () {
 
-				categoryCookie = 'cookielawinfo-' + jQuery(this).attr('data-id');
-				categoryCookieValue = CLI_Cookie.read(categoryCookie);
+				const categoryCookie = 'cookielawinfo-' + jQuery(this).attr('data-id');
+				const categoryCookieValue = CLI_Cookie.read(categoryCookie);
 				if (categoryCookieValue == null) {
 					if (jQuery(this).is(':checked')) {
 						CLI_Cookie.set(categoryCookie, 'yes', CLI_ACCEPT_COOKIE_EXPIRE);
@@ -312,7 +312,7 @@ var CLI =
 						var strippedText = jQuery('<div />').html(textBlock.html());
 						strippedText.find('table').remove();
 						textBlock.html(strippedText.html());
-						currentText = textBlock.text();
+						const currentText = textBlock.text();
 						if (currentText.trim().length > 250) {
 							var newStr = currentText.substring(0, 250);
 							textBlock.empty().html(newStr).append('...');
@@ -754,8 +754,7 @@ var CLI =
 		if (this.checkifStyleAttributeExist() === false) {
 			cli_elm.css({ 'padding': '25px 15px' });
 		}
-		cli_h = cli_elm.height();
-		li_h = cli_h < 200 ? 200 : cli_h;
+		const cli_h = cli_elm.height();
 		cli_elm.css({ 'top': '50%', 'margin-top': ((cli_h / 2) + 30) * -1 });
 		setTimeout(
 			function () {
@@ -810,7 +809,7 @@ var CLI =
 
 				var cli_chkbox_elm = jQuery(this);
 				var cli_chkbox_data_id = cli_chkbox_elm.attr('data-id');
-				cliCategorySlug = cli_chkbox_data_id.replace('checkbox-', '');
+				const cliCategorySlug = cli_chkbox_data_id.replace('checkbox-', '');
 				if (Cli_Data.strictlyEnabled.indexOf(cliCategorySlug) === -1) {
 					cli_chkbox_elm.prop('checked', false);
 					CLI_Cookie.set('cookielawinfo-' + cli_chkbox_data_id, 'no', CLI_ACCEPT_COOKIE_EXPIRE);
@@ -838,10 +837,10 @@ var CLI =
 		jQuery('.cli-user-preference-checkbox').each(
 			function () {
 				var status = false;
-				cli_chkbox_elm = jQuery(this);
-				cli_chkbox_data_id = cli_chkbox_elm.attr('data-id');
+				const cli_chkbox_elm = jQuery(this);
+				let cli_chkbox_data_id = cli_chkbox_elm.attr('data-id');
 				cli_chkbox_data_id = cli_chkbox_data_id.replace('checkbox-', '');
-				cli_chkbox_data_id_trimmed = cli_chkbox_data_id.replace('-', '_')
+				const cli_chkbox_data_id_trimmed = cli_chkbox_data_id.replace('-', '_')
 				if (jQuery(cli_chkbox_elm).is(':checked')) {
 					status = true;
 					cliAllowedCategories.push(cli_chkbox_data_id);
@@ -862,17 +861,16 @@ var CLI =
 	},
 	generateConsent: function () {
 		var preferenceCookie = CLI_Cookie.read(CLI_PREFERENCE_COOKIE);
-		cliConsent = {};
+		let cliConsent = {};
 		if (preferenceCookie !== null) {
 			cliConsent = window.atob(preferenceCookie);
 			cliConsent = JSON.parse(cliConsent);
 		}
 		cliConsent.ver = Cli_Data.consentVersion;
-		categories = [];
 		jQuery('.cli-user-preference-checkbox').each(
 			function () {
-				categoryVal = '';
-				cli_chkbox_data_id = jQuery(this).attr('data-id');
+				let categoryVal = '';
+				let cli_chkbox_data_id = jQuery(this).attr('data-id');
 				cli_chkbox_data_id = cli_chkbox_data_id.replace('checkbox-', '');
 				if (jQuery(this).is(':checked')) {
 					categoryVal = true;
@@ -1002,7 +1000,7 @@ var cliBlocker =
 			if (CLI_Cookie.read(CLI_ACCEPT_COOKIE_NAME) !== null) {
 				var non_necessary_cookies = Cli_Data.non_necessary_cookies;
 				for (var key in non_necessary_cookies) {
-					currentCategory = key;
+					const currentCategory = key;
 					if (CLI.allowedCategories.indexOf(currentCategory) === -1) {
 						var nonNecessaryCookies = non_necessary_cookies[currentCategory];
 						for (var i = 0; i < nonNecessaryCookies.length; i++) {
@@ -1019,7 +1017,6 @@ var cliBlocker =
 	runScripts: function (blocking) {
 		blocking = typeof blocking !== 'undefined' ? blocking : true;
 		cliBlocker.blockingStatus = blocking;
-		srcReplaceableElms = ['iframe', 'IFRAME', 'EMBED', 'embed', 'OBJECT', 'object', 'IMG', 'img'];
 		var genericFuncs =
 		{
 
@@ -1146,7 +1143,7 @@ var cliBlocker =
 		var ccpaOptedOut = false;
 		var preferenceCookie = CLI_Cookie.read(CLI_PREFERENCE_COOKIE);
 		if (preferenceCookie !== null) {
-			cliConsent = window.atob(preferenceCookie);
+			let cliConsent = window.atob(preferenceCookie);
 			cliConsent = JSON.parse(cliConsent);
 			if (typeof cliConsent.ccpaOptout !== 'undefined') {
 				ccpaOptedOut = cliConsent.ccpaOptout;

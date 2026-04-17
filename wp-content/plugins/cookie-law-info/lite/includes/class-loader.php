@@ -11,6 +11,10 @@
 
 namespace CookieYes\Lite\Includes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Register all actions and filters for the plugin.
  *

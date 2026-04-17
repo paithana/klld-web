@@ -1418,8 +1418,12 @@ to {
 .cky-app-wrap .cky-image-radio input[type=radio] {
   display: none;
 }
-.cky-app-wrap input[type=radio]:checked::before {
+body.cky-app-admin.cky-wp-core-radio-checked .cky-app-wrap input[type=radio]:checked::before {
   background-color: #1863dc;
+}
+body.cky-app-admin.cky-wp-core-radio-fill .cky-app-wrap input[type=radio]:checked {
+  background: #1863dc;
+  border-color: #1863dc;
 }
 .cky-app-wrap .cky-form-control,
 .cky-app-wrap .cky-select {
@@ -2873,6 +2877,12 @@ fieldset[disabled] .cky-app-wrap .cky-select {
 .cky-blurred-input {
   background: #edf0f3 !important;
 }
+.cky-app-wrap .cky-input-error input[data-v-a27da00c] {
+  border-color: #dc3545;
+}
+.cky-app-wrap .cky-input-error input[data-v-a27da00c]:active, .cky-app-wrap .cky-input-error input[data-v-a27da00c]:focus {
+  box-shadow: 0 0 0 0.5px #dc3545;
+}
 .cky-tab-content-accordion {
   margin-top: 10px;
 }
@@ -2950,12 +2960,6 @@ fieldset[disabled] .cky-app-wrap .cky-select {
 }
 .cky-app-wrap .cky-button {
   position: relative;
-}
-.cky-app-wrap .cky-input-error input[data-v-a27da00c] {
-  border-color: #dc3545;
-}
-.cky-app-wrap .cky-input-error input[data-v-a27da00c]:active, .cky-app-wrap .cky-input-error input[data-v-a27da00c]:focus {
-  box-shadow: 0 0 0 0.5px #dc3545;
 }
 .cky-popper-container {
   display: inline-block;

@@ -114,7 +114,7 @@ class Shortcodes {
 	 * @return void
 	 */
 	private function load_shortcodes() {
-		$this->shortcodes = cky_read_json_file( dirname( __FILE__ ) . '/versions/' . esc_html( $this->template ) . '/shortcodes.json' );
+		$this->shortcodes = cky_read_json_file( dirname( __FILE__ ) . '/versions/shortcodes.json' );
 	}
 	/**
 	 * Init shortcodes.
@@ -724,6 +724,24 @@ class Shortcodes {
 	}
 	public function cky_optout_close_label() {
 		return isset( $this->contents['optoutPopup']['elements']['closeButton'] ) ? $this->contents['optoutPopup']['elements']['closeButton'] : '';
+	}
+
+	/**
+	 * Callback for the shortcode [cky_optout_success_text]
+	 *
+	 * @return string
+	 */
+	public function cky_optout_success_text() {
+		return isset( $this->contents['optoutPopup']['elements']['optoutSuccess']['elements']['text'] ) ? $this->contents['optoutPopup']['elements']['optoutSuccess']['elements']['text'] : '';
+	}
+
+	/**
+	 * Callback for the shortcode [cky_optout_success_subtext]
+	 *
+	 * @return string
+	 */
+	public function cky_optout_success_subtext() {
+		return isset( $this->contents['optoutPopup']['elements']['optoutSuccess']['elements']['subtext'] ) ? $this->contents['optoutPopup']['elements']['optoutSuccess']['elements']['subtext'] : '';
 	}
 
 }

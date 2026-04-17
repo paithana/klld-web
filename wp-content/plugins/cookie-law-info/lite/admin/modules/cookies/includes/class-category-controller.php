@@ -182,8 +182,6 @@ class Category_Controller extends Base_Controller {
 				'%d',
 				'%d',
 				'%s',
-				'%d',
-				'%s',
 				'%s',
 				'%s',
 			)
@@ -200,6 +198,8 @@ class Category_Controller extends Base_Controller {
 	 */
 	public function update_item( $object ) {
 		global $wpdb;
+		$date_modified = current_time( 'mysql' );
+		$object->set_date_modified( $date_modified );
 		$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prefix . 'cky_cookie_categories',
 			array(
@@ -221,8 +221,6 @@ class Category_Controller extends Base_Controller {
 				'%d',
 				'%d',
 				'%d',
-				'%d',
-				'%s',
 				'%d',
 				'%s',
 				'%s',

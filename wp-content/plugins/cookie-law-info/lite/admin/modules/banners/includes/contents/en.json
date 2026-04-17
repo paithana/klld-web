@@ -73,6 +73,12 @@
                         "confirm": "Save My Preferences"
                     }
                 },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Your opt-out preference has been honored.",
+                        "subtext": "Banner closes automatically in <span id=\"ckyCountdownTimer\"></span> s..."
+                    }
+                },
                 "closeButton": "Close"
             }
         },
@@ -171,6 +177,12 @@
                     "elements": {
                         "cancel": "Cancel",
                         "confirm": "Save My Preferences"
+                    }
+                },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Your opt-out preference has been honored.",
+                        "subtext": "Banner closes automatically in <span id=\"ckyCountdownTimer\"></span> s..."
                     }
                 },
                 "closeButton": "Close"

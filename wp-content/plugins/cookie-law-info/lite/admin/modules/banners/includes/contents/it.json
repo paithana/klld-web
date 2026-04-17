@@ -73,6 +73,12 @@
                         "confirm": "Salva le mie preferenze"
                     }
                 },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "La tua preferenza di non partecipare è stata rispettata.",
+                        "subtext": "Il banner si chiuderà automaticamente tra <span id=\"ckyCountdownTimer\"></span> s..."
+                    }
+                },
                 "closeButton": "Vicino"
             }
         },
@@ -171,6 +177,12 @@
                     "elements": {
                         "cancel": "Annulla",
                         "confirm": "Salva le mie preferenze"
+                    }
+                },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "La tua preferenza di non partecipare è stata rispettata.",
+                        "subtext": "Il banner si chiuderà automaticamente tra <span id=\"ckyCountdownTimer\"></span> s..."
                     }
                 },
                 "closeButton": "Vicino"

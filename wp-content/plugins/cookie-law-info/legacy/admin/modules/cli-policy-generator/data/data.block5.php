@@ -7,6 +7,10 @@
  * @package Cookie_Law_Info
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 ?>
 <p>Should you decide to change your preferences later through your browsing session, you can click on the "Manage consent" tab on your screen. This will display the consent notice again enabling you to change your preferences or withdraw your consent entirely.</p>

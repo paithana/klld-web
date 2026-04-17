@@ -232,6 +232,22 @@
         "uiTag": ""
     },
     {
+        "key": "cky_optout_success_text",
+        "type": "text",
+        "content": {},
+        "attributes": {},
+        "customTag": "",
+        "uiTag": ""
+    },
+    {
+        "key": "cky_optout_success_subtext",
+        "type": "text",
+        "content": {},
+        "attributes": {},
+        "customTag": "",
+        "uiTag": ""
+    },
+    {
         "key": "cky_preference_close_label",
         "type": "text",
         "content": {},

@@ -10,6 +10,10 @@
 
 namespace CookieYes\Lite\Admin;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use CookieYes\Lite\Includes\Notice;
 use CookieYes\Lite\Includes\Connect_Notice;
 
@@ -492,6 +496,12 @@ class Admin {
 	public function admin_body_classes( $classes ) {
 		if ( true === cky_is_admin_page() ) {
 			$classes .= ' cky-app-admin';
+			global $wp_version;
+			if ( version_compare( $wp_version, '6.9.4', '<=' ) ) {
+				$classes .= ' cky-wp-core-radio-checked';
+			} else {
+				$classes .= ' cky-wp-core-radio-fill';
+			}
 		}
 		return $classes;
 	}

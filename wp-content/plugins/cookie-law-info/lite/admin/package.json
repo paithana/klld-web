@@ -7,7 +7,8 @@
     "build": "node build-dev.js",
     "build:production": "node build.js",
     "lint": "vue-cli-service lint",
-    "build-webpack-lite": "webpack-cli --config webpack/lite.config.js --mode production"
+    "build-webpack-lite": "webpack-cli --config webpack/lite.config.js --mode production",
+    "i18n:make-pot": "bash ../../scripts/i18n-make-pot.sh"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",

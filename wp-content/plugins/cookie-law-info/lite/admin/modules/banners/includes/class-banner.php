@@ -151,7 +151,8 @@ class Banner extends Store {
 	public function set_settings( $data ) {
 		$key = 'settings';
 		if ( array_key_exists( $key, $this->data ) ) {
-			$data               = $this->sanitize_settings( array( $this, 'sanitize_option' ), $data, $this->controller->get_default_configs() );
+			$defaults = $this->get_defaults_for_settings( $data );
+			$data     = $this->sanitize_settings( array( $this, 'sanitize_option' ), $data, $defaults );
 			$this->data[ $key ] = $data;
 		}
 	}
@@ -211,10 +212,27 @@ class Banner extends Store {
 		if ( array_key_exists( $key, $this->data ) ) {
 			$settings = ( is_string( $this->data[ $key ] ) ) ? json_decode( $this->data[ $key ], true ) : $this->data[ $key ];
 			if ( is_array( $settings ) ) {
-				$settings = $this->sanitize_settings( array( $this, 'sanitize_option' ), $settings, $this->controller->get_default_configs() );
+				$defaults = $this->get_defaults_for_settings( $settings );
+				$settings = $this->sanitize_settings( array( $this, 'sanitize_option' ), $settings, $defaults );
 			}
 		}
 		return $settings;
+	}
+
+	/**
+	 * Get default configs matching the banner's versionID.
+	 * Uses 6.0.0 config for 6.0.0 banners (no accessibilityOverrides), 6.2.0 for others.
+	 *
+	 * @param array $settings Banner settings array.
+	 * @return array
+	 */
+	private function get_defaults_for_settings( $settings ) {
+		$version = isset( $settings['settings']['versionID'] ) ? $settings['settings']['versionID'] : '6.2.0';
+		if ( '' === $version || 'default' === $version ) {
+			$version = '6.0.0';
+		}
+		$type = isset( $settings['settings']['applicableLaw'] ) ? $settings['settings']['applicableLaw'] : 'gdpr';
+		return $this->controller->get_default_configs( $type, $version );
 	}
 
 	/**
@@ -442,6 +460,7 @@ class Banner extends Store {
 	public function sanitize_content( $option, $value ) {
 		switch ( $option ) {
 			case 'description':
+			case 'subtext':
 				$value = cky_sanitize_content( $value );
 				break;
 			default:

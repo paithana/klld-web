@@ -73,6 +73,12 @@
                         "confirm": "Enregistrer mes préférences"
                     }
                 },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Votre préférence de désinscription a été respectée.",
+                        "subtext": "La bannière se ferme automatiquement dans <span id=\"ckyCountdownTimer\"></span> s..."
+                    }
+                },
                 "closeButton": "Fermer"
             }
         },
@@ -171,6 +177,12 @@
                     "elements": {
                         "cancel": "Annuler",
                         "confirm": "Enregistrer mes préférences"
+                    }
+                },
+                "optoutSuccess": {
+                    "elements": {
+                        "text": "Votre préférence de désinscription a été respectée.",
+                        "subtext": "La bannière se ferme automatiquement dans <span id=\"ckyCountdownTimer\"></span> s..."
                     }
                 },
                 "closeButton": "Fermer"

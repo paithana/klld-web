@@ -2,34 +2,38 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: CookieYes | GDPR Cookie Consent 3.4.0\n"
+"Project-Id-Version: CookieYes | GDPR Cookie Consent 3.4.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cookie-law-info\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-21T04:49:48+00:00\n"
+"POT-Creation-Date: 2026-04-08T06:02:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: cookie-law-info\n"
 
 #. Plugin Name of the plugin
+#: cookie-law-info.php
 msgid "CookieYes | GDPR Cookie Consent"
 msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
+#: cookie-law-info.php
 msgid "https://www.cookieyes.com/"
 msgstr ""
 
 #. Description of the plugin
+#: cookie-law-info.php
 msgid "A simple way to show your website complies with the EU Cookie Law / GDPR."
 msgstr ""
 
 #. Author of the plugin
-#: lite/admin/class-admin.php:423
-#: lite/admin/class-admin.php:424
+#: cookie-law-info.php
+#: lite/admin/class-admin.php:427
+#: lite/admin/class-admin.php:428
 #: lite/admin/modules/dashboard-widget/class-dashboard-widget.php:102
 msgid "CookieYes"
 msgstr ""
@@ -38,22 +42,22 @@ msgstr ""
 msgid "Please make sure the cache is cleared after each plugin update especially if you have minified JS and/or CSS files."
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:188
-#: legacy/admin/class-cookie-law-info-admin.php:189
-#: legacy/admin/class-cookie-law-info-admin.php:264
+#: legacy/admin/class-cookie-law-info-admin.php:192
+#: legacy/admin/class-cookie-law-info-admin.php:193
+#: legacy/admin/class-cookie-law-info-admin.php:268
 #: legacy/admin/partials/cookie-law-info-admin_settings.php:31
-#: lite/admin/class-admin.php:705
+#: lite/admin/class-admin.php:715
 msgid "Settings"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:196
-#: legacy/admin/class-cookie-law-info-admin.php:197
+#: legacy/admin/class-cookie-law-info-admin.php:200
+#: legacy/admin/class-cookie-law-info-admin.php:201
 #: legacy/admin/partials/cookie-law-info-privacy_overview.php:25
 msgid "Privacy Overview"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:239
-#: legacy/admin/class-cookie-law-info-admin.php:275
+#: legacy/admin/class-cookie-law-info-admin.php:243
+#: legacy/admin/class-cookie-law-info-admin.php:279
 #: legacy/admin/modules/cli-policy-generator/classes/class-policy-generator-ajax.php:19
 #: legacy/admin/modules/cookie-scaner/classes/class-cookie-law-info-cookie-scanner-ajax.php:24
 #: legacy/admin/modules/cookie-scaner/cookie-scaner.php:282
@@ -68,87 +72,87 @@ msgstr ""
 msgid "You do not have sufficient permission to perform this operation"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:258
-#: legacy/admin/class-cookie-law-info-admin.php:297
+#: legacy/admin/class-cookie-law-info-admin.php:262
+#: legacy/admin/class-cookie-law-info-admin.php:301
 #: legacy/admin/modules/cookies/cookies.php:787
 msgid "Settings Updated."
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:265
-#: lite/admin/class-admin.php:704
+#: legacy/admin/class-cookie-law-info-admin.php:269
+#: lite/admin/class-admin.php:714
 #: lite/admin/dist/js/app.js:1637
 msgid "Support"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:373
+#: legacy/admin/class-cookie-law-info-admin.php:377
 msgid "Close consent bar"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:377
+#: legacy/admin/class-cookie-law-info-admin.php:381
 msgid "Redirect to URL on click"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:391
+#: legacy/admin/class-cookie-law-info-admin.php:395
 msgid "Extra Large"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:395
+#: legacy/admin/class-cookie-law-info-admin.php:399
 msgid "Large"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:399
+#: legacy/admin/class-cookie-law-info-admin.php:403
 msgid "Medium"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:403
+#: legacy/admin/class-cookie-law-info-admin.php:407
 msgid "Small"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:417
+#: legacy/admin/class-cookie-law-info-admin.php:421
 msgid "Default theme font"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:421
+#: legacy/admin/class-cookie-law-info-admin.php:425
 msgid "Sans Serif"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:425
+#: legacy/admin/class-cookie-law-info-admin.php:429
 msgid "Serif"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:429
+#: legacy/admin/class-cookie-law-info-admin.php:433
 msgid "Arial"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:433
+#: legacy/admin/class-cookie-law-info-admin.php:437
 msgid "Arial Black"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:437
+#: legacy/admin/class-cookie-law-info-admin.php:441
 msgid "Georgia, serif"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:441
+#: legacy/admin/class-cookie-law-info-admin.php:445
 msgid "Helvetica"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:445
+#: legacy/admin/class-cookie-law-info-admin.php:449
 msgid "Lucida"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:449
+#: legacy/admin/class-cookie-law-info-admin.php:453
 msgid "Tahoma"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:453
+#: legacy/admin/class-cookie-law-info-admin.php:457
 msgid "Times New Roman"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:457
+#: legacy/admin/class-cookie-law-info-admin.php:461
 msgid "Trebuchet"
 msgstr ""
 
-#: legacy/admin/class-cookie-law-info-admin.php:461
+#: legacy/admin/class-cookie-law-info-admin.php:465
 msgid "Verdana"
 msgstr ""
 
@@ -487,6 +491,7 @@ msgstr ""
 
 #. translators: %1$s: CookieYes website URL, %2$s: Privacy Policy URL, %3$s: Terms of Service URL
 #: legacy/admin/modules/cookie-scaner/cookie-scaner.php:428
+#, php-format
 msgid "Clicking “Connect & scan” will let you connect with a free <a href=\"%1$s\" target=\"_blank\">CookieYes</a> account and initiate scanning of your website for cookies. These cookies along with their description will be listed under the cookie declaration popup. By continuing, you agree to CookieYes's <a href=\"%2$s\" target=\"_blank\">Privacy Policy</a> & <a href=\"%3$s\" target=\"_blank\">Terms of service</a>."
 msgstr ""
 
@@ -501,6 +506,7 @@ msgstr ""
 
 #. translators: %1$s: last scan date
 #: legacy/admin/modules/cookie-scaner/cookie-scaner.php:506
+#, php-format
 msgid "Last scan: %1$s"
 msgstr ""
 
@@ -609,6 +615,7 @@ msgstr ""
 
 #. translators: %s: Cookie List URL
 #: legacy/admin/modules/cookie-scaner/views/scan-results.php:45
+#, php-format
 msgid "Clicking “Add to cookie list” will import the discovered cookies to the <a href=\"%s\" target=\"_blank\">Cookie List</a> and thus display them in the cookie declaration section of your consent banner."
 msgstr ""
 
@@ -775,14 +782,14 @@ msgstr ""
 #: legacy/admin/modules/cookies/cookies.php:627
 #: legacy/admin/modules/cookies/views/non-necessary-settings.php:40
 #: legacy/public/modules/script-blocker/views/settings.php:164
-#: legacy/public/views/cookie-law-info_popup_content.php:6
+#: legacy/public/views/cookie-law-info_popup_content.php:9
 msgid "Enabled"
 msgstr ""
 
 #: legacy/admin/modules/cookies/cookies.php:602
 #: legacy/admin/modules/cookies/cookies.php:628
 #: legacy/admin/modules/cookies/views/non-necessary-settings.php:41
-#: legacy/public/views/cookie-law-info_popup_content.php:7
+#: legacy/public/views/cookie-law-info_popup_content.php:10
 msgid "Disabled"
 msgstr ""
 
@@ -1121,6 +1128,7 @@ msgstr ""
 #: legacy/admin/views/admin-settings-buttons.php:374
 #: lite/admin/dist/js/app.js:1685
 #: lite/admin/dist/js/app.js:1697
+#: lite/admin/dist/js/app.js:1733
 msgid "Text"
 msgstr ""
 
@@ -1624,112 +1632,112 @@ msgstr ""
 msgid "Input a text to appear on the revisit consent widget."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:309
+#: legacy/admin/views/goto-pro-v2.php:314
 msgid "You are using the legacy version! <span class='wt-blue-text'>Migrate to the new UI</span> for better experience and advanced features"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:318
+#: legacy/admin/views/goto-pro-v2.php:323
 msgid "Migrate Now"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:321
+#: legacy/admin/views/goto-pro-v2.php:326
 msgid "Get the new, WCAG-compliant cookie consent banner."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:322
+#: legacy/admin/views/goto-pro-v2.php:327
 msgid "Access new free features"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:323
+#: legacy/admin/views/goto-pro-v2.php:328
 msgid "— Set consent expiration, disable prior consent, hide consent categories, choose colour scheme (light/dark/custom), generate cookie/privacy policy, etc."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:326
+#: legacy/admin/views/goto-pro-v2.php:331
 msgid "Access additional free and premium features by connecting to CookieYes web app (Optional)"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:328
+#: legacy/admin/views/goto-pro-v2.php:333
 msgid "— Cookie scan, Consent log, Support for Google Consent Mode v2, IAB TCF v2.3 banner, Google’s Additional Consent Mode, etc."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:332
+#: legacy/admin/views/goto-pro-v2.php:337
 msgid "Learn more about migration"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:337
+#: legacy/admin/views/goto-pro-v2.php:342
 msgid "Ready to migrate to the new UI?"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:339
+#: legacy/admin/views/goto-pro-v2.php:344
 msgid "Please review the following before proceeding:"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:344
+#: legacy/admin/views/goto-pro-v2.php:349
 msgid "<strong>Cookie bar and other shortcodes</strong> will be replaced with <strong>easier customization methods.</strong>"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:355
+#: legacy/admin/views/goto-pro-v2.php:360
 msgid "<strong>After migrating, you can add custom CSS to:</strong>"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:365
+#: legacy/admin/views/goto-pro-v2.php:370
 msgid "Change the font format of the cookie banner (available in the premium plans)."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:368
+#: legacy/admin/views/goto-pro-v2.php:373
 msgid "Customize the position of the revisit consent button (from the right/left margin)."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:371
+#: legacy/admin/views/goto-pro-v2.php:376
 msgid "Change the button size."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:377
+#: legacy/admin/views/goto-pro-v2.php:382
 msgid "<strong>The following customization features will no longer be available:</strong>"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:387
+#: legacy/admin/views/goto-pro-v2.php:392
 msgid "Changing the button to a link."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:390
+#: legacy/admin/views/goto-pro-v2.php:395
 msgid "Redirecting to the URL on click."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:393
+#: legacy/admin/views/goto-pro-v2.php:398
 msgid "Animating the cookie banner (On Load/Hide)."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:396
+#: legacy/admin/views/goto-pro-v2.php:401
 msgid "Allowing the cookie banner to move with page scroll."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:399
+#: legacy/admin/views/goto-pro-v2.php:404
 msgid "Accepting cookie consent on the page scroll or delay action on the cookie banner."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:402
+#: legacy/admin/views/goto-pro-v2.php:407
 msgid "Disabling the accept button."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:408
+#: legacy/admin/views/goto-pro-v2.php:413
 msgid "The <strong>popup layout</strong> for the banner and the <strong>option to use both \"GDPR\" and \"US State Laws\" consent templates</strong> will be <strong>available in the premium plans</strong> with <strong>advanced geo-targeting.</strong>"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:419
+#: legacy/admin/views/goto-pro-v2.php:424
 msgid "From the new plugin UI, you can navigate to <strong>Cookie Manager > Add Cookie > Advanced settings</strong> and add the pattern that identifies the script <strong>(Script URL Pattern)</strong> to manually block cookies before obtaining user consent."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:431
+#: legacy/admin/views/goto-pro-v2.php:436
 msgid "Alternatively, you can <strong>connect to the CookieYes web app (optional)</strong> to utilize the <strong>cookie scan feature,</strong> which <strong>discovers, categorizes, and automatically blocks</strong> your website cookies prior to consent."
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:442
+#: legacy/admin/views/goto-pro-v2.php:447
 msgid "Contact Support"
 msgstr ""
 
-#: legacy/admin/views/goto-pro-v2.php:446
-#: legacy/includes/class-cookie-law-info.php:987
+#: legacy/admin/views/goto-pro-v2.php:451
+#: legacy/includes/class-cookie-law-info.php:991
 msgid "Start Migration"
 msgstr ""
 
@@ -1868,6 +1876,7 @@ msgstr ""
 
 #. translators: %s: user email.
 #: legacy/includes/class-cookie-law-info-cookieyes.php:1007
+#, php-format
 msgid "We've sent an account verification link to the email address %s. Please click on the link given in email to verify your account with CookieYes."
 msgstr ""
 
@@ -1885,6 +1894,7 @@ msgstr ""
 
 #. translators: %s: user email address
 #: legacy/includes/class-cookie-law-info-cookieyes.php:1068
+#, php-format
 msgid "Looks like you already have an account with CookieYes for email id %s, please login to continue."
 msgstr ""
 
@@ -1911,10 +1921,12 @@ msgstr ""
 #. translators: %1$s: opening bold tag, %2$s: closing bold tag
 #: legacy/includes/class-cookie-law-info-review-request.php:60
 #: lite/admin/dist/js/app.js:857
+#, php-format,js-format
 msgid "Hey, we at %1$sCookieYes%2$s would like to thank you for using our plugin. We would really appreciate if you could take a moment to drop a quick review that will inspire us to keep going."
 msgstr ""
 
 #: legacy/includes/class-cookie-law-info-review-request.php:63
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:309
 msgid "Remind me later"
 msgstr ""
 
@@ -1938,30 +1950,31 @@ msgstr ""
 #. translators: %1$s: CookieYes plugin name in bold, %2$s: star rating link, %3$s: WordPress.org link
 #: legacy/includes/class-cookie-law-info-review-request.php:271
 #: lite/admin/modules/review-feedback/class-review-feedback.php:279
+#, php-format
 msgid "Please rate %1$s %2$s on %3$s to help us spread the word. Thank you from the team CookieYes!"
 msgstr ""
 
-#: legacy/includes/class-cookie-law-info.php:978
+#: legacy/includes/class-cookie-law-info.php:982
 msgid "Migrate to the new UI for an enhanced experience and advanced features"
 msgstr ""
 
-#: legacy/includes/class-cookie-law-info.php:979
+#: legacy/includes/class-cookie-law-info.php:983
 msgid "By migrating to the new and improved user interface, you can:"
 msgstr ""
 
-#: legacy/includes/class-cookie-law-info.php:981
+#: legacy/includes/class-cookie-law-info.php:985
 msgid "Display the new cookie consent banner (compliant with the WCAG guidelines) on your website"
 msgstr ""
 
-#: legacy/includes/class-cookie-law-info.php:982
+#: legacy/includes/class-cookie-law-info.php:986
 msgid "Access new free features (set consent expiration period, enable/disable prior consent, show/hide categories on the banner, light/dark/custom colour scheme, privacy policy generator, etc.)"
 msgstr ""
 
-#: legacy/includes/class-cookie-law-info.php:983
+#: legacy/includes/class-cookie-law-info.php:987
 msgid "Use the live preview feature to customize your banner while you are looking at it."
 msgstr ""
 
-#: legacy/includes/class-cookie-law-info.php:984
+#: legacy/includes/class-cookie-law-info.php:988
 msgid "Get access to additional free features such as cookie scan, consent log, etc. by connecting to the CookieYes web app (Optional)"
 msgstr ""
 
@@ -2006,11 +2019,13 @@ msgstr ""
 
 #. translators: %s: action text
 #: legacy/public/modules/script-blocker/views/settings.php:11
+#, php-format
 msgid "<a id=\"wt-cli-script-blocker-action\">%s</a>"
 msgstr ""
 
 #. translators: %s: advanced settings URL
 #: legacy/public/modules/script-blocker/views/settings.php:16
+#, php-format
 msgid "Advanced script rendering is currently disabled. It should be enabled for the automatic script blocker to function. <a href=\"%s\">Enable.</a>"
 msgstr ""
 
@@ -2020,6 +2035,7 @@ msgstr ""
 
 #. translators: %s: plugin help URL
 #: legacy/public/modules/script-blocker/views/settings.php:147
+#, php-format
 msgid "Below is the list of plugins currently supported for auto blocking. Plugins marked inactive are either not installed or activated on your website. Enabled plugins will be blocked by default on the front-end of your website prior to obtaining user consent and rendered respectively based on consent. <a href=\"%s\" target=\"_blank\">Read more.</a>"
 msgstr ""
 
@@ -2085,16 +2101,67 @@ msgstr ""
 msgid "Powered by"
 msgstr ""
 
-#: legacy/public/views/cookie-law-info_popup_content.php:5
+#: legacy/public/views/cookie-law-info_popup_content.php:8
 msgid "Always Enabled"
 msgstr ""
 
-#: legacy/public/views/cookie-law-info_popup_content.php:8
+#: legacy/public/views/cookie-law-info_popup_content.php:11
 msgid "Show more"
 msgstr ""
 
-#: legacy/public/views/cookie-law-info_popup_content.php:8
+#: legacy/public/views/cookie-law-info_popup_content.php:11
 msgid "Show less"
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:178
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:328
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:182
+msgid "You do not have sufficient permissions to install plugins."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:200
+msgid "Plugin download link not found."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:215
+msgid "Plugin installation failed."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:255
+msgid "You do not have sufficient permissions to activate plugins."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:263
+msgid "Activation failed."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:283
+msgid "Accessibility Widget"
+msgstr ""
+
+#. translators: 1: a tag opening, 2: a tag closing
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:289
+#, php-format
+msgid "Make your site inclusive with %1$s AccessYes accessibility widget. %2$s"
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:297
+msgid "A lightweight accessibility widget to improve accessibility and usability for every users. Set it up in minutes for free."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:305
+msgid "Install & activate"
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:465
+msgid "Installing..."
+msgstr ""
+
+#: lite/admin/cross-promotion-banners/class-wbte-accessibility-banner.php:564
+msgid "Plugin installed successfully."
 msgstr ""
 
 #: lite/admin/modules/banners/api/class-api.php:103
@@ -2248,6 +2315,7 @@ msgstr ""
 #: lite/integrations/cookieyes/includes/class-cloud.php:110
 #: lite/integrations/cookieyes/includes/class-cloud.php:123
 #: lite/integrations/cookieyes/includes/class-cloud.php:136
+#, php-format
 msgid "Method '%s' not implemented. Must be overridden in subclass."
 msgstr ""
 
@@ -2415,6 +2483,7 @@ msgstr ""
 
 #. translators: %1$s: opening bold tag, %2$s: closing bold tag
 #: lite/admin/modules/review-feedback/class-review-feedback.php:96
+#, php-format
 msgid "Hey, we at %1$s CookieYes %2$s would like to thank you for using our plugin. We would really appreciate if you could take a moment to drop a quick review that will inspire us to keep going."
 msgstr ""
 
@@ -2517,6 +2586,7 @@ msgstr ""
 
 #. translators: %s: field name
 #: lite/admin/modules/settings/includes/class-controller.php:510
+#, php-format
 msgid "Missing required payment data: %s"
 msgstr ""
 
@@ -2549,7 +2619,8 @@ msgid "Skip & Deactivate"
 msgstr ""
 
 #. translators: %s: Migration notice expiry notice.
-#: lite/admin/modules/upgrade/class-upgrade.php:533
+#: lite/admin/modules/upgrade/class-upgrade.php:534
+#, php-format
 msgid "Not satisfied with the New UI and related changes? You can switch back to the old UI at any time until %s."
 msgstr ""
 
@@ -2910,11 +2981,13 @@ msgstr ""
 
 #. translators: %1$s is opening bold tag, %2$s is closing bold tag
 #: lite/admin/dist/js/4.js:35
+#, js-format
 msgid "Create a free account to connect with %1$sCookieYes web app%2$s. After connecting, you can manage all your settings from the web app and access advanced features:"
 msgstr ""
 
 #. translators: %s is the URL to pageview pricing documentation
 #: lite/admin/dist/js/4.js:35
+#, js-format
 msgid "You can continue using the plugin without connecting to the web app if you wish so. Please note that the standalone version of the plugin doesn't provide some advanced features. However, it offers unlimited <a href=\"%s\" target=\"_blank\">pageviews</a> in contrast to that of the web app-connected version."
 msgstr ""
 
@@ -2966,16 +3039,19 @@ msgstr ""
 
 #. translators: %1$s is opening bold tag, %2$s is closing bold tag, %3$s is the settings page URL
 #: lite/admin/dist/js/4.js:83
+#, js-format
 msgid "%1$sNote:%2$s To use the standalone plugin, you can <a href='%3$s'>disconnect</a> from the web app. However, you'll lose advanced features and customizations."
 msgstr ""
 
 #. translators: %s: plan name
 #: lite/admin/dist/js/4.js:95
+#, js-format
 msgid "🎉 You’re on a 14-day %s trial"
 msgstr ""
 
 #. translators: %1$d: number of days left in the trial, %2$s: plan name
 #: lite/admin/dist/js/4.js:95
+#, js-format
 msgid "Only %1$d day left in your %2$s trial"
 msgid_plural "Only %1$d days left in your %2$s trial"
 msgstr[0] ""
@@ -2983,21 +3059,25 @@ msgstr[1] ""
 
 #. translators: %1$s: plan name, %2$s: trial end date
 #: lite/admin/dist/js/4.js:95
+#, js-format
 msgid "Your %1$s features are active until %2$s. After that, your plan will be downgraded to Free unless you add payment details. You won't be charged until your trial ends."
 msgstr ""
 
 #. translators: %s: plan name
 #: lite/admin/dist/js/4.js:95
+#, js-format
 msgid "To avoid losing access to advanced features after the trial ends, add payment details now and continue on the %s plan seamlessly. You won't be charged until your trial ends."
 msgstr ""
 
 #. translators: %1$s: plan name, %2$s: trial end date
 #: lite/admin/dist/js/4.js:95
+#, js-format
 msgid "Your %1$s features are active until %2$s. After that, your cookie banner will be paused unless you add payment details. You won't be charged until your trial ends."
 msgstr ""
 
 #. translators: %s: plan name
 #: lite/admin/dist/js/4.js:95
+#, js-format
 msgid "To keep your cookie banner active after the trial, add payment details now and continue on the %s plan seamlessly. You won't be charged until your trial ends."
 msgstr ""
 
@@ -3011,6 +3091,7 @@ msgstr ""
 
 #. translators: %s is the URL to the documentation page
 #: lite/admin/dist/js/4.js:107
+#, js-format
 msgid "You can now enable Extra Pageviews to keep your cookie banner active even when a site exceeds its monthly pageview limit. Once enabled, this setting will apply to all Basic and Pro sites in your account. <a href=\"%s\" target=\"_blank\">Learn more</a> <span class=\"cky-learn-more-arrow\">→</span>"
 msgstr ""
 
@@ -3020,21 +3101,25 @@ msgstr ""
 
 #. translators: %s is the URL to the settings page
 #: lite/admin/dist/js/4.js:119
+#, js-format
 msgid "Alternatively, you can <a href=\"%s\">disconnect</a> your site from the web app and continue using the standalone version of the plugin. Please note that by doing so, you will lose your banner customisation and access to advanced features."
 msgstr ""
 
 #. translators: %s is the URL to the Organizations & Sites page
 #: lite/admin/dist/js/4.js:119
+#, js-format
 msgid "<b>Pageview limit exceeded</b>: Upgrade to a higher plan to increase your pageview limit and continue displaying the banner on this site. Visit <a href=\"%s\" target=\"_blank\">Organisations & Sites</a> to upgrade plan."
 msgstr ""
 
 #. translators: %s is the URL to the Organizations & Sites page
 #: lite/admin/dist/js/4.js:119
+#, js-format
 msgid "<b>Pageview limit exceeded</b>: Upgrade to a higher plan to increase your pageview limit and continue displaying the banner on this site. Visit <a href=\"%s\" target=\"_blank\">Organisations & Sites</a> to upgrade plan and activate your banner."
 msgstr ""
 
 #. translators: %1$s is the URL to the Organizations & Sites page, %2$s is the URL to the Billing page
 #: lite/admin/dist/js/4.js:119
+#, js-format
 msgid "<b>Pageview limit exceeded</b>: To keep showing the banner on this site, <a href=\"%1$s\" target=\"_blank\">upgrade your plan</a> or <a href=\"%2$s\" target=\"_blank\">enable Extra Pageviews</a> from your web app account."
 msgstr ""
 
@@ -3136,6 +3221,7 @@ msgstr ""
 
 #. translators: %s is a line break tag
 #: lite/admin/dist/js/4.js:167
+#, js-format
 msgid "2 months free%son annual plans"
 msgstr ""
 
@@ -3323,6 +3409,7 @@ msgstr ""
 
 #. translators: %s is the name of the cookie being deleted
 #: lite/admin/dist/js/5.js:83
+#, js-format
 msgid "The cookie <b>%s</b> will be permanently deleted. This cookie will no longer be displayed on your cookie list nor be blocked prior to receiving user consent."
 msgstr ""
 
@@ -3480,6 +3567,7 @@ msgstr ""
 
 #. translators: %s is the name of the language being deleted
 #: lite/admin/dist/js/6.js:82
+#, js-format
 msgid "The <b>%s</b> language and any translations you've added in this language will be permanently deleted."
 msgstr ""
 
@@ -3558,6 +3646,7 @@ msgstr ""
 
 #. translators: %1$s is the URL to the ISO 3166-2 regions documentation
 #: lite/admin/dist/js/7.js:23
+#, js-format
 msgid "By specifying \"All\", consent will apply to all regions. You can specify a comma-separated list of <a href=\"%1$s\" target=\"_blank\">regions</a> to apply consent to specific regions."
 msgstr ""
 
@@ -3759,11 +3848,13 @@ msgstr ""
 
 #. translators: %1$s is the URL to the troubleshooting guide
 #: lite/admin/dist/js/app.js:281
+#, js-format
 msgid "Unable to reach your web app account at the moment. Please reload the page to retry. If the issue persists, check out the <a href=\"%1$s\" target=\"_blank\">common issues causing this error</a> and try applying the suggested solutions."
 msgstr ""
 
 #. translators: %1$s is the URL to the Organizations & Sites page, %2$s is the URL to the support page
 #: lite/admin/dist/js/app.js:281
+#, js-format
 msgid "Looks like your website URL has changed. To ensure the proper functioning of your banner, update the registered URL on your CookieYes account (navigate to the <a href=\"%1$s\" target=\"_blank\">Organisations & Sites</a> page and click the More button associated with your site). Then, reload this page to retry. If the issue persists, please  <a href=\"%2$s\" target=\"_blank\">contact us</a>."
 msgstr ""
 
@@ -3785,6 +3876,7 @@ msgstr ""
 
 #. translators: %1$s is the reset date, %2$s is the URL to pageviews documentation
 #: lite/admin/dist/js/app.js:869
+#, js-format
 msgid "Pageviews will reset on<br><b>%1$s</b>.<br><a class=\"cky-external-link\" href=\"%2$s\" target=\"_blank\">Learn more</a>"
 msgstr ""
 
@@ -4051,11 +4143,13 @@ msgstr ""
 
 #. translators: %1$s is the currency symbol, %2$s is the price per 1000 pageviews
 #: lite/admin/dist/js/app.js:1013
+#, js-format
 msgid "+ %1$s%2$s per 1,000 extra pageviews*"
 msgstr ""
 
 #. translators: %s is the release date when extra pageviews became automatically enabled
 #: lite/admin/dist/js/app.js:1013
+#, js-format
 msgid "*Extra pageviews are automatically enabled for users who created their CookieYes account on or after %s. Users who created their account before this date can enable it anytime from Billing & Invoices. "
 msgstr ""
 
@@ -4141,6 +4235,7 @@ msgstr ""
 #: lite/admin/dist/js/app.js:1685
 #: lite/admin/dist/js/app.js:1697
 #: lite/admin/dist/js/app.js:1721
+#: lite/admin/dist/js/app.js:1733
 #: lite/admin/dist/js/app.js:1757
 msgid "Background"
 msgstr ""
@@ -4253,6 +4348,26 @@ msgstr ""
 #: lite/admin/dist/js/app.js:1733
 #: lite/admin/dist/js/app.js:1745
 msgid "“Save My Preferences” button"
+msgstr ""
+
+#: lite/admin/dist/js/app.js:1733
+msgid "Opt-out confirmation message"
+msgstr ""
+
+#: lite/admin/dist/js/app.js:1733
+msgid "Your opt-out preference has been honored."
+msgstr ""
+
+#: lite/admin/dist/js/app.js:1733
+msgid "A message is required to show upon opt-out."
+msgstr ""
+
+#: lite/admin/dist/js/app.js:1733
+msgid "Icon"
+msgstr ""
+
+#: lite/admin/dist/js/app.js:1733
+msgid "Subtext"
 msgstr ""
 
 #: lite/admin/dist/js/app.js:1733

@@ -220,6 +220,35 @@
                             }
                         }
                     },
+                    "optoutSuccess": {
+                        "styles": {
+                            "background-color": "#E5F4EF",
+                            "border-color": "inherit"
+                        },
+                        "elements": {
+                            "icon": {
+                                "styles": {
+                                    "color": "#00754E",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "text": {
+                                "styles": {
+                                    "color": "#14142A",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "subtext": {
+                                "styles": {
+                                    "color": "#4E4B66",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            }
+                        }
+                    },
                     "poweredBy": {
                         "styles": {
                             "background-color": "#EDEDED",
@@ -484,6 +513,35 @@
                             "description": {
                                 "styles": {
                                     "color": "#d0d0d0"
+                                }
+                            }
+                        }
+                    },
+                    "optoutSuccess": {
+                        "styles": {
+                            "background-color": "#E5F4EF",
+                            "border-color": "inherit"
+                        },
+                        "elements": {
+                            "icon": {
+                                "styles": {
+                                    "color": "#00754E",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "text": {
+                                "styles": {
+                                    "color": "#14142A",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
+                                }
+                            },
+                            "subtext": {
+                                "styles": {
+                                    "color": "#4E4B66",
+                                    "background-color": "transparent",
+                                    "border-color": "transparent"
                                 }
                             }
                         }

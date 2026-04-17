@@ -9,6 +9,10 @@
 
 namespace CookieYes\Lite\Includes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class Filesystem.
  */
