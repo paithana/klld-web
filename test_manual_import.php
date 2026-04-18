@@ -1,47 +1,43 @@
 <?php
-require_once('wp-load.php');
-require_once('wp-admin/includes/comment.php');
+/**
+ * Manual Import Simulation Test
+ */
+define('KLLD_TOOL_RUN', true);
+require_once 'wp-load.php';
 
-echo "Testing Manual Import Logic...\n";
-
-$batch = [
+// Prepare Mock Data for "Amazing 3 Temples" (Post 16271)
+$postId = 16271;
+$mockBatch = [
     [
-        'postId' => 14528,
-        'reviewId' => 'test_manual_123',
-        'metaKey' => '_gyg_review_id',
-        'author' => 'Test Manual User',
-        'email' => 'test@manual.com',
-        'content' => 'This is a manual import test review.',
+        'postId' => $postId,
+        'reviewId' => 'man_ta_123',
+        'metaKey' => 'tripadvisor_review_id',
+        'author' => 'Manual Tester',
+        'content' => 'This is a manually imported TripAdvisor review test.',
         'rating' => 5,
-        'dateStr' => date('Y-m-d H:i:s'),
+        'dateStr' => '2026-04-18',
         'targetLang' => 'en'
     ]
 ];
 
-// Simmons the POST request
 $_POST['action'] = 'ota_direct_import';
-$_POST['batch'] = json_encode($batch);
+$_POST['batch'] = json_encode($mockBatch);
 
-// Include the tool file to trigger the handler
-// We need to bypass the die() or exit if any
-define('KLLD_TOOL_RUN', true);
-require_once('wp-content/themes/traveler-childtheme/inc/ota-tools/review_tool.php');
+echo "Starting Manual Import Simulation...\n";
 
-echo "Import triggered. Checking database...\n";
+// Require the tool file from the new plugin directory
+require_once 'wp-content/plugins/ota-reviews/review_tool.php';
+
+// The review_tool.php with wp_send_json_success will exit, so we might need to capture or check DB
+echo "\nImport triggered. Checking database for review_id 'man_ta_123'...\n";
 
 global $wpdb;
-$comment = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->comments} WHERE comment_author = 'Test Manual User' ORDER BY comment_ID DESC LIMIT 1"));
+$found = $wpdb->get_var($wpdb->prepare(
+    "SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = 'tripadvisor_review_id' AND meta_value = 'man_ta_123' LIMIT 1"
+));
 
-if ($comment) {
-    echo "✅ Success: Found manual test comment ID {$comment->comment_ID}\n";
-    $rate = get_comment_meta($comment->comment_ID, 'comment_rate', true);
-    echo "Rating: $rate\n";
-    $gyg_id = get_comment_meta($comment->comment_ID, '_gyg_review_id', true);
-    echo "GYG ID: $gyg_id\n";
-    
-    // Cleanup
-    wp_delete_comment($comment->comment_ID, true);
-    echo "Cleanup complete.\n";
+if ($found) {
+    echo "✅ SUCCESS: Manual review found in database (Comment ID: $found)\n";
 } else {
-    echo "❌ Failure: Comment not found.\n";
+    echo "❌ FAILURE: Manual review not found in database.\n";
 }

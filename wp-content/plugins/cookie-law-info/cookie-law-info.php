@@ -16,7 +16,7 @@
  * Plugin Name:       CookieYes | GDPR Cookie Consent
  * Plugin URI:        https://www.cookieyes.com/
  * Description:       A simple way to show your website complies with the EU Cookie Law / GDPR.
- * Version:           3.4.1
+ * Version:           3.4.2
  * Author:            CookieYes
  * Author URI:        https://www.cookieyes.com/
  * License:           GPLv3
@@ -46,7 +46,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'CLI_VERSION', '3.4.1' );
+define( 'CLI_VERSION', '3.4.2' );
 define( 'CLI_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'CLI_PLUGIN_BASEPATH', plugin_dir_path( __FILE__ ) );
 define( 'CLI_SETTINGS_FIELD', 'CookieLawInfo-0.9' );
@@ -104,7 +104,8 @@ function cky_upgrade_notice( $data, $response ) {
  *
  * @return void
  */
-function cky_upgrade_notice_js() {     ?>
+function cky_upgrade_notice_js() {
+	?>
 		<script>
 			( function( $ ){
 				var update_dv=$( '#cookie-law-info-update ');
@@ -119,8 +120,8 @@ function cky_upgrade_notice_js() {     ?>
 
 add_action( 'in_plugin_update_message-cookie-law-info/cookie-law-info.php', 'cky_upgrade_notice', 10, 2 );
 
-//declare compliance with WP Consent API
-add_filter( "wp_consent_api_registered_".CLI_PLUGIN_BASENAME, '__return_true' );
+// declare compliance with WP Consent API
+add_filter( 'wp_consent_api_registered_' . CLI_PLUGIN_BASENAME, '__return_true' );
 
 /**
  * Return internal DB version.

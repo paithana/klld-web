@@ -62,14 +62,18 @@ if (isset($_POST['action']) && $_POST['action'] === 'save_ota_mappings') {
         update_post_meta($wp_id, '_viator_url', esc_url_raw($map['viatorUrl'] ?? ''));
         update_post_meta($wp_id, '_tripadvisor_activity_id', sanitize_text_field($map['taId'] ?? ''));
         update_post_meta($wp_id, '_ta_url', esc_url_raw($map['taUrl'] ?? ''));
+        update_post_meta($wp_id, '_ota_keywords', sanitize_text_field($map['keywords'] ?? ''));
         update_post_meta($wp_id, '_gmb_id', sanitize_text_field($map['gmbId'] ?? ''));
         update_post_meta($wp_id, '_trustpilot_id', sanitize_text_field($map['tpId'] ?? ''));
         $count++;
     }
 
-    // Save Partner API Key
+    // Save Partner API Keys
     if (isset($_POST['gyg_partner_key'])) {
         update_option('_gyg_partner_api_key', sanitize_text_field($_POST['gyg_partner_key']));
+    }
+    if (isset($_POST['ta_api_key'])) {
+        update_option('_ta_api_key', sanitize_text_field($_POST['ta_api_key']));
     }
 
     wp_send_json_success(['message' => "Saved $count mappings and settings successfully."]);
@@ -319,9 +323,63 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
             }
         }
         wp_send_json_success(['message' => "Re-mapped $mapped orphan reviews using keywords."]);
+    } elseif ($job === 'gmb_filter') {
+        // Assign GMB reviews to tours based on keywords
+        $all_mapped_tours = get_posts([
+            'post_type' => 'st_tours',
+            'posts_per_page' => -1,
+            'meta_query' => [['key' => '_ota_keywords', 'compare' => 'EXISTS']]
+        ]);
+
+        $tour_keywords = [];
+        foreach ($all_mapped_tours as $t) {
+            $kw = get_post_meta($t->ID, '_ota_keywords', true);
+            if ($kw) {
+                $tour_keywords[$t->ID] = array_map('trim', explode(',', $kw));
+            }
+        }
+
+        if (empty($tour_keywords)) wp_send_json_error('No keywords defined for any tour.');
+
+        // Get GMB reviews (either post_id=0 or ota_source=gmb)
+        $gmb_reviews = $wpdb->get_results("
+            SELECT c.comment_ID, c.comment_content, c.comment_post_ID 
+            FROM {$wpdb->comments} c
+            JOIN {$wpdb->commentmeta} cm ON c.comment_ID = cm.comment_id
+            WHERE cm.meta_key = 'ota_source' AND cm.meta_value = 'gmb'
+        ");
+
+        $mapped = 0;
+        foreach ($gmb_reviews as $rev) {
+            foreach ($tour_keywords as $pid => $kws) {
+                foreach ($kws as $word) {
+                    if ($word && stripos($rev->comment_content, $word) !== false) {
+                        // Match Found!
+                        $wpdb->update($wpdb->comments, ['comment_post_ID' => $pid], ['comment_ID' => $rev->comment_ID]);
+                        // Also update summary
+                        if (function_exists('st_helper_update_total_review')) {
+                            st_helper_update_total_review($pid);
+                        }
+                        $mapped++;
+                        break 2; // Move to next review
+                    }
+                }
+            }
+        }
+        wp_send_json_success(['message' => "Scanned " . count($gmb_reviews) . " GMB reviews. Re-assigned $mapped reviews based on keywords."]);
     } elseif ($job === 'refresh_ratings') {
         // Recalculate all ratings for all mapped tours
-        $tour_ids = [37796, 14528, 14583, 14625, 14755, 14761, 14789, 14790, 14791, 15162, 15166, 15168, 16171, 49149, 16255, 16271, 16299, 16321, 16352, 16371, 27793, 28002, 28139, 14353, 52439];
+        $all_mapped_tours = get_posts([
+            'post_type' => 'st_tours',
+            'posts_per_page' => -1,
+            'meta_query' => [
+                'relation' => 'OR',
+                ['key' => '_gyg_activity_id', 'compare' => 'EXISTS'],
+                ['key' => '_viator_activity_id', 'compare' => 'EXISTS'],
+                ['key' => '_tripadvisor_activity_id', 'compare' => 'EXISTS']
+            ]
+        ]);
+        $tour_ids = wp_list_pluck($all_mapped_tours, 'ID');
         $total_updated = 0;
         
         foreach ($tour_ids as $id) {
@@ -342,8 +400,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
     wp_send_json_error('Unknown maintenance job.');
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'run_auto_mapper') {
+    $mapper_file = dirname(__FILE__) . '/ota_auto_mapper.php';
+    if (file_exists($mapper_file)) {
+        ob_start();
+        include($mapper_file);
+        $results = ob_get_clean();
+        wp_send_json_success(['results' => $results]);
+    } else {
+        wp_send_json_error('Auto-Mapper script not found.');
+    }
+}
+
 if (isset($_POST['action']) && $_POST['action'] === 'run_system_health_check') {
-    $test_suite = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/test_ota_suite.php';
+    $test_suite = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/test_tripadvisor_suite.php';
     if (file_exists($test_suite)) {
         ob_start();
         include($test_suite);
@@ -449,6 +519,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
     }
     wp_send_json_success(['message' => "Successfully imported $count reviews directly to database."]);
 }
+
+// Fetch All Tours for UI
+$all_st_tours = get_posts([
+    'post_type' => 'st_tours',
+    'posts_per_page' => -1,
+    'post_status' => ['publish', 'private', 'draft'],
+    'orderby' => 'title',
+    'order' => 'ASC'
+]);
 
 // All good — serve the tool
 if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
@@ -647,7 +726,70 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                 color: var(--text-muted);
                 text-transform: uppercase;
             }
-            .id-cell, .wp-id-cell, .name-cell { width: 100% !important; }
+        .id-cell, .wp-id-cell, .name-cell { width: 100% !important; }
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .search-container input {
+            padding-left: 35px;
+        }
+
+        .search-container::before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .ota-link-icon {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 14px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .ota-link-icon:hover {
+            opacity: 1;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 2px;
+            font-size: 10px;
+            margin-left: 5px;
+            border-radius: 4px;
+        }
+
+        .copy-btn:hover {
+            color: var(--primary);
+            background: #ffffff10;
+        }
+
+        .tour-row.hidden {
+            display: none !important;
+        }
+
+        .badge-count {
+            background: var(--border);
+            color: var(--text);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-left: 8px;
         }
 
         .log-panel {
@@ -694,9 +836,12 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
 <?php } ?>
     <div class="klld-dashboard">
         <div class="header-section">
-            <div>
-                <h1>🎯 OTA Review Manager</h1>
-                <p class="subtitle">Multi-source synchronization & mapping dashboard</p>
+            <div style="display:flex; align-items:center; gap: 1rem;">
+                <img src="<?php echo KLLD_OTA_PLUGIN_URL; ?>img/ota-reviews-logo.svg" style="width:50px; height:50px;" alt="Logo">
+                <div>
+                    <h1>🎯 OTA Review Manager</h1>
+                    <p class="subtitle">Multi-source synchronization & mapping dashboard</p>
+                </div>
             </div>
             <div class="badge badge-blue pulse" id="status-badge">System Active</div>
         </div>
@@ -711,6 +856,16 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
         <div id="sync" class="tab-content active">
             <div class="k-card" style="border-left: 4px solid var(--primary);">
                 <h2>🚀 Historical Sync Runner</h2>
+                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; background: #020617; padding:1.5rem; border-radius:8px; border: 1px solid var(--border);">
+                    <div>
+                        <label class="text-xs text-muted">TripAdvisor API Key</label>
+                        <input type="password" id="ta-api-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_ta_api_key')); ?>" placeholder="Enter API Key...">
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted">GYG API Key (Optional)</label>
+                        <input type="password" id="gyg-partner-api-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_gyg_partner_api_key')); ?>" placeholder="Enter API Key...">
+                    </div>
+                </div>
                 <p class="text-sm text-muted mb-4">Trigger a full historical sync for all mapped tours. Processes tours sequentially to avoid timeouts.</p>
                 <div class="flex gap-2">
                     <button id="sync-runner-btn" onclick="startHistoricalSync()" class="k-btn k-btn-primary">Start Full Sync</button>
@@ -731,17 +886,17 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                 <h2>🛡 Manual JSON Fallback</h2>
                 <p class="text-sm text-muted mb-4">Paste raw API responses if the server is blocked or for custom imports.</p>
                 <div class="flex gap-2 items-center mb-2">
-                    <label class="text-xs text-muted">Target Tour:</label>
-                    <select id="manual-post-id" class="k-input" style="width:300px;">
-                        <option value="">-- Select Tour --</option>
-                        <?php 
-                        foreach ($tour_ids as $tid) {
-                            echo '<option value="'.$tid.'">'.get_the_title($tid).' (#'.$tid.')</option>';
-                        }
-                        ?>
-                    </select>
+                    <div style="flex: 1;">
+                        <label class="text-xs text-muted">Target Tour (Optional if using Keywords):</label>
+                        <select id="manual-post-id" class="k-input w-full">
+                            <option value="detect">-- Auto-Detect by Keywords --</option>
+                            <?php foreach ($all_st_tours as $t): ?>
+                                <option value="<?php echo $t->ID; ?>"><?php echo esc_html($t->post_title); ?> (#<?php echo $t->ID; ?>)</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-                <textarea id="manual-json" class="k-input" style="height:150px; font-family:monospace;" placeholder="Paste GYG JSON (Travelers or Official API format) here..."></textarea>
+                <textarea id="manual-json" class="k-input" style="height:150px; font-family:monospace;" placeholder="Paste GYG/GMB JSON here..."></textarea>
                 <div class="flex gap-2 mt-4">
                     <button onclick="manualImport()" class="k-btn k-btn-primary" style="background:var(--warning)">Process JSON</button>
                     <button onclick="document.getElementById('manual-json').value=''" class="k-btn k-btn-outline">Clear</button>
@@ -752,15 +907,22 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
         <!-- --- Tab: Mapping --- -->
         <div id="mapping" class="tab-content">
             <div class="k-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                    <h2>🗺 Global Tour Mapping</h2>
-                    <div class="flex gap-2 items-center">
-                        <div class="flex items-center gap-1">
-                            <label class="text-xs text-muted">GYG Partner API Key:</label>
-                            <input type="text" id="gyg-partner-api-key" class="k-input" style="width:200px; font-size:10px;" value="<?php echo esc_attr(get_option('_gyg_partner_api_key')); ?>" placeholder="Authorization Header Value">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div style="display:flex; align-items:center; gap: 15px;">
+                        <h2>🗺 Global Tour Mapping <span class="badge-count"><?php echo count($all_st_tours); ?> tours</span></h2>
+                        <div class="search-container">
+                            <input type="text" id="tour-search" class="k-input" placeholder="Search tours by name or ID..." oninput="filterTours()">
                         </div>
-                        <button onclick="saveMappings()" class="k-btn k-btn-primary">Save All Mappings</button>
                     </div>
+                        <div class="flex gap-2 items-center">
+                            <div class="flex items-center gap-1">
+                                <label class="text-xs text-muted">GYG Partner API Key:</label>
+                                <input type="password" id="gyg-partner-api-key" class="k-input" style="width:160px; font-size:10px;" value="<?php echo esc_attr(get_option('_gyg_partner_api_key')); ?>" placeholder="GYG Auth Header">
+                                <input type="password" id="ta-api-key" class="k-input" style="width:160px; font-size:10px;" value="<?php echo esc_attr(get_option('_ta_api_key')); ?>" placeholder="TripAdvisor API Key">
+                            </div>
+                            <button onclick="runAutoMapper()" class="k-btn k-btn-outline" style="border-color:var(--secondary); color:var(--secondary);">Auto-Map IDs</button>
+                            <button onclick="saveMappings()" class="k-btn k-btn-primary">Save Mappings</button>
+                        </div>
                 </div>
                 
                 <div class="mapping-wrapper">
@@ -773,29 +935,41 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                 <th class="id-cell">Viator ID</th>
                                 <th class="id-cell">TA ID</th>
                                 <th class="id-cell">GMB/TP</th>
+                                <th class="id-cell">Keywords</th>
                                 <th style="width:50px;">Status</th>
                             </tr>
                         </thead>
                         <tbody id="tour-rows">
                             <?php
-                            $tour_ids = [37796, 14528, 14583, 14625, 14755, 14761, 14789, 14790, 14791, 15162, 15166, 15168, 16171, 49149, 16255, 16271, 16299, 16321, 16352, 16371, 27793, 28002, 28139, 14353, 52439];
-                            foreach ($tour_ids as $id) {
+                            foreach ($all_st_tours as $tour) {
+                                $id = $tour->ID;
                                 $gyg = get_post_meta($id, '_gyg_activity_id', true);
+                                $gyg_url = get_post_meta($id, '_gyg_url', true);
                                 $via = get_post_meta($id, '_viator_activity_id', true);
+                                $via_url = get_post_meta($id, '_viator_url', true);
                                 $ta  = get_post_meta($id, '_tripadvisor_activity_id', true);
+                                $ta_url = get_post_meta($id, '_ta_url', true);
                                 $gmb = get_post_meta($id, '_gmb_id', true);
                                 $tp  = get_post_meta($id, '_trustpilot_id', true);
-                                $title = get_the_title($id);
-                                if (!$title) $title = "Deleted Tour";
+                                $title = $tour->post_title;
                                 
-                                $has_ota = ($gyg || $via || $ta);
+                                $has_ota = ($gyg || $via || $ta || $gmb || $tp);
                                 ?>
-                                <tr class="tour-row" style="<?php echo !$has_ota ? 'opacity:0.6;' : ''; ?>">
-                                    <td data-label="WP ID"><input type="number" class="k-input wp-id" value="<?php echo $id; ?>" disabled></td>
+                                <tr class="tour-row" data-search="<?php echo esc_attr(strtolower($title . ' ' . $id)); ?>" style="<?php echo !$has_ota ? 'opacity:0.6;' : ''; ?>">
+                                    <td data-label="WP ID">
+                                        <div class="flex items-center">
+                                            <input type="number" class="k-input wp-id" value="<?php echo $id; ?>" disabled>
+                                            <button class="copy-btn" onclick="copyToClipboard('<?php echo $id; ?>')" title="Copy ID">📋</button>
+                                        </div>
+                                    </td>
                                     <td data-label="Name">
                                         <div class="tour-name-cell">
-                                            <input type="text" class="k-input tour-name" value="<?php echo esc_attr($title); ?>" readonly>
-                                            <a href="<?php echo get_edit_post_link($id); ?>" target="_blank" class="text-xs text-muted">Edit Tour</a>
+                                            <div style="font-weight: 500; margin-bottom: 2px;"><?php echo esc_html($title); ?></div>
+                                            <div class="flex gap-2">
+                                                <a href="<?php echo get_edit_post_link($id); ?>" target="_blank" class="text-xs text-muted">Edit Tour</a>
+                                                <a href="<?php echo get_permalink($id); ?>" target="_blank" class="text-xs text-muted">View Page</a>
+                                            </div>
+                                            <input type="hidden" class="tour-name" value="<?php echo esc_attr($title); ?>">
                                         </div>
                                     </td>
                                     <td data-label="GYG">
@@ -803,24 +977,40 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                             <div class="flex gap-1 items-center">
                                                 <input type="text" class="k-input gyg-id" value="<?php echo esc_attr($gyg); ?>" placeholder="ID">
                                                 <?php if ($gyg): ?>
+                                                    <a href="<?php echo esc_url($gyg_url); ?>" target="_blank" class="ota-link-icon" title="View on GYG">🔗</a>
                                                     <div class="flex flex-col gap-1">
                                                         <div class="flex gap-1">
-                                                            <button onclick="syncSingleGYG(<?php echo $id; ?>, 'partner')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px;" title="Official API Sync">Official</button>
-                                                            <button onclick="syncSingleGYG(<?php echo $id; ?>, 'traveler')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px;" title="Traveler API Fallback">Traveler</button>
+                                                            <button onclick="syncSingleGYG(<?php echo $id; ?>, 'partner')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px; background:#f97316;" title="Official API Sync">Official</button>
+                                                            <button onclick="syncSingleGYG(<?php echo $id; ?>, 'traveler')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px;" title="Traveler API Fallback">Public</button>
                                                         </div>
+                                                        <button onclick="syncAllSources(<?php echo $id; ?>)" class="k-btn k-btn-primary k-btn-sm" style="font-size:9px; padding:3px 6px; width:100%;" title="Fetch reviews from all mapped OTAs">Sync All</button>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
-                                            <input type="url" class="k-input gyg-url mt-1" value="<?php echo esc_attr(get_post_meta($id, '_gyg_url', true)); ?>" placeholder="https://..." style="font-size:10px;">
+                                            <input type="url" class="k-input gyg-url mt-1" value="<?php echo esc_attr($gyg_url); ?>" placeholder="URL" style="font-size:10px;">
                                         </div>
                                     </td>
                                     <td data-label="Viator">
-                                        <input type="text" class="k-input viator-id" value="<?php echo esc_attr($via); ?>" placeholder="Code">
-                                        <input type="url" class="k-input viator-url mt-1" value="<?php echo esc_attr(get_post_meta($id, '_viator_url', true)); ?>" placeholder="https://..." style="font-size:10px;">
+                                        <div class="flex flex-col gap-1">
+                                            <div class="flex gap-1 items-center">
+                                                <input type="text" class="k-input viator-id" value="<?php echo esc_attr($via); ?>" placeholder="Code">
+                                                <?php if ($via_url): ?>
+                                                    <a href="<?php echo esc_url($via_url); ?>" target="_blank" class="ota-link-icon" title="View on Viator">🔗</a>
+                                                <?php endif; ?>
+                                            </div>
+                                            <input type="url" class="k-input viator-url mt-1" value="<?php echo esc_attr($via_url); ?>" placeholder="URL" style="font-size:10px;">
+                                        </div>
                                     </td>
                                     <td data-label="TA">
-                                        <input type="text" class="k-input ta-id" value="<?php echo esc_attr($ta); ?>" placeholder="d#">
-                                        <input type="url" class="k-input ta-url mt-1" value="<?php echo esc_attr(get_post_meta($id, '_ta_url', true)); ?>" placeholder="https://..." style="font-size:10px;">
+                                        <div class="flex flex-col gap-1">
+                                            <div class="flex gap-1 items-center">
+                                                <input type="text" class="k-input ta-id" value="<?php echo esc_attr($ta); ?>" placeholder="ID">
+                                                <?php if ($ta_url): ?>
+                                                    <a href="<?php echo esc_url($ta_url); ?>" target="_blank" class="ota-link-icon" title="View on TA">🔗</a>
+                                                <?php endif; ?>
+                                            </div>
+                                            <input type="url" class="k-input ta-url mt-1" value="<?php echo esc_attr($ta_url); ?>" placeholder="URL" style="font-size:10px;">
+                                        </div>
                                     </td>
                                     <td data-label="GMB/TP">
                                         <div class="flex flex-col gap-1">
@@ -828,9 +1018,12 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                             <input type="text" class="k-input tp-id" value="<?php echo esc_attr($tp); ?>" placeholder="Trustpilot Slug">
                                         </div>
                                     </td>
-                                    <td data-label="Valid">
+                                    <td data-label="Keywords">
+                                        <input type="text" class="k-input keywords" value="<?php echo esc_attr(get_post_meta($id, '_ota_keywords', true)); ?>" placeholder="Keyword1, Keyword2" style="font-size:10px;">
+                                    </td>
+                                    <td data-label="Status">
                                         <div class="flex flex-col items-center">
-                                            <span class="status-indicator <?php echo $has_ota ? 'status-online' : 'status-offline'; ?>"></span>
+                                            <span class="status-indicator <?php echo $has_ota ? 'status-online' : 'status-offline'; ?>" title="<?php echo $has_ota ? 'Mapped' : 'Unmapped'; ?>"></span>
                                         </div>
                                     </td>
                                 </tr>
@@ -865,6 +1058,11 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         <h3>✅ Approve Reviews</h3>
                         <p class="text-xs text-muted mb-4">Set status to 'Approved' for all imported tour reviews.</p>
                         <button onclick="runMaintenance('approve_all')" class="k-btn k-btn-outline w-full" style="color:var(--success); border-color:var(--success);">Approve All</button>
+                    </div>
+                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3>🔍 GMB Filter</h3>
+                        <p class="text-xs text-muted mb-4">Assign GMB reviews to tours using keywords.</p>
+                        <button onclick="runMaintenance('gmb_filter')" class="k-btn k-btn-primary w-full" style="background:var(--secondary);">Filter GMB Now</button>
                     </div>
                     <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
                         <h3>🧬 Health Check</h3>
@@ -929,6 +1127,15 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
 
         // Initialize state
         window.addEventListener('DOMContentLoaded', () => {
+            const tourKeywords = {
+                <?php
+                foreach ($all_st_tours as $t) {
+                    $kw = get_post_meta($t->ID, '_ota_keywords', true);
+                    if ($kw) echo "'{$t->ID}': " . json_encode(array_map('trim', explode(',', $kw))) . ",\n";
+                }
+                ?>
+            };
+            State.setState({ tourKeywords });
             State.subscribe(data => console.log('State Updated:', data));
             State.render();
         });
@@ -964,6 +1171,35 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
                     logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
                     logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:100px; overflow:auto;">${data.log}</pre>`;
+                } else {
+                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
+                }
+            } catch (e) {
+                logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
+            }
+            
+            State.setState({ isSyncing: false });
+            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        async function syncAllSources(wpId) {
+            const logBox = document.getElementById('sync-runner-log');
+            const secret = 'kld_sync_2024';
+            
+            State.setState({ isSyncing: true, currentTab: 'sync' });
+            logBox.innerHTML = `<b>Syncing ALL Sources for Tour (#${wpId})...</b><br>`;
+            logBox.scrollTop = logBox.scrollHeight;
+
+            try {
+                // We use ota_sync.php?post_id=X&force=1 which naturally handles all mapped sources in the backend
+                const url = `inc/ota-tools/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (data.success) {
+                    logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Sync completed for all sources.</div>`;
+                    logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:200px; overflow:auto;">${data.log}</pre>`;
                 } else {
                     logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
                 }
@@ -1033,7 +1269,8 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     taId: r.querySelector('.ta-id').value,
                     taUrl: r.querySelector('.ta-url')?.value || '',
                     gmbId: r.querySelector('.gmb-id').value,
-                    tpId: r.querySelector('.tp-id').value
+                    tpId: r.querySelector('.tp-id').value,
+                    keywords: r.querySelector('.keywords').value
                 }));
 
                 try {
@@ -1041,6 +1278,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     formData.append('action', 'save_ota_mappings');
                     formData.append('mappings', JSON.stringify(mappings));
                     formData.append('gyg_partner_key', document.getElementById('gyg-partner-api-key').value);
+                    formData.append('ta_api_key', document.getElementById('ta-api-key').value);
 
                     const resp = await fetch(window.location.href, { method: 'POST', body: formData });
                     const data = await resp.json();
@@ -1086,6 +1324,36 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     logPre.textContent = 'Health check failed to run.';
                 }
             } catch(e) { logPre.textContent = 'Error: ' + e.message; }
+        }
+
+        async function runAutoMapper() {
+            confirmAction('RUN AUTO-MAPPER (Attempts to match GYG IDs to Tours automatically)', async () => {
+                const logBox = document.getElementById('sync-runner-log');
+                State.setState({ isSyncing: true, currentTab: 'sync' });
+                logBox.innerHTML = '<b>Initializing Auto-Mapper Script...</b><br>';
+                logBox.scrollTop = logBox.scrollHeight;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'run_auto_mapper');
+                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                    const data = await resp.json();
+                    
+                    if (data.success) {
+                        logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Auto-Mapping Complete.</div>`;
+                        logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:400px; overflow:auto;">${data.data.results}</pre>`;
+                        alert('✅ Auto-Mapping completed. Please refresh the page to see updated mappings.');
+                    } else {
+                        logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.data || 'Error'}</div>`;
+                    }
+                } catch (e) {
+                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
+                }
+                
+                State.setState({ isSyncing: false });
+                logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
+                logBox.scrollTop = logBox.scrollHeight;
+            });
         }
 
         async function manualImport() {
@@ -1147,6 +1415,73 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         }
                         return null;
                     }).filter(r => r !== null);
+                } else if (raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.reviewReferenceId || raw.reviews[0]?.reviewText)) {
+                    // Viator Format
+                    reviews = raw.reviews.map(r => ({
+                        postId: postId,
+                        reviewId: r.reviewReferenceId || r.id,
+                        metaKey: 'viator_review_id',
+                        author: r.userName || r.authorName || 'Viator Traveler',
+                        content: r.reviewText || r.text || '',
+                        rating: r.rating || 5,
+                        dateStr: r.publishedDate || r.date || '',
+                        targetLang: 'en'
+                    }));
+                } else if (raw.data && Array.isArray(raw.data) && raw.data[0]?.location_id) {
+                    // TripAdvisor Content API Format
+                    reviews = raw.data.map(r => ({
+                        postId: postId,
+                        reviewId: r.id,
+                        metaKey: 'tripadvisor_review_id',
+                        author: r.user?.username || 'TA Traveler',
+                        content: (r.title ? '<strong>' + r.title + '</strong><br>' : '') + r.text,
+                        rating: r.rating || 5,
+                        dateStr: r.published_date || '',
+                        targetLang: 'en'
+                    }));
+                } else if (Array.isArray(raw) && raw[0]?.author && raw[0]?.text) {
+                    // GMB Scraped Format (from browser tool)
+                    const kwsMap = State.data.tourKeywords || {};
+                    reviews = raw.map(r => {
+                        let matchedPostId = postId; // Default to selected
+                        
+                        // Try to auto-detect if postId was 0 or "Detect"
+                        if (postId === 'detect' || postId === '0') {
+                            for (const [tid, kws] of Object.entries(kwsMap)) {
+                                for (const kw of kws) {
+                                    if (kw && r.text.toLowerCase().includes(kw.toLowerCase())) {
+                                        matchedPostId = tid;
+                                        break;
+                                    }
+                                }
+                                if (matchedPostId !== postId) break;
+                            }
+                        }
+
+                        return {
+                            postId: matchedPostId,
+                            reviewId: btoa(r.author + r.date).substring(0, 16), // Generate unique ID
+                            metaKey: 'gmb_review_id',
+                            author: r.author,
+                            content: r.text,
+                            rating: parseFloat(String(r.rating).replace(/[^0-9.]/g, '')),
+                            dateStr: r.date,
+                            source: 'gmb',
+                            targetLang: 'en'
+                        };
+                    });
+                } else if (Array.isArray(raw) && (raw[0]?.text || raw[0]?.content)) {
+                    // Generic / TripAdvisor JSON
+                    reviews = raw.map(r => ({
+                        postId: postId,
+                        reviewId: r.id || btoa(r.author + r.text).substring(0,12),
+                        metaKey: 'tripadvisor_review_id',
+                        author: r.author || 'Traveler',
+                        content: r.text || r.content || '',
+                        rating: r.rating || 5,
+                        dateStr: r.date || '',
+                        targetLang: 'en'
+                    }));
                 }
 
                 if (reviews.length === 0) {
@@ -1177,6 +1512,27 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             }
             State.setState({ isSyncing: false });
             logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function filterTours() {
+            const query = document.getElementById('tour-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#tour-rows .tour-row');
+            
+            rows.forEach(row => {
+                const searchData = row.getAttribute('data-search');
+                if (searchData.includes(query)) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Subtle feedback? maybe alert is too much
+                // alert('Copied: ' + text);
+            });
         }
 
         function clearAll() {

@@ -245,7 +245,7 @@ if (!class_exists('TravelHelper')) {
             if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
             } else {
-                $ip = $_SERVER['REMOTE_ADDR'];
+                $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
             }
             self::$user_ip = filter_var($ip, FILTER_VALIDATE_IP);
             self::$transient_key = substr('stt_'.md5(self::$user_ip), 7, 23);

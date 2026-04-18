@@ -563,7 +563,13 @@ function klld_ota_review_image_lazyload( $text, $comment ) {
     return $text;
 }
 
-/* ── Consolidate Tools into Child Theme ──────────────────────────── */
-if (is_admin()) {
-    require_once get_stylesheet_directory() . '/inc/ota-tools/admin-tools-loader.php';
+
+/**
+ * Ensure 'st_reviews' are always sorted by date (newest first).
+ */
+add_filter( 'comments_template_query_args', 'klld_sort_reviews_by_date_desc' );
+function klld_sort_reviews_by_date_desc( $comment_args ) {
+    $comment_args['orderby'] = 'comment_date_gmt';
+    $comment_args['order']   = 'DESC';
+    return $comment_args;
 }

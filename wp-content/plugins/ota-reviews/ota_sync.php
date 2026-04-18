@@ -87,17 +87,34 @@ class OTAReviewSync {
         // TA, GMB, Trustpilot often require scraping or specific APIs not always suitable for basic server sync
     ];
 
-    public function run() {
-        echo "Starting OTA Sync at " . date('Y-m-d H:i:s') . "\n";
+    public function run($limits = null, $force_sync = null) {
+        if ($limits === null) {
+            $limits = isset($_GET['limits']) ? intval($_GET['limits']) : (isset($GLOBALS['argv'][1]) && is_numeric($GLOBALS['argv'][1]) ? intval($GLOBALS['argv'][1]) : 10);
+        }
+        if ($force_sync === null) {
+            $force_sync = isset($_GET['force']) || (isset($GLOBALS['argv'][2]) && $GLOBALS['argv'][2] == 'force');
+        }
+
+        echo "Starting OTA Sync (Limits: $limits) at " . date('Y-m-d H:i:s') . "\n";
         $stats = ['tours' => 0, 'imported' => 0];
+        global $wpdb;
+        $mapped_ids = $wpdb->get_col("
+            SELECT DISTINCT post_id 
+            FROM {$wpdb->postmeta} 
+            WHERE meta_key IN ('_gyg_activity_id', '_viator_activity_id', '_tripadvisor_activity_id', '_gmb_id')
+        ");
+
+        if (empty($mapped_ids)) {
+            echo "No tours with OTA mappings found.\n";
+            return $stats;
+        }
+
         $args = [
             'post_type' => 'st_tours',
             'posts_per_page' => -1,
-            'meta_query' => [
-                'relation' => 'OR',
-                ['key' => '_gyg_activity_id', 'compare' => 'EXISTS'],
-                ['key' => '_viator_activity_id', 'compare' => 'EXISTS']
-            ]
+            'post_status' => ['publish', 'private', 'draft', 'trash'],
+            'post__in' => $mapped_ids,
+            'orderby' => 'post__in'
         ];
 
         global $target_post_id, $target_limit;
@@ -136,6 +153,16 @@ class OTAReviewSync {
                 }
                 if ($via_id) {
                     $this->sync_viator($target_post_id, $via_id, $target_limit, $force_sync);
+                }
+                
+                $ta_id = get_post_meta($tour->ID, '_tripadvisor_activity_id', true);
+                if ($ta_id) {
+                    $this->sync_tripadvisor($target_post_id, $ta_id, $target_limit, $force_sync);
+                }
+
+                $gmb_id = get_post_meta($tour->ID, '_gmb_id', true);
+                if ($gmb_id) {
+                    $this->sync_gmb($target_post_id, $gmb_id, $target_limit, $force_sync);
                 }
             }
 
@@ -309,7 +336,15 @@ class OTAReviewSync {
                 ]
             ]);
             if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
-                echo "  [Viator] Error: " . (is_wp_error($resp) ? $resp->get_error_message() : wp_remote_retrieve_response_code($resp)) . "\n";
+                $code = is_wp_error($resp) ? 'WP_Error' : wp_remote_retrieve_response_code($resp);
+                $body = wp_remote_retrieve_body($resp);
+                $diag = "";
+                if ($code == 403) {
+                    if (strpos($body, 'DataDome') !== false) $diag = " [Blocked by DataDome]";
+                    elseif (strpos($body, 'Cloudflare') !== false) $diag = " [Blocked by Cloudflare]";
+                    else $diag = " [Forbidden/Bot Protection]";
+                }
+                echo "  [Viator] Error: {$code}{$diag}\n";
                 break;
             }
 
@@ -350,11 +385,200 @@ class OTAReviewSync {
         echo "  - Viator: Sync'd $total_imported reviews for $product_code\n";
     }
 
+    private function sync_tripadvisor($post_id, $ta_id, $limit_total = 100, $force = false) {
+        $api_key = get_option('_ta_api_key');
+        if ($api_key && $ta_id) {
+            return $this->sync_tripadvisor_api($post_id, $ta_id, $limit_total, $force);
+        }
+
+        $ta_url = get_post_meta($post_id, '_ta_url', true);
+        if (!$ta_url) {
+            echo "  [TA] Skipping sync: No URL provided for ID $ta_id\n";
+            return;
+        }
+
+        $is_profile = (strpos($ta_url, 'Attraction_Review') !== false);
+        echo "  [TA] Scraper-based " . ($is_profile ? "Profile" : "Product") . " sync for: $ta_url\n";
+        // Logic similar to review_tool.php sync
+        $resp = wp_remote_get($ta_url, [
+            'timeout' => 20,
+            'headers' => [
+                'Accept' => 'text/html',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            ]
+        ]);
+        
+        if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
+            $code = is_wp_error($resp) ? 'WP_Error' : wp_remote_retrieve_response_code($resp);
+            $body = wp_remote_retrieve_body($resp);
+            $diag = "";
+            if ($code == 403) {
+                if (strpos($body, 'Cloudflare') !== false) $diag = " [Blocked by Cloudflare]";
+                else $diag = " [Forbidden/Bot Protection]";
+            }
+            echo "  [TA] Error: {$code}{$diag}\n";
+            return;
+        }
+
+        $body = wp_remote_retrieve_body($resp);
+        $reviews = [];
+        
+        // Use DOMDocument to extract data
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<?xml encoding="UTF-8">' . $body);
+        $xpath = new DOMXPath($dom);
+        $cards = $xpath->query("//div[contains(@data-automation, 'reviewCard')]");
+        
+        $total_imported = 0;
+        foreach ($cards as $card) {
+            $remote_id = $card->getAttribute('id') ?: bin2hex(random_bytes(8));
+            $text = $xpath->query(".//span[contains(@class, 'ySdfQ')]", $card)->item(0)?->nodeValue ?? '';
+            $author = $xpath->query(".//a[contains(@href, '/Profile/')]", $card)->item(0)?->nodeValue ?? 
+                      $xpath->query(".//span[contains(@class, 'biGQs')]", $card)->item(0)?->nodeValue ?? 'TA Traveler';
+            
+            $rating = 5;
+            // Try SVG title first (Modern UI)
+            $rating_svg = $xpath->query(".//svg[contains(@title, 'of 5 bubble')]", $card)->item(0);
+            if ($rating_svg) {
+                $title = $rating_svg->getAttribute('title');
+                if (preg_match('/([0-9.]+)/', $title, $m)) $rating = floatval($m[1]);
+            } else {
+                // Fallback to legacy bubble class
+                $bubbles = $xpath->query(".//span[contains(@class, 'ui_bubble_rating')]", $card)->item(0);
+                if ($bubbles) {
+                    $class = $bubbles->getAttribute('class');
+                    if (preg_match('/bubble_(\d+)/', $class, $m)) $rating = intval($m[1]) / 10;
+                }
+            }
+
+            if ($text) {
+                $comment_id = $this->upsert_review($post_id, 'tripadvisor', $remote_id, [
+                    'author' => strip_tags($author),
+                    'content' => $text,
+                    'rating' => $rating,
+                    'date' => '' // Dates are hard to scrape from simple HTML
+                ]);
+                if ($comment_id) $total_imported++;
+            }
+        }
+        echo "  - TA (Scraper): Scraped $total_imported reviews from $ta_url\n";
+    }
+
+    private function sync_tripadvisor_api($post_id, $ta_id, $limit_total = 100, $force = false) {
+        // Strip 'd' from ID if present (Content API expects numeric only)
+        $location_id = preg_replace('/[^0-9]/', '', $ta_id);
+        $api_key = get_option('_ta_api_key');
+
+        echo "  [TA] Official API sync for Location ID: $location_id\n";
+
+        $url = "https://api.tripadvisor.com/api/v1/location/{$location_id}/reviews?key={$api_key}&language=en";
+        
+        $resp = wp_remote_get($url, [
+            'timeout' => 20,
+            'headers' => [
+                'Accept' => 'application/json'
+            ]
+        ]);
+
+        if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
+            $code = is_wp_error($resp) ? 'WP_Error' : wp_remote_retrieve_response_code($resp);
+            echo "  [TA] API Error: {$code}\n";
+            // Fallback to scraper if API fails
+            return $this->sync_tripadvisor_scraper($post_id, $ta_id, $limit_total, $force);
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($resp), true);
+        if (!isset($data['data']) || !is_array($data['data'])) {
+            echo "  [TA] API Error: Invalid response format.\n";
+            return;
+        }
+
+        $total_imported = 0;
+        foreach ($data['data'] as $review) {
+            $remote_id = $review['id'] ?? '';
+            $text = $review['text'] ?? '';
+            $author = $review['user']['username'] ?? 'TA Traveler';
+            $rating = isset($review['rating']) ? intval($review['rating']) : 5;
+            $date = $review['published_date'] ?? '';
+
+            if ($text && $remote_id) {
+                $comment_id = $this->upsert_review($post_id, 'tripadvisor', $remote_id, [
+                    'author' => $author,
+                    'content' => $text,
+                    'rating' => $rating,
+                    'date' => $this->normalize_date($date)
+                ]);
+                if ($comment_id) $total_imported++;
+            }
+        }
+        echo "  - TA (API): Imported $total_imported reviews for Location ID $location_id\n";
+    }
+
+    private function sync_tripadvisor_scraper($post_id, $ta_id, $limit_total = 100, $force = false) {
+        $ta_url = get_post_meta($post_id, '_ta_url', true);
+        if (!$ta_url) return;
+        
+        $is_profile = (strpos($ta_url, 'Attraction_Review') !== false);
+        // Logic similar to review_tool.php sync
+        $resp = wp_remote_get($ta_url, [
+            'timeout' => 20,
+            'headers' => [
+                'Accept' => 'text/html',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            ]
+        ]);
+        
+        if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
+            $code = is_wp_error($resp) ? 'WP_Error' : wp_remote_retrieve_response_code($resp);
+            echo "  [TA] Scraper Error: {$code}\n";
+            return;
+        }
+
+        $body = wp_remote_retrieve_body($resp);
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<?xml encoding="UTF-8">' . $body);
+        $xpath = new DOMXPath($dom);
+        $cards = $xpath->query("//div[contains(@data-automation, 'reviewCard')]");
+        
+        $total_imported = 0;
+        foreach ($cards as $card) {
+            $remote_id = $card->getAttribute('id') ?: bin2hex(random_bytes(8));
+            $text = $xpath->query(".//span[contains(@class, 'ySdfQ')]", $card)->item(0)?->nodeValue ?? '';
+            $author = $xpath->query(".//a[contains(@href, '/Profile/')]", $card)->item(0)?->nodeValue ?? 
+                      $xpath->query(".//span[contains(@class, 'biGQs')]", $card)->item(0)?->nodeValue ?? 'TA Traveler';
+            
+            $rating = 5;
+            // Try SVG title first
+            $rating_svg = $xpath->query(".//svg[contains(@title, 'of 5 bubble')]", $card)->item(0);
+            if ($rating_svg) {
+                $title = $rating_svg->getAttribute('title');
+                if (preg_match('/([0-9.]+)/', $title, $m)) $rating = floatval($m[1]);
+            }
+
+            if ($text) {
+                $comment_id = $this->upsert_review($post_id, 'tripadvisor', $remote_id, [
+                    'author' => strip_tags($author),
+                    'content' => $text,
+                    'rating' => $rating,
+                    'date' => ''
+                ]);
+                if ($comment_id) $total_imported++;
+            }
+        }
+        echo "  - TA (Scraper Fallback): Scraped $total_imported reviews from $ta_url\n";
+    }
+
+    private function sync_gmb($post_id, $gmb_id, $limit_total = 100, $force = false) {
+        // GMB Sync is usually manual or via specific API
+        // For now, we just log that we processed it, as GMB is handled via the "Filter" maintenance job
+        echo "  [GMB] Place ID $gmb_id mapped. Fetch reviews via Google Business Dashboard or API.\n";
+    }
+
     public function upsert_review($post_id, $source, $remote_id, $data) {
+        if (!get_post_status($post_id)) return false; // Fail if post doesn't exist
+        
         global $wpdb;
         $meta_key = $source . '_review_id';
-        
-        // Check if exists for THIS specific post
         $comment_id = $wpdb->get_var($wpdb->prepare(
             "SELECT cm.comment_id 
              FROM {$wpdb->commentmeta} cm
@@ -410,6 +634,7 @@ class OTAReviewSync {
 
             update_comment_meta($new_id, $meta_key, $remote_id);
             update_comment_meta($new_id, 'ota_source', $source);
+            update_comment_meta($new_id, 'review_date_formatted', date('d-M-Y', strtotime($comment_data['comment_date'])));
             update_comment_meta($new_id, '_comment_like_count', 0);
             
             file_put_contents(__DIR__ . '/ota_sync_log.txt', "[" . date('Y-m-d H:i:s') . "] Imported $source review $remote_id for Post $post_id\n", FILE_APPEND);
@@ -418,10 +643,45 @@ class OTAReviewSync {
         return false;
     }
 
-    public function normalize_date($d) {
-        if (!$d) return current_time('mysql');
-        $time = strtotime($d);
-        return $time ? date('Y-m-d H:i:s', $time) : current_time('mysql');
+    public static function normalize_date($d) {
+        if (empty($d)) return '';
+        // If already in dd-M-yyyy format (e.g. 18-Apr-2026), just return
+        if (preg_match('/^\d{1,2}-[A-Za-z]{3}-\d{4}$/', $d)) return $d;
+
+        $ts = is_numeric($d) ? $d : strtotime($d);
+        if (!$ts) {
+            // Check for format like 2024-04-18T10:00:00Z
+            $ts = strtotime(str_replace('T', ' ', substr($d, 0, 19)));
+        }
+        return $ts ? date('d-M-Y', $ts) : '';
+    }
+
+    public static function calculate_match_score($s1, $s2) {
+        $s1 = strtolower(trim($s1));
+        $s2 = strtolower(trim($s2));
+        if ($s1 == $s2) return 100;
+        
+        // Tokenize and calculate word intersection
+        $stop_words = ['the', 'and', 'with', 'tour', 'trip', 'private', 'guided', 'from', 'to'];
+        $tokens1 = array_diff(explode(' ', preg_replace('/[^a-z0-9 ]/', '', $s1)), $stop_words);
+        $tokens2 = array_diff(explode(' ', preg_replace('/[^a-z0-9 ]/', '', $s2)), $stop_words);
+        $tokens1 = array_filter($tokens1); $tokens2 = array_filter($tokens2);
+
+        $intersect = array_intersect($tokens1, $tokens2);
+        $union = array_unique(array_merge($tokens1, $tokens2));
+        $jaccard = count($union) > 0 ? (count($intersect) / count($union)) * 100 : 0;
+        
+        // Combine with similarity (to handle typos)
+        similar_text($s1, $s2, $percent);
+        
+        $score = ($jaccard * 0.7) + ($percent * 0.3);
+        
+        // Boost for "Khao Lak" presence
+        if (strpos($s1, 'khao lak') !== false && strpos($s2, 'khao lak') !== false) {
+            $score += 5;
+        }
+        
+        return min(100, round($score, 1));
     }
 
     public function update_summary($post_id) {

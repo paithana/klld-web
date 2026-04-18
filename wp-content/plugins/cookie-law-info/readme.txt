@@ -3,9 +3,9 @@ Contributors: webtoffee, cookieyesdev
 Donate link: https://www.cookieyes.com/ 
 Tags: cookie consent, cookie banner, cookie notice, gdpr, ccpa
 Requires at least: 5.0.0
-Tested up to: 7
+Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -87,7 +87,7 @@ Access the following features by subscribing to a premium plan (Basic, Pro, or U
 &#9989; **Page-Specific Controls:** Disable the banner on specific pages (e.g., login, checkout).
 &#9989; **Custom CSS:** Custom CSS for advanced design customization.
 &#9989; **Custom Logo:** Add your brand’s logo to the cookie banner.
-&#9989; **Remove Branding:** Remove the “Powered by CookieYes” branding for a white-label experience.
+&#9989; **Remove Branding:** Remove the “Powered by CookieYes” branding for a fully customized banner.
 
 **Extended Cookie Management**
 
@@ -259,6 +259,10 @@ Every time we update the plugin, you will see a notification on the installed pl
 
 == Changelog ==
 
+= 3.4.2 =
+
+[Compatibility] Updated WordPress compatibility to 7.0
+
 = 3.4.1 =
 
 [Add] - Opt-Out Confirmation in US State Laws banner
@@ -270,8 +274,6 @@ For the changelog of earlier versions, please refer to the [changelog.txt](https
 
 == Upgrade Notice ==
 
-= 3.4.1 =
+= 3.4.2 =
 
-[Add] - Opt-Out Confirmation in US State Laws banner
-[Fix] - Minor bugs and security fixes.
-[Compatibility] - Tested OK with WordPress version 7
+[Compatibility] Updated WordPress compatibility to 7.0

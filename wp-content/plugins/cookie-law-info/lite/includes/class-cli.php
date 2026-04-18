@@ -90,7 +90,7 @@ class CLI {
 		if ( defined( 'CLI_VERSION' ) ) {
 			$this->version = CLI_VERSION;
 		} else {
-			$this->version = '3.4.1';
+			$this->version = '3.4.2';
 		}
 		$this->plugin_name = 'cookie-law-info';
 
@@ -99,7 +99,6 @@ class CLI {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		$this->init_license();
-
 	}
 
 	/**
@@ -120,15 +119,15 @@ class CLI {
 	 */
 	private function load_dependencies() {
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/cross-promotion-banners/class-wbte-cross-promotion-banners.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/cross-promotion-banners/class-wbte-cross-promotion-banners.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-utils.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-formatting.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-i18n-helpers.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-utils.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-formatting.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-i18n-helpers.php';
 		$this->loader = new \CookieYes\Lite\Includes\Loader();
 	}
 
@@ -145,7 +144,6 @@ class CLI {
 
 		$plugin_i18n = I18n::get_instance();
 		$this->loader->add_action( 'init', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
 
 	/**
@@ -159,7 +157,6 @@ class CLI {
 		$plugin_admin = new Admin( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
 	}
 
 	/**

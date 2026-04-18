@@ -2199,3 +2199,331 @@ Stack trace:
 #13 /usr/local/bin/wp-cli-2.12.0.phar(4): include('phar:///usr/loc...')
 #14 {main}
   thrown in phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Formatter.php on line 94
+[17-Apr-2026 20:39:18 UTC] PHP Fatal error:  Uncaught TypeError: array_map(): Argument #2 ($array) must be of type array, int given in phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Formatter.php:94
+Stack trace:
+#0 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Formatter.php(94): array_map()
+#1 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/entity-command/src/Comment_Command.php(411): WP_CLI\Formatter->display_items()
+#2 [internal function]: Comment_Command->list_()
+#3 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func()
+#4 [internal function]: WP_CLI\Dispatcher\CommandFactory::WP_CLI\Dispatcher\{closure}()
+#5 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func()
+#6 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke()
+#7 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command()
+#8 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1295): WP_CLI\Runner->run_command_and_exit()
+#9 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#10 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process()
+#11 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#12 phar:///usr/local/bin/wp-cli-2.12.0.phar/php/boot-phar.php(20): include('phar:///usr/loc...')
+#13 /usr/local/bin/wp-cli-2.12.0.phar(4): include('phar:///usr/loc...')
+#14 {main}
+  thrown in phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Formatter.php on line 94
+[17-Apr-2026 22:23:32 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:23:32 UTC] PHP Stack trace:
+[17-Apr-2026 22:23:32 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_ota_suite.php:0
+[17-Apr-2026 22:23:32 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_ota_suite.php:8
+[17-Apr-2026 22:23:32 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:23:32 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:23:32 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:23:32 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:23:32 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:23:32 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:23:32 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:23:32 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:23:32 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:23:32 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:23:32 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:25:08 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:25:08 UTC] PHP Stack trace:
+[17-Apr-2026 22:25:08 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_gen.php:0
+[17-Apr-2026 22:25:08 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_gen.php:2
+[17-Apr-2026 22:25:08 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:25:08 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:25:08 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:25:08 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:25:08 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:25:08 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:25:08 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:25:08 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:25:08 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:25:08 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:25:08 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:25:23 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:25:23 UTC] PHP Stack trace:
+[17-Apr-2026 22:25:23 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_gen.php:0
+[17-Apr-2026 22:25:23 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_gen.php:2
+[17-Apr-2026 22:25:23 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:25:23 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:25:23 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:25:23 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:25:23 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:25:23 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:25:23 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:25:23 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:25:23 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:25:23 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:25:23 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:25:41 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:25:41 UTC] PHP Stack trace:
+[17-Apr-2026 22:25:41 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_gen.php:0
+[17-Apr-2026 22:25:41 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_gen.php:2
+[17-Apr-2026 22:25:41 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:25:41 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:25:41 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:25:41 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:25:41 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:25:41 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:25:41 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:25:41 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:25:41 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:25:41 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:25:41 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:25:52 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:25:52 UTC] PHP Stack trace:
+[17-Apr-2026 22:25:52 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:25:52 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:25:52 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:25:52 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:25:52 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:25:52 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:25:52 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:25:52 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:25:52 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:25:52 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:25:52 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:25:52 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:25:52 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:26:11 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:26:11 UTC] PHP Stack trace:
+[17-Apr-2026 22:26:11 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:26:11 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:26:11 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:26:11 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:26:11 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:26:11 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:26:11 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:26:11 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:26:11 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:26:11 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:26:11 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:26:11 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:26:11 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:26:52 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:26:52 UTC] PHP Stack trace:
+[17-Apr-2026 22:26:52 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:26:52 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:26:52 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:26:52 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:26:52 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:26:52 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:26:52 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:26:52 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:26:52 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:26:52 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:26:52 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:26:52 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:26:52 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:27:23 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:27:23 UTC] PHP Stack trace:
+[17-Apr-2026 22:27:23 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ota_diag.php:0
+[17-Apr-2026 22:27:23 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ota_diag.php:6
+[17-Apr-2026 22:27:23 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:27:23 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:27:23 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:27:23 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:27:23 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:27:23 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:27:23 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:27:23 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:27:23 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:27:23 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:27:23 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:27:47 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:27:47 UTC] PHP Stack trace:
+[17-Apr-2026 22:27:47 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:27:47 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:27:47 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:27:47 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:27:47 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:27:47 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:27:47 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:27:47 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:27:47 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:27:47 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:27:47 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:27:47 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:27:47 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:27:57 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:27:57 UTC] PHP Stack trace:
+[17-Apr-2026 22:27:57 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:27:57 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:27:57 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:27:57 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:27:57 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:27:57 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:27:57 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:27:57 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:27:57 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:27:57 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:27:57 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:27:57 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:27:57 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:28:06 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:28:06 UTC] PHP Stack trace:
+[17-Apr-2026 22:28:06 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:28:06 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:28:06 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:28:06 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:28:06 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:28:06 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:28:06 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:28:06 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:28:06 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:28:06 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:28:06 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:28:06 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:28:06 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:37:42 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:37:42 UTC] PHP Stack trace:
+[17-Apr-2026 22:37:42 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:37:42 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:37:42 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:37:42 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:37:42 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:37:42 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:37:42 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:37:42 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:37:42 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:37:42 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:37:42 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:37:42 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:37:42 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:37:53 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:37:53 UTC] PHP Stack trace:
+[17-Apr-2026 22:37:53 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_date_format.php:0
+[17-Apr-2026 22:37:53 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_date_format.php:3
+[17-Apr-2026 22:37:53 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:37:53 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:37:53 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:37:53 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:37:53 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:37:53 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:37:53 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:37:53 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:37:53 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:37:53 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:37:53 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:37:54 UTC] PHP Fatal error:  Cannot redeclare klld_get_relative_timestamp() (previously declared in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler-childtheme/inc/ota-tools/review_generator.php:99) in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler-childtheme/inc/ota-tools/review_generator.php on line 99
+[17-Apr-2026 22:37:54 UTC] PHP Stack trace:
+[17-Apr-2026 22:37:54 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_date_format.php:0
+[17-Apr-2026 22:37:56 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:37:56 UTC] PHP Stack trace:
+[17-Apr-2026 22:37:56 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:37:56 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:37:56 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:37:56 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:37:56 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:37:56 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:37:56 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:37:56 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:37:56 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:37:56 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:37:56 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:37:56 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:37:56 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:38:09 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:38:09 UTC] PHP Stack trace:
+[17-Apr-2026 22:38:09 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:38:09 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:38:09 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:38:09 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:38:09 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:38:09 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:38:09 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:38:09 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:38:09 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:38:09 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:38:09 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:38:09 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:38:09 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:38:19 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:38:19 UTC] PHP Stack trace:
+[17-Apr-2026 22:38:19 UTC] PHP   1. {main}() Command line code:0
+[17-Apr-2026 22:38:19 UTC] PHP   2. {main}() Command line code:0
+[17-Apr-2026 22:38:19 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:38:19 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:38:19 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:38:19 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:38:19 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:38:19 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:38:19 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:38:19 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:38:19 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:38:19 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:38:19 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:52:05 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:52:05 UTC] PHP Stack trace:
+[17-Apr-2026 22:52:05 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php:0
+[17-Apr-2026 22:52:05 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php:8
+[17-Apr-2026 22:52:05 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:52:05 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:52:05 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:52:05 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:52:05 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:52:05 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:52:05 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:52:05 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:52:05 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:52:05 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:52:05 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 22:52:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method OTAReviewSync::set_format() in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php:16
+Stack trace:
+#0 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php(116): TripAdvisorTest->__construct()
+#1 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php on line 16
+[17-Apr-2026 22:53:27 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 22:53:27 UTC] PHP Stack trace:
+[17-Apr-2026 22:53:27 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php:0
+[17-Apr-2026 22:53:27 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php:8
+[17-Apr-2026 22:53:27 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 22:53:27 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 22:53:27 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 22:53:27 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 22:53:27 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 22:53:27 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 22:53:27 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 22:53:27 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 22:53:27 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 22:53:27 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 22:53:27 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[17-Apr-2026 23:10:43 UTC] PHP Warning:  Undefined array key "REMOTE_ADDR" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php on line 248
+[17-Apr-2026 23:10:43 UTC] PHP Stack trace:
+[17-Apr-2026 23:10:43 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php:0
+[17-Apr-2026 23:10:43 UTC] PHP   2. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_tripadvisor_suite.php:8
+[17-Apr-2026 23:10:43 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php:50
+[17-Apr-2026 23:10:43 UTC] PHP   4. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-config.php:116
+[17-Apr-2026 23:10:43 UTC] PHP   5. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-settings.php:710
+[17-Apr-2026 23:10:43 UTC] PHP   6. get_template_part($slug = 'inc/class.traveler', $name = *uninitialized*, $args = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/functions.php:34
+[17-Apr-2026 23:10:43 UTC] PHP   7. locate_template($template_names = [0 => 'inc/class.traveler.php'], $load = TRUE, $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/general-template.php:206
+[17-Apr-2026 23:10:43 UTC] PHP   8. load_template($_template_file = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php', $load_once = FALSE, $args = []) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:749
+[17-Apr-2026 23:10:43 UTC] PHP   9. require() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-includes/template.php:816
+[17-Apr-2026 23:10:43 UTC] PHP  10. STTraveler::_class_init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:722
+[17-Apr-2026 23:10:43 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
+[17-Apr-2026 23:10:43 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
+[17-Apr-2026 23:10:43 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[18-Apr-2026 11:53:20 Asia/Bangkok] PHP Fatal error:  Illegal offset type in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_system_suite.php on line 49
+[18-Apr-2026 04:59:52 UTC] PHP Fatal error:  Uncaught Error: Class "OTAReviewSync" not found in Command line code:2
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 2
+[18-Apr-2026 05:00:21 UTC] PHP Fatal error:  Uncaught Error: Class "OTAReviewSync" not found in Command line code:2
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 2
+[18-Apr-2026 05:01:01 UTC] PHP Fatal error:  Uncaught Error: Class "OTAReviewSync" not found in Command line code:2
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 2
+[18-Apr-2026 05:01:32 UTC] PHP Fatal error:  Uncaught Error: Class "OTAReviewSync" not found in Command line code:2
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 2

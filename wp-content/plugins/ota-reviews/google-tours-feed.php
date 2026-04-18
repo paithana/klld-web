@@ -183,35 +183,43 @@ if ($query->have_posts()) {
 
 if ($preview && current_user_can('manage_options')) {
     // Premium Debug UI
+    if (!defined('KLLD_DASHBOARD_PREVIEW')) {
     ?>
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>GTTD Feed Preview | KLD</title>
+<?php } ?>
         <style>
+            <?php if (!defined('KLLD_DASHBOARD_PREVIEW')): ?>
             body { font-family: 'Inter', system-ui, sans-serif; background: #f8fafc; color: #1e293b; padding: 40px; }
             .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-            h1 { font-size: 24px; color: #0ea5e9; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th { text-align: left; padding: 12px; background: #f1f5f9; border-bottom: 2px solid #e2e8f0; font-size: 13px; text-transform: uppercase; color: #64748b; }
-            td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 14px; vertical-align: top; }
-            tr:hover { background: #f8fafc; }
+            <?php else: ?>
+            .container { background: #fff; padding: 10px; border-radius: 8px; }
+            <?php endif; ?>
+            h1.feed-title { font-size: 24px; color: #0ea5e9; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+            table.feed-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            table.feed-table th { text-align: left; padding: 12px; background: #f1f5f9; border-bottom: 2px solid #e2e8f0; font-size: 13px; text-transform: uppercase; color: #64748b; }
+            table.feed-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 14px; vertical-align: top; }
+            table.feed-table tr:hover { background: #f8fafc; }
             .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
             .badge-price { background: #dcfce7; color: #15803d; }
             .badge-rating { background: #fef9c3; color: #854d0e; }
             .img-preview { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; }
         </style>
+<?php if (!defined('KLLD_DASHBOARD_PREVIEW')) { ?>
     </head>
     <body>
+<?php } ?>
         <div class="container">
-            <h1>🎯 Google Things to Do Feed Preview</h1>
+            <h1 class="feed-title">🎯 Google Things to Do Feed Preview</h1>
             <p>Displaying <?php echo count($feed); ?> products. Formats: 
-                <a href="?format=json">JSON</a> | 
-                <a href="?format=xml">XML</a> |
+                <a href="<?php echo get_stylesheet_directory_uri(); ?>/inc/ota-tools/google-tours-feed.php?format=json" target="_blank">JSON</a> | 
+                <a href="<?php echo get_stylesheet_directory_uri(); ?>/inc/ota-tools/google-tours-feed.php?format=xml" target="_blank">XML</a> |
                 Merchant ID: <code><?php echo $merchant_id; ?></code>
             </p>
-            <table>
+            <table class="feed-table">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -242,10 +250,17 @@ if ($preview && current_user_can('manage_options')) {
                 </tbody>
             </table>
         </div>
+<?php if (!defined('KLLD_DASHBOARD_PREVIEW')) { ?>
     </body>
     </html>
-    <?php
+<?php 
     exit;
+}
+}
+
+// Ensure we don't fall through to JSON/XML if we just finished a dashboard preview
+if (defined('KLLD_DASHBOARD_PREVIEW')) {
+    return;
 }
 
 if ($format === 'xml') {
