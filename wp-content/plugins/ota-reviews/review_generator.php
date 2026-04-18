@@ -20,12 +20,19 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
     $count = intval($_POST['count'] ?? 1);
     $approve = ($_POST['approve'] === 'true');
     
-    $template_file = dirname(__FILE__) . '/gmb_reviews.json';
-    if (!file_exists($template_file)) {
-        wp_send_json_error(['message' => 'Template file not found.']);
+    $templates = null;
+    if (!empty($_POST['custom_templates'])) {
+        $templates = json_decode(stripslashes($_POST['custom_templates']), true);
     }
-    
-    $templates = json_decode(file_get_contents($template_file), true);
+
+    if (!$templates) {
+        $template_file = dirname(__FILE__) . '/gmb_reviews.json';
+        if (!file_exists($template_file)) {
+            wp_send_json_error(['message' => 'Template file not found.']);
+        }
+        $templates = json_decode(file_get_contents($template_file), true);
+    }
+
     if (!$templates) {
         wp_send_json_error(['message' => 'Invalid template JSON.']);
     }
@@ -34,8 +41,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
     $results = [];
 
     foreach ($post_ids as $post_id) {
-        shuffle($templates);
-        $selected = array_slice($templates, 0, $count);
+        $tour_templates = $templates;
+        shuffle($tour_templates);
+        $selected = array_slice($tour_templates, 0, $count);
         $tour_imported = 0;
 
         foreach ($selected as $tpl) {
@@ -184,8 +192,11 @@ function klld_update_tour_review_summary($post_id) {
         <div class="gen-layout">
             <div class="form-panel">
                 <div class="form-row">
-                    <label>Target Tours [Batch Select]</label>
-                    <select id="gen-tour-ids" multiple style="height: 200px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <label style="margin:0;">Target Tours [Batch Select]</label>
+                        <a href="#" id="select-all-tours" style="font-size:11px; text-decoration:none; color:#0ea5e9;">Select All</a>
+                    </div>
+                    <select id="gen-tour-ids" multiple style="height: 250px;">
                         <?php
                         $tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'orderby' => 'title', 'order' => 'ASC', 'post_status' => 'publish']);
                         foreach ($tours as $t) {
@@ -193,7 +204,6 @@ function klld_update_tour_review_summary($post_id) {
                         }
                         ?>
                     </select>
-                    <p style="font-size:11px; color:#64748b; margin-top:5px;">Hold Cmd/Ctrl to select multiple.</p>
                 </div>
 
                 <div class="form-row">
@@ -211,7 +221,13 @@ function klld_update_tour_review_summary($post_id) {
             </div>
 
             <div class="list-panel">
-                <h3>Template Library Preview</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h3 style="margin:0;">Template Library Preview</h3>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="checkbox" id="select-all-templates" checked>
+                        <label for="select-all-templates" style="font-size:12px; font-weight:600;">Select All</label>
+                    </div>
+                </div>
                 <div class="templates-list" id="tpl-container">
                     <!-- Templates injected here -->
                 </div>
@@ -228,7 +244,9 @@ function klld_update_tour_review_summary($post_id) {
         const approve = document.getElementById('gen-approve');
         const tplContainer = document.getElementById('tpl-container');
         const refreshBtn = document.getElementById('btn-refresh-tpls');
-
+        const selectAllTours = document.getElementById('select-all-tours');
+        const selectAllTemplates = document.getElementById('select-all-templates');
+ 
         const templates = <?php echo file_get_contents(dirname(__FILE__) . '/gmb_reviews.json'); ?>;
 
         function renderTemplates() {
@@ -240,6 +258,7 @@ function klld_update_tour_review_summary($post_id) {
                 const relative = tpl.date || 'unknown';
                 
                 item.innerHTML = `
+                    <input type="checkbox" class="tpl-checkbox" data-idx="${idx}" checked>
                     <div class="tpl-header">
                         <span class="tpl-author">${tpl.author}</span>
                         <span class="tpl-date">${relative}</span>
@@ -253,6 +272,22 @@ function klld_update_tour_review_summary($post_id) {
 
         renderTemplates();
 
+        // Select All Tours Logic
+        selectAllTours.addEventListener('click', function(e) {
+            e.preventDefault();
+            const allSelected = Array.from(tourSelect.options).every(opt => opt.selected);
+            for (let i = 0; i < tourSelect.options.length; i++) {
+                tourSelect.options[i].selected = !allSelected;
+            }
+            this.textContent = allSelected ? 'Select All' : 'Deselect All';
+        });
+
+        // Select All Templates Logic
+        selectAllTemplates.addEventListener('change', function() {
+            const checks = document.querySelectorAll('.tpl-checkbox');
+            checks.forEach(c => c.checked = this.checked);
+        });
+
         btn.addEventListener('click', async function() {
             const selectedTours = Array.from(tourSelect.selectedOptions).map(opt => opt.value);
             if (selectedTours.length === 0) {
@@ -260,15 +295,33 @@ function klld_update_tour_review_summary($post_id) {
                 return;
             }
 
+            const selectedTplIndices = Array.from(document.querySelectorAll('.tpl-checkbox:checked')).map(c => parseInt(c.dataset.idx));
+            if (selectedTplIndices.length === 0) {
+                alert('Please select at least one template.');
+                return;
+            }
+
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner is-active" style="float:none; margin:0 5px 0 0;"></span> Processing Batch...';
             status.style.display = 'none';
+
+            // Filter templates based on selection
+            const activeTemplates = templates.filter((_, idx) => selectedTplIndices.includes(idx));
 
             const formData = new FormData();
             formData.append('action', 'generate_custom_reviews');
             formData.append('post_ids', selectedTours.join(','));
             formData.append('approve', approve.checked);
             formData.append('count', count.value);
+            
+            // We need to pass the specific templates if we want the backend to use them, 
+            // OR we just handle the seeding in a more customized way.
+            // For now, let's just use the count and assume random from the full list on backend to stay simple, 
+            // OR update the backend to accept specific template indices.
+            // Actually, the backend shuffles from the FILE.
+            
+            // Let's update the backend to accept a templates_json param to be more precise.
+            formData.append('custom_templates', JSON.stringify(activeTemplates));
 
             try {
                 const response = await fetch(ajaxurl, { method: 'POST', body: formData });
@@ -277,7 +330,6 @@ function klld_update_tour_review_summary($post_id) {
                 if (result.success) {
                     status.className = 'status-success';
                     status.innerHTML = `<strong>${result.data.message}</strong><br><small>${result.data.details}</small>`;
-                    // Scroll to status
                     status.scrollIntoView({ behavior: 'smooth' });
                 } else {
                     status.className = 'status-error';

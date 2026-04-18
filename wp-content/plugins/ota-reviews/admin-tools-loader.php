@@ -12,10 +12,25 @@ class KLLD_Admin_Tools {
         add_action( 'admin_menu', [ $this, 'add_menu_pages' ] );
         add_action( 'admin_init', [ $this, 'intercept_tool_ajax' ] );
         add_action( 'admin_head', [ $this, 'inject_admin_css' ] );
+        add_action( 'admin_enqueue_scripts', [ $this, 'cleanup_admin_scripts' ], 999 );
         
         // Include WP-CLI command
         if ( defined( 'WP_CLI' ) && WP_CLI ) {
             require_once KLLD_OTA_PLUGIN_DIR . 'class-ota-cli.php';
+        }
+    }
+
+    public function cleanup_admin_scripts() {
+        $screen = get_current_screen();
+        $my_pages = [
+            'toplevel_page_reviews-tools',
+            'reviews-tools_page_klld-review-manager',
+            'reviews-tools_page_klld-gttd-push',
+            'reviews-tools_page_klld-review-generator'
+        ];
+
+        if ( in_array( $screen->id, $my_pages ) ) {
+            wp_dequeue_script( 'wpml-content-stats' );
         }
     }
 

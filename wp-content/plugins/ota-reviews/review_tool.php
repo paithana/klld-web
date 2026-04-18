@@ -858,12 +858,16 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                 <h2>🚀 Historical Sync Runner</h2>
                 <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; background: #020617; padding:1.5rem; border-radius:8px; border: 1px solid var(--border);">
                     <div>
-                        <label class="text-xs text-muted">TripAdvisor API Key</label>
+                        <label class="text-xs text-muted">TripAdvisor API Key <a href="https://contentapi.tripadvisor.com/" target="_blank" class="text-blue-500 hover:underline">(Get Key)</a></label>
                         <input type="password" id="ta-api-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_ta_api_key')); ?>" placeholder="Enter API Key...">
                     </div>
                     <div>
-                        <label class="text-xs text-muted">GYG API Key (Optional)</label>
+                        <label class="text-xs text-muted">GYG API Key <a href="https://partner.getyourguide.com/api-management" target="_blank" class="text-blue-500 hover:underline">(Get Key)</a></label>
                         <input type="password" id="gyg-partner-api-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_gyg_partner_api_key')); ?>" placeholder="Enter API Key...">
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted">Viator Partner <a href="https://partner.viator.com/en/user/login" target="_blank" class="text-blue-500 hover:underline">(Portal)</a></label>
+                        <div class="text-xs text-muted mt-2">Manage your Viator connectivity directly on their portal.</div>
                     </div>
                 </div>
                 <p class="text-sm text-muted mb-4">Trigger a full historical sync for all mapped tours. Processes tours sequentially to avoid timeouts.</p>
