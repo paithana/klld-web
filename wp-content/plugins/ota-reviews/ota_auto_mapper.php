@@ -7,34 +7,32 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $supplier_id = 203466;
-$logFile = dirname(__FILE__) . '/ota_auto_mapper_log.txt';
+if (!isset($logFile)) {
+    $logFile = dirname(__FILE__) . '/ota_auto_mapper_log.txt';
+}
+
 function logMapper($msg) {
-    global $logFile;
+    $log_path = dirname(__FILE__) . '/ota_auto_mapper_log.txt';
     $txt = "[" . date('Y-m-d H:i:s') . "] $msg\n";
     echo $txt;
-    file_put_contents($logFile, $txt, FILE_APPEND);
+    file_put_contents($log_path, $txt, FILE_APPEND);
 }
 
 logMapper("Starting Auto-Mapper Phase 1: Discover Activities...");
 
 // ── Load WordPress ────────────────────────────────────────────────────────
 if ( ! defined( 'ABSPATH' ) ) {
-    $search_path = __DIR__;
-    $found = false;
-    for ($i = 0; $i < 10; $i++) {
-        if (file_exists($search_path . '/wp-load.php')) {
-            require_once $search_path . '/wp-load.php';
-            $found = true;
+    $search_paths = [
+        __DIR__ . '/wp-load.php',
+        dirname(__DIR__, 2) . '/wp-load.php',
+        dirname(__DIR__, 3) . '/wp-load.php',
+        dirname(__DIR__, 4) . '/wp-load.php',
+        '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php'
+    ];
+    foreach ($search_paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
             break;
-        }
-        $parent = dirname($search_path);
-        if ($parent === $search_path) break;
-        $search_path = $parent;
-    }
-    if (!$found) {
-        $abs_path = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php';
-        if (file_exists($abs_path)) {
-            require_once $abs_path;
         }
     }
 }

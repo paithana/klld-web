@@ -21,7 +21,7 @@ while (have_posts()): the_post();
 	echo "<pre>".var_dump($review_rate,$count_review)."</pre>";
     }
     ?>
-    <div id="st-content-wrapper" class="st-style-4 st-style-elementor st-single-tour st-single-tour-<?php echo esc_attr($style_single);?>" itemscope itemtype="https://schema.org/Product">
+    <div id="st-content-wrapper" class="st-style-4 st-style-elementor st-single-tour st-single-tour-<?php echo esc_attr($style_single);?>" itemscope itemtype="https://schema.org/Tour">
         <?php
         echo stt_elementorv2()->loadView('components/banner');
         ?>

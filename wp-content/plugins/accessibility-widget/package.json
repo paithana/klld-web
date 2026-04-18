@@ -1,0 +1,11 @@
+{
+    "name": "accessibility-widget",
+    "version": "1.0.0",
+    "license": "UNLICENSED",
+    "scripts": {
+      "build": "cd lite/admin/app && npm run build",
+      "build:production": "cd lite/admin/app && npm run build:production"
+    },
+    "dependencies": {
+    }
+  }

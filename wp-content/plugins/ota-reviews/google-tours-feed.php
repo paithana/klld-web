@@ -12,26 +12,21 @@
 
 // Load WordPress
 if ( ! defined( 'ABSPATH' ) ) {
-    $search_path = __DIR__;
-    $found = false;
-    for ($i = 0; $i < 10; $i++) {
-        if (file_exists($search_path . '/wp-load.php')) {
-            require_once $search_path . '/wp-load.php';
-            $found = true;
+    $search_paths = [
+        __DIR__ . '/wp-load.php',
+        dirname(__DIR__, 2) . '/wp-load.php',
+        dirname(__DIR__, 3) . '/wp-load.php',
+        dirname(__DIR__, 4) . '/wp-load.php',
+        '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php'
+    ];
+    foreach ($search_paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
             break;
         }
-        $parent = dirname($search_path);
-        if ($parent === $search_path) break;
-        $search_path = $parent;
     }
-    
-    if (!$found) {
-        $abs_path = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php';
-        if (file_exists($abs_path)) {
-            require_once $abs_path;
-        } else {
-            die("Fatal: Could not find wp-load.php");
-        }
+    if ( ! defined( 'ABSPATH' ) ) {
+        die("Fatal: Could not find wp-load.php.");
     }
 }
 
@@ -122,6 +117,17 @@ if ($query->have_posts()) {
         $terms = get_the_terms($id, 'st_tour_type');
         $category = (!is_wp_error($terms) && !empty($terms)) ? $terms[0]->name : 'Sightseeing Tour';
 
+        // Duration Mapping
+        $raw_duration = get_post_meta($id, 'duration_day', true);
+        $iso_duration = 'PT8H'; // Default Full Day
+        if (strpos(strtolower($raw_duration), 'day') !== false) {
+            $num = (int)preg_replace('/[^0-9]/', '', $raw_duration) ?: 1;
+            $iso_duration = $num > 1 ? "P{$num}D" : "PT8H";
+        } elseif (strpos(strtolower($raw_duration), 'hour') !== false) {
+            $num = (int)preg_replace('/[^0-9]/', '', $raw_duration) ?: 4;
+            $iso_duration = "PT{$num}H";
+        }
+
         // GTTD specific mapping
         $product = array(
             'id' => (string)$id,
@@ -134,9 +140,8 @@ if ($query->have_posts()) {
                 'currency' => $currency
             ),
             'brand' => 'Khao Lak Land Discovery',
-            'product_type' => $category,
-            'availability' => 'in_stock',
             'google_product_category' => 'Travel & Events > Travel Services > Sightseeing Tours',
+            'product_type' => 'Tour',
             'rating' => array(
                 'average' => (float)$rating,
                 'count' => (int)$review_count
@@ -149,6 +154,8 @@ if ($query->have_posts()) {
             'merchant_id' => $merchant_id,
             'inventory_types' => array('INVENTORY_TYPE_OPERATOR_DIRECT'),
             'admission_ticket_type' => 'tours',
+            'confirmation_type' => 'INSTANT',
+            'duration' => $iso_duration,
             'booking_options' => array(
                 'adult' => array(
                     'price' => (float)get_post_meta($id, 'adult_price', true),
@@ -167,12 +174,16 @@ if ($query->have_posts()) {
             'last_updated' => get_the_modified_date('c')
         );
 
-        // Map through string values and decode entities
-        foreach ($product as $key => $value) {
-            if (is_string($value)) {
-                $product[$key] = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
+        // Map through values and decode entities recursively
+        $product = array_map(function($val) {
+            if (is_string($val)) return html_entity_decode($val, ENT_QUOTES, 'UTF-8');
+            if (is_array($val)) {
+                return array_map(function($v) {
+                    return is_string($v) ? html_entity_decode($v, ENT_QUOTES, 'UTF-8') : $v;
+                }, $val);
             }
-        }
+            return $val;
+        }, $product);
 
         $feed[] = apply_filters('klld_gttd_product', $product, $id);
     }
@@ -287,23 +298,34 @@ if ($format === 'xml') {
         $item->addChild('g:price', $p['price']['amount'] . ' ' . $p['price']['currency'], 'http://base.google.com/ns/1.0');
         $item->addChild('g:brand', $p['brand'], 'http://base.google.com/ns/1.0');
         
-        // Category should also be safe
-        $cat_node = $item->addChild('g:google_product_category', null, 'http://base.google.com/ns/1.0');
-        $cat_node[0] = $p['google_product_category'];
-        $item->addChild('g:availability', $p['availability'], 'http://base.google.com/ns/1.0');
+        $item->addChild('g:google_product_category', null, 'http://base.google.com/ns/1.0')[0] = $p['google_product_category'];
+        $item->addChild('g:availability', 'in_stock', 'http://base.google.com/ns/1.0');
         
         // Custom attributes for GTTD
-        $item->addChild('g:location_address', htmlspecialchars($p['location']['address']), 'http://base.google.com/ns/1.0');
+        $loc_node = $item->addChild('g:location_address', null, 'http://base.google.com/ns/1.0');
+        $loc_node[0] = $p['location']['address'];
+        
         $item->addChild('g:rating_average', (string)$p['rating']['average'], 'http://base.google.com/ns/1.0');
         $item->addChild('g:rating_count', (string)$p['rating']['count'], 'http://base.google.com/ns/1.0');
 
-        if ($p['ota_ids']['getyourguide']) $item->addChild('g:getyourguide_id', $p['ota_ids']['getyourguide'], 'http://base.google.com/ns/1.0');
-        if ($p['ota_ids']['viator'])       $item->addChild('g:viator_id', $p['ota_ids']['viator'], 'http://base.google.com/ns/1.0');
-        if ($p['ota_ids']['tripadvisor'])  $item->addChild('g:tripadvisor_id', $p['ota_ids']['tripadvisor'], 'http://base.google.com/ns/1.0');
+        if ($p['ota_ids']['getyourguide']) {
+            $gyg_node = $item->addChild('g:getyourguide_id', null, 'http://base.google.com/ns/1.0');
+            $gyg_node[0] = $p['ota_ids']['getyourguide'];
+        }
+        if ($p['ota_ids']['viator']) {
+            $via_node = $item->addChild('g:viator_id', null, 'http://base.google.com/ns/1.0');
+            $via_node[0] = $p['ota_ids']['viator'];
+        }
+        if ($p['ota_ids']['tripadvisor']) {
+            $ta_node = $item->addChild('g:tripadvisor_id', null, 'http://base.google.com/ns/1.0');
+            $ta_node[0] = $p['ota_ids']['tripadvisor'];
+        }
         
         $item->addChild('g:merchant_id', $merchant_id, 'http://base.google.com/ns/1.0');
         $item->addChild('g:inventory_type', 'INVENTORY_TYPE_OPERATOR_DIRECT', 'http://base.google.com/ns/1.0');
         $item->addChild('g:admission_ticket_type', $p['admission_ticket_type'], 'http://base.google.com/ns/1.0');
+        $item->addChild('g:confirmation_type', $p['confirmation_type'], 'http://base.google.com/ns/1.0');
+        $item->addChild('g:duration', $p['duration'], 'http://base.google.com/ns/1.0');
         
         // Structured Booking Options (Adult/Child)
         foreach ($p['booking_options'] as $type => $opt) {

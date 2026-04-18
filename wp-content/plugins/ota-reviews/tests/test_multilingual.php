@@ -1,5 +1,5 @@
 <?php
-require_once('wp-load.php');
+require_once dirname(__FILE__, 5) . '/wp-load.php';
 require_once('wp-admin/includes/comment.php');
 
 echo "Testing Multilingual Duplication...\n";
@@ -25,7 +25,7 @@ $_POST['action'] = 'ota_direct_import';
 $_POST['batch'] = json_encode($batch);
 
 define('KLLD_TOOL_RUN', true);
-require_once('wp-content/themes/traveler-childtheme/inc/ota-tools/review_tool.php');
+require_once dirname(__FILE__, 2) . '/review_tool.php';
 
 echo "\nImport triggered. Checking database for $review_id...\n";
 

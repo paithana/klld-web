@@ -11,27 +11,21 @@ $max_per_source = 50;      // Limit reviews per sync to avoid timeouts
 // ── Load WordPress ────────────────────────────────────────────────────────
 // Load WordPress
 if ( ! defined( 'ABSPATH' ) ) {
-    $search_path = __DIR__;
-    $found = false;
-    for ($i = 0; $i < 10; $i++) {
-        if (file_exists($search_path . '/wp-load.php')) {
-            require_once $search_path . '/wp-load.php';
-            $found = true;
+    $search_paths = [
+        __DIR__ . '/wp-load.php',
+        dirname(__DIR__, 2) . '/wp-load.php',
+        dirname(__DIR__, 3) . '/wp-load.php',
+        dirname(__DIR__, 4) . '/wp-load.php',
+        '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php'
+    ];
+    foreach ($search_paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
             break;
         }
-        $parent = dirname($search_path);
-        if ($parent === $search_path) break;
-        $search_path = $parent;
     }
-    
-    if (!$found) {
-        // Absolute fallback for this specific server if discovery fails
-        $abs_path = '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php';
-        if (file_exists($abs_path)) {
-            require_once $abs_path;
-        } else {
-            die("Fatal: Could not find wp-load.php (Last search: $search_path)");
-        }
+    if ( ! defined( 'ABSPATH' ) ) {
+        die("Fatal: Could not find wp-load.php.");
     }
 }
 
@@ -54,15 +48,16 @@ if (PHP_SAPI !== 'cli') {
 // ── Global overrides for targeted execution ──────────────────────────────────
 // Detect CLI vs Browser and parse arguments
 if (PHP_SAPI === 'cli') {
-    parse_str(implode('&', array_slice($argv, 1)), $_CLI);
+    $cli_args = isset($argv) && is_array($argv) ? array_slice($argv, 1) : [];
+    parse_str(implode('&', $cli_args), $_CLI);
     $target_post_id = isset($_CLI['post_id']) ? intval($_CLI['post_id']) : null;
-    $target_limit   = isset($_CLI['limit']) ? intval($_CLI['limit']) : 1000;
+    $target_limit   = (isset($_CLI['limit']) && $_CLI['limit'] != '0') ? intval($_CLI['limit']) : 10000;
     $target_offset  = isset($_CLI['offset']) ? intval($_CLI['offset']) : 0;
     $force_sync     = (isset($_CLI['force']) && $_CLI['force'] == '1');
     $format         = 'text';
 } else {
     $target_post_id = isset($_GET['post_id']) ? intval($_GET['post_id']) : null;
-    $target_limit   = isset($_GET['limit']) ? intval($_GET['limit']) : 1000;
+    $target_limit   = (isset($_GET['limit']) && $_GET['limit'] != '0') ? intval($_GET['limit']) : 10000;
     $target_offset  = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
     $force_sync     = (isset($_GET['force']) && $_GET['force'] == '1');
     $format         = isset($_GET['format']) ? $_GET['format'] : 'html';
@@ -114,7 +109,10 @@ class OTAReviewSync {
             'posts_per_page' => -1,
             'post_status' => ['publish', 'private', 'draft', 'trash'],
             'post__in' => $mapped_ids,
-            'orderby' => 'post__in'
+            'orderby' => 'post__in',
+            'no_found_rows' => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false
         ];
 
         global $target_post_id, $target_limit;
@@ -147,22 +145,22 @@ class OTAReviewSync {
              */
             $localized_ids = $this->get_translated_post_ids($tour->ID);
             
-            foreach ($localized_ids as $target_post_id) {
+            foreach ($localized_ids as $loc_id) {
                 if ($gyg_id) {
-                    $this->sync_gyg($target_post_id, $gyg_id, $target_limit, $force_sync, $mode);
+                    $this->sync_gyg($loc_id, $gyg_id, $target_limit, $force_sync, $mode);
                 }
                 if ($via_id) {
-                    $this->sync_viator($target_post_id, $via_id, $target_limit, $force_sync);
+                    $this->sync_viator($loc_id, $via_id, $target_limit, $force_sync);
                 }
                 
                 $ta_id = get_post_meta($tour->ID, '_tripadvisor_activity_id', true);
                 if ($ta_id) {
-                    $this->sync_tripadvisor($target_post_id, $ta_id, $target_limit, $force_sync);
+                    $this->sync_tripadvisor($loc_id, $ta_id, $target_limit, $force_sync);
                 }
 
                 $gmb_id = get_post_meta($tour->ID, '_gmb_id', true);
                 if ($gmb_id) {
-                    $this->sync_gmb($target_post_id, $gmb_id, $target_limit, $force_sync);
+                    $this->sync_gmb($loc_id, $gmb_id, $target_limit, $force_sync);
                 }
             }
 
@@ -575,85 +573,91 @@ class OTAReviewSync {
     }
 
     public function upsert_review($post_id, $source, $remote_id, $data) {
-        if (!get_post_status($post_id)) return false; // Fail if post doesn't exist
+        if (!get_post_status($post_id)) return false; 
         
         global $wpdb;
         $meta_key = $source . '_review_id';
-        $comment_id = $wpdb->get_var($wpdb->prepare(
-            "SELECT cm.comment_id 
-             FROM {$wpdb->commentmeta} cm
-             JOIN {$wpdb->comments} c ON c.comment_ID = cm.comment_id
-             WHERE cm.meta_key = %s AND cm.meta_value = %s AND c.comment_post_ID = %d 
-             LIMIT 1",
-            $meta_key, $remote_id, $post_id
-        ));
+        $localized_ids = $this->get_translated_post_ids($post_id);
+        $total_new = 0;
 
-        if ($comment_id) return false;
+        foreach ($localized_ids as $target_post_id) {
+            $existing_id = $wpdb->get_var($wpdb->prepare(
+                "SELECT cm.comment_id 
+                 FROM {$wpdb->commentmeta} cm
+                 JOIN {$wpdb->comments} c ON c.comment_ID = cm.comment_id
+                 WHERE cm.meta_key = %s AND cm.meta_value = %s AND c.comment_post_ID = %d 
+                 LIMIT 1",
+                $meta_key, $remote_id, $target_post_id
+            ));
 
-        $rating = (float)$data['rating'];
-        $title = !empty($data['title']) ? $data['title'] : wp_trim_words($data['content'], 6, '...');
-        if (!$title) $title = "Expert tour from " . ucfirst($source);
+            if ($existing_id) continue;
 
-        // Prepare localized sub-rating labels
-        $lang = $this->get_post_language($post_id);
-        $labels = $this->get_sub_rating_labels($lang);
+            $rating = (float)$data['rating'];
+            $title = !empty($data['title']) ? $data['title'] : wp_trim_words($data['content'], 6, '...');
+            if (!$title) $title = "Expert tour from " . ucfirst($source);
 
-        // Prepare serialized stats for Traveler Theme
-        $stats = [
-            $labels['statItinerary'] => (float)($data['statItinerary'] ?? $rating),
-            $labels['statGuide']      => (float)($data['statGuide'] ?? $rating),
-            $labels['statService']    => (float)($data['statService'] ?? $rating),
-            $labels['statDriver']     => (float)($data['statDriver'] ?? $rating),
-            $labels['statFood']       => (float)($data['statFood'] ?? $rating)
-        ];
-        $serialized_stats = serialize($stats);
+            $lang = $this->get_post_language($target_post_id);
+            $labels = $this->get_sub_rating_labels($lang);
 
-        $comment_data = [
-            'comment_post_ID' => $post_id,
-            'comment_author' => $data['author'],
-            'comment_author_email' => sanitize_title($data['author']) . '@' . $source . '.com',
-            'comment_content' => $data['content'],
-            'comment_type' => 'st_reviews',
-            'comment_approved' => '1',
-            'comment_date' => $this->normalize_date($data['date']),
-        ];
+            $stats = [
+                $labels['statItinerary'] => (float)($data['statItinerary'] ?? $rating),
+                $labels['statGuide']      => (float)($data['statGuide'] ?? $rating),
+                $labels['statService']    => (float)($data['statService'] ?? $rating),
+                $labels['statDriver']     => (float)($data['statDriver'] ?? $rating),
+                $labels['statFood']       => (float)($data['statFood'] ?? $rating)
+            ];
+            $serialized_stats = serialize($stats);
 
-        $new_id = wp_insert_comment($comment_data);
-        if ($new_id) {
-            update_comment_meta($new_id, 'st_reviews', $rating);
-            update_comment_meta($new_id, 'st_star', $rating);
-            update_comment_meta($new_id, 'comment_rate', $rating);
-            update_comment_meta($new_id, 'comment_title', $title);
-            update_comment_meta($new_id, 'st_review_stats', $serialized_stats);
-            
-            // Sub-rating individual keys (localized)
-            foreach ($stats as $label => $val) {
-                $meta_key_sub = 'st_stat_' . sanitize_title($label);
-                update_comment_meta($new_id, $meta_key_sub, $val);
+            $comment_data = [
+                'comment_post_ID' => $target_post_id,
+                'comment_author' => $data['author'],
+                'comment_author_email' => sanitize_title($data['author']) . '@' . $source . '.com',
+                'comment_content' => $data['content'],
+                'comment_type' => 'st_reviews',
+                'comment_approved' => '1',
+                'comment_date' => $this->normalize_date($data['date']),
+            ];
+
+            $new_id = wp_insert_comment($comment_data);
+            if ($new_id) {
+                update_comment_meta($new_id, 'st_reviews', $rating);
+                update_comment_meta($new_id, 'st_star', $rating);
+                update_comment_meta($new_id, 'comment_rate', $rating);
+                update_comment_meta($new_id, 'comment_title', $title);
+                update_comment_meta($new_id, 'st_review_stats', $serialized_stats);
+                
+                foreach ($stats as $label => $val) {
+                    $meta_key_sub = 'st_stat_' . sanitize_title($label);
+                    update_comment_meta($new_id, $meta_key_sub, $val);
+                }
+
+                update_comment_meta($new_id, $meta_key, $remote_id);
+                update_comment_meta($new_id, 'ota_source', $source);
+                update_comment_meta($new_id, 'review_date_formatted', date('d-m-Y', strtotime($comment_data['comment_date'])));
+                update_comment_meta($new_id, '_comment_like_count', 0);
+                
+                if (function_exists('st_helper_update_total_review')) {
+                    st_helper_update_total_review($target_post_id);
+                }
+                
+                file_put_contents(__DIR__ . '/ota_sync_log.txt', "[" . date('Y-m-d H:i:s') . "] Imported $source review $remote_id for Post $target_post_id ($lang)\n", FILE_APPEND);
+                $total_new++;
             }
-
-            update_comment_meta($new_id, $meta_key, $remote_id);
-            update_comment_meta($new_id, 'ota_source', $source);
-            update_comment_meta($new_id, 'review_date_formatted', date('d-M-Y', strtotime($comment_data['comment_date'])));
-            update_comment_meta($new_id, '_comment_like_count', 0);
-            
-            file_put_contents(__DIR__ . '/ota_sync_log.txt', "[" . date('Y-m-d H:i:s') . "] Imported $source review $remote_id for Post $post_id\n", FILE_APPEND);
-            return $new_id;
         }
-        return false;
+        return $total_new;
     }
 
     public static function normalize_date($d) {
         if (empty($d)) return '';
-        // If already in dd-M-yyyy format (e.g. 18-Apr-2026), just return
-        if (preg_match('/^\d{1,2}-[A-Za-z]{3}-\d{4}$/', $d)) return $d;
+        // If already in dd-mm-yyyy format (e.g. 18-04-2026), just return
+        if (preg_match('/^\d{1,2}-\d{1,2}-\d{4}$/', $d)) return $d;
 
         $ts = is_numeric($d) ? $d : strtotime($d);
         if (!$ts) {
             // Check for format like 2024-04-18T10:00:00Z
             $ts = strtotime(str_replace('T', ' ', substr($d, 0, 19)));
         }
-        return $ts ? date('d-M-Y', $ts) : '';
+        return $ts ? date('d-m-Y', $ts) : '';
     }
 
     public static function calculate_match_score($s1, $s2) {

@@ -577,3 +577,7 @@ Stack trace:
 [17-Apr-2026 22:27:34 UTC] PHP  11. STFramework::load_libs($libs = [0 => 'helpers/new_layout.helper', 1 => 'travel-helper', 2 => 'class/class.cart', 3 => 'admin/class.stadmin', 4 => 'st.customvc', 5 => 'helpers/st-languages', 6 => 'class/class.inbox', 7 => 'class/class.travelobject', 8 => 'class/class.review', 9 => 'class/class.order', 10 => 'st.customvc', 11 => 'helpers/class.validate', 12 => 'models/posts', 13 => 'models/availability', 14 => 'models/cronjob_log', 15 => 'models/order_item', 16 => 'models/inbox', 17 => 'factory/service-factory', 18 => 'factory/message-factory']) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/class.traveler.php:106
 [17-Apr-2026 22:27:34 UTC] PHP  12. include_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/core/class.shinetheme.php:120
 [17-Apr-2026 22:27:34 UTC] PHP  13. TravelHelper::init() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/themes/traveler/inc/layouts/modern/travel-helper.php:6024
+[18-Apr-2026 17:42:27 Asia/Bangkok] PHP Fatal error:  Uncaught Error: Call to undefined function get_option() in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php on line 9

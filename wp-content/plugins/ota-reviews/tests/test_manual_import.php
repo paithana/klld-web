@@ -26,7 +26,7 @@ $_POST['batch'] = json_encode($mockBatch);
 echo "Starting Manual Import Simulation...\n";
 
 // Require the tool file from the new plugin directory
-require_once 'wp-content/plugins/ota-reviews/review_tool.php';
+require_once dirname(__FILE__, 2) . '/review_tool.php';
 
 // The review_tool.php with wp_send_json_success will exit, so we might need to capture or check DB
 echo "\nImport triggered. Checking database for review_id 'man_ta_123'...\n";

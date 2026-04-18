@@ -37,17 +37,16 @@ class KLLD_Admin_Tools {
     public function inject_admin_css() {
         ?>
         <style>
+            #adminmenu .toplevel_page_reviews-tools .wp-menu-image img {
+                width: 20px !important;
+                height: auto !important;
+                padding: 7px 0 !important;
+                opacity: 0.8;
+            }
             #adminmenu li.menu-top:hover .wp-menu-image img, 
             #adminmenu li.wp-has-current-submenu .wp-menu-image img {
                 opacity: 1 !important;
                 width: 100% !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            #adminmenu .wp-menu-image img {
-                padding: 4px 0 !important;
-                opacity: 0.7;
-                transition: opacity 0.2s;
             }
         </style>
         <?php

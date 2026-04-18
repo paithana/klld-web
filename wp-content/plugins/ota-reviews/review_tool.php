@@ -5,11 +5,18 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    // Basic fallback if called directly as a legacy endpoint
-    // Corrected: 6 levels up to reach public_html from inc/ota-tools/
-    $wp_load = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php';
-    if (file_exists($wp_load)) {
-        require_once($wp_load);
+    $search_paths = [
+        __DIR__ . '/wp-load.php',
+        dirname(__DIR__, 2) . '/wp-load.php',
+        dirname(__DIR__, 3) . '/wp-load.php',
+        dirname(__DIR__, 4) . '/wp-load.php',
+        '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php'
+    ];
+    foreach ($search_paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+            break;
+        }
     }
 }
 
@@ -74,6 +81,16 @@ if (isset($_POST['action']) && $_POST['action'] === 'save_ota_mappings') {
     }
     if (isset($_POST['ta_api_key'])) {
         update_option('_ta_api_key', sanitize_text_field($_POST['ta_api_key']));
+    }
+
+    // Save GTTD SFTP Settings
+    if (isset($_POST['sftp_host'])) {
+        update_option('_gttd_sftp_host', sanitize_text_field($_POST['sftp_host']));
+        update_option('_gttd_sftp_port', intval($_POST['sftp_port'] ?? 22));
+        update_option('_gttd_sftp_user', sanitize_text_field($_POST['sftp_user']));
+        update_option('_gttd_sftp_pass', sanitize_text_field($_POST['sftp_pass']));
+        update_option('_gttd_sftp_key', sanitize_text_field($_POST['sftp_key']));
+        update_option('_gttd_sftp_file', sanitize_text_field($_POST['sftp_file']));
     }
 
     wp_send_json_success(['message' => "Saved $count mappings and settings successfully."]);
@@ -369,15 +386,23 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
         wp_send_json_success(['message' => "Scanned " . count($gmb_reviews) . " GMB reviews. Re-assigned $mapped reviews based on keywords."]);
     } elseif ($job === 'refresh_ratings') {
         // Recalculate all ratings for all mapped tours
+        // Optimized query: Get IDs first to avoid slow meta joins
+        $mapped_ids = $wpdb->get_col("
+            SELECT DISTINCT post_id 
+            FROM {$wpdb->postmeta} 
+            WHERE meta_key IN ('_gyg_activity_id', '_viator_activity_id', '_tripadvisor_activity_id')
+        ");
+
+        if (empty($mapped_ids)) {
+            wp_send_json_success(['message' => "No tours with OTA mappings found."]);
+        }
+
         $all_mapped_tours = get_posts([
             'post_type' => 'st_tours',
             'posts_per_page' => -1,
-            'meta_query' => [
-                'relation' => 'OR',
-                ['key' => '_gyg_activity_id', 'compare' => 'EXISTS'],
-                ['key' => '_viator_activity_id', 'compare' => 'EXISTS'],
-                ['key' => '_tripadvisor_activity_id', 'compare' => 'EXISTS']
-            ]
+            'post__in' => $mapped_ids,
+            'post_status' => 'any',
+            'no_found_rows' => true
         ]);
         $tour_ids = wp_list_pluck($all_mapped_tours, 'ID');
         $total_updated = 0;
@@ -396,6 +421,16 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
         // Approve all st_reviews
         $updated = $wpdb->query("UPDATE {$wpdb->comments} SET comment_approved = '1' WHERE comment_type = 'st_reviews' AND comment_approved = '0'");
         wp_send_json_success(['message' => "Successfully approved $updated tour reviews."]);
+    } elseif ($job === 'sftp_push') {
+        $push_file = dirname(__FILE__) . '/gttd_sftp_push.php';
+        if (file_exists($push_file)) {
+            ob_start();
+            include($push_file);
+            $results = ob_get_clean();
+            wp_send_json_success(['message' => "SFTP Push execution completed.", 'results' => $results]);
+        } else {
+            wp_send_json_error('SFTP Push script not found.');
+        }
     }
     wp_send_json_error('Unknown maintenance job.');
 }
@@ -849,6 +884,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
         <div class="tabs">
             <button class="tab-btn active" onclick="showTab('sync')">🔄 Sync & Import</button>
             <button class="tab-btn" onclick="showTab('mapping')">🗺 Tour Mapping</button>
+            <button class="tab-btn" onclick="showTab('feed')">📡 Feed Settings</button>
             <button class="tab-btn" onclick="showTab('maintenance')">🛠 Maintenance</button>
         </div>
 
@@ -858,7 +894,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                 <h2>🚀 Historical Sync Runner</h2>
                 <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; background: #020617; padding:1.5rem; border-radius:8px; border: 1px solid var(--border);">
                     <div>
-                        <label class="text-xs text-muted">TripAdvisor API Key <a href="https://contentapi.tripadvisor.com/" target="_blank" class="text-blue-500 hover:underline">(Get Key)</a></label>
+                        <label class="text-xs text-muted">TripAdvisor API Key <a href="https://www.tripadvisor.com/ContentAPIRequest" target="_blank" class="text-blue-500 hover:underline">(Get Key)</a></label>
                         <input type="password" id="ta-api-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_ta_api_key')); ?>" placeholder="Enter API Key...">
                     </div>
                     <div>
@@ -900,10 +936,13 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         </select>
                     </div>
                 </div>
-                <textarea id="manual-json" class="k-input" style="height:150px; font-family:monospace;" placeholder="Paste GYG/GMB JSON here..."></textarea>
-                <div class="flex gap-2 mt-4">
-                    <button onclick="manualImport()" class="k-btn k-btn-primary" style="background:var(--warning)">Process JSON</button>
-                    <button onclick="document.getElementById('manual-json').value=''" class="k-btn k-btn-outline">Clear</button>
+                <textarea id="manual-json" class="k-input" style="height:120px; font-family:monospace; font-size:11px;" placeholder="Paste JSON data from GYG / Viator / TA / GMB here..."></textarea>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <button onclick="manualImport('gyg')" class="k-btn k-btn-primary" style="background:#f97316; border-color:#f97316;">Import GYG</button>
+                    <button onclick="manualImport('viator')" class="k-btn k-btn-primary" style="background:#5559be; border-color:#5559be;">Import Viator</button>
+                    <button onclick="manualImport('tripadvisor')" class="k-btn k-btn-primary" style="background:#34e0a1; border-color:#34e0a1; color:#000;">Import TA</button>
+                    <button onclick="manualImport('gmb')" class="k-btn k-btn-primary" style="background:#4285f4; border-color:#4285f4;">Import GMB</button>
+                    <button onclick="document.getElementById('manual-json').value=''" class="k-btn k-btn-outline" style="margin-left:auto;">Clear</button>
                 </div>
             </div>
         </div>
@@ -953,6 +992,15 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                 $via_url = get_post_meta($id, '_viator_url', true);
                                 $ta  = get_post_meta($id, '_tripadvisor_activity_id', true);
                                 $ta_url = get_post_meta($id, '_ta_url', true);
+
+                                // Fallback URLs
+                                if (!$gyg_url && $gyg) $gyg_url = "https://www.getyourguide.com/activity/-t{$gyg}/";
+                                if (!$via_url && $via) $via_url = "https://www.viator.com/tours/search?query={$via}";
+                                if (!$ta_url && $ta) {
+                                    $clean_ta = preg_replace('/[^0-9]/', '', $ta);
+                                    $ta_url = (strpos($ta, 'd') === 0) ? "https://www.tripadvisor.com/Attraction_Review-g1-d{$clean_ta}" : "https://www.tripadvisor.com/{$ta}";
+                                }
+
                                 $gmb = get_post_meta($id, '_gmb_id', true);
                                 $tp  = get_post_meta($id, '_trustpilot_id', true);
                                 $title = $tour->post_title;
@@ -1080,6 +1128,44 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                 </div>
             </div>
         </div>
+
+        <!-- --- Tab: Feed Settings --- -->
+        <div id="feed" class="tab-content">
+            <div class="k-card" style="border-left: 4px solid var(--secondary);">
+                <h2>📡 Google Things to Do - SFTP Feed Delivery</h2>
+                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #020617; padding:1.5rem; border-radius:8px; border: 1px solid var(--border); margin-bottom: 20px;">
+                    <div>
+                        <label class="text-xs text-muted">SFTP Host</label>
+                        <input type="text" id="sftp-host" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_host', 'partnerupload.google.com')); ?>">
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted">SFTP Port</label>
+                        <input type="number" id="sftp-port" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_port', 19321)); ?>">
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted">SFTP Username</label>
+                        <input type="text" id="sftp-user" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_user', 'mc-sftp-5520609361')); ?>">
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted">SFTP Password</label>
+                        <input type="password" id="sftp-pass" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_pass', ':(2Q>%zv4e')); ?>">
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted">Private Key Path</label>
+                        <input type="text" id="sftp-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_key', '/home/u451564824/.ssh/gttd_rsa')); ?>">
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted">Target Filename (.xml)</label>
+                        <input type="text" id="sftp-file" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_file', 'tours_feed.xml')); ?>">
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="saveMappings()" class="k-btn k-btn-primary">Save SFTP Settings</button>
+                    <button onclick="runMaintenance('sftp_push')" class="k-btn k-btn-outline" style="border-color:var(--success); color:var(--success);">Push Feed Now</button>
+                </div>
+                <div id="sftp-status" style="margin-top:10px; font-size:11px; color:var(--text-muted);"></div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1110,7 +1196,8 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                 // Handle tab switching
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === this.data.currentTab));
                 document.querySelectorAll('.tab-btn').forEach(b => {
-                    const tid = b.textContent.toLowerCase().includes('sync') ? 'sync' : (b.textContent.toLowerCase().includes('mapping') ? 'mapping' : 'maintenance');
+                    const text = b.textContent.toLowerCase();
+                    const tid = text.includes('sync') ? 'sync' : (text.includes('mapping') ? 'mapping' : (text.includes('feed') ? 'feed' : 'maintenance'));
                     b.classList.toggle('active', tid === this.data.currentTab);
                 });
 
@@ -1281,8 +1368,15 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     const formData = new FormData();
                     formData.append('action', 'save_ota_mappings');
                     formData.append('mappings', JSON.stringify(mappings));
-                    formData.append('gyg_partner_key', document.getElementById('gyg-partner-api-key').value);
                     formData.append('ta_api_key', document.getElementById('ta-api-key').value);
+                    
+                    // SFTP Fields
+                    formData.append('sftp_host', document.getElementById('sftp-host').value);
+                    formData.append('sftp_port', document.getElementById('sftp-port').value);
+                    formData.append('sftp_user', document.getElementById('sftp-user').value);
+                    formData.append('sftp_pass', document.getElementById('sftp-pass').value);
+                    formData.append('sftp_key', document.getElementById('sftp-key').value);
+                    formData.append('sftp_file', document.getElementById('sftp-file').value);
 
                     const resp = await fetch(window.location.href, { method: 'POST', body: formData });
                     const data = await resp.json();
@@ -1360,7 +1454,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             });
         }
 
-        async function manualImport() {
+        async function manualImport(source = 'detect') {
             const jsonText = document.getElementById('manual-json').value.trim();
             const postId = document.getElementById('manual-post-id').value;
             const logBox = document.getElementById('sync-runner-log');
@@ -1372,10 +1466,13 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                 const raw = JSON.parse(jsonText);
                 let reviews = [];
                 
-                // 1. Detect Format & Normalize
-                if (raw.reviews && Array.isArray(raw.reviews)) {
-                    // Travelers API or Official API v1
-                    reviews = raw.reviews.map(r => {
+                // 1. Detect/Force Format & Normalize
+                if (source === 'gyg' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.review_id || raw.reviews[0]?.id))) {
+                    // GYG: Travelers API or Official API v1
+                    const data = source === 'gyg' ? (raw.reviews || raw) : raw.reviews;
+                    const items = Array.isArray(data) ? data : (data.reviews || []);
+                    
+                    reviews = items.map(r => {
                         // Official API v1 mapping
                         if (r.review_id) {
                             return {
@@ -1419,9 +1516,10 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         }
                         return null;
                     }).filter(r => r !== null);
-                } else if (raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.reviewReferenceId || raw.reviews[0]?.reviewText)) {
+                } else if (source === 'viator' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.reviewReferenceId || raw.reviews[0]?.reviewText))) {
                     // Viator Format
-                    reviews = raw.reviews.map(r => ({
+                    const items = Array.isArray(raw.reviews) ? raw.reviews : (Array.isArray(raw) ? raw : []);
+                    reviews = items.map(r => ({
                         postId: postId,
                         reviewId: r.reviewReferenceId || r.id,
                         metaKey: 'viator_review_id',
@@ -1431,9 +1529,10 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         dateStr: r.publishedDate || r.date || '',
                         targetLang: 'en'
                     }));
-                } else if (raw.data && Array.isArray(raw.data) && raw.data[0]?.location_id) {
+                } else if (source === 'tripadvisor' || (source === 'detect' && raw.data && Array.isArray(raw.data) && raw.data[0]?.location_id)) {
                     // TripAdvisor Content API Format
-                    reviews = raw.data.map(r => ({
+                    const items = raw.data || (Array.isArray(raw) ? raw : []);
+                    reviews = items.map(r => ({
                         postId: postId,
                         reviewId: r.id,
                         metaKey: 'tripadvisor_review_id',
@@ -1443,7 +1542,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         dateStr: r.published_date || '',
                         targetLang: 'en'
                     }));
-                } else if (Array.isArray(raw) && raw[0]?.author && raw[0]?.text) {
+                } else if (source === 'gmb' || (source === 'detect' && Array.isArray(raw) && raw[0]?.author)) {
                     // GMB Scraped Format (from browser tool)
                     const kwsMap = State.data.tourKeywords || {};
                     reviews = raw.map(r => {

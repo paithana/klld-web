@@ -4,25 +4,35 @@
  * This script captures the Google Things to Do feed and uploads it via SFTP.
  */
 
-// ── Configuration ──────────────────────────────────────────────────────────
-$sftp_host = 'partnerupload.google.com'; 
-$sftp_port = 19321;
-$sftp_user = 'mc-sftp-5520609361'; 
-$sftp_key  = '/home/u451564824/.ssh/gttd_rsa';
-$target_file = 'tours_feed.xml';
-$local_temp = __DIR__ . '/tours_feed.tmp.xml';
-
 // ── Load WordPress ─────────────────────────────────────────────────────────
-$wp_load = __DIR__ . '/../../../../../wp-load.php';
-if (file_exists($wp_load)) {
-    require_once $wp_load;
-} else {
-    // Fallback search
-    $wp_load = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php';
-    if (file_exists($wp_load)) require_once $wp_load;
+if ( ! defined( 'ABSPATH' ) ) {
+    $search_paths = [
+        __DIR__ . '/wp-load.php',
+        dirname(__DIR__, 2) . '/wp-load.php',
+        dirname(__DIR__, 3) . '/wp-load.php',
+        dirname(__DIR__, 4) . '/wp-load.php',
+        '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php'
+    ];
+    foreach ($search_paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+            break;
+        }
+    }
 }
 
 if (!defined('ABSPATH')) die('Error: Could not load WordPress environment.');
+
+// ── Configuration ──────────────────────────────────────────────────────────
+// 1. GTTD SFTP Credentials (from WordPress options)
+$sftp_host = get_option('_gttd_sftp_host', 'partnerupload.google.com'); 
+$sftp_port = (int)get_option('_gttd_sftp_port', 19321);
+$sftp_user = get_option('_gttd_sftp_user', 'mc-sftp-5520609361'); 
+$sftp_pass = get_option('_gttd_sftp_pass');
+$sftp_key  = get_option('_gttd_sftp_key', '/home/u451564824/.ssh/gttd_rsa');
+$target_file = get_option('_gttd_sftp_file', 'tours_feed.xml');
+$local_temp = __DIR__ . '/tours_feed.tmp.xml';
+$auth_method = $sftp_pass ? 'password' : 'key';
 
 // ── Load Dependencies ──────────────────────────────────────────────────────
 $autoload = ABSPATH . 'wp-content/plugins/google-listings-and-ads/vendor/autoload.php';
@@ -65,12 +75,22 @@ echo "Connecting to $sftp_host:$sftp_port as $sftp_user...\n";
 try {
     $sftp = new SFTP($sftp_host, $sftp_port);
     
-    // Load the private key
-    $key_content = file_get_contents($sftp_key);
-    $key = PublicKeyLoader::load($key_content);
+    // Auth Method
+    if ($sftp_pass) {
+        if (!$sftp->login($sftp_user, $sftp_pass)) {
+            die("SFTP Login Failed using password for $sftp_user\n");
+        }
+    } else {
+        // Load the private key
+        if (!file_exists($sftp_key)) {
+            die("Error: Private key file not found at $sftp_key\n");
+        }
+        $key_content = file_get_contents($sftp_key);
+        $key = PublicKeyLoader::load($key_content);
 
-    if (!$sftp->login($sftp_user, $key)) {
-        die("SFTP Login Failed using key at $sftp_key\n");
+        if (!$sftp->login($sftp_user, $key)) {
+            die("SFTP Login Failed using key at $sftp_key\n");
+        }
     }
 
     echo "Login successful. Uploading $target_file...\n";

@@ -2527,3 +2527,217 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in Command line code on line 2
+[18-Apr-2026 13:09:21 Asia/Bangkok] PHP Warning:  require_once(/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/wp-load.php): Failed to open stream: No such file or directory in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_system_suite.php on line 9
+[18-Apr-2026 13:09:21 Asia/Bangkok] PHP Stack trace:
+[18-Apr-2026 13:09:21 Asia/Bangkok] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_system_suite.php:0
+[18-Apr-2026 13:09:21 Asia/Bangkok] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/wp-load.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php:') in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_system_suite.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_system_suite.php on line 9
+[18-Apr-2026 06:10:20 UTC] PHP Warning:  require_once(wp-content/themes/traveler-childtheme/inc/ota-tools/review_tool.php): Failed to open stream: No such file or directory in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_multilingual.php on line 28
+[18-Apr-2026 06:10:20 UTC] PHP Stack trace:
+[18-Apr-2026 06:10:20 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_multilingual.php:0
+[18-Apr-2026 06:10:20 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'wp-content/themes/traveler-childtheme/inc/ota-tools/review_tool.php' (include_path='/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/post-smtp/includes/libs/HTMLPurifier:.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php:') in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_multilingual.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_multilingual.php on line 28
+[18-Apr-2026 06:43:57 UTC] PHP Fatal error:  Uncaught TypeError: array_slice(): Argument #1 ($array) must be of type array, null given in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:57
+Stack trace:
+#0 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php(57): array_slice()
+#1 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/class-ota-cli.php(37): require_once('/home/u45156482...')
+#2 [internal function]: KLLD_OTA_CLI_Command->sync()
+#3 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func()
+#4 [internal function]: WP_CLI\Dispatcher\CommandFactory::WP_CLI\Dispatcher\{closure}()
+#5 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func()
+#6 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke()
+#7 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command()
+#8 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1295): WP_CLI\Runner->run_command_and_exit()
+#9 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#10 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process()
+#11 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#12 phar:///usr/local/bin/wp-cli-2.12.0.phar/php/boot-phar.php(20): include('phar:///usr/loc...')
+#13 /usr/local/bin/wp-cli-2.12.0.phar(4): include('phar:///usr/loc...')
+#14 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php on line 57
+[18-Apr-2026 06:47:23 UTC] PHP Fatal error:  Uncaught TypeError: array_map(): Argument #2 ($array) must be of type array, int given in phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Formatter.php:94
+Stack trace:
+#0 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Formatter.php(94): array_map()
+#1 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/entity-command/src/Comment_Command.php(411): WP_CLI\Formatter->display_items()
+#2 [internal function]: Comment_Command->list_()
+#3 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func()
+#4 [internal function]: WP_CLI\Dispatcher\CommandFactory::WP_CLI\Dispatcher\{closure}()
+#5 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func()
+#6 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke()
+#7 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command()
+#8 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1295): WP_CLI\Runner->run_command_and_exit()
+#9 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#10 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process()
+#11 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#12 phar:///usr/local/bin/wp-cli-2.12.0.phar/php/boot-phar.php(20): include('phar:///usr/loc...')
+#13 /usr/local/bin/wp-cli-2.12.0.phar(4): include('phar:///usr/loc...')
+#14 {main}
+  thrown in phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Formatter.php on line 94
+[18-Apr-2026 06:50:15 UTC] PHP Fatal error:  Uncaught ValueError: Path cannot be empty in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php:15
+Stack trace:
+#0 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php(15): file_put_contents()
+#1 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php(18): logMapper()
+#2 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/class-ota-cli.php(62): require_once('/home/u45156482...')
+#3 [internal function]: KLLD_OTA_CLI_Command->map()
+#4 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func()
+#5 [internal function]: WP_CLI\Dispatcher\CommandFactory::WP_CLI\Dispatcher\{closure}()
+#6 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func()
+#7 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke()
+#8 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command()
+#9 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1295): WP_CLI\Runner->run_command_and_exit()
+#10 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#11 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process()
+#12 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#13 phar:///usr/local/bin/wp-cli-2.12.0.phar/php/boot-phar.php(20): include('phar:///usr/loc...')
+#14 /usr/local/bin/wp-cli-2.12.0.phar(4): include('phar:///usr/loc...')
+#15 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php on line 15
+[18-Apr-2026 06:55:25 UTC] PHP Fatal error:  Uncaught ValueError: Path cannot be empty in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php:15
+Stack trace:
+#0 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php(15): file_put_contents()
+#1 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php(18): logMapper()
+#2 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/class-ota-cli.php(62): require_once('/home/u45156482...')
+#3 [internal function]: KLLD_OTA_CLI_Command->map()
+#4 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func()
+#5 [internal function]: WP_CLI\Dispatcher\CommandFactory::WP_CLI\Dispatcher\{closure}()
+#6 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func()
+#7 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke()
+#8 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command()
+#9 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1295): WP_CLI\Runner->run_command_and_exit()
+#10 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#11 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process()
+#12 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#13 phar:///usr/local/bin/wp-cli-2.12.0.phar/php/boot-phar.php(20): include('phar:///usr/loc...')
+#14 /usr/local/bin/wp-cli-2.12.0.phar(4): include('phar:///usr/loc...')
+#15 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php on line 15
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:04:30 UTC] PHP Warning:  Undefined array key "availability" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/google-tours-feed.php on line 305
+[18-Apr-2026 07:04:30 UTC] PHP Stack trace:
+[18-Apr-2026 07:04:30 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:0
+[18-Apr-2026 07:04:30 UTC] PHP   2. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php:52
+[18-Apr-2026 07:11:52 UTC] PHP Parse error:  syntax error, unexpected token "<" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/admin-tools-loader.php on line 38
+[18-Apr-2026 14:13:24 Asia/Bangkok] PHP Warning:  require_once(/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/wp-load.php): Failed to open stream: No such file or directory in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php on line 8
+[18-Apr-2026 14:13:24 Asia/Bangkok] PHP Stack trace:
+[18-Apr-2026 14:13:24 Asia/Bangkok] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php:0
+[18-Apr-2026 14:13:24 Asia/Bangkok] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/wp-load.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php:') in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php on line 8
+[18-Apr-2026 14:13:48 Asia/Bangkok] PHP Warning:  require_once(/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/wp-load.php): Failed to open stream: No such file or directory in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php on line 8
+[18-Apr-2026 14:13:48 Asia/Bangkok] PHP Stack trace:
+[18-Apr-2026 14:13:48 Asia/Bangkok] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php:0
+[18-Apr-2026 14:13:48 Asia/Bangkok] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/wp-load.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php:') in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_google_customer_reviews.php on line 8
+[18-Apr-2026 15:07:59 Asia/Bangkok] PHP Warning:  require_once(/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/misc/wp-content/themes/traveler-childtheme/inc/ota-tools/ota_auto_mapper.php): Failed to open stream: No such file or directory in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/misc/ota_auto_mapper.php on line 5
+[18-Apr-2026 15:07:59 Asia/Bangkok] PHP Stack trace:
+[18-Apr-2026 15:07:59 Asia/Bangkok] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/misc/ota_auto_mapper.php:0
+[18-Apr-2026 15:07:59 Asia/Bangkok] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/misc/wp-content/themes/traveler-childtheme/inc/ota-tools/ota_auto_mapper.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php:') in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/misc/ota_auto_mapper.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/misc/ota_auto_mapper.php on line 5
+[18-Apr-2026 10:43:47 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method phpseclib3\Net\SFTP::setLogger() in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/sftp_debug.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/sftp_debug.php on line 18

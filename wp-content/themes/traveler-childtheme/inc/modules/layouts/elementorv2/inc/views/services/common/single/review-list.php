@@ -86,7 +86,12 @@
                             <?php
                         }
                         ?>
-                        <div class="date" itemprop="datePublished"><?php echo get_comment_date( TravelHelper::getDateFormat(), $comment_id ) ?></div>
+                        <div class="date" itemprop="datePublished">
+                            <?php 
+                            $formatted_date = get_comment_meta($comment_id, 'review_date_formatted', true);
+                            echo $formatted_date ? $formatted_date : get_comment_date( TravelHelper::getDateFormat(), $comment_id ); 
+                            ?>
+                        </div>
                     </div>
                 </div>
                 <div class="like">

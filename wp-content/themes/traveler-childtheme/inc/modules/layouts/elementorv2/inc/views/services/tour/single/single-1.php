@@ -18,7 +18,7 @@ while (have_posts()): the_post();
     $booking_type = st_get_booking_option_type();
     $tour_type = get_post_meta(get_the_ID(), 'type_tour', true);
     ?>
-    <div id="st-content-wrapper" class="st-style-4 st-style-elementor st-single-tour st-single-tour-<?php echo esc_attr($style_single);?>" itemscope itemtype="https://schema.org/Product">
+    <div id="st-content-wrapper" class="st-style-4 st-style-elementor st-single-tour st-single-tour-<?php echo esc_attr($style_single);?>" itemscope itemtype="https://schema.org/Tour">
         <?php
         echo stt_elementorv2()->loadView('components/banner');
         ?>

@@ -50,7 +50,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
             $relative_date = $tpl['date'] ?? '1 month ago';
             $timestamp = klld_get_relative_timestamp($relative_date);
             $full_date = date('Y-m-d H:i:s', $timestamp);
-            $formatted_date = date('d-M-Y', $timestamp); // Format: 17-Apr-2026
+            $formatted_date = date('d-m-Y', $timestamp); // Format: 17-04-2026
             
             $comment_data = [
                 'comment_post_ID' => $post_id,
@@ -59,7 +59,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
                 'comment_type' => 'st_reviews',
                 'comment_parent' => 0,
                 'user_id' => 0,
-                'comment_author_IP' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+                'comment_author_IP' => (PHP_SAPI === 'cli') ? '127.0.0.1' : ($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'),
                 'comment_agent' => 'KLLD-Review-Gen',
                 'comment_date' => $full_date,
                 'comment_approved' => $approve ? 1 : 0,
@@ -80,7 +80,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
                 update_comment_meta($comment_id, 'st_stat_service', $rating);
                 update_comment_meta($comment_id, 'st_stat_driver', $rating);
                 update_comment_meta($comment_id, 'gmb_review_id', 'gen_' . uniqid());
-                update_comment_meta($comment_id, 'ota_source', 'google');
+                update_comment_meta($comment_id, 'ota_source', 'gmb');
                 update_comment_meta($comment_id, 'review_date_formatted', $formatted_date);
                 
                 $tour_imported++;
