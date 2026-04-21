@@ -83,7 +83,8 @@
 }
 
 .ota-badge-gyg { background: #fff5f2; color: var(--ota-gyg); border: 1px solid #ffccbc; }
-.ota-badge-tripadvisor { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.ota-badge-tripadvisor { background: #00af87; color: white; border: 1px solid #00af87; padding-left: 22px; position: relative; }
+.ota-badge-tripadvisor::before { content: ''; position: absolute; left: 5px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: url('https://www.logo.wine/a/logo/TripAdvisor/TripAdvisor-Logo.wine.svg') no-repeat center; background-size: contain; filter: brightness(0) invert(1); }
 .ota-badge-viator { background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
 .ota-badge-gmb { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
 

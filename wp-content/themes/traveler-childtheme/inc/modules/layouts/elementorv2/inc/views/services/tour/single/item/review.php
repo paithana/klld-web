@@ -100,14 +100,16 @@
                     <?php comments_number(__('0 review on this Tour', 'traveler'), __('1 review on this Tour', 'traveler'), __('% reviews on this Tour', 'traveler')); ?>
                     - <?php echo sprintf(__('Showing %s to %s', 'traveler'), $from, $to) ?>
                 </div>
-                <div id="reviews" class="review-list">
+                <div id="reviews" class="review-list st-review-list-ajax" data-post-id="<?php echo get_the_ID(); ?>" data-paged="1" data-total-pages="<?php echo ceil($total / $comment_per_page); ?>">
                     <?php
                     $offset = ($paged - 1) * $comment_per_page;
                     $args = [
                         'number' => $comment_per_page,
                         'offset' => $offset,
                         'post_id' => get_the_ID(),
-                        'status' => ['approve']
+                        'status' => ['approve'],
+                        'orderby' => 'comment_date',
+                        'order' => 'DESC'
                     ];
                     $comments_query = new WP_Comment_Query;
                     $comments = $comments_query->query($args);
@@ -119,8 +121,52 @@
                     endif;
                     ?>
                 </div>
+                <?php if ($total > $comment_per_page): ?>
+                    <div class="load-more-reviews-wrapper text-center mt20">
+                        <a href="javascript:void(0);" class="btn btn-primary btn-load-more-reviews" id="st-btn-load-more-reviews">
+                            <?php echo esc_html__('Load More', 'traveler'); ?>
+                            <i class="fa fa-spinner fa-spin d-none"></i>
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
-            <?php TravelHelper::pagination_comment(['total' => $total,'next_icon'=>"stt-icon-arrow-right", 'prev_icon'=>"stt-icon-arrow-left"]) ?>
+            
+            <script>
+                jQuery(function($){
+                    $('#st-btn-load-more-reviews').on('click', function(e){
+                        e.preventDefault();
+                        var btn = $(this);
+                        var container = $('.st-review-list-ajax');
+                        var paged = container.data('paged');
+                        var totalPages = container.data('total-pages');
+                        var postId = container.data('post-id');
+                        
+                        if(paged < totalPages){
+                            btn.find('i').removeClass('d-none');
+                            $.ajax({
+                                url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                                type: 'POST',
+                                data: {
+                                    action: 'klld_load_more_reviews',
+                                    paged: paged + 1,
+                                    post_id: postId
+                                },
+                                success: function(response){
+                                    if(response.success){
+                                        container.append(response.data.html);
+                                        container.data('paged', paged + 1);
+                                        if((paged + 1) >= totalPages){
+                                            btn.hide();
+                                        }
+                                    }
+                                    btn.find('i').addClass('d-none');
+                                }
+                            });
+                        }
+                    });
+                });
+            </script>
+
             <?php
             if (comments_open($post_id)) {
                 ?>

@@ -581,3 +581,4 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/gttd_sftp_push.php on line 9
+[19-Apr-2026 10:09:54 Asia/Bangkok] PHP Parse error:  syntax error, unexpected token "echo", expecting "function" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php on line 472

@@ -463,51 +463,60 @@ class OTAReviewSync {
     }
 
     private function sync_tripadvisor_api($post_id, $ta_id, $limit_total = 100, $force = false) {
-        // Strip 'd' from ID if present (Content API expects numeric only)
         $location_id = preg_replace('/[^0-9]/', '', $ta_id);
         $api_key = get_option('_ta_api_key');
+        $batch = 5; 
+        $offset = 0;
+        $total_imported = 0;
 
         echo "  [TA] Official API sync for Location ID: $location_id\n";
 
-        $url = "https://api.tripadvisor.com/api/v1/location/{$location_id}/reviews?key={$api_key}&language=en";
-        
-        $resp = wp_remote_get($url, [
-            'timeout' => 20,
-            'headers' => [
-                'Accept' => 'application/json'
-            ]
-        ]);
+        while ($offset < $limit_total) {
+            $url = "https://api.content.tripadvisor.com/api/v1/location/{$location_id}/reviews?key={$api_key}&language=en&limit={$batch}&offset={$offset}";
+            
+            $resp = wp_remote_get($url, [
+                'timeout' => 20,
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'User-Agent' => 'KLLD Sync Agent'
+                ]
+            ]);
 
-        if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
-            $code = is_wp_error($resp) ? 'WP_Error' : wp_remote_retrieve_response_code($resp);
-            echo "  [TA] API Error: {$code}\n";
-            // Fallback to scraper if API fails
-            return $this->sync_tripadvisor_scraper($post_id, $ta_id, $limit_total, $force);
-        }
-
-        $data = json_decode(wp_remote_retrieve_body($resp), true);
-        if (!isset($data['data']) || !is_array($data['data'])) {
-            echo "  [TA] API Error: Invalid response format.\n";
-            return;
-        }
-
-        $total_imported = 0;
-        foreach ($data['data'] as $review) {
-            $remote_id = $review['id'] ?? '';
-            $text = $review['text'] ?? '';
-            $author = $review['user']['username'] ?? 'TA Traveler';
-            $rating = isset($review['rating']) ? intval($review['rating']) : 5;
-            $date = $review['published_date'] ?? '';
-
-            if ($text && $remote_id) {
-                $comment_id = $this->upsert_review($post_id, 'tripadvisor', $remote_id, [
-                    'author' => $author,
-                    'content' => $text,
-                    'rating' => $rating,
-                    'date' => $this->normalize_date($date)
-                ]);
-                if ($comment_id) $total_imported++;
+            if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
+                $code = is_wp_error($resp) ? 'WP_Error' : wp_remote_retrieve_response_code($resp);
+                echo "  [TA] API Error: {$code}\n";
+                if ($offset === 0) return $this->sync_tripadvisor_scraper($post_id, $ta_id, $limit_total, $force);
+                break;
             }
+
+            $data = json_decode(wp_remote_retrieve_body($resp), true);
+            $reviews = $data['data'] ?? [];
+            if (empty($reviews)) break;
+
+            echo "  [TA] Processing " . count($reviews) . " reviews (Offset: $offset)\n";
+
+            foreach ($reviews as $review) {
+                $remote_id = $review['id'] ?? '';
+                $text = $review['text'] ?? '';
+                $author = $review['user']['username'] ?? 'TA Traveler';
+                $rating = isset($review['rating']) ? intval($review['rating']) : 5;
+                $date = $review['published_date'] ?? '';
+                $title = $review['title'] ?? '';
+
+                if ($text && $remote_id) {
+                    $comment_id = $this->upsert_review($post_id, 'tripadvisor', $remote_id, [
+                        'author' => $author,
+                        'content' => $text,
+                        'rating' => $rating,
+                        'title' => $title,
+                        'date' => $this->normalize_date($date)
+                    ]);
+                    if ($comment_id) $total_imported++;
+                }
+            }
+
+            $offset += count($reviews);
+            if (count($reviews) < $batch) break;
         }
         echo "  - TA (API): Imported $total_imported reviews for Location ID $location_id\n";
     }

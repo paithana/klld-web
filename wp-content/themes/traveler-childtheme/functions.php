@@ -573,3 +573,54 @@ function klld_sort_reviews_by_date_desc( $comment_args ) {
     $comment_args['order']   = 'DESC';
     return $comment_args;
 }
+
+/**
+ * Optimize Google Maps script loading with async and defer
+ */
+add_filter('script_loader_tag', 'klld_add_async_defer_attribute', 10, 2);
+function klld_add_async_defer_attribute($tag, $handle) {
+    if ('gmap-apiv3' !== $handle) {
+        return $tag;
+    }
+    return str_replace(' src', ' async defer src', $tag);
+}
+
+/**
+ * AJAX Handler for Load More Reviews
+ */
+add_action('wp_ajax_klld_load_more_reviews', 'klld_load_more_reviews');
+add_action('wp_ajax_nopriv_klld_load_more_reviews', 'klld_load_more_reviews');
+function klld_load_more_reviews() {
+    $paged = (int)($_POST['paged'] ?? 1);
+    $post_id = (int)($_POST['post_id'] ?? 0);
+    $comment_per_page = (int)get_option('comments_per_page', 10);
+    $offset = ($paged - 1) * $comment_per_page;
+
+    $args = [
+        'number'  => $comment_per_page,
+        'offset'  => $offset,
+        'post_id' => $post_id,
+        'status'  => ['approve'],
+        'orderby' => 'comment_date',
+        'order'   => 'DESC'
+    ];
+    $comments_query = new WP_Comment_Query;
+    $comments = $comments_query->query($args);
+
+    $html = '';
+    if ($comments) {
+        foreach ($comments as $comment) {
+            $html .= stt_elementorv2()->loadView('services/common/single/review-list', ['comment' => (object)$comment, 'post_type' => 'st_tours']);
+        }
+    }
+
+    wp_send_json_success(['html' => $html]);
+}
+
+/**
+ * Ensure images in reviews are lazy-loaded
+ */
+add_filter('wp_get_attachment_image_attributes', function($atts, $attachment, $size) {
+    $atts['loading'] = 'lazy';
+    return $atts;
+}, 10, 3);

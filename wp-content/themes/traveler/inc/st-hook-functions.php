@@ -263,6 +263,7 @@ if ( ! function_exists( 'st_add_scripts' ) ) {
 				'libraries' => 'places',
 				'language'  => 'en',
 				'key'       => $gg_api_key,
+				'loading'   => 'async',
 			], 'https://maps.googleapis.com/maps/api/js');
 		} else {
 			$url = add_query_arg([
@@ -270,6 +271,7 @@ if ( ! function_exists( 'st_add_scripts' ) ) {
 				'libraries' => 'places',
 				'language'  => 'en',
 				'key'       => $gg_api_key,
+				'loading'   => 'async',
 			], 'http://maps.googleapis.com/maps/api/js');
 		}
 		wp_enqueue_script( 'gmap-apiv3', $url, [ 'jquery' ], null, true );

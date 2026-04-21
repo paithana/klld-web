@@ -575,6 +575,480 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GetYourGuide Reviews → SQL Generator | KLD</title>
 <?php } ?>
+    <script>
+        /**
+         * KLLD State Management (React-inspired pattern)
+         */
+        const State = {
+            data: {
+                mappings: [],
+                isSyncing: false,
+                currentTab: 'sync',
+                lastLog: 'Ready...',
+                stopSync: false,
+                searchQuery: ''
+            },
+            
+            listeners: [],
+
+            subscribe(fn) { this.listeners.push(fn); },
+
+            setState(update) {
+                this.data = { ...this.data, ...update };
+                this.listeners.forEach(fn => fn(this.data));
+                this.render();
+            },
+
+            render() {
+                // Handle tab switching
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === this.data.currentTab));
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    const text = b.textContent.toLowerCase();
+                    const tid = text.includes('sync') ? 'sync' : (text.includes('mapping') ? 'mapping' : (text.includes('feed') ? 'feed' : 'maintenance'));
+                    b.classList.toggle('active', tid === this.data.currentTab);
+                });
+
+                // Handle sync badge/button
+                const syncBtn = document.getElementById('sync-runner-btn');
+                if (syncBtn) {
+                    syncBtn.disabled = this.data.isSyncing;
+                    syncBtn.innerHTML = this.data.isSyncing ? '⏳ Syncing...' : '🚀 Start Full Sync';
+                }
+
+                const badge = document.getElementById('status-badge');
+                if (badge) {
+                    badge.textContent = this.data.isSyncing ? 'Syncing...' : 'Ready';
+                    badge.className = `badge ${this.data.isSyncing ? 'badge-blue pulse' : 'badge-green'}`;
+                }
+            }
+        };
+
+        // Initialize state
+        window.addEventListener('DOMContentLoaded', () => {
+            const tourKeywords = {
+                <?php
+                foreach ($all_st_tours as $t) {
+                    $kw = get_post_meta($t->ID, '_ota_keywords', true);
+                    if ($kw) echo "'{$t->ID}': " . json_encode(array_map('trim', explode(',', $kw))) . ",\n";
+                }
+                ?>
+            };
+            State.setState({ tourKeywords });
+            State.subscribe(data => console.log('State Updated:', data));
+            State.render();
+        });
+
+        function showTab(tabId) {
+            State.setState({ currentTab: tabId });
+        }
+
+        /**
+         * Confirmation Hurdle
+         */
+        function confirmAction(actionName, callback) {
+            if (confirm(`Are you sure you want to perform: ${actionName}?`)) {
+                callback();
+            }
+        }
+
+        async function syncSingleGYG(wpId, mode = 'auto') {
+            const logBox = document.getElementById('sync-runner-log');
+            const secret = 'kld_sync_2024';
+            
+            State.setState({ isSyncing: true, currentTab: 'sync' });
+            logBox.innerHTML = `<b>Syncing Individual Tour (#${wpId}) in ${mode} mode...</b><br>`;
+            logBox.scrollTop = logBox.scrollHeight;
+
+            try {
+                // Using relative path for the current folder
+                const url = `inc/ota-tools/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1&mode=${mode}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (data.success) {
+                    const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
+                    logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
+                    logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:100px; overflow:auto;">${data.log}</pre>`;
+                } else {
+                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
+                }
+            } catch (e) {
+                logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
+            }
+            
+            State.setState({ isSyncing: false });
+            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        async function syncAllSources(wpId) {
+            const logBox = document.getElementById('sync-runner-log');
+            const secret = 'kld_sync_2024';
+            
+            State.setState({ isSyncing: true, currentTab: 'sync' });
+            logBox.innerHTML = `<b>Syncing ALL Sources for Tour (#${wpId})...</b><br>`;
+            logBox.scrollTop = logBox.scrollHeight;
+
+            try {
+                // We use ota_sync.php?post_id=X&force=1 which naturally handles all mapped sources in the backend
+                const url = `inc/ota-tools/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (data.success) {
+                    logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Sync completed for all sources.</div>`;
+                    logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:200px; overflow:auto;">${data.log}</pre>`;
+                } else {
+                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
+                }
+            } catch (e) {
+                logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
+            }
+            
+            State.setState({ isSyncing: false });
+            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+
+        async function startHistoricalSync() {
+            confirmAction('FULL HISTORICAL SYNC (All Tours)', async () => {
+                const logBox = document.getElementById('sync-runner-log');
+                const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
+                const secret = 'kld_sync_2024';
+                
+                State.setState({ isSyncing: true, stopSync: false });
+                logBox.innerHTML = '<b>Initializing Global Sync Sequence...</b><br>';
+
+                for (let i = 0; i < rows.length; i++) {
+                    if (State.data.stopSync) {
+                        logBox.innerHTML += '<br><b style="color:var(--danger);">[ABORTED]</b>';
+                        break;
+                    }
+
+                    const wpId = rows[i].querySelector('.wp-id').value.trim();
+                    const tourName = rows[i].querySelector('.tour-name').value;
+                    if (!wpId) continue;
+
+                    logBox.innerHTML += `<div class="text-xs mt-1">[${i+1}/${rows.length}] ${tourName}...</div>`;
+                    logBox.scrollTop = logBox.scrollHeight;
+
+                    try {
+                        const url = `/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
+                        const resp = await fetch(url);
+                        const data = await resp.json();
+
+                        if (data.success) {
+                            const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
+                            logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
+                        } else {
+                            logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
+                        }
+                    } catch (e) {
+                        logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
+                    }
+                    logBox.scrollTop = logBox.scrollHeight;
+                }
+
+                State.setState({ isSyncing: false });
+                logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
+            });
+        }
+
+        async function saveMappings() {
+            confirmAction('SAVE ALL MAPPINGS', async () => {
+                const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
+                const mappings = rows.map(r => ({
+                    wpId: r.querySelector('.wp-id').value,
+                    gygId: r.querySelector('.gyg-id').value,
+                    gygUrl: r.querySelector('.gyg-url')?.value || '',
+                    viatorId: r.querySelector('.viator-id').value,
+                    viatorUrl: r.querySelector('.viator-url')?.value || '',
+                    taId: r.querySelector('.ta-id').value,
+                    taUrl: r.querySelector('.ta-url')?.value || '',
+                    gmbId: r.querySelector('.gmb-id').value,
+                    tpId: r.querySelector('.tp-id').value,
+                    keywords: r.querySelector('.keywords').value
+                }));
+
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'save_ota_mappings');
+                    formData.append('mappings', JSON.stringify(mappings));
+                    formData.append('ta_api_key', document.getElementById('ta-api-key').value);
+                    
+                    // SFTP Fields
+                    formData.append('sftp_host', document.getElementById('sftp-host').value);
+                    formData.append('sftp_port', document.getElementById('sftp-port').value);
+                    formData.append('sftp_user', document.getElementById('sftp-user').value);
+                    formData.append('sftp_pass', document.getElementById('sftp-pass').value);
+                    formData.append('sftp_key', document.getElementById('sftp-key').value);
+                    formData.append('sftp_file', document.getElementById('sftp-file').value);
+
+                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                    const data = await resp.json();
+                    if (data.success) {
+                        alert('✅ Mappings and Supplier URLs saved.');
+                        location.reload();
+                    } else {
+                        alert('❌ ' + (data.data || 'Save failed'));
+                    }
+                } catch (e) {
+                    alert('❌ Connection Error: ' + e.message);
+                }
+            });
+        }
+
+        async function runMaintenance(job) {
+            confirmAction(`DATABASE MAINTENANCE: ${job}`, async () => {
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'ota_db_maintenance');
+                    formData.append('job', job);
+                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                    const data = await resp.json();
+                    alert(data.success ? '✅ ' + data.data.message : '❌ ' + (data.data.message || data.data));
+                } catch(e) { alert('Maintenance Error'); }
+            });
+        }
+
+        async function runHealthCheck() {
+            const logPanel = document.getElementById('health-check-results');
+            const logPre = document.getElementById('health-log');
+            logPanel.style.display = 'block';
+            logPre.textContent = 'Running suite...';
+            
+            try {
+                const formData = new FormData();
+                formData.append('action', 'run_system_health_check');
+                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                const data = await resp.json();
+                if (data.success) {
+                    logPre.textContent = data.data.results;
+                } else {
+                    logPre.textContent = 'Health check failed to run.';
+                }
+            } catch(e) { logPre.textContent = 'Error: ' + e.message; }
+        }
+
+        async function runAutoMapper() {
+            confirmAction('RUN AUTO-MAPPER (Attempts to match GYG IDs to Tours automatically)', async () => {
+                const logBox = document.getElementById('sync-runner-log');
+                State.setState({ isSyncing: true, currentTab: 'sync' });
+                logBox.innerHTML = '<b>Initializing Auto-Mapper Script...</b><br>';
+                logBox.scrollTop = logBox.scrollHeight;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'run_auto_mapper');
+                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                    const data = await resp.json();
+                    
+                    if (data.success) {
+                        logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Auto-Mapping Complete.</div>`;
+                        logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:400px; overflow:auto;">${data.data.results}</pre>`;
+                        alert('✅ Auto-Mapping completed. Please refresh the page to see updated mappings.');
+                    } else {
+                        logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.data || 'Error'}</div>`;
+                    }
+                } catch (e) {
+                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
+                }
+                
+                State.setState({ isSyncing: false });
+                logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
+                logBox.scrollTop = logBox.scrollHeight;
+            });
+        }
+
+        async function manualImport(source = 'detect') {
+            const jsonText = document.getElementById('manual-json').value.trim();
+            const postId = document.getElementById('manual-post-id').value;
+            const logBox = document.getElementById('sync-runner-log');
+
+            if (!jsonText) { alert('Please paste JSON data first.'); return; }
+            if (!postId) { alert('Please select a target tour.'); return; }
+
+            try {
+                const raw = JSON.parse(jsonText);
+                let reviews = [];
+                
+                // 1. Detect/Force Format & Normalize
+                if (source === 'gyg' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.review_id || raw.reviews[0]?.id))) {
+                    // GYG: Travelers API or Official API v1
+                    const data = source === 'gyg' ? (raw.reviews || raw) : raw.reviews;
+                    const items = Array.isArray(data) ? data : (data.reviews || []);
+                    
+                    reviews = items.map(r => {
+                        // Official API v1 mapping
+                        if (r.review_id) {
+                            return {
+                                postId: postId,
+                                reviewId: r.review_id,
+                                metaKey: 'gyg_review_id',
+                                author: r.author_name || 'Traveler',
+                                content: r.review_content,
+                                rating: r.review_rating,
+                                dateStr: r.review_date,
+                                targetLang: 'en'
+                            };
+                        }
+                        // Travelers API mapping
+                        if (r.id) {
+                            const subStats = {};
+                            if (r.ratings && Array.isArray(r.ratings)) {
+                                r.ratings.forEach(sr => {
+                                    if (sr.ratingType === 'rating_guide') subStats.statGuide = sr.ratingValue;
+                                    if (sr.ratingType === 'rating_transport') subStats.statDriver = sr.ratingValue;
+                                    if (sr.ratingType === 'rating_overall') subStats.statService = sr.ratingValue;
+                                    if (sr.ratingType === 'rating_value') subStats.statItinerary = sr.ratingValue;
+                                });
+                            }
+
+                            return {
+                                postId: postId,
+                                reviewId: r.id,
+                                metaKey: 'gyg_review_id',
+                                author: r.fullName || 'Traveler',
+                                content: r.message,
+                                rating: r.rating,
+                                dateStr: r.created,
+                                statGuide: subStats.statGuide,
+                                statDriver: subStats.statDriver,
+                                statService: subStats.statService,
+                                statItinerary: subStats.statItinerary,
+                                statTransport: subStats.statDriver, // Map transport to driver if available
+                                targetLang: 'en'
+                            };
+                        }
+                        return null;
+                    }).filter(r => r !== null);
+                } else if (source === 'viator' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.reviewReferenceId || raw.reviews[0]?.reviewText))) {
+                    // Viator Format
+                    const items = Array.isArray(raw.reviews) ? raw.reviews : (Array.isArray(raw) ? raw : []);
+                    reviews = items.map(r => ({
+                        postId: postId,
+                        reviewId: r.reviewReferenceId || r.id,
+                        metaKey: 'viator_review_id',
+                        author: r.userName || r.authorName || 'Viator Traveler',
+                        content: r.reviewText || r.text || '',
+                        rating: r.rating || 5,
+                        dateStr: r.publishedDate || r.date || '',
+                        targetLang: 'en'
+                    }));
+                } else if (source === 'tripadvisor' || (source === 'detect' && raw.data && Array.isArray(raw.data) && raw.data[0]?.location_id)) {
+                    // TripAdvisor Content API Format
+                    const items = raw.data || (Array.isArray(raw) ? raw : []);
+                    reviews = items.map(r => ({
+                        postId: postId,
+                        reviewId: r.id,
+                        metaKey: 'tripadvisor_review_id',
+                        author: r.user?.username || 'TA Traveler',
+                        content: (r.title ? '<strong>' + r.title + '</strong><br>' : '') + r.text,
+                        rating: r.rating || 5,
+                        dateStr: r.published_date || '',
+                        targetLang: 'en'
+                    }));
+                } else if (source === 'gmb' || (source === 'detect' && Array.isArray(raw) && raw[0]?.author)) {
+                    // GMB Scraped Format (from browser tool)
+                    const kwsMap = State.data.tourKeywords || {};
+                    reviews = raw.map(r => {
+                        let matchedPostId = postId; // Default to selected
+                        
+                        // Try to auto-detect if postId was 0 or "Detect"
+                        if (postId === 'detect' || postId === '0') {
+                            for (const [tid, kws] of Object.entries(kwsMap)) {
+                                for (const kw of kws) {
+                                    if (kw && r.text.toLowerCase().includes(kw.toLowerCase())) {
+                                        matchedPostId = tid;
+                                        break;
+                                    }
+                                }
+                                if (matchedPostId !== postId) break;
+                            }
+                        }
+
+                        return {
+                            postId: matchedPostId,
+                            reviewId: btoa(r.author + r.date).substring(0, 16), // Generate unique ID
+                            metaKey: 'gmb_review_id',
+                            author: r.author,
+                            content: r.text,
+                            rating: parseFloat(String(r.rating).replace(/[^0-9.]/g, '')),
+                            dateStr: r.date,
+                            source: 'gmb',
+                            targetLang: 'en'
+                        };
+                    });
+                } else if (Array.isArray(raw) && (raw[0]?.text || raw[0]?.content)) {
+                    // Generic / TripAdvisor JSON
+                    reviews = raw.map(r => ({
+                        postId: postId,
+                        reviewId: r.id || btoa(r.author + r.text).substring(0,12),
+                        metaKey: 'tripadvisor_review_id',
+                        author: r.author || 'Traveler',
+                        content: r.text || r.content || '',
+                        rating: r.rating || 5,
+                        dateStr: r.date || '',
+                        targetLang: 'en'
+                    }));
+                }
+
+                if (reviews.length === 0) {
+                    alert('No reviews found in the provided JSON format.');
+                    return;
+                }
+
+                if (!confirm(`Found ${reviews.length} reviews. Import them now?`)) return;
+
+                State.setState({ isSyncing: true, currentTab: 'sync' });
+                logBox.innerHTML = `<b>Manually Importing ${reviews.length} reviews...</b><br>`;
+
+                const formData = new FormData();
+                formData.append('action', 'ota_direct_import');
+                formData.append('batch', JSON.stringify(reviews));
+
+                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+                const data = await resp.json();
+
+                if (data.success) {
+                    logBox.innerHTML += `<div style="color:var(--success);">${data.data.message}</div>`;
+                } else {
+                    logBox.innerHTML += `<div style="color:var(--danger);">Import Error: ${data.data}</div>`;
+                }
+
+            } catch (e) {
+                alert('Invalid JSON: ' + e.message);
+            }
+            State.setState({ isSyncing: false });
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function filterTours() {
+            const query = document.getElementById('tour-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#tour-rows .tour-row');
+            
+            rows.forEach(row => {
+                const searchData = row.getAttribute('data-search');
+                if (searchData.includes(query)) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Subtle feedback? maybe alert is too much
+                // alert('Copied: ' + text);
+            });
+        }
+
+        function clearAll() {
+            document.getElementById('sync-runner-log').innerHTML = 'Ready...';
+        }
+    </script>
     <style>
         :root {
             --primary: #0ea5e9;
@@ -1168,479 +1642,6 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
         </div>
     </div>
 
-    <script>
-        /**
-         * KLLD State Management (React-inspired pattern)
-         */
-        const State = {
-            data: {
-                mappings: [],
-                isSyncing: false,
-                currentTab: 'sync',
-                lastLog: 'Ready...',
-                stopSync: false,
-                searchQuery: ''
-            },
-            
-            listeners: [],
-
-            subscribe(fn) { this.listeners.push(fn); },
-
-            setState(update) {
-                this.data = { ...this.data, ...update };
-                this.listeners.forEach(fn => fn(this.data));
-                this.render();
-            },
-
-            render() {
-                // Handle tab switching
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === this.data.currentTab));
-                document.querySelectorAll('.tab-btn').forEach(b => {
-                    const text = b.textContent.toLowerCase();
-                    const tid = text.includes('sync') ? 'sync' : (text.includes('mapping') ? 'mapping' : (text.includes('feed') ? 'feed' : 'maintenance'));
-                    b.classList.toggle('active', tid === this.data.currentTab);
-                });
-
-                // Handle sync badge/button
-                const syncBtn = document.getElementById('sync-runner-btn');
-                if (syncBtn) {
-                    syncBtn.disabled = this.data.isSyncing;
-                    syncBtn.innerHTML = this.data.isSyncing ? '⏳ Syncing...' : '🚀 Start Full Sync';
-                }
-
-                const badge = document.getElementById('status-badge');
-                if (badge) {
-                    badge.textContent = this.data.isSyncing ? 'Syncing...' : 'Ready';
-                    badge.className = `badge ${this.data.isSyncing ? 'badge-blue pulse' : 'badge-green'}`;
-                }
-            }
-        };
-
-        // Initialize state
-        window.addEventListener('DOMContentLoaded', () => {
-            const tourKeywords = {
-                <?php
-                foreach ($all_st_tours as $t) {
-                    $kw = get_post_meta($t->ID, '_ota_keywords', true);
-                    if ($kw) echo "'{$t->ID}': " . json_encode(array_map('trim', explode(',', $kw))) . ",\n";
-                }
-                ?>
-            };
-            State.setState({ tourKeywords });
-            State.subscribe(data => console.log('State Updated:', data));
-            State.render();
-        });
-
-        function showTab(tabId) {
-            State.setState({ currentTab: tabId });
-        }
-
-        /**
-         * Confirmation Hurdle
-         */
-        function confirmAction(actionName, callback) {
-            if (confirm(`Are you sure you want to perform: ${actionName}?`)) {
-                callback();
-            }
-        }
-
-        async function syncSingleGYG(wpId, mode = 'auto') {
-            const logBox = document.getElementById('sync-runner-log');
-            const secret = 'kld_sync_2024';
-            
-            State.setState({ isSyncing: true, currentTab: 'sync' });
-            logBox.innerHTML = `<b>Syncing Individual Tour (#${wpId}) in ${mode} mode...</b><br>`;
-            logBox.scrollTop = logBox.scrollHeight;
-
-            try {
-                // Using relative path for the current folder
-                const url = `inc/ota-tools/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1&mode=${mode}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-
-                if (data.success) {
-                    const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
-                    logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
-                    logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:100px; overflow:auto;">${data.log}</pre>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
-                }
-            } catch (e) {
-                logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-            }
-            
-            State.setState({ isSyncing: false });
-            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        async function syncAllSources(wpId) {
-            const logBox = document.getElementById('sync-runner-log');
-            const secret = 'kld_sync_2024';
-            
-            State.setState({ isSyncing: true, currentTab: 'sync' });
-            logBox.innerHTML = `<b>Syncing ALL Sources for Tour (#${wpId})...</b><br>`;
-            logBox.scrollTop = logBox.scrollHeight;
-
-            try {
-                // We use ota_sync.php?post_id=X&force=1 which naturally handles all mapped sources in the backend
-                const url = `inc/ota-tools/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-
-                if (data.success) {
-                    logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Sync completed for all sources.</div>`;
-                    logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:200px; overflow:auto;">${data.log}</pre>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
-                }
-            } catch (e) {
-                logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-            }
-            
-            State.setState({ isSyncing: false });
-            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-
-        async function startHistoricalSync() {
-            confirmAction('FULL HISTORICAL SYNC (All Tours)', async () => {
-                const logBox = document.getElementById('sync-runner-log');
-                const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
-                const secret = 'kld_sync_2024';
-                
-                State.setState({ isSyncing: true, stopSync: false });
-                logBox.innerHTML = '<b>Initializing Global Sync Sequence...</b><br>';
-
-                for (let i = 0; i < rows.length; i++) {
-                    if (State.data.stopSync) {
-                        logBox.innerHTML += '<br><b style="color:var(--danger);">[ABORTED]</b>';
-                        break;
-                    }
-
-                    const wpId = rows[i].querySelector('.wp-id').value.trim();
-                    const tourName = rows[i].querySelector('.tour-name').value;
-                    if (!wpId) continue;
-
-                    logBox.innerHTML += `<div class="text-xs mt-1">[${i+1}/${rows.length}] ${tourName}...</div>`;
-                    logBox.scrollTop = logBox.scrollHeight;
-
-                    try {
-                        const url = `/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
-                        const resp = await fetch(url);
-                        const data = await resp.json();
-
-                        if (data.success) {
-                            const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
-                            logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
-                        } else {
-                            logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
-                        }
-                    } catch (e) {
-                        logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-                    }
-                    logBox.scrollTop = logBox.scrollHeight;
-                }
-
-                State.setState({ isSyncing: false });
-                logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-            });
-        }
-
-        async function saveMappings() {
-            confirmAction('SAVE ALL MAPPINGS', async () => {
-                const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
-                const mappings = rows.map(r => ({
-                    wpId: r.querySelector('.wp-id').value,
-                    gygId: r.querySelector('.gyg-id').value,
-                    gygUrl: r.querySelector('.gyg-url')?.value || '',
-                    viatorId: r.querySelector('.viator-id').value,
-                    viatorUrl: r.querySelector('.viator-url')?.value || '',
-                    taId: r.querySelector('.ta-id').value,
-                    taUrl: r.querySelector('.ta-url')?.value || '',
-                    gmbId: r.querySelector('.gmb-id').value,
-                    tpId: r.querySelector('.tp-id').value,
-                    keywords: r.querySelector('.keywords').value
-                }));
-
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'save_ota_mappings');
-                    formData.append('mappings', JSON.stringify(mappings));
-                    formData.append('ta_api_key', document.getElementById('ta-api-key').value);
-                    
-                    // SFTP Fields
-                    formData.append('sftp_host', document.getElementById('sftp-host').value);
-                    formData.append('sftp_port', document.getElementById('sftp-port').value);
-                    formData.append('sftp_user', document.getElementById('sftp-user').value);
-                    formData.append('sftp_pass', document.getElementById('sftp-pass').value);
-                    formData.append('sftp_key', document.getElementById('sftp-key').value);
-                    formData.append('sftp_file', document.getElementById('sftp-file').value);
-
-                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                    const data = await resp.json();
-                    if (data.success) {
-                        alert('✅ Mappings and Supplier URLs saved.');
-                        location.reload();
-                    } else {
-                        alert('❌ ' + (data.data || 'Save failed'));
-                    }
-                } catch (e) {
-                    alert('❌ Connection Error: ' + e.message);
-                }
-            });
-        }
-
-        async function runMaintenance(job) {
-            confirmAction(`DATABASE MAINTENANCE: ${job}`, async () => {
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'ota_db_maintenance');
-                    formData.append('job', job);
-                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                    const data = await resp.json();
-                    alert(data.success ? '✅ ' + data.data.message : '❌ ' + (data.data.message || data.data));
-                } catch(e) { alert('Maintenance Error'); }
-            });
-        }
-
-        async function runHealthCheck() {
-            const logPanel = document.getElementById('health-check-results');
-            const logPre = document.getElementById('health-log');
-            logPanel.style.display = 'block';
-            logPre.textContent = 'Running suite...';
-            
-            try {
-                const formData = new FormData();
-                formData.append('action', 'run_system_health_check');
-                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                const data = await resp.json();
-                if (data.success) {
-                    logPre.textContent = data.data.results;
-                } else {
-                    logPre.textContent = 'Health check failed to run.';
-                }
-            } catch(e) { logPre.textContent = 'Error: ' + e.message; }
-        }
-
-        async function runAutoMapper() {
-            confirmAction('RUN AUTO-MAPPER (Attempts to match GYG IDs to Tours automatically)', async () => {
-                const logBox = document.getElementById('sync-runner-log');
-                State.setState({ isSyncing: true, currentTab: 'sync' });
-                logBox.innerHTML = '<b>Initializing Auto-Mapper Script...</b><br>';
-                logBox.scrollTop = logBox.scrollHeight;
-
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'run_auto_mapper');
-                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                    const data = await resp.json();
-                    
-                    if (data.success) {
-                        logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Auto-Mapping Complete.</div>`;
-                        logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:400px; overflow:auto;">${data.data.results}</pre>`;
-                        alert('✅ Auto-Mapping completed. Please refresh the page to see updated mappings.');
-                    } else {
-                        logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.data || 'Error'}</div>`;
-                    }
-                } catch (e) {
-                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-                }
-                
-                State.setState({ isSyncing: false });
-                logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-                logBox.scrollTop = logBox.scrollHeight;
-            });
-        }
-
-        async function manualImport(source = 'detect') {
-            const jsonText = document.getElementById('manual-json').value.trim();
-            const postId = document.getElementById('manual-post-id').value;
-            const logBox = document.getElementById('sync-runner-log');
-
-            if (!jsonText) { alert('Please paste JSON data first.'); return; }
-            if (!postId) { alert('Please select a target tour.'); return; }
-
-            try {
-                const raw = JSON.parse(jsonText);
-                let reviews = [];
-                
-                // 1. Detect/Force Format & Normalize
-                if (source === 'gyg' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.review_id || raw.reviews[0]?.id))) {
-                    // GYG: Travelers API or Official API v1
-                    const data = source === 'gyg' ? (raw.reviews || raw) : raw.reviews;
-                    const items = Array.isArray(data) ? data : (data.reviews || []);
-                    
-                    reviews = items.map(r => {
-                        // Official API v1 mapping
-                        if (r.review_id) {
-                            return {
-                                postId: postId,
-                                reviewId: r.review_id,
-                                metaKey: 'gyg_review_id',
-                                author: r.author_name || 'Traveler',
-                                content: r.review_content,
-                                rating: r.review_rating,
-                                dateStr: r.review_date,
-                                targetLang: 'en'
-                            };
-                        }
-                        // Travelers API mapping
-                        if (r.id) {
-                            const subStats = {};
-                            if (r.ratings && Array.isArray(r.ratings)) {
-                                r.ratings.forEach(sr => {
-                                    if (sr.ratingType === 'rating_guide') subStats.statGuide = sr.ratingValue;
-                                    if (sr.ratingType === 'rating_transport') subStats.statDriver = sr.ratingValue;
-                                    if (sr.ratingType === 'rating_overall') subStats.statService = sr.ratingValue;
-                                    if (sr.ratingType === 'rating_value') subStats.statItinerary = sr.ratingValue;
-                                });
-                            }
-
-                            return {
-                                postId: postId,
-                                reviewId: r.id,
-                                metaKey: 'gyg_review_id',
-                                author: r.fullName || 'Traveler',
-                                content: r.message,
-                                rating: r.rating,
-                                dateStr: r.created,
-                                statGuide: subStats.statGuide,
-                                statDriver: subStats.statDriver,
-                                statService: subStats.statService,
-                                statItinerary: subStats.statItinerary,
-                                statTransport: subStats.statDriver, // Map transport to driver if available
-                                targetLang: 'en'
-                            };
-                        }
-                        return null;
-                    }).filter(r => r !== null);
-                } else if (source === 'viator' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.reviewReferenceId || raw.reviews[0]?.reviewText))) {
-                    // Viator Format
-                    const items = Array.isArray(raw.reviews) ? raw.reviews : (Array.isArray(raw) ? raw : []);
-                    reviews = items.map(r => ({
-                        postId: postId,
-                        reviewId: r.reviewReferenceId || r.id,
-                        metaKey: 'viator_review_id',
-                        author: r.userName || r.authorName || 'Viator Traveler',
-                        content: r.reviewText || r.text || '',
-                        rating: r.rating || 5,
-                        dateStr: r.publishedDate || r.date || '',
-                        targetLang: 'en'
-                    }));
-                } else if (source === 'tripadvisor' || (source === 'detect' && raw.data && Array.isArray(raw.data) && raw.data[0]?.location_id)) {
-                    // TripAdvisor Content API Format
-                    const items = raw.data || (Array.isArray(raw) ? raw : []);
-                    reviews = items.map(r => ({
-                        postId: postId,
-                        reviewId: r.id,
-                        metaKey: 'tripadvisor_review_id',
-                        author: r.user?.username || 'TA Traveler',
-                        content: (r.title ? '<strong>' + r.title + '</strong><br>' : '') + r.text,
-                        rating: r.rating || 5,
-                        dateStr: r.published_date || '',
-                        targetLang: 'en'
-                    }));
-                } else if (source === 'gmb' || (source === 'detect' && Array.isArray(raw) && raw[0]?.author)) {
-                    // GMB Scraped Format (from browser tool)
-                    const kwsMap = State.data.tourKeywords || {};
-                    reviews = raw.map(r => {
-                        let matchedPostId = postId; // Default to selected
-                        
-                        // Try to auto-detect if postId was 0 or "Detect"
-                        if (postId === 'detect' || postId === '0') {
-                            for (const [tid, kws] of Object.entries(kwsMap)) {
-                                for (const kw of kws) {
-                                    if (kw && r.text.toLowerCase().includes(kw.toLowerCase())) {
-                                        matchedPostId = tid;
-                                        break;
-                                    }
-                                }
-                                if (matchedPostId !== postId) break;
-                            }
-                        }
-
-                        return {
-                            postId: matchedPostId,
-                            reviewId: btoa(r.author + r.date).substring(0, 16), // Generate unique ID
-                            metaKey: 'gmb_review_id',
-                            author: r.author,
-                            content: r.text,
-                            rating: parseFloat(String(r.rating).replace(/[^0-9.]/g, '')),
-                            dateStr: r.date,
-                            source: 'gmb',
-                            targetLang: 'en'
-                        };
-                    });
-                } else if (Array.isArray(raw) && (raw[0]?.text || raw[0]?.content)) {
-                    // Generic / TripAdvisor JSON
-                    reviews = raw.map(r => ({
-                        postId: postId,
-                        reviewId: r.id || btoa(r.author + r.text).substring(0,12),
-                        metaKey: 'tripadvisor_review_id',
-                        author: r.author || 'Traveler',
-                        content: r.text || r.content || '',
-                        rating: r.rating || 5,
-                        dateStr: r.date || '',
-                        targetLang: 'en'
-                    }));
-                }
-
-                if (reviews.length === 0) {
-                    alert('No reviews found in the provided JSON format.');
-                    return;
-                }
-
-                if (!confirm(`Found ${reviews.length} reviews. Import them now?`)) return;
-
-                State.setState({ isSyncing: true, currentTab: 'sync' });
-                logBox.innerHTML = `<b>Manually Importing ${reviews.length} reviews...</b><br>`;
-
-                const formData = new FormData();
-                formData.append('action', 'ota_direct_import');
-                formData.append('batch', JSON.stringify(reviews));
-
-                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                const data = await resp.json();
-
-                if (data.success) {
-                    logBox.innerHTML += `<div style="color:var(--success);">${data.data.message}</div>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger);">Import Error: ${data.data}</div>`;
-                }
-
-            } catch (e) {
-                alert('Invalid JSON: ' + e.message);
-            }
-            State.setState({ isSyncing: false });
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        function filterTours() {
-            const query = document.getElementById('tour-search').value.toLowerCase();
-            const rows = document.querySelectorAll('#tour-rows .tour-row');
-            
-            rows.forEach(row => {
-                const searchData = row.getAttribute('data-search');
-                if (searchData.includes(query)) {
-                    row.classList.remove('hidden');
-                } else {
-                    row.classList.add('hidden');
-                }
-            });
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                // Subtle feedback? maybe alert is too much
-                // alert('Copied: ' + text);
-            });
-        }
-
-        function clearAll() {
-            document.getElementById('sync-runner-log').innerHTML = 'Ready...';
-        }
-    </script>
+<?php if ( ! defined( "KLLD_TOOL_RUN" ) ) { ?>
 </body>
-</html>
+</html><?php } ?>

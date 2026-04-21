@@ -63,7 +63,7 @@ jQuery(function ($) {
             var car_from_value = this.value;
             var data = $("#transfer_from").select2("data");
             if (!data) {
-                var car_from_name = "Phuket Airport";
+                var car_from_name = "Phuket+Airport";
             }
             console.log(car_from_name);
             var from = parent_from.find(".destination-pickup render .destination");
@@ -75,7 +75,7 @@ jQuery(function ($) {
             var car_from_value = this.value;
             var data = $("#transfer_to").select2("data");
             if (!data) {
-                var car_from_name = "Khao Lak";
+                var car_from_name = "Khao+Lak";
             }
             console.log(car_from_name);
             var from = parent_from.find(".destination-dropoff .render .destination");

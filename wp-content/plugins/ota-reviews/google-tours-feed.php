@@ -94,6 +94,27 @@ if ($query->have_posts()) {
                 $price = $info_price['price_new'];
             }
         }
+
+        // WooCommerce Price Overwrite (Priority)
+        // Check if there is a linked WooCommerce product
+        $wc_product_ids = get_posts([
+            'post_type' => 'product',
+            'meta_key' => '_st_booking_id',
+            'meta_value' => $id,
+            'posts_per_page' => 1,
+            'fields' => 'ids'
+        ]);
+
+        if (!empty($wc_product_ids)) {
+            $wc_prod_id = $wc_product_ids[0];
+            $wc_product = wc_get_product($wc_prod_id);
+            if ($wc_product) {
+                $wc_price = $wc_product->get_price();
+                if ($wc_price > 0) {
+                    $price = $wc_price;
+                }
+            }
+        }
         
         $currency = function_exists('st_get_default_currency') ? st_get_default_currency() : 'THB';
         

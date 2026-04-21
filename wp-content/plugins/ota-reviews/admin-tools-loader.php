@@ -150,7 +150,8 @@ class KLLD_Admin_Tools {
                 .ota-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; text-transform: uppercase; }
                 .badge-gyg { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }
                 .badge-viator { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; }
-                .badge-tri { background: #f0f9ff; color: #0284c7; border: 1px solid #e0f2fe; }
+                .badge-tri { background: #00af87; color: white; border: 1px solid #00af87; padding-left: 22px; position: relative; }
+                .badge-tri::before { content: ''; position: absolute; left: 5px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: url('https://www.logo.wine/a/logo/TripAdvisor/TripAdvisor-Logo.wine.svg') no-repeat center; background-size: contain; filter: brightness(0) invert(1); }
                 .badge-gmb { background: #fdf2f2; color: #dc2626; border: 1px solid #fee2e2; }
                 .badge-tp { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; }
                 .rating-stars { color: #f59e0b; }
@@ -193,7 +194,7 @@ class KLLD_Admin_Tools {
                 <div class="k-card-tool">
                     <h3>📊 Feed Health</h3>
                     <p>Verify exactly what Google sees. Preview the JSON and XML feeds before they are pushed to servers.</p>
-                    <a href="<?php echo get_stylesheet_directory_uri(); ?>/inc/ota-tools/google-tours-feed.php?preview=1" target="_blank" class="k-btn-link">Preview Feed Statistics</a>
+                    <a href="<?php echo KLLD_OTA_PLUGIN_URL; ?>google-tours-feed.php?preview=1" target="_blank" class="k-btn-link">Preview Feed Statistics</a>
                 </div>
             </div>
 

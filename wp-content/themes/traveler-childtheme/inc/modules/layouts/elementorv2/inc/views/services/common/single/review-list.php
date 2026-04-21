@@ -53,7 +53,7 @@
                 <div class="media d-flex align-items-center">
                     <div class="media-left">
                         <?php 
-                        $img_dir = get_stylesheet_directory_uri() . '/inc/ota-tools/img/';
+                        $img_dir = plugins_url('ota-reviews/img/');
                         if ($is_gyg || $is_via || $is_tri || $is_gmb || $is_tp) {
                             $avatar_url = '';
                             if ($is_gyg) $avatar_url = $img_dir . 'avatar-gyg.svg';
@@ -63,7 +63,7 @@
                             elseif ($is_tp)  $avatar_url = $img_dir . 'avatar-trustpilot.svg';
 
                             if ($avatar_url) {
-                                echo '<img src="' . esc_url($avatar_url) . '" alt="OTA Avatar" class="avatar ota-avatar" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">';
+                                echo '<img src="' . esc_url($avatar_url) . '" alt="OTA Avatar" class="avatar ota-avatar" style="width:50px; height:50px; border-radius:50%; object-fit:cover;" loading="lazy">';
                             } else {
                                 echo st_get_profile_avatar($comment->user_id, 50);
                             }

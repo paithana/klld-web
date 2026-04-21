@@ -2741,3 +2741,93 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/sftp_debug.php on line 18
+[18-Apr-2026 12:14:28 UTC] WordPress database error Column 'comment_ID' in SELECT is ambiguous for query SELECT comment_ID, comment_post_ID FROM wp_comments c 
+     JOIN wp_commentmeta m ON c.comment_ID = m.comment_id 
+     WHERE m.meta_key = 'test_source_review_id' AND m.meta_value = 'test_multi_lang_1776514468'
+[18-Apr-2026 12:16:30 UTC] WordPress database error Column 'comment_ID' in SELECT is ambiguous for query SELECT comment_ID, comment_post_ID FROM wp_comments c 
+     JOIN wp_commentmeta m ON c.comment_ID = m.comment_id 
+     WHERE m.meta_key = 'test_source_review_id' AND m.meta_value = 'test_multi_lang_1776514590'
+[18-Apr-2026 12:17:56 UTC] PHP Warning:  Constant KLLD_TOOL_RUN already defined in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/tests/test_tripadvisor_suite.php on line 7
+[18-Apr-2026 12:17:56 UTC] PHP Stack trace:
+[18-Apr-2026 12:17:56 UTC] PHP   1. {main}() Command line code:0
+[18-Apr-2026 12:17:56 UTC] PHP   2. {main}() Command line code:0
+[18-Apr-2026 12:17:56 UTC] PHP   3. include() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/review_tool.php:454
+[19-Apr-2026 10:09:34 Asia/Bangkok] PHP Parse error:  syntax error, unexpected token "echo", expecting "function" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php on line 472
+[19-Apr-2026 06:11:25 UTC] PHP Fatal error:  Uncaught Error: Class "OTAReviewSync" not found in Command line code:1
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 1
+[19-Apr-2026 06:15:24 UTC] PHP Fatal error:  Uncaught Error: Class "OTAReviewSync" not found in Command line code:1
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 1
+[19-Apr-2026 13:27:45 Asia/Bangkok] PHP Warning:  file_get_contents(/dev/stdin): Failed to open stream: No such file or directory in Command line code on line 1
+[19-Apr-2026 13:27:45 Asia/Bangkok] PHP Stack trace:
+[19-Apr-2026 13:27:45 Asia/Bangkok] PHP   1. {main}() Command line code:0
+[19-Apr-2026 13:27:45 Asia/Bangkok] PHP   2. file_get_contents($filename = '/dev/stdin') Command line code:1
+[19-Apr-2026 06:29:50 UTC] WordPress database error Column 'comment_ID' in SELECT is ambiguous for query SELECT comment_ID, comment_post_ID FROM wp_comments c 
+     JOIN wp_commentmeta m ON c.comment_ID = m.comment_id 
+     WHERE m.meta_key = 'test_source_review_id' AND m.meta_value = 'test_multi_lang_1776580190'
+[19-Apr-2026 06:40:04 UTC] WordPress database error Column 'comment_ID' in SELECT is ambiguous for query SELECT comment_ID, comment_post_ID FROM wp_comments c 
+     JOIN wp_commentmeta m ON c.comment_ID = m.comment_id 
+     WHERE m.meta_key = 'test_source_review_id' AND m.meta_value = 'test_multi_lang_1776580804'
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
+[21-Apr-2026 06:44:56 UTC] PHP Stack trace:
+[21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0

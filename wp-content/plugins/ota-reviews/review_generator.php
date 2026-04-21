@@ -79,6 +79,32 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
                 update_comment_meta($comment_id, 'st_stat_tour-guide', $rating);
                 update_comment_meta($comment_id, 'st_stat_service', $rating);
                 update_comment_meta($comment_id, 'st_stat_driver', $rating);
+
+                // Add Serialized Stats for Traveler Theme Compatibility
+                $target_lang = 'en';
+                if (function_exists('icl_object_id')) {
+                    $target_lang = apply_filters('wpml_post_language_details', null, $post_id)['language_code'] ?? 'en';
+                }
+
+                $labels = [
+                    'en' => ['iti' => 'Itinerary', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Driver', 'food' => 'Food', 'trans' => 'Transport'],
+                    'de' => ['iti' => 'Reiseverlauf', 'guide' => 'Reiseleiter', 'svc' => 'Service', 'drv' => 'Fahrer', 'food' => 'Essen', 'trans' => 'Transport'],
+                    'da' => ['iti' => 'Rejseplan', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Chauffør', 'food' => 'Mad', 'trans' => 'Transport'],
+                    'no' => ['iti' => 'Reiseplan', 'guide' => 'Turguide', 'svc' => 'Service', 'drv' => 'Sjåfør', 'food' => 'Mat', 'trans' => 'Transport'],
+                    'sv' => ['iti' => 'Resplan', 'guide' => 'Reseledare', 'svc' => 'Service', 'drv' => 'Förare', 'food' => 'Mat', 'trans' => 'Transport'],
+                    'fr' => ['iti' => 'Itinéraire', 'guide' => 'Guide touristique', 'svc' => 'Service', 'drv' => 'Chauffeur', 'food' => 'Nourriture', 'trans' => 'Transport'],
+                    'nl' => ['iti' => 'Reisroute', 'guide' => 'Gids', 'svc' => 'Service', 'drv' => 'Bestuurder', 'food' => 'Eten', 'trans' => 'Vervoer'],
+                ];
+                $l = $labels[$target_lang] ?? $labels['en'];
+                
+                $stats_array = [
+                    $l['iti']   => $rating,
+                    $l['guide'] => $rating,
+                    $l['svc']   => $rating,
+                    $l['drv']   => $rating,
+                ];
+                update_comment_meta($comment_id, 'st_review_stats', serialize($stats_array));
+
                 update_comment_meta($comment_id, 'gmb_review_id', 'gen_' . uniqid());
                 update_comment_meta($comment_id, 'ota_source', 'gmb');
                 update_comment_meta($comment_id, 'review_date_formatted', $formatted_date);
