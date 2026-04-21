@@ -5,7 +5,7 @@
 
 require_once '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php';
 
-$json_file = __DIR__ . '/tests/gmb_test_data.json';
+$json_file = __DIR__ . '/data/source_gmb_legacy.json';
 if (!file_exists($json_file)) {
     die("JSON file not found: $json_file\n");
 }

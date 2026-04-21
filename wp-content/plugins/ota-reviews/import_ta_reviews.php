@@ -8,7 +8,7 @@
 
 require_once '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php';
 
-$json_file = __DIR__ . '/ta_scraped_reviews.json';
+$json_file = __DIR__ . '/data/source_ta.json';
 if (!file_exists($json_file)) {
     die("JSON file not found: $json_file\n");
 }

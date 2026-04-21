@@ -6,7 +6,7 @@
             <?php echo esc_html__('Reviews', 'traveler') ?>
         </h2>
         <div id="reviews" class="st-reviews">
-            <div class="st-review-form">
+            <div class="st-review-form" style="display: none;">
                 <div class="information-review">
                     <div class="review-box">
                         <div class="st-review-box-top">
@@ -86,7 +86,11 @@
                         </div>
                     </div>
                 </div>
+                <div id="write-review-form-content" class="mt20">
+                    <?php TravelHelper::comment_form(); ?>
+                </div>
             </div>
+
             <div class="review-pagination">
                 <div class="summary text-center">
                     <?php
@@ -98,9 +102,12 @@
                     $to = ($paged * $comment_per_page < $total) ? ($paged * $comment_per_page) : $total;
                     ?>
                     <?php comments_number(__('0 review on this Tour', 'traveler'), __('1 review on this Tour', 'traveler'), __('% reviews on this Tour', 'traveler')); ?>
-                    - <?php echo sprintf(__('Showing %s to %s', 'traveler'), $from, $to) ?>
                 </div>
-                <div id="reviews" class="review-list st-review-list-ajax" data-post-id="<?php echo get_the_ID(); ?>" data-paged="1" data-total-pages="<?php echo ceil($total / $comment_per_page); ?>">
+                <div id="reviews" class="review-list st-review-list-ajax" 
+                     data-post-id="<?php echo get_the_ID(); ?>" 
+                     data-paged="1" 
+                     data-total-pages="<?php echo ceil($total / $comment_per_page); ?>"
+                     data-comment-per-page="<?php echo $comment_per_page; ?>">
                     <?php
                     $offset = ($paged - 1) * $comment_per_page;
                     $args = [
@@ -121,28 +128,47 @@
                     endif;
                     ?>
                 </div>
+                
+                <div id="st-load-more-reviews-trigger" style="height: 10px; margin-top: -50px;"></div>
+
                 <?php if ($total > $comment_per_page): ?>
                     <div class="load-more-reviews-wrapper text-center mt20">
-                        <a href="javascript:void(0);" class="btn btn-primary btn-load-more-reviews" id="st-btn-load-more-reviews">
+                        <a href="javascript:void(0);" class="btn btn-primary btn-load-more-reviews" id="st-btn-load-more-reviews" style="display: none;">
                             <?php echo esc_html__('Load More', 'traveler'); ?>
                             <i class="fa fa-spinner fa-spin d-none"></i>
                         </a>
+                        <div id="st-autoload-spinner" class="text-center mt10" style="display: none;">
+                            <i class="fa fa-spinner fa-spin fa-2x"></i>
+                        </div>
                     </div>
                 <?php endif; ?>
             </div>
             
             <script>
                 jQuery(function($){
-                    $('#st-btn-load-more-reviews').on('click', function(e){
-                        e.preventDefault();
-                        var btn = $(this);
-                        var container = $('.st-review-list-ajax');
+                    var loading = false;
+                    var container = $('.st-review-list-ajax');
+                    var btn = $('#st-btn-load-more-reviews');
+                    var autoloadSpinner = $('#st-autoload-spinner');
+                    var maxAutoload = 50;
+
+                    function loadMoreReviews() {
+                        if (loading) return;
+                        
                         var paged = container.data('paged');
                         var totalPages = container.data('total-pages');
                         var postId = container.data('post-id');
-                        
-                        if(paged < totalPages){
-                            btn.find('i').removeClass('d-none');
+                        var perPage = container.data('comment-per-page');
+                        var currentCount = paged * perPage;
+
+                        if (paged < totalPages) {
+                            loading = true;
+                            if (currentCount >= maxAutoload) {
+                                btn.find('i').removeClass('d-none');
+                            } else {
+                                autoloadSpinner.show();
+                            }
+
                             $.ajax({
                                 url: '<?php echo admin_url('admin-ajax.php'); ?>',
                                 type: 'POST',
@@ -155,14 +181,49 @@
                                     if(response.success){
                                         container.append(response.data.html);
                                         container.data('paged', paged + 1);
-                                        if((paged + 1) >= totalPages){
+                                        
+                                        var newCount = (paged + 1) * perPage;
+                                        if ((paged + 1) >= totalPages) {
                                             btn.hide();
+                                            autoloadSpinner.hide();
+                                        } else if (newCount >= maxAutoload) {
+                                            btn.show();
+                                            autoloadSpinner.hide();
                                         }
                                     }
                                     btn.find('i').addClass('d-none');
+                                    loading = false;
                                 }
                             });
                         }
+                    }
+
+                    // Intersection Observer for Autoload
+                    if ('IntersectionObserver' in window) {
+                        var observer = new IntersectionObserver(function(entries) {
+                            if (entries[0].isIntersecting) {
+                                var paged = container.data('paged');
+                                var perPage = container.data('comment-per-page');
+                                if ((paged * perPage) < maxAutoload) {
+                                    loadMoreReviews();
+                                }
+                            }
+                        }, { threshold: 0.5 });
+                        
+                        var trigger = document.getElementById('st-load-more-reviews-trigger');
+                        if (trigger) observer.observe(trigger);
+                    }
+
+                    btn.on('click', function(e){
+                        e.preventDefault();
+                        loadMoreReviews();
+                    });
+
+                    // Write a Review Toggle
+                    $('.toggle-write-review').on('click', function(e){
+                        e.preventDefault();
+                        $('.st-review-form').slideToggle();
+                        $(this).find('i').toggleClass('stt-icon-arrow-down stt-icon-arrow-up');
                     });
                 });
             </script>
@@ -170,15 +231,13 @@
             <?php
             if (comments_open($post_id)) {
                 ?>
-                <div id="write-review">
-                    <h4 class="heading">
-                        <a href="javascript: void(0)" class="toggle-section c-main f16"
-                        data-target="st-review-form"><?php echo __('Write a review', 'traveler') ?>
-                            <i class="stt-icon-arrow-down"></i></a>
+                <div id="write-review" class="mt20">
+                    <h4 class="heading text-center">
+                        <a href="javascript: void(0)" class="btn btn-secondary toggle-write-review f16">
+                            <?php echo __('Write a review', 'traveler') ?>
+                            <i class="stt-icon-arrow-down ml5"></i>
+                        </a>
                     </h4>
-                    <?php
-                    TravelHelper::comment_form();
-                    ?>
                 </div>
                 <?php
             }
