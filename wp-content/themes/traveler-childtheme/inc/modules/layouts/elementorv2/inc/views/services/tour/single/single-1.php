@@ -86,8 +86,8 @@ while (have_posts()): the_post();
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                     <div class="widgets sticky-top">
                         <div class="fixed-on-mobile st-fixed-form-booking" data-screen="992px">
-                            <div class="close-icon">
-                                <?php echo TravelHelper::getNewIcon('Ico_close'); ?>
+                            <div class="close-icon" onclick="jQuery(this).closest('.fixed-on-mobile').removeClass('open').fadeOut(); jQuery('body').removeClass('st_overflow');">
+                                <i class="fa fa-times"></i>
                             </div>
                             <?php
                                 $info_price = STTour::get_info_price();

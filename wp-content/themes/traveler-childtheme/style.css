@@ -639,23 +639,174 @@ a.service-avatar {
     position: absolute;
     top: 15px;
     right: 15px;
-    width: 32px;
-    height: 32px;
-    background: #fff;
+    width: 40px;
+    height: 40px;
+    background: #ffcc00; /* KLLD Yellow for visibility */
     border-radius: 50%;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 99999;
     cursor: pointer;
     color: #1a2b48;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 #st-content-wrapper .st-fixed-form-booking .close-icon i {
-    font-size: 18px;
+    font-size: 22px !important;
+    color: #1a2b48 !important;
+    display: block !important;
 }
 #st-content-wrapper .st-fixed-form-booking .close-icon.hide {
-    display: flex !important; /* Force override theme hide class */
+    display: flex !important; 
+    visibility: visible !important;
 }
 @media (min-width: 992px) {
     #st-content-wrapper .st-fixed-form-booking .close-icon {
         display: none !important;
     }
+}
+
+/* ── Compact & Modern Booking Form ───────────────── */
+.st-form-booking-action {
+    padding: 15px !important;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+.st-form-booking-action .st-group-form {
+    border: none !important;
+    border-radius: 0 !important;
+}
+.st-form-booking-action .form-group {
+    margin-bottom: 15px !important;
+}
+.st-form-booking-action label {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    color: #64748b !important;
+    margin-bottom: 6px !important;
+    display: block;
+}
+.st-form-booking-action .form-control, 
+.st-form-booking-action .render {
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 10px 15px !important;
+    font-size: 14px !important;
+    color: #1e293b !important;
+    background: #f8fafc !important;
+}
+.st-form-booking-action .submit-group button.btn-book-ajax {
+    padding: 12px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    background: #0b7016 !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(11, 112, 22, 0.2);
+}
+.st-form-booking-action .submit-group button.btn-book-ajax:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(11, 112, 22, 0.3);
+}
+
+/* ── Inline Calendar ───────────────── */
+.st-inline-calendar-container {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+}
+/* Force daterangepicker to be inline */
+.st-inline-calendar-container .daterangepicker {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.st-inline-calendar-container .daterangepicker .drp-calendar {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 10px !important;
+}
+.st-inline-calendar-container .daterangepicker .drp-calendar.right {
+    display: none !important; /* Single month for compact view */
+}
+.st-inline-calendar-container .daterangepicker .calendar-table {
+    border: none !important;
+    padding: 0 !important;
+}
+.st-inline-calendar-container .daterangepicker .drp-buttons {
+    display: none !important; /* Auto-apply mode */
+}
+.st-inline-calendar-container .daterangepicker td.active, 
+.st-inline-calendar-container .daterangepicker td.active:hover {
+    background-color: #0b7016 !important;
+    border-radius: 50% !important;
+}
+.st-inline-calendar-container .daterangepicker.inline-drp {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    display: block !important;
+    float: none !important;
+    margin-top: 0 !important;
+    z-index: 1 !important;
+}
+
+/* ── Guest Selection Refinement ───────────────── */
+.st-form-booking-action .guest-wrapper {
+    padding: 8px 0 !important;
+    border-bottom: 1px solid #f1f5f9;
+}
+.st-form-booking-action .guest-wrapper:last-child {
+    border-bottom: none;
+}
+.st-form-booking-action .guest-wrapper .check-in-wrapper label {
+    margin-bottom: 0 !important;
+    font-size: 14px !important;
+    color: #1a2b48 !important;
+    text-transform: none !important;
+}
+.st-form-booking-action .guest-wrapper .render {
+    font-size: 11px !important;
+    color: #64748b !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+.st-form-booking-action .st-number-wrapper {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+}
+.st-form-booking-action .st-number-wrapper input {
+    width: 40px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    text-align: center;
+    border: none !important;
+    background: transparent !important;
+    font-weight: 700;
+}
+.st-form-booking-action .st-number-wrapper .st-button {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    background: #f8fafc;
+    color: #64748b;
+    transition: all 0.2s;
+}
+.st-form-booking-action .st-number-wrapper .st-button:hover {
+    background: #e2e8f0;
+    color: #0b7016;
 }

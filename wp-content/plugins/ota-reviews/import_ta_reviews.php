@@ -6,7 +6,20 @@
  * to WordPress tours based on the "Review of" title.
  */
 
-require_once '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php';
+if ( ! defined( 'ABSPATH' ) ) {
+    $search_paths = [
+        __DIR__ . '/wp-load.php',
+        dirname(__DIR__, 2) . '/wp-load.php',
+        dirname(__DIR__, 3) . '/wp-load.php',
+        dirname(__DIR__, 4) . '/wp-load.php'
+    ];
+    foreach ($search_paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+            break;
+        }
+    }
+}
 
 $json_file = __DIR__ . '/data/source_ta.json';
 if (!file_exists($json_file)) {

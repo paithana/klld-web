@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
         dirname(__DIR__, 2) . '/wp-load.php',
         dirname(__DIR__, 3) . '/wp-load.php',
         dirname(__DIR__, 4) . '/wp-load.php',
-        '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php'
     ];
     foreach ($search_paths as $path) {
         if (file_exists($path)) {

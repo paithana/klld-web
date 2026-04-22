@@ -1,7 +1,7 @@
 <?php
 /**
  * Admin Tools Redirect - Points to new integrated KLLD Tools menu.
- * Centralized in: wp-content/themes/traveler-childtheme/inc/ota-tools/admin-tools-loader.php
+ * Centralized in: wp-content/plugins/ota-reviews/admin-tools-loader.php
  */
 require_once __DIR__ . '/wp-load.php';
 

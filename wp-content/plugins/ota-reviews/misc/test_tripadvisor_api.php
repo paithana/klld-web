@@ -7,7 +7,7 @@ define('KLLD_TOOL_RUN', true);
 define('KLLD_SYNC_NO_RUN', true);
 
 require_once 'wp-load.php';
-require_once 'wp-content/themes/traveler-childtheme/inc/ota-tools/ota_sync.php';
+require_once dirname(__DIR__) . '/ota_sync.php';
 
 class TripAdvisorAPITest {
     private $sync;

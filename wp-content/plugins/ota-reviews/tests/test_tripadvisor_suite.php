@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     require_once dirname(__FILE__, 5) . '/wp-load.php';
 }
 require_once dirname(__FILE__, 2) . '/ota_sync.php';
-$ota_sync_path = ABSPATH . 'wp-content/themes/traveler-childtheme/inc/ota-tools/ota_sync.php';
+$ota_sync_path = ABSPATH . 'wp-content/plugins/ota-reviews/ota_sync.php';
 if (file_exists($ota_sync_path)) {
     require_once($ota_sync_path);
 }

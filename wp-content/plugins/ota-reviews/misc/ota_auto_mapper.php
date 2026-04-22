@@ -2,4 +2,4 @@
 /**
  * Auto-Mapper Wrapper - Redirects to child theme version
  */
-require_once __DIR__ . '/wp-content/themes/traveler-childtheme/inc/ota-tools/ota_auto_mapper.php';
+require_once dirname(__DIR__) . '/ota_auto_mapper.php';

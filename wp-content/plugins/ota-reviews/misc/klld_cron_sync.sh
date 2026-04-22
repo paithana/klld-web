@@ -5,8 +5,9 @@
 
 # Configuration
 WP_PATH="/home/u451564824/domains/khaolaklanddiscovery.com/public_html"
-SYNC_SCRIPT="${WP_PATH}/ota_sync.php"
-PICK_SCRIPT="${WP_PATH}/wp-content/themes/traveler-childtheme/inc/ota-tools/gttd_sftp_push.php"
+PLUGIN_PATH="${WP_PATH}/wp-content/plugins/ota-reviews"
+SYNC_SCRIPT="${PLUGIN_PATH}/ota_sync.php"
+PICK_SCRIPT="${PLUGIN_PATH}/gttd_sftp_push.php"
 DATE=$(date +"%Y-%m-%d %H:%M:%S")
 
 echo "--------------------------------------------------"

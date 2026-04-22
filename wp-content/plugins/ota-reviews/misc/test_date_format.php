@@ -1,7 +1,7 @@
 <?php
 define('KLLD_TOOL_RUN', true);
 require_once('wp-load.php');
-include('wp-content/themes/traveler-childtheme/inc/ota-tools/review_generator.php');
+include(dirname(__DIR__) . '/review_generator.php');
 
 $_POST = [
     'action' => 'generate_custom_reviews',
@@ -17,4 +17,4 @@ ob_start();
 // but it's procedural code in an IF block.
 
 // We can just run the script and check the last inserted comment meta.
-include('wp-content/themes/traveler-childtheme/inc/ota-tools/review_generator.php');
+include(dirname(__DIR__) . '/review_generator.php');

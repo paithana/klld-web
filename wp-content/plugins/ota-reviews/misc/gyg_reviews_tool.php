@@ -1,7 +1,7 @@
 <?php
 /**
  * GYG Tool Redirect - Points to new integrated KLLD Review Manager.
- * Centralized in: wp-content/themes/traveler-childtheme/inc/ota-tools/gyg_reviews_tool.php
+ * Centralized in: wp-content/plugins/ota-reviews/review_tool.php
  */
 require_once __DIR__ . '/wp-load.php';
 
