@@ -626,10 +626,6 @@ a.service-avatar {
 #main-footer {
   border-bottom: 0 !important;
 }
-/* .st-close-button {
-  padding-bottom: 1em !important;
-}
- */
 
 /* ── Mobile Booking Form Close Button ───────────────── */
 #st-content-wrapper .st-fixed-form-booking .close-icon {
@@ -637,13 +633,13 @@ a.service-avatar {
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
-    background: #ffcc00; /* KLLD Yellow for visibility */
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: #ffcc00; /* KLLD Yellow */
     border-radius: 50%;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     z-index: 99999;
     cursor: pointer;
     color: #1a2b48;
@@ -651,7 +647,7 @@ a.service-avatar {
     opacity: 1 !important;
 }
 #st-content-wrapper .st-fixed-form-booking .close-icon i {
-    font-size: 22px !important;
+    font-size: 16px !important;
     color: #1a2b48 !important;
     display: block !important;
 }
@@ -718,17 +714,18 @@ a.service-avatar {
     border: 1px solid #e2e8f0;
     background: #fff;
 }
-/* Force daterangepicker to be inline */
-.st-inline-calendar-container .daterangepicker {
+.st-inline-calendar-container .daterangepicker.inline-drp {
     position: relative !important;
-    top: 0 !important;
-    left: 0 !important;
+    top: auto !important;
+    left: auto !important;
     display: block !important;
+    float: none !important;
     width: 100% !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    z-index: 1 !important;
 }
 .st-inline-calendar-container .daterangepicker .drp-calendar {
     max-width: none !important;
@@ -736,28 +733,48 @@ a.service-avatar {
     padding: 10px !important;
 }
 .st-inline-calendar-container .daterangepicker .drp-calendar.right {
-    display: none !important; /* Single month for compact view */
+    display: none !important; 
 }
 .st-inline-calendar-container .daterangepicker .calendar-table {
     border: none !important;
     padding: 0 !important;
 }
 .st-inline-calendar-container .daterangepicker .drp-buttons {
-    display: none !important; /* Auto-apply mode */
+    display: none !important;
 }
 .st-inline-calendar-container .daterangepicker td.active, 
 .st-inline-calendar-container .daterangepicker td.active:hover {
     background-color: #0b7016 !important;
     border-radius: 50% !important;
 }
-.st-inline-calendar-container .daterangepicker.inline-drp {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    display: block !important;
-    float: none !important;
-    margin-top: 0 !important;
-    z-index: 1 !important;
+.st-inline-calendar-container .daterangepicker td.today {
+    background-color: #fff0b0 !important;
+    border-radius: 50% !important;
+}
+.st-inline-calendar-container .daterangepicker .calendar-table th, 
+.st-inline-calendar-container .daterangepicker .calendar-table td {
+    width: 35px !important;
+    height: 35px !important;
+    line-height: 35px !important;
+}
+
+/* ── Form Head ───────────────── */
+.st-form-booking-action .st-form-head-book {
+    padding: 10px 0 !important;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 15px !important;
+}
+.st-form-booking-action .st-form-head-book .price {
+    font-size: 20px !important;
+}
+.st-form-booking-action .total-price-book {
+    padding-top: 15px !important;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 15px !important;
+}
+.st-form-booking-action .total-price-book h5 {
+    font-size: 16px !important;
+    font-weight: 700 !important;
 }
 
 /* ── Guest Selection Refinement ───────────────── */
@@ -810,3 +827,20 @@ a.service-avatar {
     background: #e2e8f0;
     color: #0b7016;
 }
+
+/* ── Calendar UI Fixes ───────────────── */
+.daterangepicker .calendar-table td.active, 
+.daterangepicker .calendar-table td.active:hover {
+    background-color: #0b7016 !important;
+    border-radius: 50% !important;
+    color: #fff !important;
+}
+.daterangepicker .calendar-table td.today {
+    background-color: #fff0b0 !important;
+    border-radius: 50% !important;
+}
+.daterangepicker .drp-buttons .btn-primary {
+    background-color: #0b7016 !important;
+    border-color: #0b7016 !important;
+}
+

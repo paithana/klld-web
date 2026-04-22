@@ -71,7 +71,7 @@ while (have_posts()): the_post();
                                 </div>
                             </div>
                             <a href=""
-                            class="btn-v2 btn-primary btn-mpopup btn-green"><?php echo esc_html__('Book', 'traveler') ?></a>
+                            class="btn-v2 btn-primary btn-mpopup btn-green" onclick="event.preventDefault(); event.stopImmediatePropagation(); jQuery('.fixed-on-mobile').toggleClass('open').fadeToggle(300); jQuery('body').addClass('st_overflow');"><?php echo esc_html__('Book', 'traveler') ?></a>
                         </div>
                     </div>
                     <?php echo stt_elementorv2()->loadView('services/tour/single/item/infor', array('tour_type' => $tour_type)); ?>
@@ -93,7 +93,7 @@ while (have_posts()): the_post();
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                     <div class="widgets sticky-top">
                         <div class="fixed-on-mobile st-fixed-form-booking" data-screen="992px">
-                            <div class="close-icon" onclick="jQuery(this).closest('.fixed-on-mobile').removeClass('open').fadeOut(); jQuery('body').removeClass('st_overflow');">
+                            <div class="close-icon" onclick="event.preventDefault(); event.stopImmediatePropagation(); jQuery(this).closest('.fixed-on-mobile').removeClass('open').fadeOut(200); jQuery('body').removeClass('st_overflow');">
                                 <i class="fa fa-times"></i>
                             </div>
 

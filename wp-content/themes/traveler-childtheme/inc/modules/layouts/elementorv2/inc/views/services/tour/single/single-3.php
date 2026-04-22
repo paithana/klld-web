@@ -53,7 +53,7 @@ while (have_posts()) : the_post();
                                 <?php
                                 if ($tour_external == 'off' || empty($tour_external)) {
                                 ?>
-                                    <a href="" class="btn-v2 btn-primary btn-mpopup btn-green">
+                                    <a href="" class="btn-v2 btn-primary btn-mpopup btn-green" onclick="event.preventDefault(); event.stopImmediatePropagation(); jQuery('.fixed-on-mobile').toggleClass('open').fadeToggle(300); jQuery('body').addClass('st_overflow');">
                                         <?php
                                         if ($booking_type == 'enquire') {
                                             echo esc_html__('Inquiry', 'traveler');
@@ -107,7 +107,7 @@ while (have_posts()) : the_post();
                     <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                         <div class="widgets sticky-top">
                             <div class="fixed-on-mobile st-fixed-form-booking" data-screen="992px">
-                                <div class="close-icon" onclick="jQuery(this).closest('.fixed-on-mobile').removeClass('open').fadeOut(); jQuery('body').removeClass('st_overflow');">
+                                <div class="close-icon" onclick="event.preventDefault(); event.stopImmediatePropagation(); jQuery(this).closest('.fixed-on-mobile').removeClass('open').fadeOut(200); jQuery('body').removeClass('st_overflow');">
                                     <i class="fa fa-times"></i>
                                 </div>
                                 <?php

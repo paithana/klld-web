@@ -57,10 +57,10 @@ $prices=STTour::get_price_person(get_the_ID());
             <div class="check-in-wrapper">
                 <label><?php echo __('Adults', 'traveler'); ?></label>
                 <div class="render"><?php echo sprintf(__('%s', 'traveler'), $tour_guest_adult); ?></div>
-                <div class="render"><?php echo TravelHelper::format_money($prices['adult'], false); ?></div>
+                <div class="render" style="font-weight:700; color:#0b7016;"><?php echo TravelHelper::format_money($prices['adult'], false); ?></div>
             </div>
             <div class="select-wrapper">
-                <div class="st-number-wrapper d-flex align-items-center justify-content-between">
+                <div class="st-number-wrapper d-flex align-items-center">
                     <input type="text" name="adult_number" value="<?php echo esc_attr($adult_number); ?>" class="form-control st-input-number adult_number" autocomplete="off" readonly data-min="<?php echo esc_attr($min_people); ?>" data-max="<?php echo esc_attr($max_people); ?>" />
                 </div>
             </div>
@@ -71,10 +71,10 @@ $prices=STTour::get_price_person(get_the_ID());
             <div class="check-in-wrapper">
                 <label><?php echo __('Children', 'traveler'); ?></label>
                 <div class="render"><?php echo sprintf(__('%s', 'traveler'), $tour_guest_childrent); ?></div>
-                <div class="render"><?php echo TravelHelper::format_money($prices['child']); ?></div>
+                <div class="render" style="font-weight:700; color:#0b7016;"><?php echo TravelHelper::format_money($prices['child']); ?></div>
             </div>
             <div class="select-wrapper">
-                <div class="st-number-wrapper d-flex align-items-center justify-content-between">
+                <div class="st-number-wrapper d-flex align-items-center">
                     <input type="text" name="child_number" value="<?php echo esc_html($child_number); ?>" class="form-control st-input-number child_number" autocomplete="off" readonly data-min="0" data-max="<?php echo esc_attr($max_people); ?>" />
                 </div>
             </div>
@@ -87,7 +87,7 @@ $prices=STTour::get_price_person(get_the_ID());
                 <div class="render"><?php echo sprintf(__('%s', 'traveler'), $tour_guest_infant); ?></div>
             </div>
             <div class="select-wrapper">
-                <div class="st-number-wrapper d-flex align-items-center justify-content-between">
+                <div class="st-number-wrapper d-flex align-items-center">
                     <input type="text" name="infant_number" value="<?php echo esc_attr($infant_number); ?>" class="form-control st-input-number infant_number" autocomplete="off" readonly data-min="0" data-max="<?php echo esc_attr($max_people); ?>" />
                 </div>
             </div>

@@ -53,21 +53,19 @@ $current_calendar_reverb = date('m/d/Y', strtotime($current_calendar));
 ?>
 <div class="form-group form-date-field st-search-date-tour st-single-tour-search form-date-search d-flex align-items-center" 
     data-format="<?php echo TravelHelper::getDateFormatMoment() ?>"
-    data-availability-date="<?php echo esc_attr($current_calendar_reverb); ?>"
-    data-inline="true">
+    data-availability-date="<?php echo esc_attr($current_calendar_reverb); ?>">
     <?php
     if ($has_icon) {
         echo TravelHelper::getNewIcon('ico_calendar_search_box');
     }
     ?>
-    <div class="date-wrapper d-flex justify-content-between align-items-center w-100" style="display: none !important;">
+    <div class="date-wrapper d-flex justify-content-between align-items-center w-100">
         <div class="check-in-wrapper">
             <label><?php echo __('Date', 'traveler'); ?></label>
             <div class="render check-in-render"><?php echo esc_html($start); ?></div>
         </div>
         <i class="stt-icon-arrow-down"></i>
     </div>
-    <div id="st-inline-calendar-container" class="st-inline-calendar-container w-100"></div>
     <input type="text" class="check-in-input"
         value="<?php echo esc_attr($start) ?>" name="check_in" style="display:none;">
     <input type="hidden" class="check-out-input"
@@ -75,7 +73,7 @@ $current_calendar_reverb = date('m/d/Y', strtotime($current_calendar));
     <input type="text" class="check-in-out-input"
         value="<?php echo esc_attr($date) ?>" name="check_in_out"
         data-action="st_get_availability_tour_frontend"
-        data-tour-id="<?php the_ID(); ?>" data-posttype="st_tours" style="display:none;">
+        data-tour-id="<?php the_ID(); ?>" data-posttype="st_tours">
 </div>
 <?php
 /*Starttime*/

@@ -99,37 +99,7 @@ $post_id = get_the_ID();
                         </div>
                     </div>
                     <div id="write-review-form-content" class="mt20">
-                        <?php 
-                        wp_enqueue_script( 'st-reviews-form' );
-                        $commenter = wp_get_current_commenter();
-                        $comment_form = [
-                            'title_reply'          => __('Leave a review', 'traveler'),
-                            'title_reply_to'       => __('Leave a review to %s', 'traveler'),
-                            'comment_notes_before' => '',
-                            'fields'               => [
-                                'author' => '<div class="row"><div class="col-md-6"><div class="form-group">' .
-                                    '<label for="author">' . __( 'Name*', 'traveler' ) . '</label>' .
-                                    '<input id="author" name="author" type="text" value="' . esc_attr( $commenter[ 'comment_author' ] ) . '" size="30" aria-required="true" class="form-control" />' .
-                                    '</div></div>',
-                                'email'  => '<div class="col-md-6"><div class="form-group">' .
-                                    '<label for="email">' . __( 'Your email address *', 'traveler' ) . '</label>' .
-                                    '<input class="form-control" id="email" name="email" type="text" value="' . esc_attr( $commenter[ 'comment_author_email' ] ) . '" size="30" aria-required="true" />' .
-                                    '</div></div></div>',
-                            ],
-                            'label_submit'         => __('Post Review', 'traveler'),
-                            'logged_in_as'         => '',
-                            'comment_field'        => '<input name="comment_type" value="st_reviews" type="hidden">',
-                            'comment_notes_after'  => '',
-                            'class_form'           => 'review-form',
-                            'id_form'              => 'commentform'
-                        ];
-
-                        $comment_form_arg = apply_filters( get_post_type( $post_id ) . '_wp_review_form_args', $comment_form, $post_id );
-                        
-                        // Force display: block for our custom wrapper
-                        echo '<style>#respond.comment-respond { display: block !important; }</style>';
-                        comment_form( $comment_form_arg ); 
-                        ?>
+                        <?php TravelHelper::comment_form(); ?>
                     </div>
                 </div>
             </div>
@@ -164,23 +134,23 @@ $post_id = get_the_ID();
             <div class="st-review-filter-wrapper mb30">
                 <div class="st-review-filter-carousel-container" style="overflow-x: auto; padding: 10px 0; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
                     <ul class="st-review-filter-list d-flex justify-content-start align-items-center" style="list-style: none; padding: 0 2px; gap: 8px; margin: 0; white-space: nowrap;">
-                        <li><a href="javascript:void(0);" class="btn btn-outline-primary active" data-source="all" data-keyword=""><?php echo __('All', 'traveler'); ?> (<?php echo $count_all; ?>)</a></li>
+                        <li><a href="javascript:void(0);" class="btn btn-outline-primary active" data-source="all" data-keyword="" style="font-size: 8px; padding: 4px 8px;"><?php echo __('All', 'traveler'); ?> (<?php echo $count_all; ?>)</a></li>
                         
                         <?php if ($count_local > 0): ?>
-                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="local" data-keyword="">Website (<?php echo $count_local; ?>)</a></li>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="local" data-keyword="" style="font-size: 8px; padding: 4px 8px;">Website (<?php echo $count_local; ?>)</a></li>
                         <?php endif; ?>
                         
                         <?php if ($count_gyg > 0): ?>
-                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="gyg" data-keyword="">GYG (<?php echo $count_gyg; ?>)</a></li>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="gyg" data-keyword="" style="font-size: 8px; padding: 4px 8px;">GYG (<?php echo $count_gyg; ?>)</a></li>
                         <?php endif; ?>
                         
                         <?php if ($count_ta > 0): ?>
-                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="TA" data-keyword="">TA (<?php echo $count_ta; ?>)</a></li>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="TA" data-keyword="" style="font-size: 8px; padding: 4px 8px;">TA (<?php echo $count_ta; ?>)</a></li>
                         <?php endif; ?>
 
                         <!-- Keyword Buttons -->
                         <?php foreach ($keywords as $kw): if (empty($kw)) continue; ?>
-                            <li><a href="javascript:void(0);" class="btn btn-outline-primary btn-keyword" data-source="all" data-keyword="<?php echo esc_attr($kw); ?>">#<?php echo esc_html($kw); ?></a></li>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary btn-keyword" data-source="all" data-keyword="<?php echo esc_attr($kw); ?>" style="font-size: 8px; padding: 4px 8px;">#<?php echo esc_html($kw); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>

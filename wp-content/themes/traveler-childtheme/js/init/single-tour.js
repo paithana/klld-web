@@ -526,49 +526,4 @@ jQuery(function ($) {
         });
         requestRunning = true;
     }
-
-    // ── KLLD Inline Calendar Initialization ────────────────────────
-    $('.st-search-date-tour[data-inline="true"]').each(function() {
-        var $parent = $(this);
-        var $input = $parent.find('.check-in-out-input');
-        var container = '#st-inline-calendar-container';
-        
-        if ($(container).length > 0) {
-            var options = {
-                singleDatePicker: true,
-                alwaysShowCalendars: true,
-                autoApply: true,
-                parentEl: container,
-                inline: true,
-                startDate: moment($input.val().split('-')[0], $parent.data('format').toUpperCase()),
-                locale: {
-                    format: $parent.data('format').toUpperCase(),
-                    separator: ' - '
-                }
-            };
-
-            // Initialize daterangepicker
-            $input.daterangepicker(options);
-
-            // Force visibility and positioning
-            var drp = $input.data('daterangepicker');
-            drp.container.addClass('inline-drp');
-            drp.show();
-            
-            // Re-show if it tries to hide
-            $input.on('hide.daterangepicker', function(ev, picker) {
-                picker.show();
-            });
-
-            // Handle date selection
-            $input.on('apply.daterangepicker', function(ev, picker) {
-                var start = picker.startDate.format(picker.locale.format);
-                $parent.find('.check-in-render').text(start);
-                $parent.find('.check-in-input').val(start);
-                
-                // Trigger any theme-specific updates
-                $input.trigger('daterangepicker_change', [picker.startDate, picker.startDate]);
-            });
-        }
-    });
 });

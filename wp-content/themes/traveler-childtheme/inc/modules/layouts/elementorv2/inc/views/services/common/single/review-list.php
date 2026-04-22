@@ -74,42 +74,45 @@
                         ?>
                     </div>
                     <div class="review-meta-content" style="flex-grow: 1; min-width: 0; padding-right: 80px;">
-                        <!-- Line 1: Name & Stars & Title -->
-                        <div class="review-meta-top d-flex align-items-center mb-1" style="gap: 10px; flex-wrap: nowrap;">
-                            <div class="author-wrapper" style="flex-shrink: 0;">
-                                <?php if ($origin_url): ?>
-                                    <a href="<?php echo esc_url($origin_url); ?>" target="_blank" rel="nofollow" class="author-name-link" style="text-decoration:none;">
-                                <?php endif; ?>
-                                <span class="author-name" style="font-size: 15px; font-weight: 700; color: #1a2b48; line-height: 1.2;" title="<?php echo esc_attr($author_name); ?>">
-                                    <?php echo esc_html($author_name); ?>
-                                </span>
-                                <?php if ($origin_url): ?></a><?php endif; ?>
-                            </div>
-                            
-                            <div class="stars-wrapper" style="line-height: 1; flex-shrink: 0;">
-                                <?php
-                                $comment_rate = (float)get_comment_meta( $comment_id, 'comment_rate', true );
-                                if ($comment_rate) {
-                                    echo '<ul class="review-star small" style="margin:0; padding:0; list-style:none; display:flex; gap:2px; font-size: 9px;">';
-                                    echo TravelHelper::rate_to_string($comment_rate);
-                                    echo '</ul>';
-                                }
-                                ?>
-                            </div>
+                        <!-- Line 1: Name -->
+                        <div class="review-meta-name mb-1">
+                            <?php if ($origin_url): ?>
+                                <a href="<?php echo esc_url($origin_url); ?>" target="_blank" rel="nofollow" class="author-name-link" style="text-decoration:none;">
+                            <?php endif; ?>
+                            <span class="author-name" style="font-size: 15px; font-weight: 700; color: #1a2b48; display: block;" title="<?php echo esc_attr($author_name); ?>">
+                                <?php echo esc_html($author_name); ?>
+                            </span>
+                            <?php if ($origin_url): ?></a><?php endif; ?>
+                        </div>
+                        
+                        <!-- Line 2: Stars + Source -->
+                        <div class="review-meta-secondary d-flex align-items-center mb-1" style="gap: 10px; flex-wrap: wrap;">
+                            <?php
+                            $comment_rate = (float)get_comment_meta( $comment_id, 'comment_rate', true );
+                            if ($comment_rate) {
+                                echo '<ul class="review-star small" style="margin:0; padding:0; list-style:none; display:flex; gap:2px; font-size: 8px;">';
+                                echo TravelHelper::rate_to_string($comment_rate);
+                                echo '</ul>';
+                            }
+                            ?>
+                            <span class="source-label" style="font-size: 8px; color: #64748b;">
+                                <?php echo __('via', 'traveler'); ?> 
+                                <span style="font-weight:600; color:#475569;"><?php echo esc_html($source_label); ?></span>
+                            </span>
                         </div>
 
-                        <!-- Line 2: Source • Date -->
-                        <div class="review-meta-details" style="font-size: 11px; color: #64748b; line-height: 1.4; display: flex; align-items: center; gap: 6px;">
-                            <span class="source-label" style="display: flex; align-items: center; gap: 4px;">
-                                <?php echo __('via', 'traveler'); ?> 
-                                <span style="color:#475569; font-weight:600;"><?php echo esc_html($source_label); ?></span>
-                            </span>
-                            <span class="separator" style="color: #cbd5e1;">&bull;</span>
+                        <!-- Line 3: Date {dd-M-Y} Time -->
+                        <div class="review-meta-details" style="font-size: 8px; color: #94a3b8; line-height: 1.2;">
                             <span class="date-time">
                                 <?php 
-                                $formatted_date = get_comment_meta($comment_id, 'review_date_formatted', true);
-                                $date_str = $formatted_date ? $formatted_date : get_comment_date( TravelHelper::getDateFormat(), $comment_id );
-                                echo esc_html($date_str); 
+                                // Get the raw timestamp or date string from meta
+                                $raw_date = get_comment_meta($comment_id, 'review_date', true);
+                                if ($raw_date) {
+                                    $timestamp = strtotime($raw_date);
+                                    echo esc_html(date('d-M-Y H:i', $timestamp));
+                                } else {
+                                    echo esc_html(get_comment_date('d-M-Y H:i', $comment_id)); 
+                                }
                                 ?>
                             </span>
                         </div>
