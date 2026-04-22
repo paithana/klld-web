@@ -106,7 +106,8 @@ foreach ($data as $batch_id => $batch_data) {
         $target_post_ids = $batch_post_ids;
         $review_of = $r['review_of'] ?? '';
         
-        echo "   🔍 Review by {$r['reviewer_name']} of '{$review_of}'\n";
+        $reviewer_name = $r['reviewer_name'] ?? 'Unknown';
+        echo "   🔍 Review by {$reviewer_name} of '{$review_of}'\n";
 
         // If no hardcoded post_ids, try to match based on 'review_of'
         if (empty($target_post_ids) && !empty($review_of)) {

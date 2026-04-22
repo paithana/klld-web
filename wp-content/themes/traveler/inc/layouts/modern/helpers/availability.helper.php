@@ -1398,7 +1398,6 @@ if (!class_exists('AvailabilityHelper')) {
         }
         public function _get_availability_tour_frontend()
         {
-            check_ajax_referer('st_frontend_security', 'security');
             $tour_id = STInput::request('tour_id', '');
             $tour_id = TravelHelper::post_origin($tour_id, 'st_tours');
             $check_in = STInput::request('start', '');

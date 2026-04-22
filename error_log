@@ -2831,3 +2831,36 @@ Stack trace:
 [21-Apr-2026 06:44:56 UTC] PHP Warning:  Undefined array key "reviewer_name" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php on line 109
 [21-Apr-2026 06:44:56 UTC] PHP Stack trace:
 [21-Apr-2026 06:44:56 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/import_ta_reviews.php:0
+[22-Apr-2026 03:12:55 UTC] PHP Warning:  Undefined array key "price" in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_price.php on line 10
+[22-Apr-2026 03:12:55 UTC] PHP Stack trace:
+[22-Apr-2026 03:12:55 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_price.php:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
+[22-Apr-2026 19:08:04 UTC] PHP Stack trace:
+[22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0

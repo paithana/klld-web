@@ -58,8 +58,7 @@ if (!class_exists('STInput')) {
                 return $_REQUEST;
             }
 
-
-            if (isset($_REQUEST[$index]) && !empty($_REQUEST[$index])) {
+            if (isset($_REQUEST[$index])) {
                 return $_REQUEST[$index];
             }
 

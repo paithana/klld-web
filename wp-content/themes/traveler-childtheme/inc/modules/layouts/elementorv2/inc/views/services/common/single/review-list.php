@@ -21,182 +21,150 @@
         $user_id      = get_comment( $comment_id )->user_id;
         $user_email   = get_comment( $comment_id )->comment_author_email;
         $current_user = wp_get_current_user();
+
+        /* ── Determine Source Label ───────────────────────────── */
+        $ota_source = get_comment_meta($comment_id, 'ota_source', true);
+        $source_label = 'Khao Lak Land Discovery';
+        if ($ota_source === 'gyg') $source_label = 'GetYourGuide';
+        elseif ($ota_source === 'TA' || $ota_source === 'tripadvisor') $source_label = 'TripAdvisor';
+        elseif ($ota_source === 'vt' || $ota_source === 'viator') $source_label = 'Viator';
+        elseif ($ota_source === 'gmb' || $ota_source === 'google') $source_label = 'Google';
+
+        $author_name = $comment->comment_author;
+        if (!empty($user_id)) {
+            $author_name = TravelHelper::get_username($user_id);
+        }
+
+        /* ── Determine Origin URL ───────────────────────────── */
+        $post_id = $comment->comment_post_ID;
+        $origin_url = '';
+        if ($is_gyg) $origin_url = get_post_meta($post_id, '_gyg_url', true);
+        elseif ($is_tri) $origin_url = get_post_meta($post_id, '_ta_url', true);
+        elseif ($is_via) $origin_url = get_post_meta($post_id, '_viator_url', true);
+        elseif ($is_gmb) $origin_url = 'https://www.google.com/maps/search/?api=1&query=Khao+Lak+Land+Discovery&query_place_id=' . get_post_meta($post_id, '_gmb_id', true);
         ?>
         <div class="comment-item" style="position:relative;" itemprop="review" itemscope itemtype="https://schema.org/Review">
             <?php 
             /* ── OTA Source Badge (Top Right) ───────────────────────── */
-            $is_gyg = get_comment_meta($comment_id, 'gyg_review_id', true);
-            $is_via = get_comment_meta($comment_id, 'viator_review_id', true);
-            $is_tri = get_comment_meta($comment_id, 'tripadvisor_review_id', true);
-            $is_gmb = get_comment_meta($comment_id, 'gmb_review_id', true);
+            $is_gyg = ($ota_source === 'gyg');
+            $is_via = ($ota_source === 'vt' || $ota_source === 'viator');
+            $is_tri = ($ota_source === 'TA' || $ota_source === 'tripadvisor');
+            $is_gmb = ($ota_source === 'gmb' || $ota_source === 'google');
             $is_tp  = get_comment_meta($comment_id, 'trustpilot_review_id', true);
-
-            $badge_html = '';
-            if ($is_gyg) {
-                // Removed redundant GYG badge per request
-                $badge_html = ''; 
-            } elseif ($is_via) {
-               //
-            } elseif ($is_tri) {
-                //
-            } elseif ($is_gmb) {
-                //
-            } elseif ($is_tp) {
-                //
-            }
-
-            if ($badge_html) {
-                //echo '<div class="ota-badge-top-right" style="position:absolute; top:20px; right:20px; z-index:10;">' . $badge_html . '</div>';
-            }
             ?>
-            <div class="comment-item-head d-flex justify-content-between align-items-center pd-3">
-                <div class="media d-flex align-items-center">
-                    <div class="media-left">
+            <div class="comment-item-head pd-3" style="position:relative;">
+                <div class="d-flex align-items-center">
+                    <div class="review-avatar" style="flex-shrink: 0; margin-right: 15px;">
                         <?php 
                         $img_dir = plugins_url('ota-reviews/img/');
-                        if ($is_gyg || $is_via || $is_tri || $is_gmb || $is_tp) {
-                            $avatar_url = '';
-                            if ($is_gyg) $avatar_url = $img_dir . 'avatar-gyg.svg';
-                            elseif ($is_via) $avatar_url = $img_dir . 'avatar-viator.svg';
-                            elseif ($is_tri) $avatar_url = $img_dir . 'avatar-tripadvisor.svg';
-                            elseif ($is_gmb) $avatar_url = $img_dir . 'avatar-google.svg';
-                            elseif ($is_tp)  $avatar_url = $img_dir . 'avatar-trustpilot.svg';
+                        $avatar_url = '';
+                        if ($is_gyg) $avatar_url = $img_dir . 'avatar-gyg.svg';
+                        elseif ($is_via) $avatar_url = $img_dir . 'avatar-viator.svg';
+                        elseif ($is_tri) $avatar_url = $img_dir . 'avatar-tripadvisor.svg';
+                        elseif ($is_gmb) $avatar_url = $img_dir . 'avatar-google.svg';
+                        elseif ($is_tp)  $avatar_url = $img_dir . 'avatar-trustpilot.svg';
 
-                            if ($avatar_url) {
-                                echo '<img src="' . esc_url($avatar_url) . '" alt="OTA Avatar" class="avatar ota-avatar" style="width:50px; height:50px; border-radius:50%; object-fit:cover;" loading="lazy">';
-                            } else {
-                                echo st_get_profile_avatar($comment->user_id, 50);
-                            }
+                        if ($avatar_url) {
+                            echo '<img src="' . esc_url($avatar_url) . '" alt="OTA" class="ota-logo-header" style="width:48px; height:48px; object-fit:contain; border-radius:50%; background:#f8fafc; padding:4px; border:1px solid #e2e8f0;" loading="lazy">';
                         } else {
-                            echo st_get_profile_avatar($comment->user_id, 50);
+                            // Use Site Logo for native reviews
+                            $site_logo = 'https://www.khaolaklanddiscovery.com/wp-content/uploads/2022/04/Khao-Lak-Land-Discovery.png';
+                            echo '<img src="' . esc_url($site_logo) . '" alt="Site Logo" style="width:48px; height:48px; object-fit:contain; border-radius:50%; background:#fff; padding:2px; border:1px solid #eee;" loading="lazy">';
                         }
                         ?>
                     </div>
-                    <div class="media-body">
-                        <?php
-                        if(!empty($user_id)){
-                            ?>
-                            <div class="media-heading" itemprop="author" itemscope itemtype="https://schema.org/Person"><span itemprop="name"><?php echo TravelHelper::get_username( $user_id ); ?></span></div>
+                    <div class="review-meta-content" style="flex-grow: 1; min-width: 0; padding-right: 80px;">
+                        <!-- Line 1: Name + Rate -->
+                        <div class="review-meta-name d-flex align-items-center mb-1" style="gap: 8px;">
+                            <?php if ($origin_url): ?>
+                                <a href="<?php echo esc_url($origin_url); ?>" target="_blank" rel="nofollow" class="author-name-link" style="text-decoration:none;">
+                            <?php endif; ?>
+                            <span class="author-name" style="max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 15px; font-weight: 700; color: #1a2b48;" title="<?php echo esc_attr($author_name); ?>">
+                                <?php echo esc_html($author_name); ?>
+                            </span>
+                            <?php if ($origin_url): ?></a><?php endif; ?>
+
                             <?php
-                        }else{
+                            $comment_rate = (float)get_comment_meta( $comment_id, 'comment_rate', true );
+                            if ($comment_rate) {
+                                echo '<ul class="review-star small" style="margin:0; padding:0; list-style:none; display:flex; gap:2px; font-size: 9px;">';
+                                echo TravelHelper::rate_to_string($comment_rate);
+                                echo '</ul>';
+                            }
                             ?>
-                            <div class="media-heading" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                                <span itemprop="name"><?php echo esc_html($comment->comment_author); ?></span>
-                            </div>
-                            <?php
-                        }
-                        ?>
-                        <div class="date" itemprop="datePublished">
-                            <?php 
-                            $formatted_date = get_comment_meta($comment_id, 'review_date_formatted', true);
-                            echo $formatted_date ? $formatted_date : get_comment_date( TravelHelper::getDateFormat(), $comment_id ); 
-                            ?>
+                        </div>
+
+                        <!-- Line 2: Source • Date -->
+                        <div class="review-meta-details" style="font-size: 11px; color: #64748b; line-height: 1.4; display: flex; align-items: center; flex-wrap: wrap;">
+                            <span class="source-label"><?php echo __('on', 'traveler'); ?> <strong style="color:#475569; font-weight:600;"><?php echo esc_html($source_label); ?></strong></span>
+                            <span class="separator mx-1" style="color: #cbd5e1;">&bull;</span>
+                            <span class="date-time">
+                                <?php 
+                                $formatted_date = get_comment_meta($comment_id, 'review_date_formatted', true);
+                                $date_str = $formatted_date ? $formatted_date : get_comment_date( TravelHelper::getDateFormat(), $comment_id );
+                                echo esc_html($date_str); 
+                                ?>
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="like">
-                    <?php $review_obj = new STReview();
-                        if ( $review_obj->check_like( $comment_id ) ):
-                            ?>
-                            <a data-id="<?php echo esc_attr( $comment_id ); ?>" href="#"
-                               class="btn-like st-like-review ">
-                               <i class="stt-icon-like bold"></i>
-                            </a>
-                        <?php else: ?>
-                            <a data-id="<?php echo esc_attr( $comment_id ); ?>" href="#"
-                               class="btn-like st-like-review ">
-                               <i class="stt-icon-like"></i>
-                            </a>
+                
+                <div class="like-button-wrapper" style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 12px; color: #94a3b8;">
+                    <!-- Reply Action -->
+                    <a href="#write-review" class="review-reply-link" title="<?php echo __('Reply', 'traveler'); ?>" style="color: inherit; font-size: 14px;">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                    
+                    <!-- Like/Dislike -->
+                    <div class="like-container d-flex align-items-center" style="gap: 5px;">
+                        <?php $review_obj = new STReview();
+                            if ( $review_obj->check_like( $comment_id ) ):
+                                ?>
+                                <a data-id="<?php echo esc_attr( $comment_id ); ?>" href="#"
+                                   class="btn-like st-like-review" style="color:#0ea5e9;">
+                                   <i class="stt-icon-like bold"></i>
+                                </a>
+                            <?php else: ?>
+                                <a data-id="<?php echo esc_attr( $comment_id ); ?>" href="#"
+                                   class="btn-like st-like-review ">
+                                   <i class="stt-icon-like"></i>
+                                </a>
+                            <?php
+                            endif;
+                        ?>
                         <?php
-                        endif;
-                    ?>
-                    <?php
-                        $count_like = (int)get_comment_meta( $comment_id, '_comment_like_count', true );
-                        echo '<span>' . esc_html($count_like) . '</span>';
-                    ?>
+                            $count_like = (int)get_comment_meta( $comment_id, '_comment_like_count', true );
+                            echo '<span style="font-size:12px;">' . esc_html($count_like) . '</span>';
+                        ?>
+                    </div>
+                    
+                    <!-- Dislike placeholder (Theme icon) -->
+                    <a href="#" class="review-dislike-link" style="color: inherit; transform: rotate(180deg); display: inline-block;">
+                        <i class="stt-icon-like"></i>
+                    </a>
                 </div>
             </div>
             <div class="comment-item-body">
                 <?php
                     $stats        = STReview::get_review_stats( get_the_ID() );
-                    $comment_rate = (float)get_comment_meta( $comment_id, 'comment_rate', true );
+                    // Ratings moved to header
                 ?>
-                <?php if(isset($post_type) and in_array($post_type, ['st_tours', 'st_activity', 'st_hotel'])){ ?>
-                    <?php if ( $comment_title = get_comment_meta( $comment_id, 'comment_title', true ) ): ?>
-                        <?php
-                            if ( $stats ) {
-                                echo '<ul class="review-star" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">';
-                                echo '<meta itemprop="ratingValue" content="' . esc_attr($comment_rate) . '">';
-                                echo TravelHelper::rate_to_string($comment_rate);
-                                echo '</ul>';
-                            }
-                        ?>
-                        <h3 class="h4 title st_tours" <?php if(!$stats) echo 'style="padding-left: 0;"'; ?>>
-                            <?php echo esc_html(balanceTags( $comment_title )) ?>
-                        </h3>
-                    <?php else:
-                        if ( $stats ) {
-                            echo '<ul class="review-star" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">';
-                            echo '<meta itemprop="ratingValue" content="' . esc_attr($comment_rate) . '">';
-                            echo TravelHelper::rate_to_string($comment_rate);
-                            echo '</ul>';
-                        }
-                    endif; ?>
-                <?php }else{
-                    ?>
-                    <?php if ( $comment_title = get_comment_meta( $comment_id, 'comment_title', true ) ): ?>
-                        <h4 class="title d-flex align-items-center" <?php if(!$stats) echo 'style="padding-left: 0;"'; ?>>
-                            <?php
-                            if ( $stats ) {
-                                echo '<span class="comment-rate" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating"><span itemprop="ratingValue">' . number_format( $comment_rate, 1, '.', ',' ) . '</span></span>';
-                            }
-                            ?>
-                            "<?php echo esc_html(balanceTags( $comment_title )) ?>"
-                        </h4>
-                    <?php else: ?>
-                        <h4 class="title d-flex align-items-center" <?php if(!$stats) echo 'style="padding-left: 0;"'; ?>>
-                            <?php if ( $stats ) {
-                                echo '<span class="comment-rate" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating"><span itemprop="ratingValue">' . number_format( $comment_rate, 1, '.', ',' ) . '</span></span>';
-                            } ?>
-                        </h4>
-                    <?php endif; ?>
-                    <?php
-                } ?>
-                    <?php
-                        if ( !$stats && $comment_rate ) {
-                            ?>
-                            <div class="st-stars style-2">
-                                <?php
-                                    for ( $i = 1; $i <= 5; $i++ ) {
-                                        if ( $i <= $comment_rate ) {
-                                            echo '<i class="fa fa-star"></i>';
-                                        } else {
-                                            echo '<i class="fa fa-star grey"></i>';
-                                        }
-                                    }
-                                ?>
-                            </div>
-                        <?php }
-                    ?>
                 <div class="detail">
                     <?php
                         $content = get_comment_text( $comment_id );
+                        $char_limit = 150; // Proxy for 3 lines if JS check isn't used
                     ?>
-                    <div class="st-description" itemprop="reviewBody"
-                         data-show-all="st-description-<?php echo esc_attr($comment_id); ?>" <?php if ( str_word_count( $content ) >= 80 ) {
-                        echo ' data-height="80"';
-                    } ?>>
-                        <?php echo esc_html(balanceTags($content)); ?>
+                    <div class="st-description line-clamp" id="st-description-<?php echo esc_attr($comment_id); ?>" itemprop="reviewBody" style="line-height: 1.5; margin-bottom: 5px;">
+                        <?php echo balanceTags($content); ?>
                     </div>
-                    <?php if ( str_word_count( $content ) >= 80 ) { ?>
-                        <a href="#" class="st-link block"
-                           data-show-target="st-description-<?php echo esc_attr($comment_id); ?>"
-                           data-text-less="<?php echo esc_html__( 'View Less', 'traveler' ) ?>"
-                           data-text-more="<?php echo esc_html__( 'View More', 'traveler' ) ?>">
-                           <span class="text"><?php echo esc_html__( 'View More', 'traveler' ) ?></span>
-                           <i class="fa fa-caret-down ml3"></i>
+                    
+                    <?php if (strlen($content) > $char_limit): ?>
+                        <a href="javascript:void(0);" class="st-read-more-review" 
+                           style="color: #0ea5e9; font-size: 13px; font-weight: 600; text-decoration: none;"
+                           onclick="var desc=document.getElementById('st-description-<?php echo esc_attr($comment_id); ?>'); if(desc.classList.contains('line-clamp')){ desc.classList.remove('line-clamp'); this.innerText='<?php echo __('Read less', 'traveler'); ?>'; } else { desc.classList.add('line-clamp'); this.innerText='<?php echo __('Read more..', 'traveler'); ?>'; }">
+                            <?php echo __('Read more..', 'traveler'); ?>
                         </a>
-                    <?php } ?>
+                    <?php endif; ?>
 
                     <?php 
                     /* ── Display Review Photos (Carousel) ──────────────── */
@@ -206,29 +174,78 @@
                     $photos = is_array($ota_photos) ? $ota_photos : ($legacy_photo ? [$legacy_photo] : []);
                     
                     if (!empty($photos)) {
-                        echo '<style>
-                            .st-review-carousel { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; margin-top: 12px; }
-                            .st-review-carousel::-webkit-scrollbar { height: 4px; }
-                            .st-review-carousel::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-                            .st-review-carousel .photo-item { flex: 0 0 160px; scroll-snap-align: start; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; height: 120px; }
-                            .st-review-carousel .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-                            .st-review-carousel .photo-item:hover img { transform: scale(1.05); }
-                        </style>';
+                        if (!defined('KLLD_REVIEWS_STYLE_LOADED')) {
+                            define('KLLD_REVIEWS_STYLE_LOADED', true);
+                            ?>
+                            <style>
+                                .st-description.line-clamp {
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 3;
+                                    -webkit-box-orient: vertical;
+                                    overflow: hidden;
+                                }
+                                .st-review-carousel { 
+                                    display: flex; 
+                                    overflow-x: auto; 
+                                    gap: 12px; 
+                                    padding: 10px 2px; 
+                                    scroll-snap-type: x mandatory; 
+                                    -webkit-overflow-scrolling: touch; 
+                                    margin-top: 15px;
+                                    scrollbar-width: thin;
+                                }
+                                .st-review-carousel::-webkit-scrollbar { height: 6px; }
+                                .st-review-carousel::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+                                .st-review-carousel::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+                                .st-review-carousel .photo-item { 
+                                    flex: 0 0 180px; 
+                                    width: 180px;
+                                    height: 135px;
+                                    aspect-ratio: 4/3;
+                                    scroll-snap-align: start; 
+                                    position: relative; 
+                                    border-radius: 10px; 
+                                    overflow: hidden; 
+                                    border: 1px solid #e2e8f0; 
+                                    background: #f8fafc;
+                                    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                                }
+                                .st-review-carousel .photo-item img { 
+                                    width: 100%; 
+                                    height: 100%; 
+                                    object-fit: contain; 
+                                    display: block;
+                                    background: #f8fafc;
+                                    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+                                }
+                                .st-review-carousel .photo-item:hover img { transform: scale(1.1); }
+                                @media (max-width: 768px) {
+                                    .st-review-carousel .photo-item { flex: 0 0 140px; width: 140px; height: 105px; }
+                                }
+                            </style>
+                            <?php
+                        }
                         
                         echo '<div class="st-review-carousel">';
                         $proxy_base = plugins_url('ota-reviews/img_proxy.php?url=');
                         foreach ($photos as $i => $url) {
-                            $lazy = ($i === 0) ? 'eager' : 'lazy'; // Preload first image, lazy-load others
+                            $lazy = ($i < 2) ? 'eager' : 'lazy'; // Load first 2 images quickly
                             
-                            // Use proxy for external photos
                             $display_url = $url;
                             if (strpos($url, 'http') === 0 && strpos($url, home_url()) === false) {
-                                $display_url = $proxy_base . urlencode($url);
+                                $display_url = $proxy_base . rawurlencode($url);
                             }
 
                             echo '<div class="photo-item" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">';
                             echo '<a href="' . esc_url($url) . '" target="_blank" class="st-review-photo-link" itemprop="contentUrl">';
-                            echo '<img src="' . esc_url($display_url) . '" alt="Review Photo" loading="' . $lazy . '" itemprop="thumbnail">';
+                            ?>
+                            <img src="<?php echo esc_url($display_url); ?>" 
+                                 alt="Review Photo" 
+                                 loading="<?php echo $lazy; ?>" 
+                                 itemprop="thumbnail" 
+                                 data-origin="<?php echo esc_attr($url); ?>"
+                                 onerror="if(this.src.indexOf('img_proxy.php') !== -1) { this.src=this.getAttribute('data-origin'); } else { this.parentElement.parentElement.style.display='none'; }">
+                            <?php
                             echo '</a>';
                             echo '</div>';
                         }

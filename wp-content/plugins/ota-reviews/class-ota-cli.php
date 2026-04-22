@@ -47,6 +47,24 @@ class KLLD_OTA_CLI_Command {
     }
 
     /**
+     * Remove duplicate and invalid reviews from the database.
+     * 
+     * ## EXAMPLES
+     * 
+     *     wp ota-reviews cleanup
+     *
+     * @when after_wp_load
+     */
+    public function cleanup( $args, $assoc_args ) {
+        if ( ! defined( 'KLLD_SYNC_NO_RUN' ) ) define( 'KLLD_SYNC_NO_RUN', true );
+        require_once dirname(__FILE__) . '/ota_sync.php';
+        
+        $sync = new OTAReviewSync();
+        $sync->cleanup();
+        WP_CLI::success( "Cleanup finished." );
+    }
+
+    /**
      * Run the Auto-Mapper tool to discover and link OTA IDs for tours.
      * 
      * ## EXAMPLES

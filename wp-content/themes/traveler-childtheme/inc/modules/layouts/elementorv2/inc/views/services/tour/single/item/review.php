@@ -1,6 +1,6 @@
 <?php 
 $post_id = get_the_ID();
-if (comments_open($post_id) and st()->get_option('activity_tour_review') == 'on') {
+// if (comments_open($post_id) and st()->get_option('activity_tour_review') == 'on') {
     $count_review = get_comment_count($post_id)['approved'];
     ?>
     <div class="st-section-single" id="st-reviews">
@@ -171,7 +171,7 @@ if (comments_open($post_id) and st()->get_option('activity_tour_review') == 'on'
                     var container = $('.st-review-list-ajax');
                     var btn = $('#st-btn-load-more-reviews');
                     var autoloadSpinner = $('#st-autoload-spinner');
-                    var maxAutoload = 50;
+                    var maxAutoload = 25;
 
                     function loadMoreReviews(reset = false) {
                         if (loading) return;
@@ -286,4 +286,4 @@ if (comments_open($post_id) and st()->get_option('activity_tour_review') == 'on'
 
         </div>
     </div>
-<?php } ?>
+<?php  ?>

@@ -478,7 +478,15 @@ class WPML_TM_AMS_API {
 		return [
 			'method'  => $method,
 			'headers' => $headers,
+			'timeout' => $this->getTimeout( 10 ),
 		];
+	}
+
+	private function getTimeout( int $minimum = 5 ): int {
+		$max_execution_time = ini_get( 'max_execution_time' );
+		$timeout = $max_execution_time ? (int) $max_execution_time / 2 : 1;
+
+		return max( $timeout, $minimum );
 	}
 
 	/**
@@ -865,13 +873,10 @@ class WPML_TM_AMS_API {
 			FingerprintGenerator::SITE_FINGERPRINT_HEADER => $this->fingerprintGenerator->getSiteFingerprint(),
 		];
 
-		$max_execution_time = ini_get( 'max_execution_time' );
-		$timeout = $max_execution_time ? (int) $max_execution_time / 2 : 1;
-
 		$args = [
 			'method'  => $method,
 			'headers' => $headers,
-			'timeout' => (float) max( $timeout, 5 ),
+			'timeout' => $this->getTimeout(),
 		];
 
 		if ( $params ) {

@@ -630,3 +630,32 @@ a.service-avatar {
   padding-bottom: 1em !important;
 }
  */
+
+/* ── Mobile Booking Form Close Button ───────────────── */
+#st-content-wrapper .st-fixed-form-booking .close-icon {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+    cursor: pointer;
+    color: #1a2b48;
+}
+#st-content-wrapper .st-fixed-form-booking .close-icon i {
+    font-size: 18px;
+}
+#st-content-wrapper .st-fixed-form-booking .close-icon.hide {
+    display: flex !important; /* Force override theme hide class */
+}
+@media (min-width: 992px) {
+    #st-content-wrapper .st-fixed-form-booking .close-icon {
+        display: none !important;
+    }
+}

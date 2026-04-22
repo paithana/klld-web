@@ -67,7 +67,7 @@ if ($format === 'json') {
     ob_start(); 
 }
 
-set_time_limit(300); // 5 minutes
+set_time_limit(0); // No time limit for large syncs
 
 class OTAReviewSync {
     private $sources = [
@@ -115,7 +115,8 @@ class OTAReviewSync {
             'update_post_term_cache' => false
         ];
 
-        global $target_post_id, $target_limit;
+        global $target_post_id;
+        $target_limit = $limits ?: ($GLOBALS['target_limit'] ?? 10000);
         
         $tours = get_posts($args);
         echo "Found " . count($tours) . " tours to process.\n";
@@ -137,7 +138,7 @@ class OTAReviewSync {
             $gyg_id = get_post_meta($tour->ID, '_gyg_activity_id', true);
             $via_id = get_post_meta($tour->ID, '_viator_activity_id', true);
 
-            global $force_sync;
+            $force_sync = $force_sync ?? ($GLOBALS['force_sync'] ?? false);
             /**
              * Multilingual Duplication:
              * For each tour, we find all associated translation post IDs (EN, DE, FR, etc.)
@@ -170,8 +171,50 @@ class OTAReviewSync {
             // Note: need to capture imported counts from sync_ methods if we want granular stats here
         }
 
+        $this->cleanup();
+
         echo "Sync complete.\n";
         return $stats;
+    }
+
+    public function cleanup() {
+        global $wpdb;
+        echo "🧹 Starting review cleanup (Duplicates & Invalid)...\n";
+
+        // 1. Remove invalid entries (broken author/content)
+        $invalid_count = $wpdb->query("
+            DELETE FROM {$wpdb->comments} 
+            WHERE (comment_author LIKE '%object Object%' OR comment_content LIKE '%object Object%')
+            AND comment_type = 'st_reviews'
+        ");
+        if ($invalid_count) echo "   - Removed $invalid_count invalid 'object Object' reviews.\n";
+
+        // 2. Remove duplicates (Same author, content, post, and date)
+        $duplicates = $wpdb->get_results("
+            SELECT MIN(comment_ID) as keep_id, comment_post_ID, comment_author, comment_content, comment_date, COUNT(*) as cnt
+            FROM {$wpdb->comments}
+            WHERE comment_type = 'st_reviews'
+            GROUP BY comment_post_ID, comment_author, comment_content, comment_date
+            HAVING cnt > 1
+        ");
+        
+        $deleted = 0;
+        foreach ($duplicates as $dup) {
+            $ids_to_del = $wpdb->get_col($wpdb->prepare("
+                SELECT comment_ID FROM {$wpdb->comments} 
+                WHERE comment_post_ID = %d AND comment_author = %s AND comment_content = %s AND comment_date = %s AND comment_ID != %d
+            ", $dup->comment_post_ID, $dup->comment_author, $dup->comment_content, $dup->comment_date, $dup->keep_id));
+            
+            if (!empty($ids_to_del)) {
+                $ids_str = implode(',', array_map('intval', $ids_to_del));
+                $wpdb->query("DELETE FROM {$wpdb->comments} WHERE comment_ID IN ($ids_str)");
+                $wpdb->query("DELETE FROM {$wpdb->commentmeta} WHERE comment_id IN ($ids_str)");
+                $deleted += count($ids_to_del);
+            }
+        }
+        if ($deleted) echo "   - Cleaned up $deleted duplicate reviews.\n";
+        
+        echo "✅ Cleanup finished.\n";
     }
 
     private function sync_gyg($post_id, $activity_id, $limit_total = 1000, $force = false, $mode = 'auto') {
@@ -288,20 +331,34 @@ class OTAReviewSync {
                 $c = $r['message'] ?? $r['text'] ?? $r['comment'] ?? '';
                 $content = is_array($c) ? ($c['message'] ?? $c['text'] ?? '') : (is_string($c) ? $c : '');
 
+                // Extract Photos
+                $photos = [];
+                foreach (($r['media'] ?? []) as $m) {
+                    $media_urls = $m['urls'] ?? [];
+                    $best_url = '';
+                    foreach ($media_urls as $u) {
+                        if ($u['size'] === 'gallery' || $u['size'] === 'large' || $u['size'] === 'desktop') {
+                            $best_url = $u['url'];
+                            break;
+                        }
+                    }
+                    if (!$best_url && !empty($media_urls)) {
+                        $best_url = end($media_urls)['url'] ?? '';
+                    }
+                    if ($best_url) $photos[] = $best_url;
+                }
+
                 $comment_id = $this->upsert_review($post_id, 'gyg', $review_id, [
                     'author' => $author,
                     'content' => $content,
                     'rating' => round($r['overallRating'] ?? $r['rating'] ?? 5),
-                    'date' => $r['travelDate'] ?? $r['date'] ?? $r['created'] ?? ''
+                    'date' => $r['travelDate'] ?? $r['date'] ?? $r['created'] ?? '',
+                    'photos' => $photos
                 ]);
 
                 if ($comment_id) {
                     $total_imported++;
                     $consecutive_existing = 0;
-                    // Extract Photos
-                    $photos = [];
-                    foreach (($r['media'] ?? []) as $m) if (isset($m['url'])) $photos[] = $m['url'];
-                    if (!empty($photos)) update_comment_meta($comment_id, 'ota_review_photos', $photos);
                 } else {
                     $consecutive_existing++;
                 }
@@ -311,6 +368,8 @@ class OTAReviewSync {
 
             $offset += count($reviews);
             if (count($reviews) < $batch) break;
+            
+            sleep(1); // Avoid 429 Too Many Requests
         }
         echo "  - GYG Total: Sync'd $total_imported reviews for $activity_id\n";
     }
@@ -357,20 +416,21 @@ class OTAReviewSync {
                 $c = $r['reviewText'] ?? $r['text'] ?? '';
                 $content = is_array($c) ? ($c['text'] ?? $c['message'] ?? '') : (is_string($c) ? $c : '');
 
+                // Extract Photos
+                $photos = [];
+                foreach (($r['photos'] ?? []) as $m) if (isset($m['photoUrl'])) $photos[] = $m['photoUrl'];
+
                 $comment_id = $this->upsert_review($post_id, 'viator', $review_id, [
                     'author' => $r['userName'] ?? $r['authorName'] ?? 'Viator Traveler',
                     'content' => $content,
                     'rating' => $r['rating'] ?? 5,
-                    'date' => $r['publishedDate'] ?? $r['date'] ?? ''
+                    'date' => $r['publishedDate'] ?? $r['date'] ?? '',
+                    'photos' => $photos
                 ]);
 
                 if ($comment_id) {
                     $total_imported++;
                     $consecutive_existing = 0;
-                    // Extract Photos
-                    $photos = [];
-                    foreach (($r['photos'] ?? []) as $m) if (isset($m['photoUrl'])) $photos[] = $m['photoUrl'];
-                    if (!empty($photos)) update_comment_meta($comment_id, 'ota_review_photos', $photos);
                 } else {
                     $consecutive_existing++;
                 }
@@ -450,11 +510,22 @@ class OTAReviewSync {
             }
 
             if ($text) {
+                // Extract Photos
+                $photos = [];
+                $imgs = $xpath->query(".//img", $card);
+                foreach ($imgs as $img) {
+                    $src = $img->getAttribute('data-src') ?: $img->getAttribute('data-lazy-src') ?: $img->getAttribute('src');
+                    if ($src && strpos($src, '/media/photo-') !== false && strpos($src, 'avatar') === false) {
+                        $photos[] = $src;
+                    }
+                }
+
                 $comment_id = $this->upsert_review($post_id, 'tripadvisor', $remote_id, [
                     'author' => strip_tags($author),
                     'content' => $text,
                     'rating' => $rating,
-                    'date' => '' // Dates are hard to scrape from simple HTML
+                    'date' => '', // Dates are hard to scrape from simple HTML
+                    'photos' => $photos
                 ]);
                 if ($comment_id) $total_imported++;
             }
@@ -599,7 +670,13 @@ class OTAReviewSync {
                 $meta_key, $remote_id, $target_post_id
             ));
 
-            if ($existing_id) continue;
+            if ($existing_id) {
+                // Update photos if missing or requested
+                if (!empty($data['photos'])) {
+                    update_comment_meta($existing_id, 'ota_review_photos', $data['photos']);
+                }
+                continue;
+            }
 
             $rating = (float)$data['rating'];
             $title = !empty($data['title']) ? $data['title'] : wp_trim_words($data['content'], 6, '...');
@@ -645,6 +722,10 @@ class OTAReviewSync {
                 update_comment_meta($new_id, 'review_date_formatted', date('d-m-Y', strtotime($comment_data['comment_date'])));
                 update_comment_meta($new_id, '_comment_like_count', 0);
                 
+                if (!empty($data['photos'])) {
+                    update_comment_meta($new_id, 'ota_review_photos', $data['photos']);
+                }
+
                 if (function_exists('st_helper_update_total_review')) {
                     st_helper_update_total_review($target_post_id);
                 }
@@ -658,15 +739,18 @@ class OTAReviewSync {
 
     public static function normalize_date($d) {
         if (empty($d)) return '';
-        // If already in dd-mm-yyyy format (e.g. 18-04-2026), just return
-        if (preg_match('/^\d{1,2}-\d{1,2}-\d{4}$/', $d)) return $d;
-
+        
         $ts = is_numeric($d) ? $d : strtotime($d);
         if (!$ts) {
-            // Check for format like 2024-04-18T10:00:00Z
-            $ts = strtotime(str_replace('T', ' ', substr($d, 0, 19)));
+            // Check for format like 18-04-2026
+            if (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})$/', $d, $m)) {
+                $ts = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+            } else {
+                // Check for format like 2024-04-18T10:00:00Z
+                $ts = strtotime(str_replace('T', ' ', substr($d, 0, 19)));
+            }
         }
-        return $ts ? date('d-m-Y', $ts) : '';
+        return $ts ? date('Y-m-d H:i:s', $ts) : '';
     }
 
     public static function calculate_match_score($s1, $s2) {

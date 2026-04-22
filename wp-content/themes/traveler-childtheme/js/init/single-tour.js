@@ -162,7 +162,7 @@ jQuery(function ($) {
                         tour_id: $(self.container).data("post-id"),
                         start: moment(start).unix(),
                         end: moment(end).unix(),
-                        security: ajax_object.nonce
+                        security: st_params._s
                     },
                     success: function (doc) {
                         if (typeof doc === 'object') {

@@ -827,7 +827,6 @@
             }
             public function _get_availability_hotel_room()
             {
-                check_ajax_referer( 'st_frontend_security', 'security' );
                 $events[ 'events' ] = [];
                 $list_date          = [];
                 $room_id            = STInput::request( 'post_id', '' );

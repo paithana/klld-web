@@ -141,15 +141,15 @@ function conditional_checkout_fields_products($fields)
     unset($fields['billing']['billing_postcode']);
 //    $item_data = apply_filters( 'woocommerce_get_item_data', array(), $cart_item );
 //    foreach ( $item_data as $data ) {
+    if ( ! WC()->cart ) {
+        return $fields;
+    }
     foreach (WC()->cart->get_cart() as $cart_item) {
 //        $st_booking_data = $item_data['st_booking_data'];
-       $st_booking_data = $cart_item['st_booking_data'];
-        echo '<script>';
-        echo 'console.log('.var_dump($st_booking_data).')';
-        echo '</script>';
+       $st_booking_data = $cart_item['st_booking_data'] ?? [];
 
         //tour details
-        if ($st_booking_data['st_booking_post_type'] == 'st_tours') {
+        if (isset($st_booking_data['st_booking_post_type']) && $st_booking_data['st_booking_post_type'] == 'st_tours') {
             $fields['billing']['billing_tour_pickup'] = array(
                 'id' => 'billing_tour_pickup',
                 'label' => __('Hotel to pick-up', 'woocommerce'),

@@ -14,7 +14,7 @@ if (!isset($logFile)) {
 function logMapper($msg) {
     $log_path = dirname(__FILE__) . '/ota_auto_mapper_log.txt';
     $txt = "[" . date('Y-m-d H:i:s') . "] $msg\n";
-    echo $txt;
+    // echo $txt;
     file_put_contents($log_path, $txt, FILE_APPEND);
 }
 

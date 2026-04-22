@@ -33,6 +33,31 @@
         ?>
     </h2>
     <?php }
-    the_content();
+    $content = apply_filters('the_content', get_the_content());
+    if (!empty($content)) {
+        $paragraphs = explode('</p>', $content);
+        if (count($paragraphs) > 1) {
+            $first_p = $paragraphs[0] . '</p>';
+            unset($paragraphs[0]);
+            $rest_content = implode('</p>', $paragraphs);
+            ?>
+            <div class="st-description-content" id="st-description-text">
+                <div class="description-first-p">
+                    <?php echo $first_p; ?>
+                </div>
+                <div class="description-more" style="display: none;">
+                    <?php echo $rest_content; ?>
+                </div>
+                <a href="javascript:void(0);" class="st-read-more" 
+                   style="color: #0ea5e9; font-weight: 600; text-decoration: none; display: inline-block; margin-top: 10px;"
+                   onclick="var more=this.previousElementSibling; if(more.style.display==='none'){ more.style.display='block'; this.innerText='<?php echo __('Read less', 'traveler'); ?>'; } else { more.style.display='none'; this.innerText='<?php echo __('Read more', 'traveler'); ?>'; }">
+                    <?php echo __('Read more', 'traveler'); ?>
+                </a>
+            </div>
+            <?php
+        } else {
+            echo $content;
+        }
+    }
     ?>
 </div>
