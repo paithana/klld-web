@@ -1,45 +1,47 @@
 # ♊ Gemini CLI - Workspace Context & Session History
 
 ## 🚀 Project Overview: Khao Lak Land Discovery (KLLD)
-This workspace focuses on the review synchronization and optimization for the **Traveler** theme on `khaolaklanddiscovery.com`.
+This workspace focuses on the review synchronization, UI optimization, and infrastructure health for the **Traveler** theme.
 
 ## 🛠 Work Completed (April 2026)
 
-### 1. **OTA Review Synchronization & Mapping**
-*   **TripAdvisor (TA):** 
-    *   **Count:** 88 reviews currently imported.
-    *   **Workflow:** Browser-based scraper (`ta_browser_scraper.js`) is used to bypass DataDome bot protection. Data is received via `ta_receiver.php`.
-*   **GetYourGuide (gyg):**
-    *   **Count:** **2,765 unique reviews**.
-    *   **Integrity:** Restored to origin tour assignments and excluded from remapping as per the "don't filter" directive.
-*   **Google (gmb):**
-    *   **Count:** **800 unique reviews**.
-    *   **Consolidation:** Standardized from multiple JSON sources.
+### 1. **OTA Review Synchronization & Deep Sync**
+*   **Enhanced Sync Engine (`ota_sync.php`):**
+    *   Corrected variable scoping to respect high limits and force flags during CLI syncs.
+    *   Implemented **high-resolution photo extraction** for GetYourGuide (nested URLs) and TripAdvisor (lazy-load support).
+    *   Added automatic **deduplication** and removal of invalid "object Object" reviews after every sync.
+*   **Data Success:**
+    *   Successfully backfilled photos for **555 GetYourGuide reviews**.
+    *   Repaired **4,560 broken review dates** in the database, restoring correct sorting by Date (Descending).
 
-### 2. **Global Remapping & Logic Fixes**
-*   **Advanced Mapping:** Created a global remapping engine that uses **Tour Itineraries (Programmablauf)** and keywords (`_ota_keywords`) to precisely link reviews to the correct WordPress posts.
-*   **GYG Exclusion:** The remapping engine is configured to **ignore** all reviews where the `ota_source` is `gyg`, preserving their original tour assignments.
-*   **Duplicate Removal:** Successfully identified and deleted over **4,600 redundant reviews**, keeping only unique entries per author/content/tour.
+### 2. **Advanced Frontend & UI/UX Optimizations**
+*   **Review Metadata & Hierarchy:**
+    *   Implemented a "Best Fit" professional header: **Line 1: Author Name + Star Rating (Inline)** | **Line 2: Source Label • Date**.
+    *   Moved the **Review Title** (headline) to sit directly above the **Review Content** for a structured, logical flow.
+    *   Arranged interaction buttons in the final order: **Like → Dislike → Reply**.
+*   **Review Filters:**
+    *   Converted source filters into a touch-friendly **horizontal carousel**.
+    *   Added **Dynamic Keyword Filters** (Topic tags like #Similan, #Guide, #Elephant) with a limit of top 10 keywords per tour.
+    *   Added **Live Totals** to filter buttons (e.g., "GetYourGuide (332)").
+*   **Performance & Media:**
+    *   Adjusted review autoload limit to **25 entries** for faster initial page paints.
+    *   Updated review photo carousels with `object-fit: contain` and implemented a **Double-Fallback Proxy** system to bypass hotlinking protection while ensuring images never appear broken.
+    *   Truncated "About this tour" descriptions to the **first paragraph** with a smooth "Read more" toggle.
 
-### 3. **Frontend & UX Optimizations**
-*   **Order:** Reviews are now sorted by **Date (Descending)** by default.
-*   **Performance:**
-    *   **Infinite Scroll (Autoload):** Implemented for the first **50 reviews** using `IntersectionObserver`.
-    *   **"Load More" Button:** Replaces standard pagination after the 50-review limit is reached.
-    *   **Lazy Loading (`loading="lazy"`)** for all review avatars and gallery photos.
-*   **Interaction:** The "Write a Review" button smoothly toggles form visibility directly on the page.
+### 3. **Fixes & System Integrity**
+*   **Review Form Fix:** Resolved a critical issue where form fields (stars, title, textarea) were missing by bypassing a broken theme wrapper and enqueuing `st-reviews-form` correctly.
+*   **Booking Form (Mobile):** Forced the "X" close icon to display on the mobile sticky booking overlay.
+*   **Infrastructure:** Corrected SSH key permissions (`600`) to allow secure Git deployments and resolved PHP warnings related to `REMOTE_ADDR`.
 
-## 📁 Key Tools & Scripts
-*   `wp-content/plugins/ota-reviews/data/`: Consolidated raw data directory.
-*   `wp-content/plugins/ota-reviews/ta_browser_scraper.js`: Browser console script for TripAdvisor.
-*   `wp-content/plugins/ota-reviews/import_ta_reviews.php`: Import & matching logic for TA.
-*   `wp-content/plugins/ota-reviews/import_gmb_reviews.php`: Unified importer for consolidated GMB JSON.
+### 4. **Maintenance & Tools**
+*   **WP-CLI Command:** Created `wp ota-reviews cleanup` for manual database optimization.
+*   **Image Proxy (`img_proxy.php`):** Overhauled with desktop User-Agent and referer spoofing to ensure reliable OTA image delivery.
 
-## 📡 Database Mappings (Final)
-*   `gmb` = Google (Consolidated from all JSON sources)
-*   `TA` = TripAdvisor (Verified scraped source)
-*   `gyg` = GetYourGuide (Restored to origin tours, remapping excluded)
-*   `vt` = Viator (System ready, awaiting data)
+## 📡 Final Status & Mappings
+*   `gmb` = Google (Manual JSON import + 1 photo test)
+*   `TA` = TripAdvisor (88+ reviews, scraper optimized for photos via Browser Tool)
+*   `gyg` = GetYourGuide (2,765+ unique reviews, 555 with photos)
+*   `vt` = Viator (System ready, currently blocked by bot protection)
 
 ---
-*Last Updated: April 21, 2026*
+*Last Updated: April 22, 2026*

@@ -96,14 +96,6 @@
                                 }
                                 ?>
                             </div>
-
-                            <?php 
-                            $comment_title = get_comment_meta($comment_id, 'comment_title', true);
-                            if ($comment_title && strpos($comment_title, 'Expert tour from') === false): ?>
-                                <div class="review-inline-title" style="font-size: 14px; font-weight: 600; color: #1a2b48; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 1px solid #e2e8f0; padding-left: 10px;">
-                                    "<?php echo esc_html($comment_title); ?>"
-                                </div>
-                            <?php endif; ?>
                         </div>
 
                         <!-- Line 2: Source • Date -->
@@ -125,12 +117,7 @@
                 </div>
                 
                 <div class="like-button-wrapper" style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 12px; color: #94a3b8;">
-                    <!-- Reply Action -->
-                    <a href="#write-review" class="review-reply-link" title="<?php echo __('Reply', 'traveler'); ?>" style="color: inherit; font-size: 14px;">
-                        <i class="fa fa-reply"></i>
-                    </a>
-                    
-                    <!-- Like/Dislike -->
+                    <!-- Like -->
                     <div class="like-container d-flex align-items-center" style="gap: 5px;">
                         <?php $review_obj = new STReview();
                             if ( $review_obj->check_like( $comment_id ) ):
@@ -157,6 +144,11 @@
                     <a href="#" class="review-dislike-link" style="color: inherit; transform: rotate(180deg); display: inline-block;">
                         <i class="stt-icon-like"></i>
                     </a>
+
+                    <!-- Reply Action -->
+                    <a href="#write-review" class="review-reply-link" title="<?php echo __('Reply', 'traveler'); ?>" style="color: inherit; font-size: 14px;">
+                        <i class="fa fa-reply"></i>
+                    </a>
                 </div>
             </div>
             <div class="comment-item-body">
@@ -165,6 +157,14 @@
                     // Ratings moved to header
                 ?>
                 <div class="detail">
+                    <?php
+                        $comment_title = get_comment_meta($comment_id, 'comment_title', true);
+                        if ($comment_title && strpos($comment_title, 'Expert tour from') === false): ?>
+                            <h4 class="comment-title" style="font-size: 15px; font-weight: 700; color: #1a2b48; margin-bottom: 8px; line-height: 1.4;">
+                                <?php echo esc_html($comment_title); ?>
+                            </h4>
+                        <?php endif; ?>
+
                     <?php
                         $content = get_comment_text( $comment_id );
                         $char_limit = 150; // Proxy for 3 lines if JS check isn't used
