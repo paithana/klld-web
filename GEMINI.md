@@ -5,46 +5,41 @@ This workspace focuses on the review synchronization and optimization for the **
 
 ## 🛠 Work Completed (April 2026)
 
-### 1. **OTA Review Synchronization & Matching**
+### 1. **OTA Review Synchronization & Mapping**
 *   **TripAdvisor (TA):** 
-    *   Identified and imported **720 TripAdvisor reviews**.
-    *   **600+ reviews** were sourced via a browser-based scraper (`ta_browser_scraper.js`) to bypass DataDome bot protection.
-    *   Used a **Fuzzy Matching Algorithm** (Jaccard Similarity) to link reviews to tours based on the "Review of: [Tour Name]" metadata.
+    *   **Count:** 88 reviews currently imported.
+    *   **Workflow:** Browser-based scraper (`ta_browser_scraper.js`) is used to bypass DataDome bot protection. Data is received via `ta_receiver.php`.
 *   **GetYourGuide (gyg):**
-    *   Imported and verified **5,614 reviews** from `import_all_reviews.sql`.
-    *   Ensured correct attribution by mapping `@gyg.com` and `@getyourguide.com` emails.
+    *   **Count:** **2,765 unique reviews**.
+    *   **Integrity:** Restored to origin tour assignments and excluded from remapping as per the "don't filter" directive.
 *   **Google (gmb):**
-    *   Imported and mapped reviews from `gmb_test_data.json`.
-    *   Cleaned up and re-verified sources to avoid cross-platform mislabeling.
+    *   **Count:** **800 unique reviews**.
+    *   **Consolidation:** Standardized from multiple JSON sources.
 
 ### 2. **Global Remapping & Logic Fixes**
-*   **Advanced Mapping:** Created a global remapping engine (`remap_reviews.php`) that uses **Tour Itineraries (Programmablauf)** and keywords (`_ota_keywords`) to precisely link reviews to the correct WordPress posts.
+*   **Advanced Mapping:** Created a global remapping engine that uses **Tour Itineraries (Programmablauf)** and keywords (`_ota_keywords`) to precisely link reviews to the correct WordPress posts.
 *   **GYG Exclusion:** The remapping engine is configured to **ignore** all reviews where the `ota_source` is `gyg`, preserving their original tour assignments.
-*   **Title Cleanup:** Automatically removed the string `"Expert tour from Gyg"` from over **2,300 review titles** to improve frontend appearance.
-*   **Duplicate Removal:** Identified and deleted **3,642 duplicate reviews**, keeping only the unique newest entries per author/content/tour.
+*   **Duplicate Removal:** Successfully identified and deleted over **4,600 redundant reviews**, keeping only unique entries per author/content/tour.
 
 ### 3. **Frontend & UX Optimizations**
 *   **Order:** Reviews are now sorted by **Date (Descending)** by default.
 *   **Performance:**
-    *   **Infinite Scroll (Autoload):** Implemented infinite scroll for the first **50 reviews** using `IntersectionObserver`.
-    *   **"Load More" Button:** After 50 reviews, the system switches to a manual "Load More" button to maintain page stability.
+    *   **Infinite Scroll (Autoload):** Implemented for the first **50 reviews** using `IntersectionObserver`.
+    *   **"Load More" Button:** Replaces standard pagination after the 50-review limit is reached.
     *   **Lazy Loading (`loading="lazy"`)** for all review avatars and gallery photos.
-*   **Interaction:**
-    *   **Write a Review:** The "Write a Review" button now smoothly toggles the review form visibility directly on the page.
-*   **Branding:** Updated the site logo to the high-quality original (**Attachment 14501**) and fixed the directory paths for OTA badges.
+*   **Interaction:** The "Write a Review" button smoothly toggles form visibility directly on the page.
 
 ## 📁 Key Tools & Scripts
-*   `/wp-content/plugins/ota-reviews/ta_browser_scraper.js`: Browser console script for scraping TripAdvisor.
-*   `/wp-content/plugins/ota-reviews/ta_receiver.php`: Endpoint for receiving scraped data.
-*   `/wp-content/plugins/ota-reviews/import_ta_reviews.php`: Server-side import & matching logic.
-*   `remap_reviews.php`: One-time global remapping tool.
-*   `remove_duplicates.php`: Cleans up redundant reviews in the database.
+*   `wp-content/plugins/ota-reviews/data/`: Consolidated raw data directory.
+*   `wp-content/plugins/ota-reviews/ta_browser_scraper.js`: Browser console script for TripAdvisor.
+*   `wp-content/plugins/ota-reviews/import_ta_reviews.php`: Import & matching logic for TA.
+*   `wp-content/plugins/ota-reviews/import_gmb_reviews.php`: Unified importer for consolidated GMB JSON.
 
 ## 📡 Database Mappings (Final)
-*   `gmb` = Google (from `import_all_reviews.sql` and other GMB imports)
-*   `TA` = TripAdvisor (from browser scraper `ta_browser_scraper.js`)
-*   `gyg` = GetYourGuide (currently no reviews with this source)
-*   `vt` = Viator (system ready, no data found)
+*   `gmb` = Google (Consolidated from all JSON sources)
+*   `TA` = TripAdvisor (Verified scraped source)
+*   `gyg` = GetYourGuide (Restored to origin tours, remapping excluded)
+*   `vt` = Viator (System ready, awaiting data)
 
 ---
 *Last Updated: April 21, 2026*

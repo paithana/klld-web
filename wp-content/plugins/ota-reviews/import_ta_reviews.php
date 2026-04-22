@@ -177,6 +177,9 @@ foreach ($data as $batch_id => $batch_data) {
                     update_comment_meta($comment_id, 'comment_rate', $r['rating'] ?? 5);
                     update_comment_meta($comment_id, 'comment_title', $r['title'] ?? '');
                     update_comment_meta($comment_id, 'st_category_name', 'st_tours');
+                    if (!empty($r['photos'])) {
+                        update_comment_meta($comment_id, 'ota_review_photos', $r['photos']);
+                    }
                     
                     if (function_exists('st_helper_update_total_review')) {
                         st_helper_update_total_review($target_post_id);

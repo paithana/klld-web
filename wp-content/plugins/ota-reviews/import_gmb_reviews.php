@@ -1,11 +1,11 @@
 <?php
 /**
- * Import Scraped GMB Reviews into WordPress with Keyword Mapping
+ * Import Consolidated GMB Reviews into WordPress with Keyword Mapping
  */
 
 require_once '/home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-load.php';
 
-$json_file = __DIR__ . '/data/source_gmb_legacy.json';
+$json_file = __DIR__ . '/data/source_gmb.json';
 if (!file_exists($json_file)) {
     die("JSON file not found: $json_file\n");
 }
@@ -38,7 +38,6 @@ function find_best_tour($text, $tour_keywords) {
         $matches = 0;
         foreach ($kws as $kw) {
             if ($kw && stripos($text, $kw) !== false) {
-                // Weight longer keywords more
                 $matches += strlen($kw);
             }
         }
@@ -76,9 +75,8 @@ $total_unmapped = 0;
 foreach ($data as $r) {
     $text = $r['text'];
     $author = $r['author'];
-    
-    preg_match('/[0-9.]+/', $r['rating'], $matches);
-    $rating_val = !empty($matches[0]) ? floatval($matches[0]) : 5.0;
+    $rating_val = (float)$r['rating'];
+    $review_id = $r['id'];
 
     $target_post_id = find_best_tour($text, $tour_keywords);
     
@@ -94,7 +92,6 @@ foreach ($data as $r) {
     $localized_ids = klld_get_translated_post_ids($target_post_id);
     foreach ($localized_ids as $tid) {
         global $wpdb;
-        $review_id = md5($author . $text);
         $meta_key = 'gmb_review_id';
 
         $exists = $wpdb->get_var($wpdb->prepare(
@@ -107,13 +104,17 @@ foreach ($data as $r) {
             continue;
         }
 
+        // Try to parse date correctly
+        $date_ts = strtotime($r['date']);
+        if (!$date_ts) $date_ts = time();
+        
         $comment_data = [
             'comment_post_ID'      => $tid,
             'comment_author'       => $author,
             'comment_author_email' => sanitize_title($author) . '@google-reviews.com',
             'comment_content'      => $text,
             'comment_type'         => 'st_reviews',
-            'comment_date'         => date('Y-m-d H:i:s', strtotime($r['date'] ?: 'now')),
+            'comment_date'         => date('Y-m-d H:i:s', $date_ts),
             'comment_approved'     => 1,
             'comment_agent'        => 'KLLD GMB Importer',
         ];
@@ -136,7 +137,7 @@ foreach ($data as $r) {
     }
 }
 
-echo "\n✅ GMB IMPORT COMPLETE\n";
+echo "\n✅ GMB CONSOLIDATED IMPORT COMPLETE\n";
 echo "Total Imported: $total_imported\n";
 echo "Total Skipped (Duplicates): $total_skipped\n";
 echo "Total Unmapped: $total_unmapped\n";

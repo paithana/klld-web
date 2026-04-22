@@ -42,8 +42,9 @@ while (have_posts()): the_post();
                         <div class="hotel-target-book-mobile d-flex justify-content-between align-items-center">
                             <div class="price-wrapper">
                                 <div id="mobile-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                                    <?php $price_info = STTour::get_info_price(); ?>
                                     <meta itemprop="priceCurrency" content="<?php echo TravelHelper::get_current_currency('name'); ?>" />
-                                    <meta itemprop="price" content="<?php echo (float)STTour::get_info_price()['price']; ?>" />
+                                    <meta itemprop="price" content="<?php echo (float)($price_info['price_new'] ?? $price_info['price']); ?>" />
                                     <link itemprop="availability" href="https://schema.org/InStock" />
                                     <?php echo wp_kses(sprintf(__('From:<span class="price">%s</span>', 'traveler'), STTour::get_price_html(get_the_ID())), ['span' => ['class' => []]]) ?>
                                 </div>

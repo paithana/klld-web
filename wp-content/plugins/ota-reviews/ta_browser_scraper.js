@@ -40,6 +40,14 @@
         // Avatar
         const avatar = card.querySelector('img.cyS_u')?.src || null;
 
+        // Photos
+        const photos = [];
+        card.querySelectorAll('img').forEach(img => {
+            if (img.src && img.src.includes('/media/photo-') && !img.src.includes('avatar')) {
+                photos.push(img.src);
+            }
+        });
+
         // CRITICAL: "Review of" (Tour Name)
         // Usually looks like "Review of: Similan Islands Early Bird..."
         let reviewOf = "";
@@ -58,7 +66,8 @@
             rt: rating,
             dt: date,
             av: avatar,
-            ro: reviewOf
+            ro: reviewOf,
+            ph: photos
         });
     });
 

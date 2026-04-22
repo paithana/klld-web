@@ -49,6 +49,7 @@ foreach ($reviews as &$r) {
         'text'          => $r['co'] ?? '',
         'date'          => $r['dt'] ?? '',
         'review_of'     => $r['ro'] ?? '', // Preserve the tour name
+        'photos'        => $r['ph'] ?? [], // Preserve photos
     ];
 }
 unset($r);

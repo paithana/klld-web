@@ -216,13 +216,39 @@
                         </style>';
                         
                         echo '<div class="st-review-carousel">';
+                        $proxy_base = plugins_url('ota-reviews/img_proxy.php?url=');
                         foreach ($photos as $i => $url) {
                             $lazy = ($i === 0) ? 'eager' : 'lazy'; // Preload first image, lazy-load others
-                            echo '<div class="photo-item">';
-                            echo '<a href="' . esc_url($url) . '" target="_blank" class="st-review-photo-link">';
-                            echo '<img src="' . esc_url($url) . '" alt="Review Photo" loading="' . $lazy . '">';
+                            
+                            // Use proxy for external photos
+                            $display_url = $url;
+                            if (strpos($url, 'http') === 0 && strpos($url, home_url()) === false) {
+                                $display_url = $proxy_base . urlencode($url);
+                            }
+
+                            echo '<div class="photo-item" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">';
+                            echo '<a href="' . esc_url($url) . '" target="_blank" class="st-review-photo-link" itemprop="contentUrl">';
+                            echo '<img src="' . esc_url($display_url) . '" alt="Review Photo" loading="' . $lazy . '" itemprop="thumbnail">';
                             echo '</a>';
                             echo '</div>';
+                        }
+                        echo '</div>';
+                    }
+                    ?>
+
+                    <?php 
+                    /* ── Display Review Replies (Children) ──────────────── */
+                    $children = get_comments([
+                        'parent'  => $comment_id,
+                        'status'  => 'approve',
+                        'orderby' => 'comment_date',
+                        'order'   => 'ASC'
+                    ]);
+
+                    if ($children) {
+                        echo '<div class="st-review-replies ml30 mt20" style="border-left: 2px solid #eee; padding-left: 20px;">';
+                        foreach ($children as $child) {
+                            echo stt_elementorv2()->loadView('services/common/single/review-list', ['comment' => $child, 'post_type' => $post_type]);
                         }
                         echo '</div>';
                     }

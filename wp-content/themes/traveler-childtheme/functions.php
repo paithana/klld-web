@@ -593,6 +593,7 @@ add_action('wp_ajax_nopriv_klld_load_more_reviews', 'klld_load_more_reviews');
 function klld_load_more_reviews() {
     $paged = (int)($_POST['paged'] ?? 1);
     $post_id = (int)($_POST['post_id'] ?? 0);
+    $source = sanitize_text_field($_POST['source'] ?? 'all');
     $comment_per_page = (int)get_option('comments_per_page', 10);
     $offset = ($paged - 1) * $comment_per_page;
 
@@ -602,8 +603,35 @@ function klld_load_more_reviews() {
         'post_id' => $post_id,
         'status'  => ['approve'],
         'orderby' => 'comment_date',
-        'order'   => 'DESC'
+        'order'   => 'DESC',
+        'parent'  => 0
     ];
+
+    if ($source !== 'all') {
+        if ($source === 'local') {
+            $args['meta_query'] = [
+                'relation' => 'OR',
+                [
+                    'key' => 'ota_source',
+                    'compare' => 'NOT EXISTS'
+                ],
+                [
+                    'key' => 'ota_source',
+                    'value' => '',
+                    'compare' => '='
+                ]
+            ];
+        } else {
+            $args['meta_query'] = [
+                [
+                    'key' => 'ota_source',
+                    'value' => $source,
+                    'compare' => '='
+                ]
+            ];
+        }
+    }
+
     $comments_query = new WP_Comment_Query;
     $comments = $comments_query->query($args);
 

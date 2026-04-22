@@ -22,8 +22,9 @@
 ## 3. Frontend & UX
 *   **Sorting:** `functions.php` forces `comment_date` DESC order for all reviews.
 *   **Loading:** 
-    *   **Infinite Scroll:** Autoloads reviews up to 50 entries using `IntersectionObserver` in `review.php`.
-    *   **Load More:** Manual button displayed for counts > 50.
+    *   **Infinite Scroll:** Autoloads top-level reviews up to 50 entries using `IntersectionObserver` in `review.php`.
+    *   **Nested Replies:** Child comments (replies) are rendered recursively as sub-elements under their respective parent reviews with visual indentation.
+    *   **Load More:** Manual button displayed for top-level counts > 50.
 *   **Lazy Loading:** Filters applied to `wp_get_attachment_image_attributes` for all images and specifically on review-list avatars.
 
 ## 4. Verification Flow
