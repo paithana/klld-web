@@ -74,30 +74,45 @@
                         ?>
                     </div>
                     <div class="review-meta-content" style="flex-grow: 1; min-width: 0; padding-right: 80px;">
-                        <!-- Line 1: Name + Rate -->
-                        <div class="review-meta-name d-flex align-items-center mb-1" style="gap: 8px;">
-                            <?php if ($origin_url): ?>
-                                <a href="<?php echo esc_url($origin_url); ?>" target="_blank" rel="nofollow" class="author-name-link" style="text-decoration:none;">
-                            <?php endif; ?>
-                            <span class="author-name" style="max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 15px; font-weight: 700; color: #1a2b48;" title="<?php echo esc_attr($author_name); ?>">
-                                <?php echo esc_html($author_name); ?>
-                            </span>
-                            <?php if ($origin_url): ?></a><?php endif; ?>
+                        <!-- Line 1: Name & Stars & Title -->
+                        <div class="review-meta-top d-flex align-items-center mb-1" style="gap: 10px; flex-wrap: nowrap;">
+                            <div class="author-wrapper" style="flex-shrink: 0;">
+                                <?php if ($origin_url): ?>
+                                    <a href="<?php echo esc_url($origin_url); ?>" target="_blank" rel="nofollow" class="author-name-link" style="text-decoration:none;">
+                                <?php endif; ?>
+                                <span class="author-name" style="font-size: 15px; font-weight: 700; color: #1a2b48; line-height: 1.2;" title="<?php echo esc_attr($author_name); ?>">
+                                    <?php echo esc_html($author_name); ?>
+                                </span>
+                                <?php if ($origin_url): ?></a><?php endif; ?>
+                            </div>
+                            
+                            <div class="stars-wrapper" style="line-height: 1; flex-shrink: 0;">
+                                <?php
+                                $comment_rate = (float)get_comment_meta( $comment_id, 'comment_rate', true );
+                                if ($comment_rate) {
+                                    echo '<ul class="review-star small" style="margin:0; padding:0; list-style:none; display:flex; gap:2px; font-size: 9px;">';
+                                    echo TravelHelper::rate_to_string($comment_rate);
+                                    echo '</ul>';
+                                }
+                                ?>
+                            </div>
 
-                            <?php
-                            $comment_rate = (float)get_comment_meta( $comment_id, 'comment_rate', true );
-                            if ($comment_rate) {
-                                echo '<ul class="review-star small" style="margin:0; padding:0; list-style:none; display:flex; gap:2px; font-size: 9px;">';
-                                echo TravelHelper::rate_to_string($comment_rate);
-                                echo '</ul>';
-                            }
-                            ?>
+                            <?php 
+                            $comment_title = get_comment_meta($comment_id, 'comment_title', true);
+                            if ($comment_title && strpos($comment_title, 'Expert tour from') === false): ?>
+                                <div class="review-inline-title" style="font-size: 14px; font-weight: 600; color: #1a2b48; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 1px solid #e2e8f0; padding-left: 10px;">
+                                    "<?php echo esc_html($comment_title); ?>"
+                                </div>
+                            <?php endif; ?>
                         </div>
 
                         <!-- Line 2: Source • Date -->
-                        <div class="review-meta-details" style="font-size: 11px; color: #64748b; line-height: 1.4; display: flex; align-items: center; flex-wrap: wrap;">
-                            <span class="source-label"><?php echo __('on', 'traveler'); ?> <strong style="color:#475569; font-weight:600;"><?php echo esc_html($source_label); ?></strong></span>
-                            <span class="separator mx-1" style="color: #cbd5e1;">&bull;</span>
+                        <div class="review-meta-details" style="font-size: 11px; color: #64748b; line-height: 1.4; display: flex; align-items: center; gap: 6px;">
+                            <span class="source-label" style="display: flex; align-items: center; gap: 4px;">
+                                <?php echo __('via', 'traveler'); ?> 
+                                <span style="color:#475569; font-weight:600;"><?php echo esc_html($source_label); ?></span>
+                            </span>
+                            <span class="separator" style="color: #cbd5e1;">&bull;</span>
                             <span class="date-time">
                                 <?php 
                                 $formatted_date = get_comment_meta($comment_id, 'review_date_formatted', true);

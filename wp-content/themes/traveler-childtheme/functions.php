@@ -594,6 +594,7 @@ function klld_load_more_reviews() {
     $paged = (int)($_POST['paged'] ?? 1);
     $post_id = (int)($_POST['post_id'] ?? 0);
     $source = sanitize_text_field($_POST['source'] ?? 'all');
+    $keyword = sanitize_text_field($_POST['keyword'] ?? '');
     $comment_per_page = (int)get_option('comments_per_page', 10);
     $offset = ($paged - 1) * $comment_per_page;
 
@@ -604,7 +605,8 @@ function klld_load_more_reviews() {
         'status'  => ['approve'],
         'orderby' => 'comment_date',
         'order'   => 'DESC',
-        'parent'  => 0
+        'parent'  => 0,
+        'search'  => $keyword
     ];
 
     if ($source !== 'all') {
@@ -621,6 +623,12 @@ function klld_load_more_reviews() {
                     'compare' => '='
                 ]
             ];
+        } elseif ($source === 'TA') {
+            $args['meta_query'] = [['key' => 'ota_source', 'value' => ['TA', 'tripadvisor'], 'compare' => 'IN']];
+        } elseif ($source === 'vt') {
+            $args['meta_query'] = [['key' => 'ota_source', 'value' => ['vt', 'viator'], 'compare' => 'IN']];
+        } elseif ($source === 'gmb') {
+            $args['meta_query'] = [['key' => 'ota_source', 'value' => ['gmb', 'google'], 'compare' => 'IN']];
         } else {
             $args['meta_query'] = [
                 [

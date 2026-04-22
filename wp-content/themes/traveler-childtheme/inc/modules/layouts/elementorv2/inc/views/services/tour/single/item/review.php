@@ -99,21 +99,91 @@ $post_id = get_the_ID();
                         </div>
                     </div>
                     <div id="write-review-form-content" class="mt20">
-                        <?php TravelHelper::comment_form(); ?>
+                        <?php 
+                        wp_enqueue_script( 'st-reviews-form' );
+                        $commenter = wp_get_current_commenter();
+                        $comment_form = [
+                            'title_reply'          => __('Leave a review', 'traveler'),
+                            'title_reply_to'       => __('Leave a review to %s', 'traveler'),
+                            'comment_notes_before' => '',
+                            'fields'               => [
+                                'author' => '<div class="row"><div class="col-md-6"><div class="form-group">' .
+                                    '<label for="author">' . __( 'Name*', 'traveler' ) . '</label>' .
+                                    '<input id="author" name="author" type="text" value="' . esc_attr( $commenter[ 'comment_author' ] ) . '" size="30" aria-required="true" class="form-control" />' .
+                                    '</div></div>',
+                                'email'  => '<div class="col-md-6"><div class="form-group">' .
+                                    '<label for="email">' . __( 'Your email address *', 'traveler' ) . '</label>' .
+                                    '<input class="form-control" id="email" name="email" type="text" value="' . esc_attr( $commenter[ 'comment_author_email' ] ) . '" size="30" aria-required="true" />' .
+                                    '</div></div></div>',
+                            ],
+                            'label_submit'         => __('Post Review', 'traveler'),
+                            'logged_in_as'         => '',
+                            'comment_field'        => '<input name="comment_type" value="st_reviews" type="hidden">',
+                            'comment_notes_after'  => '',
+                            'class_form'           => 'review-form',
+                            'id_form'              => 'commentform'
+                        ];
+
+                        $comment_form_arg = apply_filters( get_post_type( $post_id ) . '_wp_review_form_args', $comment_form, $post_id );
+                        
+                        // Force display: block for our custom wrapper
+                        echo '<style>#respond.comment-respond { display: block !important; }</style>';
+                        comment_form( $comment_form_arg ); 
+                        ?>
                     </div>
                 </div>
             </div>
 
             <!-- Review Source Filter -->
+            <?php
+            $count_all = get_comments(['post_id' => $post_id, 'status' => 'approve', 'parent' => 0, 'count' => true, 'type' => 'st_reviews']);
+            
+            $count_gyg = get_comments(['post_id' => $post_id, 'status' => 'approve', 'parent' => 0, 'count' => true, 'type' => 'st_reviews', 'meta_key' => 'ota_source', 'meta_value' => 'gyg']);
+            
+            $count_ta = get_comments(['post_id' => $post_id, 'status' => 'approve', 'parent' => 0, 'count' => true, 'type' => 'st_reviews', 'meta_query' => [
+                ['key' => 'ota_source', 'value' => ['TA', 'tripadvisor'], 'compare' => 'IN']
+            ]]);
+
+            $count_vt = get_comments(['post_id' => $post_id, 'status' => 'approve', 'parent' => 0, 'count' => true, 'type' => 'st_reviews', 'meta_query' => [
+                ['key' => 'ota_source', 'value' => ['vt', 'viator'], 'compare' => 'IN']
+            ]]);
+
+            $count_gmb = get_comments(['post_id' => $post_id, 'status' => 'approve', 'parent' => 0, 'count' => true, 'type' => 'st_reviews', 'meta_query' => [
+                ['key' => 'ota_source', 'value' => ['gmb', 'google'], 'compare' => 'IN']
+            ]]);
+
+            $count_local = $count_all - ($count_gyg + $count_ta + $count_vt + $count_gmb);
+
+            // Get Top Keywords for filtering
+            $keywords_raw = get_post_meta($post_id, '_ota_keywords', true);
+            $keywords = [];
+            if ($keywords_raw) {
+                $keywords = array_slice(array_map('trim', explode(',', $keywords_raw)), 0, 10);
+            }
+            ?>
             <div class="st-review-filter-wrapper mb30">
-                <ul class="st-review-filter-list d-flex justify-content-center flex-wrap" style="list-style: none; padding: 0; gap: 10px;">
-                    <li><a href="javascript:void(0);" class="btn btn-outline-primary active" data-source="all"><?php echo __('All', 'traveler'); ?></a></li>
-                    <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="local">Khao Lak Land Discovery</a></li>
-                    <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="gyg">GetYourGuide</a></li>
-                    <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="TA">TripAdvisor</a></li>
-                    <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="vt">Viator</a></li>
-                    <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="gmb">Google</a></li>
-                </ul>
+                <div class="st-review-filter-carousel-container" style="overflow-x: auto; padding: 10px 0; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                    <ul class="st-review-filter-list d-flex justify-content-start align-items-center" style="list-style: none; padding: 0 2px; gap: 8px; margin: 0; white-space: nowrap;">
+                        <li><a href="javascript:void(0);" class="btn btn-outline-primary active" data-source="all" data-keyword=""><?php echo __('All', 'traveler'); ?> (<?php echo $count_all; ?>)</a></li>
+                        
+                        <?php if ($count_local > 0): ?>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="local" data-keyword="">Website (<?php echo $count_local; ?>)</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if ($count_gyg > 0): ?>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="gyg" data-keyword="">GYG (<?php echo $count_gyg; ?>)</a></li>
+                        <?php endif; ?>
+                        
+                        <?php if ($count_ta > 0): ?>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary" data-source="TA" data-keyword="">TA (<?php echo $count_ta; ?>)</a></li>
+                        <?php endif; ?>
+
+                        <!-- Keyword Buttons -->
+                        <?php foreach ($keywords as $kw): if (empty($kw)) continue; ?>
+                            <li><a href="javascript:void(0);" class="btn btn-outline-primary btn-keyword" data-source="all" data-keyword="<?php echo esc_attr($kw); ?>">#<?php echo esc_html($kw); ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             </div>
 
             <div class="review-pagination">
@@ -121,6 +191,7 @@ $post_id = get_the_ID();
                      data-post-id="<?php echo $post_id; ?>" 
                      data-paged="1" 
                      data-source="all"
+                     data-keyword=""
                      data-comment-per-page="<?php echo (int)get_option('comments_per_page', 10); ?>">
                     <?php
                     $comment_per_page = (int)get_option('comments_per_page', 10);
@@ -180,6 +251,7 @@ $post_id = get_the_ID();
                         var postId = container.data('post-id');
                         var perPage = container.data('comment-per-page');
                         var source = container.data('source');
+                        var keyword = container.data('keyword') || '';
 
                         loading = true;
                         if (!reset && (paged * perPage) >= maxAutoload) {
@@ -195,7 +267,8 @@ $post_id = get_the_ID();
                                 action: 'klld_load_more_reviews',
                                 paged: paged + 1,
                                 post_id: postId,
-                                source: source
+                                source: source,
+                                keyword: keyword
                             },
                             success: function(response){
                                 if(response.success){
@@ -219,7 +292,7 @@ $post_id = get_the_ID();
                                             autoloadSpinner.hide();
                                         }
                                     } else {
-                                        if (reset) container.html('<p class="text-center mt20"><?php echo __('No reviews found for this source.', 'traveler'); ?></p>');
+                                        if (reset) container.html('<p class="text-center mt20"><?php echo __('No reviews found for this selection.', 'traveler'); ?></p>');
                                         btn.hide();
                                         autoloadSpinner.hide();
                                     }
@@ -239,6 +312,7 @@ $post_id = get_the_ID();
                                 if (entries[0].isIntersecting) {
                                     var paged = container.data('paged');
                                     var perPage = container.data('comment-per-page');
+                                    var keyword = container.data('keyword') || '';
                                     if ((paged * perPage) < maxAutoload && !loading) {
                                         loadMoreReviews();
                                     }
@@ -260,10 +334,13 @@ $post_id = get_the_ID();
                     $('.st-review-filter-list a').on('click', function(e){
                         e.preventDefault();
                         var source = $(this).data('source');
+                        var keyword = $(this).data('keyword') || '';
+                        
                         $('.st-review-filter-list a').removeClass('active');
                         $(this).addClass('active');
                         
                         container.data('source', source);
+                        container.data('keyword', keyword);
                         container.data('paged', 0);
                         loadMoreReviews(true);
                     });

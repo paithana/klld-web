@@ -660,8 +660,8 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             logBox.scrollTop = logBox.scrollHeight;
 
             try {
-                // Using relative path for the current folder
-                const url = `inc/ota-tools/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1&mode=${mode}`;
+                // Using corrected path relative to plugin root
+                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1&mode=${mode}`;
                 const resp = await fetch(url);
                 const data = await resp.json();
 
@@ -690,8 +690,8 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             logBox.scrollTop = logBox.scrollHeight;
 
             try {
-                // We use ota_sync.php?post_id=X&force=1 which naturally handles all mapped sources in the backend
-                const url = `inc/ota-tools/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
+                // Using corrected path relative to plugin root
+                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
                 const resp = await fetch(url);
                 const data = await resp.json();
 
@@ -734,7 +734,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                     logBox.scrollTop = logBox.scrollHeight;
 
                     try {
-                        const url = `/ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
+                        const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
                         const resp = await fetch(url);
                         const data = await resp.json();
 
@@ -1451,6 +1451,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                 <th class="id-cell">GYG ID</th>
                                 <th class="id-cell">Viator ID</th>
                                 <th class="id-cell">TA ID</th>
+                                <th class="id-cell">Actions</th>
                                 <th class="id-cell">GMB/TP</th>
                                 <th class="id-cell">Keywords</th>
                                 <th style="width:50px;">Status</th>
@@ -1509,7 +1510,6 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                                             <button onclick="syncSingleGYG(<?php echo $id; ?>, 'partner')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px; background:#f97316;" title="Official API Sync">Official</button>
                                                             <button onclick="syncSingleGYG(<?php echo $id; ?>, 'traveler')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px;" title="Traveler API Fallback">Public</button>
                                                         </div>
-                                                        <button onclick="syncAllSources(<?php echo $id; ?>)" class="k-btn k-btn-primary k-btn-sm" style="font-size:9px; padding:3px 6px; width:100%;" title="Fetch reviews from all mapped OTAs">Sync All</button>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -1536,6 +1536,13 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                                 <?php endif; ?>
                                             </div>
                                             <input type="url" class="k-input ta-url mt-1" value="<?php echo esc_attr($ta_url); ?>" placeholder="URL" style="font-size:10px;">
+                                        </div>
+                                    </td>
+                                    <td data-label="Actions">
+                                        <div class="flex flex-col gap-2">
+                                            <?php if ($has_ota): ?>
+                                                <button onclick="syncAllSources(<?php echo $id; ?>)" class="k-btn k-btn-primary k-btn-sm" style="background:#0ea5e9; font-weight:600;" title="Fetch reviews from all mapped OTAs">🚀 Sync All</button>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                     <td data-label="GMB/TP">
