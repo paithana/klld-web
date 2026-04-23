@@ -1,1 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#00af87"/><path d="M30 45c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10-4.5-10-10-10zm40 0c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10-4.5-10-10-10zm-20 5l5 10h-10l5-10z" fill="#fff"/><circle cx="30" cy="55" r="3" fill="#00af87"/><circle cx="70" cy="55" r="3" fill="#00af87"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+aria-label="TripAdvisor" role="img"
+viewBox="0 0 512 512">
+<rect
+width="512" height="512"
+rx="15%"
+fill="#ffffff"/>
+<path fill="#fcc40f" stroke="#000a12" stroke-width="17" d="M93 202a195 151 0 0 1 326 0v56h-326"/>
+<g transform="translate(256 257)">
+<g id="a" fill="#000a12">
+<path d="M2 0h-33v45l31 47M-173-49c3-12-19-46-19-48h77"/>
+<circle cx="-97" cy="0" r="97"/>
+<circle cx="-97" cy="0" r="78" fill="#ffffff"/>
+<circle cx="-97" cy="0" r="50"/>
+<circle cx="-97" cy="0" r="33" fill="#ffffff"/>
+</g>
+<use xlink:href="#a" transform="scale(-1 1)"/>
+<circle cx="-97" cy="0" r="17" fill="#ef6a45"/>
+<circle cx="97" cy="0" r="17" fill="#00b087"/>
+</g>
+</svg>

@@ -25,7 +25,9 @@ if(empty($layout))
     $transfer_from = (int)STInput::get('transfer_from');
     $transfer_to = (int)STInput::get('transfer_to');
     if ($transfer_from > 0 && $transfer_to > 0) {
-        $check_transfer = STCarTransfer::inst()->get_transfer(0, $transfer_from, $transfer_to); // Using 0 as car_id to check any car
+        global $wpdb;
+        // Check both directions (A->B and B->A) since most journeys are returnable
+        $check_transfer = $wpdb->get_var($wpdb->prepare("SELECT id FROM {$wpdb->prefix}st_journey_car WHERE (transfer_from = %d AND transfer_to = %d) OR (transfer_from = %d AND transfer_to = %d) LIMIT 1", $transfer_from, $transfer_to, $transfer_to, $transfer_from));
         if (!$check_transfer) {
             echo '<div class="alert alert-warning text-center mt20" style="background-color: #fff9e6; border: 1px solid #ffeeba; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px;">' . 
                  '<strong>' . __('Note:', 'traveler') . '</strong> ' . 

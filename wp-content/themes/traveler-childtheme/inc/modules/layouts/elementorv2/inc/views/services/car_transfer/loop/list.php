@@ -238,18 +238,55 @@ $is_valid_route = !empty($transfer_from) && $transfer_from != 0 && !empty($trans
                                     $display_price = 0;
                                     if ($is_valid_route) {
                                         $passengers = (int)STInput::get('passengers', 1);
+                                        
+                                        // 1. Attempt to get price for CURRENT language ID
                                         $display_price = $transfer->get_transfer_total_price(get_the_ID(), $transfer_from, $transfer_to, $roundtrip, $passengers);
-                                    }
+                                        
+                                        // 2. Fallback: Check translated versions (e.g. pull from German Master if English is empty)
+                                        if (!$display_price || $display_price == 0) {
+                                            if (function_exists('icl_object_id')) {
+                                                $languages = icl_get_languages('skip_missing=0');
+                                                foreach($languages as $lang) {
+                                                    $tr_id = icl_object_id(get_the_ID(), 'st_cars', false, $lang['language_code']);
+                                                    if ($tr_id && $tr_id != get_the_ID()) {
+                                                        $fallback_price = $transfer->get_transfer_total_price($tr_id, $transfer_from, $transfer_to, $roundtrip, $passengers);
+                                                        if ($fallback_price > 0) {
+                                                            $display_price = $fallback_price;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
 
-                                    if (!$display_price) {
+                                        // 3. Safety Fallback: Check 'journey' meta directly if still 0
+                                        if (!$display_price || $display_price == 0) {
+                                            $journey_data = get_post_meta(get_the_ID(), 'journey', true);
+                                            if (!empty($journey_data) && is_array($journey_data)) {
+                                                foreach ($journey_data as $j) {
+                                                    if (($j['transfer_from'] == $transfer_from && $j['transfer_to'] == $transfer_to) ||
+                                                        ($j['transfer_from'] == $transfer_to && $j['transfer_to'] == $transfer_from && ($j['return'] ?? '') == 'yes')) {
+                                                        $display_price = (float)$j['price'];
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    // 4. Final Fallback: Use vehicle's minimum price
+                                    if (!$display_price || $display_price == 0) {
                                         $minmax = STAdminCars::inst()->get_min_max_price_transfer(get_the_ID());
                                         $display_price = $minmax['min_price'];
                                     }
 
-                                    echo TravelHelper::format_money($display_price);
+                                    if ($display_price > 0) {
+                                        echo TravelHelper::format_money($display_price);
+                                    } else {
+                                        echo '<span style="font-size: 14px;">' . __('Price on Request', 'traveler') . '</span>';
+                                    }
                                     ?>
-                                </span>
-                                <span class="unit">/<?php echo esc_html($transfer->get_transfer_unit( get_the_ID() )); ?></span>
+                                </span>                                <span class="unit">/<?php echo esc_html($transfer->get_transfer_unit( get_the_ID() )); ?></span>
                             </div>                            <input type="hidden" name="transfer_from" value="<?php echo esc_attr( $transfer_from ); ?>">
                             <input type="hidden" name="transfer_to" value="<?php echo esc_attr( $transfer_to ); ?>">
                             <input type="hidden" name="roundtrip" value="<?php echo esc_attr( $roundtrip ); ?>">
