@@ -233,6 +233,7 @@ $is_valid_route = !empty($transfer_from) && $transfer_from != 0 && !empty($trans
                     <div class="h-100 w-100 text-center d-flex">
                         <div class="st-list-footer align-self-center w-100 show-detail">
                             <div class="price-wrapper align-items-center" itemprop="totalPrice">
+                                <span class="label" style="display: block; font-size: 12px; color: #94a3b8; font-weight: 400; margin-bottom: 2px;"><?php echo __('Starting from', 'traveler'); ?></span>
                                 <span class="price">
                                     <?php
                                     $display_price = 0;
