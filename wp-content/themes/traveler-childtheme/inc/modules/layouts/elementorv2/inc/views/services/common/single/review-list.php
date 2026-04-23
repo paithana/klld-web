@@ -22,13 +22,21 @@
         $user_email   = get_comment( $comment_id )->comment_author_email;
         $current_user = wp_get_current_user();
 
-        /* ── Determine Source Label ───────────────────────────── */
+        /* ── Identify Source ───────────────────────────── */
         $ota_source = get_comment_meta($comment_id, 'ota_source', true);
+        
+        $is_gyg = ($ota_source === 'gyg');
+        $is_via = ($ota_source === 'vt' || $ota_source === 'viator');
+        $is_tri = ($ota_source === 'TA' || $ota_source === 'tripadvisor');
+        $is_gmb = ($ota_source === 'gmb' || $ota_source === 'google');
+        $is_tp  = get_comment_meta($comment_id, 'trustpilot_review_id', true);
+
+        /* ── Determine Source Label ───────────────────────────── */
         $source_label = 'Khao Lak Land Discovery';
-        if ($ota_source === 'gyg') $source_label = 'GetYourGuide';
-        elseif ($ota_source === 'TA' || $ota_source === 'tripadvisor') $source_label = 'TripAdvisor';
-        elseif ($ota_source === 'vt' || $ota_source === 'viator') $source_label = 'Viator';
-        elseif ($ota_source === 'gmb' || $ota_source === 'google') $source_label = 'Google';
+        if ($is_gyg) $source_label = 'GetYourGuide';
+        elseif ($is_tri) $source_label = 'TripAdvisor';
+        elseif ($is_via) $source_label = 'Viator';
+        elseif ($is_gmb) $source_label = 'Google';
 
         $author_name = $comment->comment_author;
         if (!empty($user_id)) {
@@ -44,14 +52,6 @@
         elseif ($is_gmb) $origin_url = 'https://www.google.com/maps/search/?api=1&query=Khao+Lak+Land+Discovery&query_place_id=' . get_post_meta($post_id, '_gmb_id', true);
         ?>
         <div class="comment-item" style="position:relative;" itemprop="review" itemscope itemtype="https://schema.org/Review">
-            <?php 
-            /* ── OTA Source Badge (Top Right) ───────────────────────── */
-            $is_gyg = ($ota_source === 'gyg');
-            $is_via = ($ota_source === 'vt' || $ota_source === 'viator');
-            $is_tri = ($ota_source === 'TA' || $ota_source === 'tripadvisor');
-            $is_gmb = ($ota_source === 'gmb' || $ota_source === 'google');
-            $is_tp  = get_comment_meta($comment_id, 'trustpilot_review_id', true);
-            ?>
             <div class="comment-item-head pd-3" style="position:relative;">
                 <div class="d-flex align-items-center">
                     <div class="review-avatar" style="flex-shrink: 0; margin-right: 15px;">
@@ -59,16 +59,16 @@
                         $img_dir = plugins_url('ota-reviews/img/');
                         $avatar_url = '';
                         if ($is_gyg) $avatar_url = $img_dir . 'avatar-gyg.svg';
-                        elseif ($is_via) $avatar_url = $img_dir . 'avatar-viator.svg';
                         elseif ($is_tri) $avatar_url = $img_dir . 'avatar-tripadvisor.svg';
+                        elseif ($is_via) $avatar_url = $img_dir . 'avatar-viator.svg';
                         elseif ($is_gmb) $avatar_url = $img_dir . 'avatar-google.svg';
                         elseif ($is_tp)  $avatar_url = $img_dir . 'avatar-trustpilot.svg';
 
                         if ($avatar_url) {
-                            echo '<img src="' . esc_url($avatar_url) . '" alt="OTA" class="ota-logo-header" style="width:48px; height:48px; object-fit:contain; border-radius:50%; background:#f8fafc; padding:4px; border:1px solid #e2e8f0;" loading="lazy">';
+                            echo '<img src="' . esc_url($avatar_url) . '" alt="OTA" class="ota-logo-header" style="width:40px; height:48px; object-fit:contain; border-radius:50%; background:#f8fafc; padding:2px; border:1px solid #e2e8f0;" loading="lazy">';
                         } else {
                             // Use Site Logo for native reviews
-                            $site_logo = 'https://www.khaolaklanddiscovery.com/wp-content/uploads/2022/04/Khao-Lak-Land-Discovery.png';
+                            $site_logo = $img_dir . 'avatar-klld.svg';
                             echo '<img src="' . esc_url($site_logo) . '" alt="Site Logo" style="width:48px; height:48px; object-fit:contain; border-radius:50%; background:#fff; padding:2px; border:1px solid #eee;" loading="lazy">';
                         }
                         ?>
@@ -85,8 +85,8 @@
                             <?php if ($origin_url): ?></a><?php endif; ?>
                         </div>
                         
-                        <!-- Line 2: Stars + Source -->
-                        <div class="review-meta-secondary d-flex align-items-center mb-1" style="gap: 10px; flex-wrap: wrap;">
+                        <!-- Line 2: Rate (Stars) -->
+                        <div class="review-meta-stars mb-1">
                             <?php
                             $comment_rate = (float)get_comment_meta( $comment_id, 'comment_rate', true );
                             if ($comment_rate) {
@@ -95,17 +95,17 @@
                                 echo '</ul>';
                             }
                             ?>
-                            <span class="source-label" style="font-size: 8px; color: #64748b;">
-                                <?php echo __('via', 'traveler'); ?> 
-                                <span style="font-weight:600; color:#475569;"><?php echo esc_html($source_label); ?></span>
-                            </span>
                         </div>
 
-                        <!-- Line 3: Date {dd-M-Y} Time -->
-                        <div class="review-meta-details" style="font-size: 8px; color: #94a3b8; line-height: 1.2;">
+                        <!-- Line 3: Source + Date Time -->
+                        <div class="review-meta-details" style="font-size: 8px; color: #94a3b8; line-height: 1.2; display: flex; align-items: center; gap: 5px; flex-wrap: wrap;">
+                            <span class="source-label">
+                                <?php echo __('via', 'traveler'); ?> 
+                                <span style="font-weight:600;"><?php echo esc_html($source_label); ?></span>
+                            </span>
+                            <span class="separator" style="color: #cbd5e1;">&bull;</span>
                             <span class="date-time">
                                 <?php 
-                                // Get the raw timestamp or date string from meta
                                 $raw_date = get_comment_meta($comment_id, 'review_date', true);
                                 if ($raw_date) {
                                     $timestamp = strtotime($raw_date);
@@ -155,10 +155,6 @@
                 </div>
             </div>
             <div class="comment-item-body">
-                <?php
-                    $stats        = STReview::get_review_stats( get_the_ID() );
-                    // Ratings moved to header
-                ?>
                 <div class="detail">
                     <?php
                         $comment_title = get_comment_meta($comment_id, 'comment_title', true);
@@ -170,7 +166,7 @@
 
                     <?php
                         $content = get_comment_text( $comment_id );
-                        $char_limit = 150; // Proxy for 3 lines if JS check isn't used
+                        $char_limit = 150; 
                     ?>
                     <div class="st-description line-clamp" id="st-description-<?php echo esc_attr($comment_id); ?>" itemprop="reviewBody" style="line-height: 1.5; margin-bottom: 5px;">
                         <?php echo balanceTags($content); ?>
@@ -247,7 +243,7 @@
                         echo '<div class="st-review-carousel">';
                         $proxy_base = plugins_url('ota-reviews/img_proxy.php?url=');
                         foreach ($photos as $i => $url) {
-                            $lazy = ($i < 2) ? 'eager' : 'lazy'; // Load first 2 images quickly
+                            $lazy = ($i < 2) ? 'eager' : 'lazy'; 
                             
                             $display_url = $url;
                             if (strpos($url, 'http') === 0 && strpos($url, home_url()) === false) {

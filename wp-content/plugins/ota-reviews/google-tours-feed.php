@@ -29,7 +29,22 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
 }
 
-// Security: Optional secret key if needed
+// Security: HTTP Basic Auth for Google Merchant Center
+$auth_user = 'mc-sftp-5520609361'; 
+$auth_pass = ':(2Q>%zv4e';
+
+if (PHP_SAPI !== 'cli') {
+    if (!isset($_SERVER['PHP_AUTH_USER']) || 
+        $_SERVER['PHP_AUTH_USER'] !== $auth_user || 
+        $_SERVER['PHP_AUTH_PW'] !== $auth_pass) {
+        
+        header('WWW-Authenticate: Basic realm="GTTD Feed"');
+        header('HTTP/1.0 401 Unauthorized');
+        die('Authentication Required');
+    }
+}
+
+// Security: Optional secret key (Legacy support)
 $secret_key = 'kld_feed_2024';
 if (!is_admin() && PHP_SAPI !== 'cli' && isset($_GET['key']) && $_GET['key'] !== $secret_key) {
     http_response_code(403);

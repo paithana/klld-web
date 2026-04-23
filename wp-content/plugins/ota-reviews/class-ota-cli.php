@@ -83,6 +83,31 @@ class KLLD_OTA_CLI_Command {
     }
 
     /**
+     * Scrape live Google Maps reviews using Puppeteer.
+     * 
+     * ## EXAMPLES
+     * 
+     *     wp ota-reviews scrape-gmb
+     *
+     * @when after_wp_load
+     */
+    public function scrape_gmb( $args, $assoc_args ) {
+        $scraper_dir = KLLD_OTA_PLUGIN_DIR . 'scrapers/gmb';
+        $cmd = "cd $scraper_dir && node scraper.js 2>&1";
+        
+        WP_CLI::log( "🚀 Starting Google Maps Scraper..." );
+        $output = shell_exec( $cmd );
+        WP_CLI::line( $output );
+
+        if ( strpos( $output, 'Success' ) !== false ) {
+            WP_CLI::success( "GMB Scraping complete." );
+            WP_CLI::log( "Note: Run 'wp ota-reviews cleanup' to deduplicate if needed." );
+        } else {
+            WP_CLI::error( "Scraper failed." );
+        }
+    }
+
+    /**
      * Check the sync status and mapping coverage for all tours.
      * 
      * ## EXAMPLES

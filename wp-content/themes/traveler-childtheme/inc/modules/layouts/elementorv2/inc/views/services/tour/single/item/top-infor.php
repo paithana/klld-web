@@ -7,24 +7,17 @@
 					</div>
 					<div class="head d-inline-block d-sm-flex justify-content-between align-items-center clearfix">
 						<div class="left">
-                            <?php if(!empty($review_rate) && $review_rate > 0){ ?>
-							    <!-- <div class="reviews" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"> -->
-                                <div class="reviews">
-
-                            <?php } else { ?>
-                                <div class="reviews">
-                            <?php } ?>
-								<i class="stt-icon-star1"></i>
-								<span class="rate" itemprop="ratingValue" name="review-rate">
-									<?php echo esc_html( $review_rate ); ?>
-								</span>
-								<span class="summary">
-									<?php echo sprintf(__(' of %s Reviews', 'traveler'), get_comments_number()); ?>
-								</span>
-							</div>
-                            <?php if(!empty($review_rate) && $review_rate > 0){ ?>
-                                <!-- End AggregateRating -->
-                            <?php } ?>
+                            <a href="#st-reviews" class="st-review-link" style="text-decoration: none; color: inherit;">
+                                <div class="reviews" style="display: flex; align-items: center; gap: 4px;">
+                                    <i class="stt-icon-star1" style="color: #ffcc00;"></i>
+                                    <span class="rate" style="font-weight: 700;">
+                                        <?php echo esc_html( $review_rate ); ?>
+                                    </span>
+                                    <span class="summary" style="text-decoration: underline; text-underline-offset: 3px; color: #0ea5e9;">
+                                        <?php echo sprintf(__(' of %s Reviews', 'traveler'), get_comments_number()); ?>
+                                    </span>
+                                </div>
+                            </a>
 						</div>
 					</div>
 				<span class="st-dot"></span>

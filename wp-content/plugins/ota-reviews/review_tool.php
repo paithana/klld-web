@@ -416,6 +416,18 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
             }
         }
         wp_send_json_success(['message' => "Successfully refreshed aggregate ratings for $total_updated localized tour pages."]);
+    } elseif ($job === 'gmb_scrape') {
+        // Run the Puppeteer scraper
+        $scraper_dir = KLLD_OTA_PLUGIN_DIR . 'scrapers/gmb';
+        $cmd = "cd $scraper_dir && node scraper.js 2>&1";
+        $output = shell_exec($cmd);
+        
+        if (strpos($output, 'Success') !== false) {
+            wp_send_json_success(['message' => "Scraper finished successfully: " . trim($output)]);
+        } else {
+            wp_send_json_error(['message' => "Scraper failed: " . trim($output)]);
+        }
+
     } elseif ($job === 'approve_all') {
         // Approve all st_reviews
         $updated = $wpdb->query("UPDATE {$wpdb->comments} SET comment_approved = '1' WHERE comment_type = 'st_reviews' AND comment_approved = '0'");
@@ -1590,6 +1602,11 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                         <h3>✅ Approve Reviews</h3>
                         <p class="text-xs text-muted mb-4">Set status to 'Approved' for all imported tour reviews.</p>
                         <button onclick="runMaintenance('approve_all')" class="k-btn k-btn-outline w-full" style="color:var(--success); border-color:var(--success);">Approve All</button>
+                    </div>
+                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <h3>🤖 GMB Scraper</h3>
+                        <p class="text-xs text-muted mb-4">Run Puppeteer to fetch live Google Maps reviews.</p>
+                        <button onclick="runMaintenance('gmb_scrape')" class="k-btn k-btn-primary w-full" style="background:#0ea5e9;">Scrape GMB Now</button>
                     </div>
                     <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
                         <h3>🔍 GMB Filter</h3>

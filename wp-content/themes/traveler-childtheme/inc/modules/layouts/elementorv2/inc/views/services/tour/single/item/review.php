@@ -10,96 +10,82 @@ $post_id = get_the_ID();
 
         <div id="reviews" class="st-reviews">
             
-            <!-- Review Form Above Everything -->
-            <div id="write-review" class="mb30">
-                <h4 class="heading text-center">
-                    <a href="javascript: void(0)" class="btn btn-secondary toggle-write-review f16">
-                        <?php echo __('Write a review', 'traveler') ?>
-                        <i class="stt-icon-arrow-down ml5"></i>
-                    </a>
-                </h4>
-                <div class="st-review-form mt20" style="display: none; background: #f9f9f9; padding: 30px; border-radius: 12px; border: 1px solid #eee;">
-                    <div class="information-review">
-                        <div class="review-box">
-                            <div class="st-review-box-top">
-                                <div class="infor-avg-wrapper d-flex text-center align-items-center align-self-center flex-column">
-                                    <div class="review-avg d-flex text-center align-items-center">
-                                        <i class="stt-icon-star1"></i>
-                                        <?php
-                                        $avg = STReview::get_avg_rate();
-                                        ?>
-                                        <div class="review-score">
-                                            <?php echo esc_attr($avg); ?><span class="per-total">/5</span>
-                                        </div>
-                                    </div>
-                                    <div class="review-score-text"><?php echo TravelHelper::get_rate_review_text($avg, $count_review); ?></div>
-                                    <div class="review-score-base text-center">
-                                        <span>(<?php comments_number(__('0 review', 'traveler'), __('1 review', 'traveler'), __('% reviews', 'traveler')); ?>)</span>
-                                    </div>
+            <div class="information-review mb30">
+                <div class="review-box">
+                    <div class="st-review-box-top">
+                        <div class="infor-avg-wrapper d-flex text-center align-items-center align-self-center flex-column">
+                            <div class="review-avg d-flex text-center align-items-center">
+                                <i class="stt-icon-star1"></i>
+                                <?php
+                                $avg = STReview::get_avg_rate();
+                                ?>
+                                <div class="review-score">
+                                    <?php echo esc_attr($avg); ?><span class="per-total">/5</span>
                                 </div>
                             </div>
-                            <div class="st-summany d-flex flex-wrap justify-content-between">
-                                <?php $total_comments = get_comments_number(); ?>
-                                <?php $rate_exe = STReview::count_review_by_rate(null, 5); ?>
-                                <div class="item d-flex align-items-center justify-content-between">
-                                    <div class="label">
-                                        <?php echo esc_html__('Excellent', 'traveler') ?>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="percent green"
-                                            style="width: <?php echo TravelHelper::cal_rate($rate_exe, $total_comments) ?>%;"></div>
-                                    </div>
-                                    <div class="number text-end"><?php echo esc_html($rate_exe); ?></div>
-                                </div>
-                                <?php $rate_good = STReview::count_review_by_rate(null, 4); ?>
-                                <div class="item d-flex align-items-center justify-content-between">
-                                    <div class="label">
-                                        <?php echo __('Very Good', 'traveler') ?>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="percent darkgreen"
-                                            style="width: <?php echo TravelHelper::cal_rate($rate_good, $total_comments) ?>%;"></div>
-                                    </div>
-                                    <div class="number text-end"><?php echo esc_html($rate_good); ?></div>
-                                </div>
-                                <?php $rate_avg = STReview::count_review_by_rate(null, 3); ?>
-                                <div class="item d-flex align-items-center justify-content-between">
-                                    <div class="label">
-                                        <?php echo __('Average', 'traveler') ?>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="percent yellow"
-                                            style="width: <?php echo TravelHelper::cal_rate($rate_avg, $total_comments) ?>%;"></div>
-                                    </div>
-                                    <div class="number text-end"><?php echo esc_html($rate_avg); ?></div>
-                                </div>
-                                <?php $rate_poor = STReview::count_review_by_rate(null, 2); ?>
-                                <div class="item d-flex align-items-center justify-content-between">
-                                    <div class="label">
-                                        <?php echo __('Poor', 'traveler') ?>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="percent orange"
-                                            style="width: <?php echo TravelHelper::cal_rate($rate_poor, $total_comments) ?>%;"></div>
-                                    </div>
-                                    <div class="number text-end"><?php echo esc_html($rate_poor); ?></div>
-                                </div>
-                                <?php $rate_terible = STReview::count_review_by_rate(null, 1); ?>
-                                <div class="item d-flex align-items-center justify-content-between">
-                                    <div class="label">
-                                        <?php echo __('Terrible', 'traveler') ?>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="percent red"
-                                            style="width: <?php echo TravelHelper::cal_rate($rate_terible, $total_comments) ?>%;"></div>
-                                    </div>
-                                    <div class="number text-end"><?php echo esc_html($rate_terible); ?></div>
-                                </div>
+                            <div class="review-score-text"><?php echo TravelHelper::get_rate_review_text($avg, $count_review); ?></div>
+                            <div class="review-score-base text-center">
+                                <span>(<?php comments_number(__('0 review', 'traveler'), __('1 review', 'traveler'), __('% reviews', 'traveler')); ?>)</span>
                             </div>
                         </div>
                     </div>
-                    <div id="write-review-form-content" class="mt20">
-                        <?php TravelHelper::comment_form(); ?>
+                    <div class="st-summany d-flex flex-wrap justify-content-between">
+                        <?php $total_comments = get_comments_number(); ?>
+                        <?php $rate_exe = STReview::count_review_by_rate(null, 5); ?>
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="label">
+                                <?php echo esc_html__('Excellent', 'traveler') ?>
+                            </div>
+                            <div class="progress">
+                                <div class="percent green"
+                                    style="width: <?php echo TravelHelper::cal_rate($rate_exe, $total_comments) ?>%;"></div>
+                            </div>
+                            <div class="number text-end"><?php echo esc_html($rate_exe); ?></div>
+                        </div>
+                        <?php $rate_good = STReview::count_review_by_rate(null, 4); ?>
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="label">
+                                <?php echo __('Very Good', 'traveler') ?>
+                            </div>
+                            <div class="progress">
+                                <div class="percent darkgreen"
+                                    style="width: <?php echo TravelHelper::cal_rate($rate_good, $total_comments) ?>%;"></div>
+                            </div>
+                            <div class="number text-end"><?php echo esc_html($rate_good); ?></div>
+                        </div>
+                        <?php $rate_avg = STReview::count_review_by_rate(null, 3); ?>
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="label">
+                                <?php echo __('Average', 'traveler') ?>
+                            </div>
+                            <div class="progress">
+                                <div class="percent yellow"
+                                    style="width: <?php echo TravelHelper::cal_rate($rate_avg, $total_comments) ?>%;"></div>
+                            </div>
+                            <div class="number text-end"><?php echo esc_html($rate_avg); ?></div>
+                        </div>
+                        <?php $rate_poor = STReview::count_review_by_rate(null, 2); ?>
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="label">
+                                <?php echo __('Poor', 'traveler') ?>
+                            </div>
+                            <div class="progress">
+                                <div class="percent orange"
+                                    style="width: <?php echo TravelHelper::cal_rate($rate_poor, $total_comments) ?>%;"></div>
+                            </div>
+                            <div class="number text-end"><?php echo esc_html($rate_poor); ?></div>
+                        </div>
+                        <?php $rate_terible = STReview::count_review_by_rate(null, 1); ?>
+                        <div class="item d-flex align-items-center justify-content-between">
+                            <div class="label">
+                                <?php echo __('Terrible', 'traveler') ?>
+                            </div>
+                            <div class="progress">
+                                <div class="percent red"
+                                    style="width: <?php echo TravelHelper::cal_rate($rate_terible, $total_comments) ?>%;"></div>
+                            </div>
+                            <div class="number text-end"><?php echo esc_html($rate_terible); ?></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,14 +143,27 @@ $post_id = get_the_ID();
             </div>
 
             <div class="review-pagination">
+                <div id="st-review-summary-text" class="mb20" style="font-size: 11px; color: #94a3b8;">
+                    <?php 
+                    $comment_per_page = (int)get_option('comments_per_page', 10);
+                    $initial_count = min($count_all, $comment_per_page);
+                    echo sprintf(__('Showing %s of %s reviews', 'traveler'), '<span class="shown-count">' . $initial_count . '</span>', '<span class="total-count">' . $count_all . '</span>'); 
+                    ?>
+                </div>
+
                 <div id="reviews" class="review-list st-review-list-ajax" 
                      data-post-id="<?php echo $post_id; ?>" 
                      data-paged="1" 
                      data-source="all"
                      data-keyword=""
-                     data-comment-per-page="<?php echo (int)get_option('comments_per_page', 10); ?>">
+                     data-total-all="<?php echo $count_all; ?>"
+                     data-total-local="<?php echo $count_local; ?>"
+                     data-total-gyg="<?php echo $count_gyg; ?>"
+                     data-total-ta="<?php echo $count_ta; ?>"
+                     data-total-vt="<?php echo $count_vt; ?>"
+                     data-total-gmb="<?php echo $count_gmb; ?>"
+                     data-comment-per-page="<?php echo $comment_per_page; ?>">
                     <?php
-                    $comment_per_page = (int)get_option('comments_per_page', 10);
                     $args = [
                         'number' => $comment_per_page,
                         'post_id' => $post_id,
@@ -197,6 +196,20 @@ $post_id = get_the_ID();
                     </div>
                 </div>
             </div>
+
+            <!-- Write Review Section At the Bottom -->
+            <?php if (comments_open($post_id)) { ?>
+                <div id="write-review" class="mt40" style="background: #f9f9f9; padding: 30px; border-radius: 12px; border: 1px solid #eee;">
+                    <h3 class="st-heading-section mb20" style="font-size: 20px;"><?php echo __('Leave a review', 'traveler'); ?></h3>
+                    <style>
+                        #respond { display: block !important; }
+                    </style>
+                    <?php 
+                    wp_enqueue_script( 'st-reviews-form' );
+                    TravelHelper::comment_form(); 
+                    ?>
+                </div>
+            <?php } ?>
             
             <style>
                 .st-review-filter-list .btn { border-radius: 20px; padding: 5px 20px; font-size: 14px; border: 1px solid #38761d; color: #38761d; background: transparent; transition: all 0.3s ease; }
@@ -212,7 +225,13 @@ $post_id = get_the_ID();
                     var container = $('.st-review-list-ajax');
                     var btn = $('#st-btn-load-more-reviews');
                     var autoloadSpinner = $('#st-autoload-spinner');
+                    var summary = $('#st-review-summary-text');
                     var maxAutoload = 25;
+
+                    function updateSummary(shown, total) {
+                        summary.find('.shown-count').text(shown);
+                        summary.find('.total-count').text(total);
+                    }
 
                     function loadMoreReviews(reset = false) {
                         if (loading) return;
@@ -248,13 +267,23 @@ $post_id = get_the_ID();
                                         container.append(response.data.html);
                                         container.data('paged', paged + 1);
                                         
-                                        var newCount = (paged + 1) * perPage;
                                         var itemsFound = (response.data.html.match(/comment-item/g) || []).length;
+                                        var currentlyShown = container.find('.comment-item').length;
+                                        
+                                        // Update Total based on current filter if possible
+                                        var totalForFilter = container.data('total-' + source) || container.data('total-all');
+                                        if (keyword) {
+                                            // We don't know the exact total for a keyword search from here easily
+                                            // but we can at least show what we have.
+                                            totalForFilter = '...'; 
+                                        }
+
+                                        updateSummary(currentlyShown, totalForFilter);
                                         
                                         if (itemsFound < perPage) {
                                             btn.hide();
                                             autoloadSpinner.hide();
-                                        } else if (newCount >= maxAutoload) {
+                                        } else if (currentlyShown >= maxAutoload) {
                                             btn.show();
                                             autoloadSpinner.hide();
                                         } else {
@@ -262,7 +291,10 @@ $post_id = get_the_ID();
                                             autoloadSpinner.hide();
                                         }
                                     } else {
-                                        if (reset) container.html('<p class="text-center mt20"><?php echo __('No reviews found for this selection.', 'traveler'); ?></p>');
+                                        if (reset) {
+                                            container.html('<p class="text-center mt20"><?php echo __('No reviews found for this selection.', 'traveler'); ?></p>');
+                                            updateSummary(0, 0);
+                                        }
                                         btn.hide();
                                         autoloadSpinner.hide();
                                     }
@@ -313,20 +345,6 @@ $post_id = get_the_ID();
                         container.data('keyword', keyword);
                         container.data('paged', 0);
                         loadMoreReviews(true);
-                    });
-
-                    // Write a Review Toggle
-                    $('.toggle-write-review').on('click', function(e){
-                        e.preventDefault();
-                        $('.st-review-form').slideToggle();
-                        $(this).find('i').toggleClass('stt-icon-arrow-down stt-icon-arrow-up');
-                        
-                        // Scroll to form if opening
-                        if ($(this).find('i').hasClass('stt-icon-arrow-up')) {
-                            $('html, body').animate({
-                                scrollTop: $("#write-review").offset().top - 100
-                            }, 500);
-                        }
                     });
                 });
             </script>

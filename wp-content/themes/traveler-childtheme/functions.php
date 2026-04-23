@@ -656,6 +656,17 @@ function klld_load_more_reviews() {
 /**
  * Ensure images in reviews are lazy-loaded
  */
+/**
+ * Replace smile icons with stars in review form
+ */
+add_filter('st_tours_wp_review_form_args', 'klld_replace_smiles_with_stars', 999);
+function klld_replace_smiles_with_stars($args) {
+    if (isset($args['comment_field'])) {
+        $args['comment_field'] = str_replace('fa-smile-o', 'fa-star grey', $args['comment_field']);
+    }
+    return $args;
+}
+
 add_filter('wp_get_attachment_image_attributes', function($atts, $attachment, $size) {
     $atts['loading'] = 'lazy';
     return $atts;

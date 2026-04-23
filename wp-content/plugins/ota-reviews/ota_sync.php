@@ -791,8 +791,8 @@ class OTAReviewSync {
         ));
 
         if ($stats) {
-            update_post_meta($post_id, 'total_review', $stats->total);
-            update_post_meta($post_id, 'rate_review', round($stats->avg, 1));
+            update_post_meta($post_id, 'total_review', (int)$stats->total);
+            update_post_meta($post_id, 'rate_review', round((float)$stats->avg, 1));
         }
     }
 

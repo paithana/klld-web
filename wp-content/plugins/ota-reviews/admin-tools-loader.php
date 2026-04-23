@@ -25,6 +25,7 @@ class KLLD_Admin_Tools {
         $my_pages = [
             'toplevel_page_reviews-tools',
             'reviews-tools_page_klld-review-manager',
+            'reviews-tools_page_klld-review-editor',
             'reviews-tools_page_klld-gttd-push',
             'reviews-tools_page_klld-review-generator'
         ];
@@ -66,12 +67,19 @@ class KLLD_Admin_Tools {
             'ota_direct_import',
             'generate_custom_reviews',
             'run_system_health_check',
-            'run_auto_mapper'
+            'run_auto_mapper',
+            'klld_get_reviews',
+            'klld_update_review_status',
+            'klld_update_review_post_id',
+            'klld_delete_review'
         ];
 
         if ( isset( $_POST['action'] ) && in_array( $_POST['action'], $ota_actions ) ) {
             // Determine which tool file to load
             $tool_file = 'review_tool.php'; // Consolidated OTA tool
+            if (strpos($_POST['action'], 'klld_') === 0) {
+                $tool_file = 'review_editor.php';
+            }
             
             $tool_path = KLLD_OTA_PLUGIN_DIR . $tool_file;
             if ( file_exists( $tool_path ) ) {
@@ -100,6 +108,15 @@ class KLLD_Admin_Tools {
             'manage_options',
             'klld-review-manager',
             [ $this, 'render_review_manager' ]
+        );
+
+        add_submenu_page(
+            'reviews-tools',
+            'Review Editor',
+            'Review Editor',
+            'manage_options',
+            'klld-review-editor',
+            [ $this, 'render_review_editor' ]
         );
 
         add_submenu_page(
@@ -181,6 +198,13 @@ class KLLD_Admin_Tools {
                     <h3>🔄 Review Manager</h3>
                     <p>Synchronize reviews from GetYourGuide, Viator, and TripAdvisor. Manage tour mappings and aggregate ratings.</p>
                     <a href="?page=klld-review-manager" class="k-btn-link">Open Manager →</a>
+                </div>
+
+                <!-- Tool: Review Editor -->
+                <div class="k-card-tool">
+                    <h3>✍️ Review Editor</h3>
+                    <p>Search, moderate, and remap individual reviews. Change tour assignments, update status, or remove duplicates.</p>
+                    <a href="?page=klld-review-editor" class="k-btn-link">Open Editor →</a>
                 </div>
 
                 <!-- Tool: SFTP Feed Push -->
@@ -287,6 +311,16 @@ class KLLD_Admin_Tools {
             include $tool_path;
         } else {
             echo '<div class="notice notice-error"><p>Review Manager tool file not found.</p></div>';
+        }
+    }
+
+    public function render_review_editor() {
+        $tool_path = KLLD_OTA_PLUGIN_DIR . 'review_editor.php';
+        if ( file_exists( $tool_path ) ) {
+            if ( ! defined( 'KLLD_TOOL_RUN' ) ) define( 'KLLD_TOOL_RUN', true );
+            include $tool_path;
+        } else {
+            echo '<div class="notice notice-error"><p>Review Editor tool file not found.</p></div>';
         }
     }
 

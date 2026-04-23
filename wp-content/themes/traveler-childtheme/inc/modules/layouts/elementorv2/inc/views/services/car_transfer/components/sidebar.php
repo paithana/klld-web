@@ -1,6 +1,5 @@
 <?php
 $filters = get_post_meta(get_the_ID(), 'rs_filter_car_transfer', true);
-$filers = ''
 ?>
 
     <?php

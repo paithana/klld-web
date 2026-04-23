@@ -28,7 +28,7 @@ $sftp_host = get_option('_gttd_sftp_host', 'partnerupload.google.com');
 $sftp_port = (int)get_option('_gttd_sftp_port', 19321);
 $sftp_user = get_option('_gttd_sftp_user', 'mc-sftp-5520609361'); 
 $sftp_pass = get_option('_gttd_sftp_pass');
-$sftp_key  = get_option('_gttd_sftp_key', '/home/u451564824/.ssh/gttd_rsa');
+$sftp_key  = get_option('_gttd_sftp_key', '/home/u451564824/.ssh/gttd_new_rsa');
 $target_file = get_option('_gttd_sftp_file', 'tours_feed.xml');
 $local_temp = __DIR__ . '/tours_feed.tmp.xml';
 $auth_method = $sftp_pass ? 'password' : 'key';
@@ -73,26 +73,39 @@ echo "Connecting to $sftp_host:$sftp_port as $sftp_user...\n";
 
 try {
     $sftp = new SFTP($sftp_host, $sftp_port);
-    
-    // Auth Method
-    if ($sftp_pass) {
-        if (!$sftp->login($sftp_user, $sftp_pass)) {
-            die("SFTP Login Failed using password for $sftp_user\n");
-        }
-    } else {
-        // Load the private key
-        if (!file_exists($sftp_key)) {
-            die("Error: Private key file not found at $sftp_key\n");
-        }
-        $key_content = file_get_contents($sftp_key);
-        $key = PublicKeyLoader::load($key_content);
+    $logged_in = false;
 
-        if (!$sftp->login($sftp_user, $key)) {
-            die("SFTP Login Failed using key at $sftp_key\n");
+    // 1. Try SSH Key First (More Secure)
+    if (file_exists($sftp_key)) {
+        echo "Attempting login with SSH key...\n";
+        try {
+            $key_content = file_get_contents($sftp_key);
+            $key = PublicKeyLoader::load($key_content);
+            if ($sftp->login($sftp_user, $key)) {
+                echo "Login successful using SSH key.\n";
+                $logged_in = true;
+            } else {
+                echo "SSH Key login rejected by server for $sftp_user.\n";
+            }
+        } catch (\Exception $e) {
+            echo "Key loading/login error: " . $e->getMessage() . "\n";
         }
     }
 
-    echo "Login successful. Uploading $target_file...\n";
+    // 2. Try Password Fallback
+    if (!$logged_in && $sftp_pass) {
+        echo "Attempting login with password...\n";
+        if ($sftp->login($sftp_user, $sftp_pass)) {
+            echo "Login successful using password.\n";
+            $logged_in = true;
+        }
+    }
+
+    if (!$logged_in) {
+        die("Error: All SFTP login attempts failed for $sftp_user\n");
+    }
+
+    echo "Uploading $target_file...\n";
     
     if ($sftp->put($target_file, $local_temp, SFTP::SOURCE_LOCAL_FILE)) {
         echo "Upload successful!\n";
