@@ -2864,3 +2864,50 @@ Stack trace:
 [22-Apr-2026 19:08:04 UTC] PHP Warning:  Undefined array key "reviewId" in Command line code on line 7
 [22-Apr-2026 19:08:04 UTC] PHP Stack trace:
 [22-Apr-2026 19:08:04 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 21:51:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function shell_exec() in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/class-ota-cli.php:99
+Stack trace:
+#0 [internal function]: KLLD_OTA_CLI_Command->scrape_gmb()
+#1 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func()
+#2 [internal function]: WP_CLI\Dispatcher\CommandFactory::WP_CLI\Dispatcher\{closure}()
+#3 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func()
+#4 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke()
+#5 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command()
+#6 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1295): WP_CLI\Runner->run_command_and_exit()
+#7 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#8 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process()
+#9 phar:///usr/local/bin/wp-cli-2.12.0.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#10 phar:///usr/local/bin/wp-cli-2.12.0.phar/php/boot-phar.php(20): include('phar:///usr/loc...')
+#11 /usr/local/bin/wp-cli-2.12.0.phar(4): include('phar:///usr/loc...')
+#12 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/class-ota-cli.php on line 99
+[22-Apr-2026 22:40:56 UTC] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php on line 795
+[22-Apr-2026 22:40:56 UTC] PHP Stack trace:
+[22-Apr-2026 22:40:56 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 22:40:56 UTC] PHP   2. {main}() Command line code:0
+[22-Apr-2026 22:40:56 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php:42
+[22-Apr-2026 22:40:56 UTC] PHP   4. OTAReviewSync->run($limits = *uninitialized*, $force_sync = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:858
+[22-Apr-2026 22:40:56 UTC] PHP   5. OTAReviewSync->update_summary($post_id = 16248) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:168
+[22-Apr-2026 22:40:56 UTC] PHP   6. round($num = NULL, $precision = 1) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:795
+[22-Apr-2026 22:41:23 UTC] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php on line 795
+[22-Apr-2026 22:41:23 UTC] PHP Stack trace:
+[22-Apr-2026 22:41:23 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 22:41:23 UTC] PHP   2. {main}() Command line code:0
+[22-Apr-2026 22:41:23 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php:42
+[22-Apr-2026 22:41:23 UTC] PHP   4. OTAReviewSync->run($limits = *uninitialized*, $force_sync = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:858
+[22-Apr-2026 22:41:23 UTC] PHP   5. OTAReviewSync->update_summary($post_id = 17494) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:168
+[22-Apr-2026 22:41:23 UTC] PHP   6. round($num = NULL, $precision = 1) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:795
+[22-Apr-2026 22:41:23 UTC] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php on line 795
+[22-Apr-2026 22:41:23 UTC] PHP Stack trace:
+[22-Apr-2026 22:41:23 UTC] PHP   1. {main}() Command line code:0
+[22-Apr-2026 22:41:23 UTC] PHP   2. {main}() Command line code:0
+[22-Apr-2026 22:41:23 UTC] PHP   3. require_once() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_auto_mapper.php:42
+[22-Apr-2026 22:41:23 UTC] PHP   4. OTAReviewSync->run($limits = *uninitialized*, $force_sync = *uninitialized*) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:858
+[22-Apr-2026 22:41:23 UTC] PHP   5. OTAReviewSync->update_summary($post_id = 17495) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:168
+[22-Apr-2026 22:41:23 UTC] PHP   6. round($num = NULL, $precision = 1) /home/u451564824/domains/khaolaklanddiscovery.com/public_html/wp-content/plugins/ota-reviews/ota_sync.php:795
+[23-Apr-2026 06:29:40 UTC] PHP Warning:  Attempt to read property "found_posts" on null in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_query.php on line 5
+[23-Apr-2026 06:29:40 UTC] PHP Stack trace:
+[23-Apr-2026 06:29:40 UTC] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_query.php:0
+[23-Apr-2026 06:29:40 UTC] PHP Fatal error:  Uncaught Error: Call to a member function have_posts() on null in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_query.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_query.php on line 6

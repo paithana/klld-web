@@ -15,6 +15,18 @@ wp_enqueue_script('filter-car-transfer');
                     $car = STCarTransfer::inst();
                     $st_search_query = $car->get_search_results();
 
+                    // Fallback: If no results found for specific route, show all available transfers
+                    if (!$st_search_query->have_posts()) {
+                        $args = [
+                            'post_type'   => 'st_cars',
+                            'post_status' => 'publish',
+                            'posts_per_page' => get_option('posts_per_page', 10),
+                            'orderby'     => 'date',
+                            'order'       => 'DESC',
+                        ];
+                        $st_search_query = new WP_Query($args);
+                    }
+
                     if (TravelHelper::is_wpml()) {
                         $current_lang = 'en';
                         if (defined('ICL_LANGUAGE_CODE')) {

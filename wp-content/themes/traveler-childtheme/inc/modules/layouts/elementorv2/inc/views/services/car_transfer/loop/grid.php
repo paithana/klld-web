@@ -24,15 +24,9 @@ $post_translated = TravelHelper::post_translated($post_id);
 
 $class_image = 'image-feature st-hover-grow';
 
-if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_from != 0 && !empty($transfer_to) && $transfer_to != 0) {
-// if( empty($transfer_from) || empyty($transfer_to) || $transfer_from == '' || $transfer_to == '' ){
-//     $transfer_from ='16220';
-//     $transfer_to='14539';
-//     $has_return='no';
-//     // STInput::get('has_return', 'yes');
-// }
+// Modified: Allow display if we are in fallback mode (even if route is not fully selected)
+$is_valid_route = !empty($transfer_from) && $transfer_from != 0 && !empty($transfer_to) && $transfer_to != 0;
 ?>
-
 
     <div class="services-item grid item-elementor" itemscope itemtype="https://schema.org/RentalCarReservation" data-format="<?php echo TravelHelper::getDateFormatMoment() ?>, hh:mm A" data-date-format="<?php echo TravelHelper::getDateFormatMoment() ?>" data-time-format="hh:mm A"
         data-timepicker="true">
@@ -44,9 +38,6 @@ if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_
                     if ($is_featured == 'on') { 
                         $feature_text   = st()->get_option( 'st_text_featured', __( 'Featured', 'traveler' ) ); ?>
                         <div class="featured"><?php echo esc_html__($feature_text, 'traveler') ?></div>
-                    <?php } ?>
-                    <?php if(!empty( $info_price['discount'] ) and $info_price['discount']>0 and $info_price['price'] >0) { ?>
-                        <?php echo STFeatured::get_sale($info_price['discount']); ?>
                     <?php } ?>
                 </div>
                 <?php if (is_user_logged_in()) { ?>
@@ -86,57 +77,50 @@ if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_
                 }
                 ?>
                 <h4 class="title" itemprop="name">
-                    <a href="javascript:void(0)"
-                    class="st-link c-main"><?php echo get_the_title($post_translated) ?></a>
+                    <a href="javascript:void(0)" class="st-link c-main">
+                        <?php 
+                        if ($is_valid_route) {
+                            echo get_the_title($transfer_from). " to " . get_the_title($transfer_to);
+                        } else {
+                            echo get_the_title($post_translated);
+                        }
+                        ?>
+                    </a>
                 </h4>
                 <div class="car-equipments d-flex align-items-center justify-content-start clearfix">
                     <?php
                     $pasenger = (int)get_post_meta(get_the_ID(), 'passengers', true);
-                    $auto_transmission = get_post_meta(get_the_ID(), 'auto_transmission', true);
                     $baggage = (int)get_post_meta(get_the_ID(), 'baggage', true);
-                    $door = (int)get_post_meta(get_the_ID(), 'door', true);
                     ?>
                     <div class="item d-flex flex-column" data-bs-toggle="tooltip" title="<?php echo esc_attr__('Passenger', 'traveler') ?>">
                         <span class="ico"><i class="stt-icon-user2"></i></span>
-                        <span class="text text-center"><?php echo esc_attr($pasenger); ?></span>
+                        <span class="text text-center"><?php echo esc_attr($pasenger); ?> Max.</span>
                     </div>
                     <div class="item d-flex flex-column" data-bs-toggle="tooltip" title="<?php echo esc_attr__('Baggage', 'traveler') ?>">
                         <span class="ico"><i class="stt-icon-baggage"></i></span>
                         <span class="text text-center"><?php echo esc_attr($baggage); ?></span>
                     </div>
                 </div>
-                        <?php
-                            $journey_car = get_post_meta(get_the_ID(), 'journey', true);
-                            $sr_carstrander = new STCarTransfer();
-                            $get_transfer = $sr_carstrander->get_transfer(get_the_ID(),$transfer_from, $transfer_to);
-                            if(isset($transfer_from) && isset($transfer_to) && !empty($transfer_from) && !empty($transfer_to)){
-                                // var_dump($get_transfer);
-                                echo $get_transfer->title;
-                            }
-                            if(isset( $get_transfer->has_return)){
-                                $return_car = $get_transfer->has_return;
-                            } else {
-                                $return_car = 'no';
-                            }
-                            if(($transfer_from == 0) && ($transfer_to == 0)){ ?>
-                                <div id="extra-service-return-<?php echo get_the_ID(); ?>">
-                                <label class="custom-transfer-alert"><?php echo __('Please select Pick-up/Drop-off', 'traveler');?></label> 
-                                </div>
-                            <?php } ?>
-                            <?php
-                            if(!empty($return_car) && ($return_car === 'yes')){ ?>
-                            <div id="extra-service-return-<?php echo get_the_ID(); ?>">
-                                <label class="control-label"><?php echo __('Transfer: ', 'traveler');?></label> 
-                                <span><input type="radio" name="return_car" checked value="no"> <?php echo __('Oneway', 'traveler');?> </span>
-                                <span><input type="radio" name="return_car"  value="yes"> <?php echo __('Roundtrip', 'traveler');?> </span>
-                            </div>
-                            <?php }
-                            if(!empty($return_car) && ($return_car === 'no') && ($transfer_from !== 0) && ($transfer_to !== 0)){ ?>
-                            <div id="extra-service-return-<?php echo get_the_ID(); ?>">
-                                <label class="control-label"><?php echo __('Transfer: ', 'traveler');?></label> 
-                                <span><input type="radio" name="return_car" checked value="no"> <?php echo __('Oneway', 'traveler');?> </span>
-                            </div>
-                            <?php } ?>
+
+                <?php if ($is_valid_route): ?>
+                    <?php
+                        $sr_carstrander = new STCarTransfer();
+                        $get_transfer = $sr_carstrander->get_transfer(get_the_ID(),$transfer_from, $transfer_to);
+                        $return_car = isset($get_transfer->has_return) ? $get_transfer->has_return : 'no';
+                    ?>
+                    <?php if($return_car === 'yes'): ?>
+                        <div class="extra-service-return-wrap mt10">
+                            <label class="control-label"><?php echo __('Transfer: ', 'traveler');?></label> 
+                            <span><input type="radio" name="return_car" checked value="no"> <?php echo __('Oneway', 'traveler');?> </span>
+                            <span><input type="radio" name="return_car"  value="yes"> <?php echo __('Roundtrip', 'traveler');?> </span>
+                        </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <div class="mt10">
+                        <label class="custom-transfer-alert" style="font-size: 11px; color: #d07e2f;"><?php echo __('Please select Pick-up/Drop-off for pricing', 'traveler');?></label> 
+                    </div>
+                <?php endif; ?>
+
                 <div class="booking-item-features booking-item-features-small clearfix mt10">
                     <div class="st-choose-datetime">
                         <a class="st_click_choose_datetime_transfer" type="button"
@@ -145,118 +129,24 @@ if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_
                             <?php echo __('Choose Pickup time', 'traveler'); ?> 
                         </a>
                     </div>
-                    <?php
-                    //$passenger = (int)STInput::get( 'passengers', 1 );
-                    $extra_price = get_post_meta(get_the_ID(), 'extra_price', true);
-                    if(!empty($extra_price) and is_array($extra_price)){
-                    ?>
-                    <div class="sroom-extra-service">
-                        <a class="st_click_choose_service_transfer" type="button"
-                                data-target="#extra-service-sroom-<?php echo get_the_ID(); ?>" aria-expanded="false"
-                                aria-controls="extra-service-sroom-<?php echo get_the_ID(); ?>">
-                            <?php echo __('Extra services ', 'traveler'); ?> <i class="fa fa-angle-down arrow"></i>
-
-                        </a>
-
-                        <div class="st-tooltip form-service" id="extra-service-sroom-<?php echo get_the_ID(); ?>">
-                                <div class="st-modal-dialog">
-                                    <?php $extra = STInput::request("extra_price");
-                                    if (!empty($extra['value'])) {
-                                        $extra_value = $extra['value'];
-                                    }
-                                    ?>
-                                    <div class="st-close-button text-right">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                    <div class="st-modal-content">
-                                        <table class="table" style="table-layout: fixed;">
-                                            <?php $inti = 0; ?>
-                                            <?php foreach ($extra_price as $key => $val): ?>
-                                                <tr class="<?php echo ($inti > 4) ? 'extra-collapse-control extra-none' : '' ?>">
-                                                    <td width="70%">
-                                                        <label for="field-<?php echo esc_html($val['extra_name']); ?>"
-                                                            class="ml20 mt5"><?php echo esc_html($val['title']) . ' (' . TravelHelper::format_money($val['extra_price']) . ')'; ?></label>
-                                                        <input type="hidden"
-                                                            name="extra_price[price][<?php echo esc_html($val['extra_name']); ?>]"
-                                                            value="<?php echo esc_html($val['extra_price']); ?>">
-                                                        <input type="hidden"
-                                                            name="extra_price[title][<?php echo esc_html($val['extra_name']); ?>]"
-                                                            value="<?php echo esc_html($val['title']); ?>">
-                                                        <input type="hidden"
-                                                        name="extra_price[extra_required][<?php echo esc_html($val['extra_name']); ?>]"
-                                                value="<?php echo esc_html($val['extra_required']); ?>">
-                                                    </td>
-                                                    <td>
-                                                        <select
-                                                                class="form-control app extra-service-select"
-                                                                name="extra_price[value][<?php echo esc_html($val['extra_name']); ?>]"
-                                                                id="field-<?php echo esc_html($val['extra_name']); ?>"
-                                                                data-extra-price="<?php echo esc_html($val['extra_price']); ?>">
-                                                            <?php
-                                                            $max_item = intval($val['extra_max_number']);
-                                                            if ($max_item <= 0) $max_item = 1;
-                                                            for ($i = 0; $i <= $max_item; $i++):
-                                                                $check = "";
-                                                                if (!empty($extra_value[$val['extra_name']]) and $i == $extra_value[$val['extra_name']]) {
-                                                                    $check = "selected";
-                                                                }
-                                                                ?>
-                                                                <option <?php echo esc_html($check) ?>
-                                                                        value="<?php echo esc_html($i); ?>"><?php echo esc_html($i); ?></option>
-                                                            <?php endfor; ?>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <?php $inti++; endforeach; ?>
-                                            <?php if (count($extra_price) > 5) {
-                                                echo '<tr><td colspan="2" class="extra-collapse text-center"><a href="#"><i class="fa fa-angle-double-down"></i></a></td></tr>';
-                                            } ?>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                        if($price_type === 'passenger'){ ?>
-                            <div class="sroom-passenger">
-                                <a class="st_click_choose_passenger_transfer" type="button"
-                                        data-target="#extra-service-passenger-<?php echo get_the_ID(); ?>" aria-expanded="false"
-                                        aria-controls="extra-service-passenger-<?php echo get_the_ID(); ?>">
-                                    <?php echo __('Passenger ', 'traveler'); ?> <i class="fa fa-angle-down arrow"></i>
-
-                                </a>
-                                <div class="st-tooltip form-service" id="extra-service-passenger-<?php echo get_the_ID(); ?>">
-                                    <div class="st-modal-dialog">
-                                        <div class="st-close-button text-right">
-                                            <i class="fas fa-times"></i>
-                                        </div>
-                                        <div class="st-modal-content">
-                                            <div class="form-group">
-                                                <label class="control-label"><?php echo __('Passenger', 'traveler');?></label>
-                                            <?php
-                                                if (!empty($number_pass)) {
-                                                    echo '<select name="passengers" class="form-control">';
-                                                for ($number_pas = 1; $number_pas <= $number_pass ; $number_pas++) {
-                                                        echo '<option value="'.esc_attr($number_pas).'">'.esc_html($number_pas).'</option>';
-                                                    }
-                                                    echo "</select>";
-                                                }
-                                            ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php }
-                    ?>
                 </div>
+
                 <div class="section-footer">
                     <div class="price-wrapper d-flex align-items-center" itemprop="totalPrice">
                         <span class="price">
                             <?php
-                            $minmax = STAdminCars::inst()->get_min_max_price_transfer( get_the_ID() );
-                            echo TravelHelper::format_money( $minmax[ 'min_price' ] ) 
+                            $display_price = 0;
+                            if ($is_valid_route) {
+                                $passengers = (int)STInput::get('passengers', 1);
+                                $display_price = $transfer->get_transfer_total_price(get_the_ID(), $transfer_from, $transfer_to, $roundtrip, $passengers);
+                            }
+                            
+                            if (!$display_price) {
+                                $minmax = STAdminCars::inst()->get_min_max_price_transfer(get_the_ID());
+                                $display_price = $minmax['min_price'];
+                            }
+                            
+                            echo TravelHelper::format_money($display_price);
                             ?>
                         </span>
                         <span class="unit">/<?php echo esc_html($transfer->get_transfer_unit( get_the_ID() )); ?></span>
@@ -278,9 +168,5 @@ if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_
         </form>
         <div class="message" role="alert"></div>
     </div>
-    <?php } 
-    else {
-        echo '<h4 class="warning" align="center" color="#d07e2f"> Please Select your Pickup - Drop-off area.</h4>';
-    }
-
+<?php 
 ?>

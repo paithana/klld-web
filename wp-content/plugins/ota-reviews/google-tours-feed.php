@@ -34,10 +34,17 @@ $auth_user = 'mc-sftp-5520609361';
 $auth_pass = ':(2Q>%zv4e';
 
 if (PHP_SAPI !== 'cli') {
-    if (!isset($_SERVER['PHP_AUTH_USER']) || 
-        $_SERVER['PHP_AUTH_USER'] !== $auth_user || 
-        $_SERVER['PHP_AUTH_PW'] !== $auth_pass) {
-        
+    $user = $_SERVER['PHP_AUTH_USER'] ?? '';
+    $pass = $_SERVER['PHP_AUTH_PW'] ?? '';
+
+    // LiteSpeed / CGI Workaround
+    if (empty($user) && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (preg_match('/Basic\s+(.*)$/i', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+            list($user, $pass) = explode(':', base64_decode($matches[1]));
+        }
+    }
+
+    if ($user !== $auth_user || $pass !== $auth_pass) {
         header('WWW-Authenticate: Basic realm="GTTD Feed"');
         header('HTTP/1.0 401 Unauthorized');
         die('Authentication Required');

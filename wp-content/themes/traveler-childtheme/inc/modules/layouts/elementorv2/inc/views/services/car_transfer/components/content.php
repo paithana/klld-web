@@ -20,6 +20,21 @@ if(empty($layout))
 ?>
 <div class="col-sm-12 col-md-12 col-lg-12">
     <?php echo stt_elementorv2()->loadView('services/hotel/components/toolbar', ['style' => $style, 'has_filter' => false, 'post_type' => 'st_car_transfer', 'service_text' => __('New','traveler')]); ?>
+    
+    <?php
+    $transfer_from = (int)STInput::get('transfer_from');
+    $transfer_to = (int)STInput::get('transfer_to');
+    if ($transfer_from > 0 && $transfer_to > 0) {
+        $check_transfer = STCarTransfer::inst()->get_transfer(0, $transfer_from, $transfer_to); // Using 0 as car_id to check any car
+        if (!$check_transfer) {
+            echo '<div class="alert alert-warning text-center mt20" style="background-color: #fff9e6; border: 1px solid #ffeeba; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px;">' . 
+                 '<strong>' . __('Note:', 'traveler') . '</strong> ' . 
+                 __('No direct transfers found for this specific route. Showing our full vehicle range with estimated pricing:', 'traveler') . 
+                 '</div>';
+        }
+    }
+    ?>
+
     <div id="modern-search-result" class="modern-search-result" data-layout="4">
         <?php echo st()->load_template('layouts/elementor/common/loader', 'content'); ?>
         <div class="service-list-wrapper service-tour list-style">

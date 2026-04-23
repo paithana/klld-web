@@ -22,13 +22,8 @@ $number_pass = (int)get_post_meta(get_the_ID(), 'num_passenger', true);
 
 $class_image = 'image-feature st-hover-grow';
 
-if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_from != 0 && !empty($transfer_to) && $transfer_to != 0) {
-/* if( empty($transfer_from) || empyty($transfer_to) || $transfer_from == '' || $transfer_to == '' ){
-    $transfer_from_name='+Phuket+Airport';
-    $transfer_from='16220';
-    $transfer_to_name=Khao+Lak;
-    $transfer_to='14539';
-} */
+// Modified: Allow display if we are in fallback mode (even if route is not fully selected)
+$is_valid_route = !empty($transfer_from) && $transfer_from != 0 && !empty($transfer_to) && $transfer_to != 0;
 ?>
     <div class="services-item list item-elementor booking-item" itemscope itemtype="https://schema.org/RentalCarReservation" data-format="<?php echo TravelHelper::getDateFormatMoment() ?>, hh:mm A" data-date-format="<?php echo TravelHelper::getDateFormatMoment() ?>" data-time-format="hh:mm A"
         data-timepicker="true">
@@ -240,13 +235,22 @@ if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_
                             <div class="price-wrapper align-items-center" itemprop="totalPrice">
                                 <span class="price">
                                     <?php
-                                    $minmax = STAdminCars::inst()->get_min_max_price_transfer( get_the_ID() );
-                                    echo TravelHelper::format_money( $minmax[ 'min_price' ] );
+                                    $display_price = 0;
+                                    if ($is_valid_route) {
+                                        $passengers = (int)STInput::get('passengers', 1);
+                                        $display_price = $transfer->get_transfer_total_price(get_the_ID(), $transfer_from, $transfer_to, $roundtrip, $passengers);
+                                    }
+
+                                    if (!$display_price) {
+                                        $minmax = STAdminCars::inst()->get_min_max_price_transfer(get_the_ID());
+                                        $display_price = $minmax['min_price'];
+                                    }
+
+                                    echo TravelHelper::format_money($display_price);
                                     ?>
                                 </span>
                                 <span class="unit">/<?php echo esc_html($transfer->get_transfer_unit( get_the_ID() )); ?></span>
-                            </div>
-                            <input type="hidden" name="transfer_from" value="<?php echo esc_attr( $transfer_from ); ?>">
+                            </div>                            <input type="hidden" name="transfer_from" value="<?php echo esc_attr( $transfer_from ); ?>">
                             <input type="hidden" name="transfer_to" value="<?php echo esc_attr( $transfer_to ); ?>">
                             <input type="hidden" name="roundtrip" value="<?php echo esc_attr( $roundtrip ); ?>">
                             <input type="hidden" name="start" value="<?php echo esc_attr( $pickup_date ); ?>">
@@ -265,12 +269,5 @@ if (!empty($transfer) && $transfer != "" && !empty($transfer_from) && $transfer_
         </form>
         <div class="message" role="alert"></div>
     </div>
-<?php }
-    else {
-        echo '<h4 class="warning" align="center" color="#d07e2f"> Please Select your Pickup - Drop-off area.</h4>';
-        ?>
-        <input type="submit" name="booking_car_transfer" class="view-detail w-100 btn-book_cartransfer" value="<?php echo __( 'Book Now', 'traveler' ); ?>"
-        <?php
-    }
-
+<?php 
 ?>
