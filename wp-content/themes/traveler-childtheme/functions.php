@@ -629,6 +629,8 @@ function klld_load_more_reviews() {
             $args['meta_query'] = [['key' => 'ota_source', 'value' => ['vt', 'viator'], 'compare' => 'IN']];
         } elseif ($source === 'gmb') {
             $args['meta_query'] = [['key' => 'ota_source', 'value' => ['gmb', 'google'], 'compare' => 'IN']];
+        } elseif ($source === 'gyg') {
+            $args['meta_query'] = [['key' => 'ota_source', 'value' => ['gyg', 'getyourguide'], 'compare' => 'IN']];
         } else {
             $args['meta_query'] = [
                 [
