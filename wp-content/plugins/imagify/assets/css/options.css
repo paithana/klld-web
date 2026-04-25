@@ -178,13 +178,6 @@ p.imagify-api-key-invite-title {
 	text-shadow: none!important;
 }
 
-/* TODO: maybe remove table lines, we don't use theme anymore… */
-@media (max-width: 782px) {
-	.imagify-settings .form-table th {
-		padding-top: 2em;
-		padding-bottom: .5em;
-	}
-}
 .imagify-settings .form-table td {
 	vertical-align: top;
 }

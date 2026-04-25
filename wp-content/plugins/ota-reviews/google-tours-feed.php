@@ -177,6 +177,7 @@ if ($query->have_posts()) {
             ),
             'merchant_id' => $merchant_id,
             'inventory_types' => array('INVENTORY_TYPE_OPERATOR_DIRECT'),
+            'availability' => 'in_stock',
             'admission_ticket_type' => 'tours',
             'confirmation_type' => 'INSTANT',
             'duration' => $iso_duration,

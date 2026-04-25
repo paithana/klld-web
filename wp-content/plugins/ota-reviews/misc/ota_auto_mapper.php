@@ -1,5 +1,5 @@
 <?php
 /**
- * Auto-Mapper Wrapper - Redirects to child theme version
+ * Auto-Mapper Wrapper
  */
 require_once dirname(__DIR__) . '/ota_auto_mapper.php';

@@ -18,24 +18,41 @@ function fetch_content($source) {
         return file_get_contents($source);
     }
     
-    echo "Attempting to fetch URL: $source\n";
-    $ch = curl_init();
-    curl_setopt_array($ch, [
-        CURLOPT_URL => $source,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    ]);
-    $html = curl_exec($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    echo "🚀 Launching Antigravity Engine for URL: $source\n";
     
-    if ($code !== 200) {
-        echo "❌ Failed to fetch URL (HTTP $code). TripAdvisor likely blocked the server.\n";
-        echo "Tip: Save the page as HTML and pass the filename instead.\n";
+    // Path to our new stealth scraper
+    $scraper_path = __DIR__ . '/wp-content/plugins/ota-reviews/scrapers/ta/antigravity_scraper.js';
+    $node_path = "/home/u451564824/.nvm/versions/node/v24.15.0/bin/node";
+    $cmd = "$node_path $scraper_path " . escapeshellarg($source) . " 2>&1";
+    
+    $html = '';
+    if ( function_exists( 'shell_exec' ) ) {
+        $html = shell_exec( $cmd );
+    } elseif ( function_exists( 'proc_open' ) ) {
+        $descriptorspec = [
+            0 => ["pipe", "r"],
+            1 => ["pipe", "w"],
+            2 => ["pipe", "w"]
+        ];
+        $process = proc_open( $cmd, $descriptorspec, $pipes );
+        if ( is_resource( $process ) ) {
+            $html = stream_get_contents( $pipes[1] );
+            fclose( $pipes[0] );
+            fclose( $pipes[1] );
+            fclose( $pipes[2] );
+            proc_close( $process );
+        }
+    } else {
+        echo "❌ Error: Both shell_exec and proc_open are disabled.\n";
         return null;
     }
+    
+    if (empty($html) || strpos($html, 'DataDome') !== false) {
+        echo "❌ Antigravity was blocked by DataDome (Server IP Blocked) or returned empty output.\n";
+        echo "Tip: Run the 'ta-scrape.js' in your browser and pass the saved HTML file to this script.\n";
+        return null;
+    }
+    
     return $html;
 }
 

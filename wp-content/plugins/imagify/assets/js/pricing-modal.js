@@ -224,13 +224,12 @@
 			imagifyModal.$modal.find('.imagify-modal-loader').hide().show();
 			imagifyModal.$modal.addClass('imagify-modal-loading');
 
-			/**
-			 * TODO: change the way to waterfall requests.
-			 * Use setInterval + counter instead.
-			 */
-
-			// Get the true prices.
-			$.post(ajaxurl, prices_rq_datas, function (prices_response) {
+			$.when(
+				$.post(ajaxurl, prices_rq_datas),
+				$.post(ajaxurl, prices_rq_discount)
+			).done(function (prices_jqXHR, discount_jqXHR) {
+				var prices_response = prices_jqXHR[0];
+				var discount_response = discount_jqXHR[0];
 
 				if (! prices_response.success) {
 					// TODO: replace modal content by any information.
@@ -238,9 +237,6 @@
 
 					return;
 				}
-
-				// Get the discount informations.
-				$.post(ajaxurl, prices_rq_discount, function (discount_response) {
 					var prices_datas, promo_datas,
 						offers,
 						mo_html = '',
@@ -381,9 +377,7 @@
 					imagifyModal.$modal.find('.imagify-modal-loader').fadeOut(300);
 					imagifyModal.$modal.removeClass('imagify-modal-loading');
 
-				}); // Third AJAX request to get discount information.
-
-			}); // End $.post.
+			}); // End $.when.
 		},
 
 		/**
