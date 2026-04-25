@@ -151,138 +151,56 @@ class Onboarding {
 
         $step = new Step( Actions::AI_STEP );
 
-        $builder_type = get_option( 'hostinger_builder_type' );
+        $builder_type           = get_option( 'hostinger_builder_type' );
+        $builder_type_whitelist = array( 'ai', 'theme', 'blank', 'prebuilt' );
 
-        if ( $builder_type === 'ai' ) {
-            $themes                = wp_get_themes();
-            $is_ai_theme_installed = array_key_exists( 'hostinger-ai-theme', $themes );
-            $is_ai_theme_active    = ( get_stylesheet() === 'hostinger-ai-theme' );
-            $is_ai_theme_ready     = $is_ai_theme_installed && $is_ai_theme_active;
-
-            $step->set_image_url( HOSTINGER_EASY_ONBOARDING_ASSETS_URL . '/images/steps/ai_step.svg' );
-
-            if ( ! $is_ai_theme_ready ) {
-                $step->set_title( __( 'Create a site with AI', 'hostinger-easy-onboarding' ) );
-                $step->set_description( __( 'Build a professional, custom-designed site in moments. Just a few clicks and AI handles the rest.', 'hostinger-easy-onboarding' ) );
-
-                $primary_button = new Button();
-                $primary_button->set_title( __( 'Create site with AI', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_modal_name( 'CreateWebsiteWithAiBuilderModal' );
-
-                $secondary_button = new Button();
-                $secondary_button->set_title( __( 'Not now', 'hostinger-easy-onboarding' ) );
-                $secondary_button->set_is_skippable( true );
-            } else {
-                $step->set_title( __( 'Want to create a new AI site?', 'hostinger-easy-onboarding' ) );
-                $step->set_description( __( 'Your new site will replace the current one. Use the same description or change it.', 'hostinger-easy-onboarding' ) );
-
-                $primary_button = new Button();
-                $primary_button->set_title( __( 'Keep current site', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_is_skippable( true );
-
-                $secondary_button = new Button();
-                $secondary_button->set_title( __( 'Create new site', 'hostinger-easy-onboarding' ) );
-                $secondary_button->set_url( admin_url( 'admin.php?page=hostinger-ai-website-creation&redirect=hostinger-easy-onboarding' ) );
-                $secondary_button->set_is_completable( false );
-            }
-
-            if ( ! $this->is_completed( self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID, Actions::AI_STEP ) ) {
-                $step->set_primary_button( $primary_button );
-                $step->set_secondary_button( $secondary_button );
-            }
-
+        if ( ! in_array( $builder_type, $builder_type_whitelist, true ) ) {
             return $step;
         }
 
-        if ( $builder_type === 'prebuilt' ) {
-            $step->set_image_url( HOSTINGER_EASY_ONBOARDING_ASSETS_URL . '/images/steps/prebuilt.svg' );
+        $themes                = wp_get_themes();
+        $is_ai_theme_installed = array_key_exists( 'hostinger-ai-theme', $themes );
+        $is_ai_theme_active    = ( get_stylesheet() === 'hostinger-ai-theme' );
+        $is_ai_theme_ready     = $is_ai_theme_installed && $is_ai_theme_active;
+        $is_completed          = $this->is_completed( self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID, Actions::AI_STEP );
+        $is_ai_generated       = ! empty( get_option( 'hostinger_ai_created_pages' ) );
 
-            $step->set_title( __( 'Want to create a new site on a different template?', 'hostinger-easy-onboarding' ) );
-            $step->set_description( __( 'Your new site will replace the current one. Choose from 140+ professional templates.', 'hostinger-easy-onboarding' ) );
-
-            if ( ! $this->is_completed( self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID, Actions::AI_STEP ) ) {
-                $primary_button = new Button();
-                $primary_button->set_title( __( 'Keep current site', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_is_skippable( true );
-                $step->set_primary_button( $primary_button );
-
-                $secondary_button = new Button();
-                $secondary_button->set_title( __( 'Choose another template', 'hostinger-easy-onboarding' ) );
-                $secondary_button->set_is_astra_needed( true );
-                $secondary_button->set_url( admin_url( 'themes.php?page=starter-templates&ci=1' ) );
-                $secondary_button->set_is_completable( false );
-                $step->set_secondary_button( $secondary_button );
+        if ( $is_ai_generated && ! $is_completed ) {
+            $onboarding_steps = $this->get_saved_steps();
+            if ( empty( $onboarding_steps[ self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID ] ) ) {
+                $onboarding_steps[ self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID ] = array();
             }
+            $onboarding_steps[ self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID ][ Actions::AI_STEP ] = true;
+            update_option( self::HOSTINGER_EASY_ONBOARDING_STEPS_OPTION_NAME, $onboarding_steps, false );
+            $is_completed = true;
         }
 
-        $whitelist_plans = array(
-            'cloud_economy',
-            'cloud_enterprise',
-            'cloud_professional',
-            'hostinger_business',
-        );
+        $step->set_image_url( HOSTINGER_EASY_ONBOARDING_ASSETS_URL . '/images/steps/ai_step.svg' );
+        $step->set_title( __( 'Start creating your site', 'hostinger-easy-onboarding' ) );
+        $step->set_description( __( 'Use AI to build your website in minutes — just answer a few questions and we\'ll generate a site tailored to your needs.', 'hostinger-easy-onboarding' ) );
 
-        $hosting_plan = get_option( 'hostinger_hosting_plan', false );
+        if ( $is_completed && $is_ai_theme_ready ) {
+            $primary_button = new Button();
+            $primary_button->set_title( __( 'Create again', 'hostinger-easy-onboarding' ) );
+            $primary_button->set_url( admin_url( 'admin.php?page=hostinger-ai-website-creation&redirect=hostinger-easy-onboarding' ) );
+            $primary_button->set_is_completable( false );
+            $step->set_primary_button( $primary_button );
+        } elseif ( $is_completed ) {
+            $primary_button = new Button();
+            $primary_button->set_title( __( 'Create new site with AI', 'hostinger-easy-onboarding' ) );
+            $primary_button->set_modal_name( 'CreateWebsiteWithAiBuilderModal' );
+            $step->set_primary_button( $primary_button );
+        } else {
+            $primary_button = new Button();
+            $primary_button->set_title( __( 'Create new site with AI', 'hostinger-easy-onboarding' ) );
+            $primary_button->set_modal_name( 'CreateWebsiteWithAiBuilderModal' );
 
-        if ( $builder_type === 'theme' && ! empty( $hosting_plan ) ) {
-            $primary_button   = new Button();
             $secondary_button = new Button();
+            $secondary_button->set_title( __( 'Not needed', 'hostinger-easy-onboarding' ) );
+            $secondary_button->set_is_skippable( true );
 
-            if ( in_array( $hosting_plan, $whitelist_plans, true ) ) {
-                $step->set_image_url( HOSTINGER_EASY_ONBOARDING_ASSETS_URL . '/images/steps/ai_step.svg' );
-                $step->set_title( __( 'Want to create a new site?', 'hostinger-easy-onboarding' ) );
-                $step->set_description( __( 'Your new site will replace the current one. Choose from 140+ professional templates or use AI.', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_title( __( 'Keep current site', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_is_skippable( true );
-                $secondary_button->set_title( __( 'Create new site', 'hostinger-easy-onboarding' ) );
-                $secondary_button->set_modal_name( 'CreateWebsiteWithAiBuilderModal' );
-            } else {
-                $step->set_image_url( HOSTINGER_EASY_ONBOARDING_ASSETS_URL . '/images/steps/prebuilt.svg' );
-                $step->set_title( __( 'Want to create a new site on a pre-built template?', 'hostinger-easy-onboarding' ) );
-                $step->set_description( __( 'Your new site will replace the current one. Choose from 140+ professional templates.', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_title( __( 'Keep current site', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_is_skippable( true );
-                $secondary_button->set_title( __( 'Choose a template', 'hostinger-easy-onboarding' ) );
-                $secondary_button->set_is_astra_needed( true );
-                $secondary_button->set_url( admin_url( 'themes.php?page=starter-templates&ci=1' ) );
-                $secondary_button->set_is_completable( false );
-            }
-
-            if ( ! $this->is_completed( self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID, Actions::AI_STEP ) ) {
-                $step->set_primary_button( $primary_button );
-
-                $step->set_secondary_button( $secondary_button );
-            }
-        }
-
-        if ( $builder_type === 'blank' && ! empty( $hosting_plan ) ) {
-            $primary_button   = new Button();
-            $secondary_button = new Button();
-
-            if ( in_array( $hosting_plan, $whitelist_plans, true ) ) {
-                $step->set_image_url( HOSTINGER_EASY_ONBOARDING_ASSETS_URL . '/images/steps/ai_step.svg' );
-                $step->set_title( __( 'Start creating your site', 'hostinger-easy-onboarding' ) );
-                $step->set_description( __( 'Build a professional, custom-designed site in moments. Choose from 140+ templates or use AI.', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_title( __( 'Create site', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_modal_name( 'CreateWebsiteWithAiBuilderModal' );
-                $secondary_button->set_title( __( 'Not now', 'hostinger-easy-onboarding' ) );
-                $secondary_button->set_is_skippable( true );
-            } else {
-                $step->set_image_url( HOSTINGER_EASY_ONBOARDING_ASSETS_URL . '/images/steps/prebuilt.svg' );
-                $step->set_title( __( 'Start creating your site', 'hostinger-easy-onboarding' ) );
-                $step->set_description( __( 'Build a custom-designed site in minutes with professional templates. You’ll be ready to go live in a few clicks.', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_title( __( 'Choose template', 'hostinger-easy-onboarding' ) );
-                $primary_button->set_is_astra_needed( true );
-                $primary_button->set_url( admin_url( 'themes.php?page=starter-templates&ci=1' ) );
-                $secondary_button->set_title( __( 'Not now', 'hostinger-easy-onboarding' ) );
-                $secondary_button->set_is_skippable( true );
-            }
-
-            if ( ! $this->is_completed( self::HOSTINGER_EASY_ONBOARDING_WEBSITE_STEP_CATEGORY_ID, Actions::AI_STEP ) ) {
-                $step->set_primary_button( $primary_button );
-
-                $step->set_secondary_button( $secondary_button );
-            }
+            $step->set_primary_button( $primary_button );
+            $step->set_secondary_button( $secondary_button );
         }
 
         return $step;
@@ -444,7 +362,7 @@ class Onboarding {
 
         $step->set_description( __( 'Collect emails from forms on your site and start sending on-brand email campaigns with Hostinger Reach – all powered by AI.', 'hostinger-easy-onboarding' ) );
 
-        $primary_button = new Button( __( 'Try free for 1 year', 'hostinger-easy-onboarding' ) );
+        $primary_button = new Button( __( 'Connect to Reach', 'hostinger-easy-onboarding' ) );
 
         $primary_button->set_url( admin_url( 'admin.php?page=hostinger-reach' ) );
 

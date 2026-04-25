@@ -844,3 +844,16 @@ a.service-avatar {
     border-color: #0b7016 !important;
 }
 
+
+/* Review Avatars - Force Circle */
+.ota-avatar, 
+.ota-avatar img, 
+.review-avatar img, 
+.review-item-user .avatar,
+.review-avatar .ota-logo-header,
+.st-reviews .avatar img {
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    width: 48px !important;
+    height: 48px !important;
+}

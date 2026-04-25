@@ -147,7 +147,7 @@ foreach ($data as $batch_id => $batch_data) {
             continue;
         }
 
-        $review_id = $r['id'] ?? md5($r['reviewer_name'] . $r['text'] . ($r['date'] ?? ''));
+        $review_id = $r['id'] ?? md5(($r['reviewer_name'] ?? 'anon') . ($r['text'] ?? '') . ($r['date'] ?? ''));
         $meta_key = 'tripadvisor_review_id';
 
         foreach ($target_post_ids as $base_post_id) {
@@ -174,8 +174,8 @@ foreach ($data as $batch_id => $batch_data) {
                 
                 $comment_data = [
                     'comment_post_ID'      => $target_post_id,
-                    'comment_author'       => $r['reviewer_name'] ?: 'TripAdvisor Traveler',
-                    'comment_author_email' => sanitize_title($r['reviewer_name'] ?: 'traveler') . '@tripadvisor.com',
+                    'comment_author'       => ($r['reviewer_name'] ?? '') ?: 'TripAdvisor Traveler',
+                    'comment_author_email' => sanitize_title(($r['reviewer_name'] ?? '') ?: 'traveler') . '@tripadvisor.com',
                     'comment_content'      => $r['text'],
                     'comment_type'         => 'st_reviews',
                     'comment_date'         => date('Y-m-d H:i:s', strtotime($date_str)),

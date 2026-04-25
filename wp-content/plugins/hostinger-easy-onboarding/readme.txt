@@ -3,7 +3,7 @@ Tags: onboarding, hostinger
 Requires at least: 5.5
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 2.1.17
+Stable tag: 2.1.18
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -631,9 +631,16 @@ Watching for Changes: During development, you can use "npm run watch" to continu
 - Fix: Add summary finished event when onboarding closed
 
 2.1.17 (2026-04-14)
-
 - Feature: Translations
 - Feature: Change themes CTA
 - Fix: run event only on manual actions
 - Fix: Added edit count property
 - Fix: Autocomplete website created step
+
+2.1.18 (2026-04-23)
+- Feature: Early access support
+- Feature: AI website creation onboarding step
+- Fix: Amplitude events template not detected
+- Fix: Phone verification broken UI
+- Fix: Change Reach CTA copy
+- Fix: Update dependencies

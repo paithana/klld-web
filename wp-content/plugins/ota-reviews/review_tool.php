@@ -1035,6 +1035,46 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             logBox.scrollTop = logBox.scrollHeight;
         }
 
+        async function syncContent(wpId) {
+            const logBox = document.getElementById('sync-runner-log');
+            State.setState({ isSyncing: true, currentTab: 'sync' });
+            logBox.innerHTML = `<b>Syncing Content for Tour (#${wpId})...</b><br>`;
+            
+            try {
+                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota-content.php?action=sync&post_id=${wpId}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+                if (data.success) {
+                    logBox.innerHTML += `<div style="color:var(--success);">✓ Content updated from GYG.</div>`;
+                } else {
+                    logBox.innerHTML += `<div style="color:var(--danger);">✗ ${data.message || 'Error'}</div>`;
+                }
+            } catch (e) { logBox.innerHTML += `<div style="color:var(--danger);">⚠ Network Failure</div>`; }
+            
+            State.setState({ isSyncing: false });
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        async function syncCalendar(wpId) {
+            const logBox = document.getElementById('sync-runner-log');
+            State.setState({ isSyncing: true, currentTab: 'sync' });
+            logBox.innerHTML = `<b>Syncing Calendar for Tour (#${wpId})...</b><br>`;
+            
+            try {
+                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota-calendar.php?action=sync&post_id=${wpId}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+                if (data.success) {
+                    logBox.innerHTML += `<div style="color:var(--success);">✓ ${data.synced} dates synced from GYG.</div>`;
+                } else {
+                    logBox.innerHTML += `<div style="color:var(--danger);">✗ ${data.message || 'Error'}</div>`;
+                }
+            } catch (e) { logBox.innerHTML += `<div style="color:var(--danger);">⚠ Network Failure</div>`; }
+            
+            State.setState({ isSyncing: false });
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
         function filterTours() {
             const query = document.getElementById('tour-search').value.toLowerCase();
             const rows = document.querySelectorAll('#tour-rows .tour-row');
@@ -1552,7 +1592,11 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
                                     <td data-label="Actions">
                                         <div class="flex flex-col gap-2">
                                             <?php if ($has_ota): ?>
-                                                <button onclick="syncAllSources(<?php echo $id; ?>)" class="k-btn k-btn-primary k-btn-sm" style="background:#0ea5e9; font-weight:600;" title="Fetch reviews from all mapped OTAs">🚀 Sync All</button>
+                                                <button onclick="syncAllSources(<?php echo $id; ?>)" class="k-btn k-btn-primary k-btn-sm" style="background:#0ea5e9; font-weight:600;" title="Fetch reviews from all mapped OTAs">🚀 Sync Reviews</button>
+                                                <?php if ($gyg): ?>
+                                                    <button onclick="syncContent(<?php echo $id; ?>)" class="k-btn k-btn-outline k-btn-sm" style="font-size:10px; border-color:var(--success); color:var(--success);">📝 Sync Content</button>
+                                                    <button onclick="syncCalendar(<?php echo $id; ?>)" class="k-btn k-btn-outline k-btn-sm" style="font-size:10px; border-color:var(--warning); color:var(--warning);">📅 Sync Calendar</button>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         </div>
                                     </td>

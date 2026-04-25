@@ -708,6 +708,7 @@ class OTAReviewSync {
                 update_comment_meta($new_id, 'st_reviews', $rating);
                 update_comment_meta($new_id, 'st_star', $rating);
                 update_comment_meta($new_id, 'comment_rate', $rating);
+                update_comment_meta($new_id, 'st_category_name', get_post_type($post_id));
                 update_comment_meta($new_id, 'comment_title', $title);
                 update_comment_meta($new_id, 'st_review_stats', $serialized_stats);
                 
@@ -790,9 +791,12 @@ class OTAReviewSync {
             $post_id
         ));
 
-        if ($stats) {
+        if ($stats && $stats->total > 0) {
             update_post_meta($post_id, 'total_review', (int)$stats->total);
-            update_post_meta($post_id, 'rate_review', round((float)$stats->avg, 1));
+            update_post_meta($post_id, 'rate_review', round((float)($stats->avg ?? 0), 1));
+        } else {
+            update_post_meta($post_id, 'total_review', 0);
+            update_post_meta($post_id, 'rate_review', 0);
         }
     }
 

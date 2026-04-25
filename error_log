@@ -2911,3 +2911,29 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/test_query.php on line 6
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP Warning:  Undefined variable $HOME in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php on line 25
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP Stack trace:
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php:0
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP   2. fetch_content($source = 'https://www.tripadvisor.com/Attraction_Review-g297914-d1960808-Reviews-Khao_Lak_Land_Discovery-Khao_Lak_Takua_Pa_Phang_Nga_Province.html') /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php:67
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP Warning:  Undefined variable $NVM_DIR in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php on line 25
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP Stack trace:
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php:0
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP   2. fetch_content($source = 'https://www.tripadvisor.com/Attraction_Review-g297914-d1960808-Reviews-Khao_Lak_Land_Discovery-Khao_Lak_Takua_Pa_Phang_Nga_Province.html') /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php:67
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP Warning:  Undefined variable $NVM_DIR in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php on line 25
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP Stack trace:
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP   1. {main}() /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php:0
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP   2. fetch_content($source = 'https://www.tripadvisor.com/Attraction_Review-g297914-d1960808-Reviews-Khao_Lak_Land_Discovery-Khao_Lak_Takua_Pa_Phang_Nga_Province.html') /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php:67
+[25-Apr-2026 11:32:55 Asia/Bangkok] PHP Fatal error:  Uncaught Error: Call to undefined function shell_exec() in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php:27
+Stack trace:
+#0 /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php(67): fetch_content()
+#1 {main}
+  thrown in /home/u451564824/domains/khaolaklanddiscovery.com/public_html/ta_scrape_filter.php on line 27
+[25-Apr-2026 08:19:49 UTC] DEBUG ARGS: Array
+(
+)
+
+[25-Apr-2026 08:19:49 UTC] DEBUG ASSOC: Array
+(
+    [post_id] => 14625
+)
+

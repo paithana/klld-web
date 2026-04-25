@@ -595,7 +595,7 @@ function klld_load_more_reviews() {
     $post_id = (int)($_POST['post_id'] ?? 0);
     $source = sanitize_text_field($_POST['source'] ?? 'all');
     $keyword = sanitize_text_field($_POST['keyword'] ?? '');
-    $comment_per_page = (int)get_option('comments_per_page', 10);
+    $comment_per_page = 25; // Increased from 10
     $offset = ($paged - 1) * $comment_per_page;
 
     $args = [

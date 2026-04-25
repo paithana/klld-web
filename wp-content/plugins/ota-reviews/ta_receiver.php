@@ -18,11 +18,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// Get data from either raw input or form field
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
+if (!$data && isset($_POST['json_data'])) {
+    $data = json_decode(stripslashes($_POST['json_data']), true);
+}
+
 if (!$data) {
-    echo json_encode(['error' => 'Invalid JSON']);
+    echo json_encode(['error' => 'Invalid JSON data received.']);
     exit;
 }
 

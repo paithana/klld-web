@@ -145,7 +145,7 @@ $post_id = get_the_ID();
             <div class="review-pagination">
                 <div id="st-review-summary-text" class="mb20" style="font-size: 11px; color: #94a3b8;">
                     <?php 
-                    $comment_per_page = (int)get_option('comments_per_page', 10);
+                    $comment_per_page = 25; // Increased from 10
                     $initial_count = min($count_all, $comment_per_page);
                     echo sprintf(__('Showing %s of %s reviews', 'traveler'), '<span class="shown-count">' . $initial_count . '</span>', '<span class="total-count">' . $count_all . '</span>'); 
                     ?>
