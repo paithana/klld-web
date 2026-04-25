@@ -29,33 +29,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
 }
 
-// Security: HTTP Basic Auth for Google Merchant Center
-$auth_user = 'mc-sftp-5520609361'; 
-$auth_pass = ':(2Q>%zv4e';
-
-if (PHP_SAPI !== 'cli') {
-    $user = $_SERVER['PHP_AUTH_USER'] ?? '';
-    $pass = $_SERVER['PHP_AUTH_PW'] ?? '';
-
-    // LiteSpeed / CGI Workaround
-    if (empty($user) && isset($_SERVER['HTTP_AUTHORIZATION'])) {
-        if (preg_match('/Basic\s+(.*)$/i', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
-            list($user, $pass) = explode(':', base64_decode($matches[1]));
-        }
-    }
-
-    if ($user !== $auth_user || $pass !== $auth_pass) {
-        header('WWW-Authenticate: Basic realm="GTTD Feed"');
-        header('HTTP/1.0 401 Unauthorized');
-        die('Authentication Required');
-    }
-}
-
-// Security: Optional secret key (Legacy support)
+// Security: Secret key for Google Merchant Center (Scheduled Fetch)
+// Usage: /google-tours-feed.php?format=xml&key=kld_feed_2024
 $secret_key = 'kld_feed_2024';
-if (!is_admin() && PHP_SAPI !== 'cli' && isset($_GET['key']) && $_GET['key'] !== $secret_key) {
-    http_response_code(403);
-    die('Forbidden');
+
+if (!is_admin() && PHP_SAPI !== 'cli') {
+    if (!isset($_GET['key']) || $_GET['key'] !== $secret_key) {
+        http_response_code(403);
+        die('Forbidden: Valid API Key Required');
+    }
 }
 
 // Detect CLI vs Browser and parse arguments

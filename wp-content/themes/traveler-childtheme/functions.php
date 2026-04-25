@@ -673,3 +673,53 @@ add_filter('wp_get_attachment_image_attributes', function($atts, $attachment, $s
     $atts['loading'] = 'lazy';
     return $atts;
 }, 10, 3);
+
+/**
+ * Add Advanced Tour Schema for Google Things to Do
+ */
+add_action('wp_head', function() {
+    if (!is_singular('st_tours')) return;
+
+    $post_id = get_the_ID();
+    $title = get_the_title();
+    $description = get_the_excerpt() ?: wp_trim_words(get_the_content(), 50);
+    $url = get_permalink();
+    $image = get_the_post_thumbnail_url($post_id, 'full');
+    
+    // Price
+    $price = get_post_meta($post_id, 'sale_price', true) ?: get_post_meta($post_id, 'min_price', true);
+    $currency = function_exists('st_get_default_currency') ? st_get_default_currency() : 'THB';
+    
+    // Rating
+    $rating_avg = get_post_meta($post_id, 'rate_review', true);
+    $rating_count = get_post_meta($post_id, 'total_review', true);
+
+    $schema = [
+        "@context" => "https://schema.org",
+        "@type" => "Tour",
+        "name" => $title,
+        "description" => strip_tags($description),
+        "url" => $url,
+        "image" => $image,
+        "tourDuration" => "PT8H", // Default to 8 hours if not specified
+        "offers" => [
+            "@type" => "Offer",
+            "price" => $price,
+            "priceCurrency" => $currency,
+            "availability" => "https://schema.org/InStock",
+            "url" => $url
+        ]
+    ];
+
+    if ($rating_avg && $rating_count) {
+        $schema["aggregateRating"] = [
+            "@type" => "AggregateRating",
+            "ratingValue" => $rating_avg,
+            "reviewCount" => $rating_count,
+            "bestRating" => "5",
+            "worstRating" => "1"
+        ];
+    }
+
+    echo '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
+});

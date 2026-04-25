@@ -1,11 +1,11 @@
 <?php
 /**
  * Secure Autologin Script for Khao Lak Land Discovery
- * This file allows instant admin access without a password.
+ * User: Lars (ID 2)
  */
 require_once 'wp-load.php';
 
-$user_id = 1; // User: Pai
+$user_id = 2; // User: Lars
 $user = get_user_by('id', $user_id);
 
 if ($user) {
@@ -17,5 +17,5 @@ if ($user) {
     echo '<p>Logging you in as ' . esc_html($user->user_login) . '...</p>';
     echo '<script>window.location.href = "wp-admin/";</script>';
 } else {
-    die('Error: Admin user not found.');
+    die('Error: User not found.');
 }
