@@ -675,15 +675,16 @@ add_filter('wp_get_attachment_image_attributes', function($atts, $attachment, $s
 }, 10, 3);
 
 /**
- * Add Advanced Tour Schema for Google Things to Do
+ * Add Advanced Tour Schema for Google Things to Do (Hardened)
  */
 add_action('wp_head', function() {
-    if (!is_singular('st_tours')) return;
+    // Only target the tour post type
+    if (get_post_type() !== 'st_tours') return;
 
     $post_id = get_the_ID();
-    $title = get_the_title();
-    $description = get_the_excerpt() ?: wp_trim_words(get_the_content(), 50);
-    $url = get_permalink();
+    $title = get_the_title($post_id);
+    $description = get_the_excerpt($post_id) ?: wp_trim_words(get_post_field('post_content', $post_id), 50);
+    $url = get_permalink($post_id);
     $image = get_the_post_thumbnail_url($post_id, 'full');
     
     // Price
@@ -701,7 +702,7 @@ add_action('wp_head', function() {
         "description" => strip_tags($description),
         "url" => $url,
         "image" => $image,
-        "tourDuration" => "PT8H", // Default to 8 hours if not specified
+        "tourDuration" => "PT8H",
         "offers" => [
             "@type" => "Offer",
             "price" => $price,
@@ -714,12 +715,14 @@ add_action('wp_head', function() {
     if ($rating_avg && $rating_count) {
         $schema["aggregateRating"] = [
             "@type" => "AggregateRating",
-            "ratingValue" => $rating_avg,
-            "reviewCount" => $rating_count,
+            "ratingValue" => (float)$rating_avg,
+            "reviewCount" => (int)$rating_count,
             "bestRating" => "5",
             "worstRating" => "1"
         ];
     }
 
+    echo "\n<!-- KLLD Custom Tour Schema -->\n";
     echo '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
-});
+    echo "\n<!-- End KLLD Custom Tour Schema -->\n";
+}, 1); // Priority 1 to ensure it appears early in <head>
