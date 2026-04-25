@@ -703,15 +703,21 @@ add_action('wp_head', function() {
         "url" => $url,
         "image" => $image,
         "tourDuration" => "PT8H",
+        "brand" => [
+            "@type" => "Brand",
+            "name" => "Khao Lak Land Discovery"
+        ],
         "offers" => [
             "@type" => "Offer",
-            "price" => $price,
+            "price" => (float)$price,
             "priceCurrency" => $currency,
             "availability" => "https://schema.org/InStock",
-            "url" => $url
+            "url" => $url,
+            "priceValidUntil" => date('Y-12-31') // Ensures validity for the current year
         ]
     ];
 
+    // Add Aggregate Rating
     if ($rating_avg && $rating_count) {
         $schema["aggregateRating"] = [
             "@type" => "AggregateRating",
@@ -720,6 +726,34 @@ add_action('wp_head', function() {
             "bestRating" => "5",
             "worstRating" => "1"
         ];
+
+        // Add Individual Review Samples (Top 3) for Merchant Listings
+        $comments = get_comments([
+            'post_id' => $post_id,
+            'status'  => 'approve',
+            'number'  => 3,
+            'type'    => 'st_reviews'
+        ]);
+
+        if ($comments) {
+            $schema["review"] = [];
+            foreach ($comments as $comment) {
+                $c_rate = get_comment_meta($comment->comment_ID, 'st_reviews', true);
+                $schema["review"][] = [
+                    "@type" => "Review",
+                    "author" => [
+                        "@type" => "Person",
+                        "name" => $comment->comment_author
+                    ],
+                    "datePublished" => date('Y-m-d', strtotime($comment->comment_date)),
+                    "reviewBody" => wp_trim_words($comment->comment_content, 30),
+                    "reviewRating" => [
+                        "@type" => "Rating",
+                        "ratingValue" => $c_rate ?: 5
+                    ]
+                ];
+            }
+        }
     }
 
     echo "\n<!-- KLLD Custom Tour Schema -->\n";
