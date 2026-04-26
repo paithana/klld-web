@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: KLLD OTA Reviews Manager
+ * Plugin Name: OTAs Manager
  * Description: Multi-platform review synchronization and management tool (GYG, Viator, TripAdvisor, GMB).
  * Version: 2.1.0
  * Author: Antigravity (KLLD Team)

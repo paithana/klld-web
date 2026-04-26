@@ -82,6 +82,23 @@ foreach ($all_tours as $t) {
 }
 
 /**
+ * Manual Mapping for TripAdvisor Slugs
+ */
+$manual_slug_map = [
+    'Off Road Safari Khao Lak' => 'Khao Lak Off-Road Safari',
+    'James Bond Phang Nga with canoe Full Day Tour' => 'James Bond Island tour & Phang Nga Bay',
+    'Surin Islands Early Bird Snorkeltour from Khao Lak in English French German It' => 'Surin Islands Snorkeling Day Trip',
+    'Phuket Weeked Market' => 'Phuket Weekend Market',
+    'Khao Lak Expedition from Phuket' => 'Phuket Tour DIY',
+    'Khao Sok Wildlife 2 Days' => '2 Day Khao Sok Wildlife',
+    'Khao Lak Land Discovery' => 'Khao Sok National Park 3 Days Discovery Tour',
+    'Amazing 3 Temples' => 'Amazing 3 Temples',
+    'Phuket Sunday Walking Street Market' => 'Phuket Sunday Walking Street',
+    'Phang Nga Bay Sunset Serenity Cruise' => 'Phang Nga Bay Sunset Serenity Cruise',
+    'Similan Islands Early Bird Snorkeltour' => 'Similan Islands Snorkeling Day Trip',
+];
+
+/**
  * Helper: Find all translations of a tour post
  */
 if (!function_exists('klld_get_translated_post_ids')) {
@@ -120,9 +137,21 @@ foreach ($data as $batch_id => $batch_data) {
         $review_of = $r['review_of'] ?? '';
         
         $reviewer_name = $r['reviewer_name'] ?? 'Unknown';
-        echo "   🔍 Review by {$reviewer_name} of '{$review_of}'\n";
+        // echo "   🔍 Review by {$reviewer_name} of '{$review_of}'\n";
 
-        // If no hardcoded post_ids, try to match based on 'review_of'
+        // 1. Try Manual Mapping
+        if (empty($target_post_ids) && isset($manual_slug_map[$review_of])) {
+            $mapped_title = $manual_slug_map[$review_of];
+            foreach ($tour_map as $tid => $title) {
+                if (stripos($title, $mapped_title) !== false || stripos($mapped_title, $title) !== false) {
+                    $target_post_ids = [$tid];
+                    echo "   📍 Manual Matched '{$review_of}' -> '{$title}'\n";
+                    break;
+                }
+            }
+        }
+
+        // 2. If still no hardcoded post_ids, try to match based on 'review_of'
         if (empty($target_post_ids) && !empty($review_of)) {
             $best_score = 0;
             $best_id = 0;
@@ -134,11 +163,11 @@ foreach ($data as $batch_id => $batch_data) {
                 }
             }
 
-            if ($best_score >= 70) {
+            if ($best_score >= 60) {
                 $target_post_ids = [$best_id];
                 echo "   🎯 Auto-matched '{$review_of}' to '{$tour_map[$best_id]}' (Score: " . round($best_score) . "%)\n";
             } else {
-                echo "   ❌ No match for '{$review_of}' (Best: '{$tour_map[$best_id]}' @ " . round($best_score) . "%)\n";
+                // echo "   ❌ No match for '{$review_of}' (Best: '{$tour_map[$best_id]}' @ " . round($best_score) . "%)\n";
             }
         }
 
@@ -187,7 +216,7 @@ foreach ($data as $batch_id => $batch_data) {
                 if ($comment_id) {
                     update_comment_meta($comment_id, $meta_key, $review_id);
                     update_comment_meta($comment_id, 'st_reviews', $r['rating'] ?? 5);
-                    update_comment_meta($comment_id, 'ota_source', 'tripadvisor');
+                    update_comment_meta($comment_id, 'ota_source', 'TA');
                     update_comment_meta($comment_id, 'comment_rate', $r['rating'] ?? 5);
                     update_comment_meta($comment_id, 'comment_title', $r['title'] ?? '');
                     update_comment_meta($comment_id, 'st_category_name', 'st_tours');

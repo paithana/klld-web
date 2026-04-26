@@ -5,10 +5,24 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    require_once dirname(__FILE__, 5) . '/wp-load.php';
+    $search_paths = [
+        __DIR__ . '/wp-load.php',
+        dirname(__DIR__, 2) . '/wp-load.php',
+        dirname(__DIR__, 3) . '/wp-load.php',
+        dirname(__DIR__, 4) . '/wp-load.php',
+    ];
+    foreach ($search_paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+            break;
+        }
+    }
 }
 
 if (!current_user_can('manage_options') && !defined('KLLD_TOOL_RUN')) die('Unauthorized');
+
+// Path to default templates
+$default_template_file = dirname(__FILE__) . '/data/source_gmb.json';
 
 // AJAX Handler
 if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
@@ -26,15 +40,14 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_custom_reviews') {
     }
 
     if (!$templates) {
-        $template_file = dirname(__FILE__) . '/gmb_reviews.json';
-        if (!file_exists($template_file)) {
-            wp_send_json_error(['message' => 'Template file not found.']);
+        if (!file_exists($default_template_file)) {
+            wp_send_json_error(['message' => 'Template file not found at: ' . $default_template_file]);
         }
-        $templates = json_decode(file_get_contents($template_file), true);
+        $templates = json_decode(file_get_contents($default_template_file), true);
     }
 
     if (!$templates) {
-        wp_send_json_error(['message' => 'Invalid template JSON.']);
+        wp_send_json_error(['message' => 'Invalid template JSON or empty file.']);
     }
     
     $total_imported = 0;
@@ -164,8 +177,25 @@ function klld_update_tour_review_summary($post_id) {
     ));
 
     if ($stats) {
-        update_post_meta($post_id, 'total_review', intval($stats->total));
-        update_post_meta($post_id, 'rate_review', round($stats->avg, 1));
+        $total = intval($stats->total);
+        $rate = round($stats->avg, 1);
+        
+        update_post_meta($post_id, 'total_review', $total);
+        update_post_meta($post_id, 'rate_review', $rate);
+
+        // Update Traveler Optimized Table
+        $wpdb->update(
+            $wpdb->prefix . 'st_tours',
+            ['rate_review' => $rate],
+            ['post_id' => $post_id]
+        );
+        
+        // Also check st_activity as it might be an activity
+        $wpdb->update(
+            $wpdb->prefix . 'st_activity',
+            ['rate_review' => $rate],
+            ['post_id' => $post_id]
+        );
     }
 }
 
@@ -247,11 +277,14 @@ function klld_update_tour_review_summary($post_id) {
             </div>
 
             <div class="list-panel">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h3 style="margin:0;">Template Library Preview</h3>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <input type="checkbox" id="select-all-templates" checked>
-                        <label for="select-all-templates" style="font-size:12px; font-weight:600;">Select All</label>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="margin:0;">📚 Template Library</h3>
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <input type="text" id="tpl-search" placeholder="Search templates..." style="padding: 5px 10px; border-radius: 4px; border: 1px solid #cbd5e1; font-size: 12px;">
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <input type="checkbox" id="select-all-templates" checked>
+                            <label for="select-all-templates" style="font-size:12px; font-weight:600;">All</label>
+                        </div>
                     </div>
                 </div>
                 <div class="templates-list" id="tpl-container">
@@ -272,16 +305,38 @@ function klld_update_tour_review_summary($post_id) {
         const refreshBtn = document.getElementById('btn-refresh-tpls');
         const selectAllTours = document.getElementById('select-all-tours');
         const selectAllTemplates = document.getElementById('select-all-templates');
+        const tplSearch = document.getElementById('tpl-search');
  
-        const templates = <?php echo file_get_contents(dirname(__FILE__) . '/gmb_reviews.json'); ?>;
+        let templates = [];
+        try {
+            templates = <?php 
+                if (file_exists($default_template_file)) {
+                    echo file_get_contents($default_template_file);
+                } else {
+                    echo '[]';
+                }
+            ?>;
+        } catch(e) {
+            console.error("Failed to parse templates", e);
+        }
 
-        function renderTemplates() {
+        function renderTemplates(filter = '') {
+            if (!templates || templates.length === 0) {
+                tplContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">No templates found. Please check data/source_gmb.json</div>';
+                return;
+            }
             tplContainer.innerHTML = '';
             templates.forEach((tpl, idx) => {
+                if (filter && !tpl.text.toLowerCase().includes(filter.toLowerCase()) && !tpl.author.toLowerCase().includes(filter.toLowerCase())) {
+                    return;
+                }
+
                 const item = document.createElement('div');
                 item.className = 'tpl-item';
                 
                 const relative = tpl.date || 'unknown';
+                const rating = parseInt(tpl.rating) || 5;
+                const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
                 
                 item.innerHTML = `
                     <input type="checkbox" class="tpl-checkbox" data-idx="${idx}" checked>
@@ -289,7 +344,7 @@ function klld_update_tour_review_summary($post_id) {
                         <span class="tpl-author">${tpl.author}</span>
                         <span class="tpl-date">${relative}</span>
                     </div>
-                    <div class="tpl-rating">${tpl.rating}</div>
+                    <div class="tpl-rating" style="margin-bottom:5px; color:#f59e0b;">${stars} (${rating})</div>
                     <div class="tpl-text">${tpl.text.substring(0, 150)}${tpl.text.length > 150 ? '...' : ''}</div>
                 `;
                 tplContainer.appendChild(item);
@@ -297,6 +352,10 @@ function klld_update_tour_review_summary($post_id) {
         }
 
         renderTemplates();
+
+        tplSearch.addEventListener('input', (e) => {
+            renderTemplates(e.target.value);
+        });
 
         // Select All Tours Logic
         selectAllTours.addEventListener('click', function(e) {

@@ -49,6 +49,14 @@ foreach ($all_tours as $t) {
     $tour_map[$t->ID] = $t->post_title;
 }
 
+$manual_slug_map = [
+    'Off Road Safari Khao Lak' => 'Khao Lak Off-Road Safari',
+    'James Bond - Phang Nga with canoe (Full-Day Tour)' => 'James Bond Island tour & Phang Nga Bay',
+    'Surin Islands- Early Bird Snorkeltour from Khao Lak in English, French, German, Italian' => 'Surin Islands Snorkeling Day Trip',
+    'Phuket Weeked Market' => 'Phuket Weekend Market',
+    'Khao Lak Expedition from Phuket' => 'Phuket Tour DIY',
+];
+
 function get_translated_ids($post_id) {
     global $wpdb;
     $table = $wpdb->prefix . 'icl_translations';
@@ -61,6 +69,7 @@ $total_imported = 0;
 $total_skipped = 0;
 
 foreach ($reviews as $r) {
+    $review_id = $r['id'] ?? '';
     $review_of = $r['ro'] ?? '';
     $reviewer_name = $r['n'] ?? 'TripAdvisor Traveler';
     $text = $r['co'] ?? '';
@@ -75,11 +84,26 @@ foreach ($reviews as $r) {
 
     $best_score = 0;
     $best_id = 0;
-    foreach ($tour_map as $tid => $title) {
-        $score = calculate_match_score($review_of, $title);
-        if ($score > $best_score) {
-            $best_score = $score;
-            $best_id = $tid;
+
+    // Try manual mapping first
+    if (isset($manual_slug_map[$review_of])) {
+        $mapped_title = $manual_slug_map[$review_of];
+        foreach ($tour_map as $tid => $title) {
+            if (stripos($title, $mapped_title) !== false) {
+                $best_score = 100;
+                $best_id = $tid;
+                break;
+            }
+        }
+    }
+
+    if ($best_score < 100) {
+        foreach ($tour_map as $tid => $title) {
+            $score = calculate_match_score($review_of, $title);
+            if ($score > $best_score) {
+                $best_score = $score;
+                $best_id = $tid;
+            }
         }
     }
 
