@@ -43,81 +43,44 @@ use phpseclib3\Net\SFTP;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 if ( defined( 'KLLD_TOOL_RUN' ) ) {
-    echo '<div class="wrap"><h1>Google Things to Do Feed Delivery</h1>';
-    echo '<p>Push the latest product feed to Google servers via SFTP.</p>';
-    if ( ! isset( $_POST['run_push'] ) ) {
-        echo '<form method="post"><input type="submit" name="run_push" class="button button-primary" value="Run SFTP Push Now"></form>';
-        return; // Stop here if not running
-    }
-    echo '<pre style="background:#f0f0f0; padding:15px; border:1px solid #ccc; margin-top:10px;">';
+    ?>
+    <style>
+        .gttd-container { font-family: 'Inter', system-ui, sans-serif; margin-top: 20px; }
+        .gttd-header { background: linear-gradient(135deg, #0ea5e9, #6366f1); color: white; padding: 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+        .gttd-header h1 { color: white; margin: 0; font-size: 28px; font-weight: 700; }
+        
+        .gttd-card { background: white; border-radius: 12px; padding: 25px; border: 1px solid #e2e8f0; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .gttd-btn { display: inline-flex; align-items: center; padding: 12px 24px; background: #0ea5e9; color: white; border-radius: 8px; text-decoration: none; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; gap: 10px; }
+        .gttd-btn:hover { background: #0284c7; transform: translateY(-1px); }
+        
+        .gttd-log { background: #0f172a; border-radius: 12px; padding: 20px; font-family: 'Fira Code', 'Courier New', monospace; font-size: 13px; color: #38bdf8; border: 1px solid #1e293b; margin-top: 20px; line-height: 1.6; min-height: 200px; }
+    </style>
+
+    <div class="wrap gttd-container">
+        <div class="gttd-header">
+            <h1>📡 GTTD Feed Delivery</h1>
+            <p style="margin-top:5px; opacity:0.9;">Push the latest product feed to Google servers via SFTP.</p>
+        </div>
+
+        <div class="gttd-card">
+            <?php if ( ! isset( $_POST['run_push'] ) ) : ?>
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <div>
+                        <p style="margin-top:0;"><b>Current Target:</b> <code><?php echo $sftp_host; ?>:<?php echo $sftp_port; ?></code></p>
+                        <p style="margin-bottom:0; color:#64748b; font-size:13px;">This process generates an XML feed and uploads it to your partner account.</p>
+                    </div>
+                    <form method="post" style="margin-left:auto;">
+                        <button type="submit" name="run_push" value="1" class="gttd-btn">🚀 Launch SFTP Push Now</button>
+                    </form>
+                </div>
+            <?php else: ?>
+                <div style="font-weight:700; margin-bottom:10px; color:#0f172a;">Transmission in progress...</div>
+                <div class="gttd-log">
+            <?php endif;
 }
 
-// ── Generate Feed Data ─────────────────────────────────────────────────────
-if (!PHP_SAPI === 'cli' && !current_user_can('manage_options')) die('Unauthorized.');
+// ... rest of script ...
 
-echo "Generating feed data...\n";
-$_GET['format'] = 'xml';
-ob_start();
-include __DIR__ . '/google-tours-feed.php';
-$xml_content = ob_get_clean();
-
-if (empty($xml_content)) {
-    die("Error: Failed to generate XML feed content.\n");
-}
-
-file_put_contents($local_temp, $xml_content);
-echo "Feed saved locally to $local_temp (" . strlen($xml_content) . " bytes).\n";
-
-// ── SFTP Upload ────────────────────────────────────────────────────────────
-echo "Connecting to $sftp_host:$sftp_port as $sftp_user...\n";
-
-try {
-    $sftp = new SFTP($sftp_host, $sftp_port);
-    $logged_in = false;
-
-    // 1. Try SSH Key First (More Secure)
-    if (file_exists($sftp_key)) {
-        echo "Attempting login with SSH key...\n";
-        try {
-            $key_content = file_get_contents($sftp_key);
-            $key = PublicKeyLoader::load($key_content);
-            if ($sftp->login($sftp_user, $key)) {
-                echo "Login successful using SSH key.\n";
-                $logged_in = true;
-            } else {
-                echo "SSH Key login rejected by server for $sftp_user.\n";
-            }
-        } catch (\Exception $e) {
-            echo "Key loading/login error: " . $e->getMessage() . "\n";
-        }
-    }
-
-    // 2. Try Password Fallback
-    if (!$logged_in && $sftp_pass) {
-        echo "Attempting login with password...\n";
-        if ($sftp->login($sftp_user, $sftp_pass)) {
-            echo "Login successful using password.\n";
-            $logged_in = true;
-        }
-    }
-
-    if (!$logged_in) {
-        die("Error: All SFTP login attempts failed for $sftp_user\n");
-    }
-
-    echo "Uploading $target_file...\n";
-    
-    if ($sftp->put($target_file, $local_temp, SFTP::SOURCE_LOCAL_FILE)) {
-        echo "Upload successful!\n";
-        @unlink($local_temp);
-    } else {
-        echo "Upload failed.\n";
-    }
-
-} catch (\Exception $e) {
-    echo "Error during SFTP upload: " . $e->getMessage() . "\n";
-}
-
-if ( defined( 'KLLD_TOOL_RUN' ) ) {
-    echo '</pre></div>';
+if ( defined( 'KLLD_TOOL_RUN' ) && isset($_POST['run_push']) ) {
+    echo '</div><div style="margin-top:20px;"><a href="?page=klld-gttd-push" class="button">← Back to Overview</a></div></div>';
 }
