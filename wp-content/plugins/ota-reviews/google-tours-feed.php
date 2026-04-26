@@ -33,10 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Usage: /google-tours-feed.php?format=xml&key=kld_feed_2024
 $secret_key = 'kld_feed_2024';
 
-if (!is_admin() && PHP_SAPI !== 'cli') {
+if (!current_user_can('manage_options') && PHP_SAPI !== 'cli') {
     if (!isset($_GET['key']) || $_GET['key'] !== $secret_key) {
         http_response_code(403);
-        die('Forbidden: Valid API Key Required');
+        echo "<h1>403 Forbidden</h1>";
+        echo "<p>Valid API Key Required. Usage: <code>google-tours-feed.php?format=xml&key=$secret_key</code></p>";
+        die();
     }
 }
 
@@ -152,43 +154,74 @@ if ($query->have_posts()) {
             $iso_duration = "PT{$num}H";
         }
 
-        // GTTD specific mapping
+        // GTTD specific mapping (Partner Feed Specification)
+        $lang_code = function_exists('icl_object_id') ? apply_filters('wpml_current_language', NULL) : 'en';
+        if (strlen($lang_code) > 2) $lang_code = substr($lang_code, 0, 2);
+
+        // Place ID Mapping for key attractions
+        $place_id = '';
+        if (stripos($title, 'Khao Sok') !== false) {
+            $place_id = 'ChIJXWn-26u-TDARBwW45qf_mGo'; // Khao Sok National Park
+        } elseif (stripos($title, 'Similan') !== false) {
+            $place_id = 'ChIJ383oYyWOTDARF-l69u_8Rmo'; // Mu Ko Similan National Park
+        } elseif (stripos($title, 'Surin') !== false) {
+            $place_id = 'ChIJyW_O3G_BTDARxwS45qf_mGo'; // Mu Ko Surin National Park
+        } elseif (stripos($title, 'James Bond') !== false || stripos($title, 'Phang Nga') !== false) {
+            $place_id = 'ChIJW_Z_HwE6UDARV6C359_8Rmo'; // Phang Nga Bay
+        }
+
         $product = array(
             'id' => (string)$id,
-            'title' => $title,
-            'description' => $description,
-            'link' => $permalink,
-            'image_link' => $image_url,
-            'price' => array(
-                'amount' => (float)$price,
-                'currency' => $currency
+            'title' => array(
+                'localized_texts' => array(
+                    array('language_code' => $lang_code, 'text' => $title)
+                )
             ),
-            'brand' => 'Khao Lak Land Discovery',
-            'google_product_category' => 'Travel & Events > Travel Services > Sightseeing Tours',
-            'product_type' => 'Tour',
-            'rating' => array(
-                'average' => (float)$rating,
-                'count' => (int)$review_count
+            'description' => array(
+                'localized_texts' => array(
+                    array('language_code' => $lang_code, 'text' => $description)
+                )
             ),
-            'location' => array(
-                'address' => $address ?: $official_address,
-                'country' => 'Thailand',
-                'postal_code' => '82220'
-            ),
-            'merchant_id' => $merchant_id,
+            'product_type' => 'TOUR',
             'inventory_types' => array('INVENTORY_TYPE_OPERATOR_DIRECT'),
-            'availability' => 'in_stock',
-            'admission_ticket_type' => 'tours',
-            'confirmation_type' => 'INSTANT',
-            'duration' => $iso_duration,
-            'booking_options' => array(
-                'adult' => array(
-                    'price' => (float)get_post_meta($id, 'adult_price', true),
-                    'currency' => $currency
-                ),
-                'child' => array(
-                    'price' => (float)get_post_meta($id, 'child_price', true),
-                    'currency' => $currency
+            'landing_page_list_view' => array('url' => $permalink),
+            'media' => array(
+                array('url' => $image_url, 'type' => 'PHOTO')
+            ),
+            'rating' => array(
+                'average_value' => (float)$rating,
+                'rating_count' => (int)$review_count
+            ),
+            'related_locations' => array(
+                array(
+                    'location' => array(
+                        'place_info' => array('place_id' => $place_id ?: 'ChIJO3S-HwE6UDARV6C359_8Rmo'), // Default to Khao Lak Land Discovery office if no specific POI
+                        'address' => $address ?: $official_address
+                    ),
+                    'relation_type' => 'RELATION_TYPE_ADMISSION_TICKET'
+                )
+            ),
+            'options' => array(
+                array(
+                    'id' => 'standard_' . $id,
+                    'title' => array(
+                        'localized_texts' => array(
+                            array('language_code' => $lang_code, 'text' => 'Standard Booking')
+                        )
+                    ),
+                    'landing_page' => array('url' => $permalink),
+                    'price_options' => array(
+                        array(
+                            'price' => array(
+                                'currency_code' => $currency,
+                                'units' => (int)$price,
+                                'nanos' => (int)(($price - (int)$price) * 1000000000)
+                            ),
+                            'type' => 'ADULT'
+                        )
+                    ),
+                    'fulfillment_type' => 'FULFILLMENT_TYPE_DIGITAL_TICKET',
+                    'confirmation_type' => 'CONFIRMATION_TYPE_INSTANT'
                 )
             ),
             'ota_ids' => array(
@@ -199,16 +232,18 @@ if ($query->have_posts()) {
             'last_updated' => get_the_modified_date('c')
         );
 
-        // Map through values and decode entities recursively
-        $product = array_map(function($val) {
-            if (is_string($val)) return html_entity_decode($val, ENT_QUOTES, 'UTF-8');
-            if (is_array($val)) {
-                return array_map(function($v) {
-                    return is_string($v) ? html_entity_decode($v, ENT_QUOTES, 'UTF-8') : $v;
-                }, $val);
-            }
-            return $val;
-        }, $product);
+        // Add child price if available
+        $child_price = (float)get_post_meta($id, 'child_price', true);
+        if ($child_price > 0) {
+            $product['options'][0]['price_options'][] = array(
+                'price' => array(
+                    'currency_code' => $currency,
+                    'units' => (int)$child_price,
+                    'nanos' => (int)(($child_price - (int)$child_price) * 1000000000)
+                ),
+                'type' => 'CHILD'
+            );
+        }
 
         $feed[] = apply_filters('klld_gttd_product', $product, $id);
     }
@@ -249,10 +284,10 @@ if ($preview && current_user_can('manage_options')) {
     <body>
 <?php } ?>
         <div class="container">
-            <h1 class="feed-title">🎯 Google Things to Do Feed Preview</h1>
+            <h1 class="feed-title">🎯 Google Things to Do Feed Preview (Partner Spec)</h1>
             <p>Displaying <?php echo count($feed); ?> products. Formats: 
-                <a href="<?php echo get_stylesheet_directory_uri(); ?>/inc/ota-tools/google-tours-feed.php?format=json" target="_blank">JSON</a> | 
-                <a href="<?php echo get_stylesheet_directory_uri(); ?>/inc/ota-tools/google-tours-feed.php?format=xml" target="_blank">XML</a> |
+                <a href="<?php echo str_replace('preview=1', 'format=json', $_SERVER['REQUEST_URI']); ?>" target="_blank">JSON</a> | 
+                <a href="<?php echo str_replace('preview=1', 'format=xml', $_SERVER['REQUEST_URI']); ?>" target="_blank">XML</a> |
                 Merchant ID: <code><?php echo $merchant_id; ?></code>
             </p>
             <table class="feed-table">
@@ -264,23 +299,28 @@ if ($preview && current_user_can('manage_options')) {
                         <th>Price</th>
                         <th>Rating</th>
                         <th>OTA IDs</th>
-                        <th>Address</th>
+                        <th>Place ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($feed as $p): ?>
                     <tr>
-                        <td><img src="<?php echo $p['image_link']; ?>" class="img-preview"></td>
+                        <td><img src="<?php echo $p['media'][0]['url']; ?>" class="img-preview"></td>
                         <td><code>#<?php echo $p['id']; ?></code></td>
-                        <td><strong><?php echo $p['title']; ?></strong></td>
-                        <td><span class="badge badge-price"><?php echo $p['price']['amount']; ?> <?php echo $p['price']['currency']; ?></span></td>
-                        <td><span class="badge badge-rating">⭐ <?php echo $p['rating']['average']; ?> (<?php echo $p['rating']['count']; ?>)</span></td>
+                        <td><strong><?php echo $p['title']['localized_texts'][0]['text']; ?></strong></td>
+                        <td>
+                            <span class="badge badge-price">
+                                <?php echo $p['options'][0]['price_options'][0]['price']['units']; ?> 
+                                <?php echo $p['options'][0]['price_options'][0]['price']['currency_code']; ?>
+                            </span>
+                        </td>
+                        <td><span class="badge badge-rating">⭐ <?php echo $p['rating']['average_value']; ?> (<?php echo $p['rating']['rating_count']; ?>)</span></td>
                         <td>
                             <?php if ($p['ota_ids']['getyourguide']): ?><div><small>GYG: <code><?php echo $p['ota_ids']['getyourguide']; ?></code></small></div><?php endif; ?>
                             <?php if ($p['ota_ids']['viator']): ?><div><small>Via: <code><?php echo $p['ota_ids']['viator']; ?></code></small></div><?php endif; ?>
                             <?php if ($p['ota_ids']['tripadvisor']): ?><div><small>TA: <code><?php echo $p['ota_ids']['tripadvisor']; ?></code></small></div><?php endif; ?>
                         </td>
-                        <td><small><?php echo $p['location']['address']; ?></small></td>
+                        <td><small><?php echo $p['related_locations'][0]['location']['place_info']['place_id']; ?></small></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -311,27 +351,34 @@ if ($format === 'xml') {
         $item = $channel->addChild('item');
         $item->addChild('g:id', $p['id'], 'http://base.google.com/ns/1.0');
         
-        // Use a safe way to add text nodes to avoid entity issues
+        // Extract plain text for XML (backward compatibility)
+        $title_text = $p['title']['localized_texts'][0]['text'] ?? '';
+        $desc_text = $p['description']['localized_texts'][0]['text'] ?? '';
+
         $title_node = $item->addChild('title');
-        $title_node[0] = $p['title'];
+        $title_node[0] = $title_text;
         
         $desc_node = $item->addChild('description');
-        $desc_node[0] = $p['description'];
+        $desc_node[0] = $desc_text;
 
-        $item->addChild('link', $p['link']);
-        $item->addChild('g:image_link', $p['image_link'], 'http://base.google.com/ns/1.0');
-        $item->addChild('g:price', $p['price']['amount'] . ' ' . $p['price']['currency'], 'http://base.google.com/ns/1.0');
-        $item->addChild('g:brand', $p['brand'], 'http://base.google.com/ns/1.0');
+        $item->addChild('link', $p['landing_page_list_view']['url'] ?? '');
+        $item->addChild('g:image_link', $p['media'][0]['url'] ?? '', 'http://base.google.com/ns/1.0');
         
-        $item->addChild('g:google_product_category', null, 'http://base.google.com/ns/1.0')[0] = $p['google_product_category'];
+        $price_opt = $p['options'][0]['price_options'][0]['price'] ?? null;
+        if ($price_opt) {
+            $item->addChild('g:price', $price_opt['units'] . '.' . str_pad($price_opt['nanos']/10000000, 2, '0', STR_PAD_LEFT) . ' ' . $price_opt['currency_code'], 'http://base.google.com/ns/1.0');
+        }
+        
+        $item->addChild('g:brand', 'Khao Lak Land Discovery', 'http://base.google.com/ns/1.0');
+        $item->addChild('g:google_product_category', 'Travel & Events > Travel Services > Sightseeing Tours', 'http://base.google.com/ns/1.0');
         $item->addChild('g:availability', 'in_stock', 'http://base.google.com/ns/1.0');
         
         // Custom attributes for GTTD
         $loc_node = $item->addChild('g:location_address', null, 'http://base.google.com/ns/1.0');
-        $loc_node[0] = $p['location']['address'];
+        $loc_node[0] = $p['related_locations'][0]['location']['address'] ?? $official_address;
         
-        $item->addChild('g:rating_average', (string)$p['rating']['average'], 'http://base.google.com/ns/1.0');
-        $item->addChild('g:rating_count', (string)$p['rating']['count'], 'http://base.google.com/ns/1.0');
+        $item->addChild('g:rating_average', (string)($p['rating']['average_value'] ?? 5), 'http://base.google.com/ns/1.0');
+        $item->addChild('g:rating_count', (string)($p['rating']['rating_count'] ?? 0), 'http://base.google.com/ns/1.0');
 
         if ($p['ota_ids']['getyourguide']) {
             $gyg_node = $item->addChild('g:getyourguide_id', null, 'http://base.google.com/ns/1.0');
@@ -348,28 +395,29 @@ if ($format === 'xml') {
         
         $item->addChild('g:merchant_id', $merchant_id, 'http://base.google.com/ns/1.0');
         $item->addChild('g:inventory_type', 'INVENTORY_TYPE_OPERATOR_DIRECT', 'http://base.google.com/ns/1.0');
-        $item->addChild('g:admission_ticket_type', $p['admission_ticket_type'], 'http://base.google.com/ns/1.0');
-        $item->addChild('g:confirmation_type', $p['confirmation_type'], 'http://base.google.com/ns/1.0');
-        $item->addChild('g:duration', $p['duration'], 'http://base.google.com/ns/1.0');
+        $item->addChild('g:admission_ticket_type', 'tours', 'http://base.google.com/ns/1.0');
+        $item->addChild('g:confirmation_type', 'INSTANT', 'http://base.google.com/ns/1.0');
+        $item->addChild('g:duration', 'PT8H', 'http://base.google.com/ns/1.0');
         
         // Structured Booking Options (Adult/Child)
-        foreach ($p['booking_options'] as $type => $opt) {
-            if ($opt['price'] > 0) {
-                // We use the price extension for individual ticket types
-                $item->addChild('g:'.$type.'_price', $opt['price'] . ' ' . $opt['currency'], 'http://base.google.com/ns/1.0');
-            }
+        foreach ($p['options'][0]['price_options'] as $p_opt) {
+            $type = strtolower($p_opt['type']);
+            $pr = $p_opt['price'];
+            $price_val = $pr['units'] . '.' . str_pad($pr['nanos']/10000000, 2, '0', STR_PAD_LEFT);
+            $item->addChild('g:'.$type.'_price', $price_val . ' ' . $pr['currency_code'], 'http://base.google.com/ns/1.0');
         }
     }
     echo $xml->asXML();
 } else {
-    // Default JSON
+    // Default JSON (Partner Feed Spec)
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode(array(
-        'status' => 'success',
-        'merchant_id' => $merchant_id,
-        'inventory_type_default' => 'INVENTORY_TYPE_OPERATOR_DIRECT',
-        'last_updated' => date('c'),
-        'count' => count($feed),
-        'items' => $feed
+        'feed_metadata' => array(
+            'shard_id' => 0,
+            'total_shards_count' => 1,
+            'processing_instruction' => 'PROCESS_AS_SNAPSHOT',
+            'nonce' => time()
+        ),
+        'products' => $feed
     ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 }

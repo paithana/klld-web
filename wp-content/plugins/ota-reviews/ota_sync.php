@@ -389,7 +389,7 @@ class OTAReviewSync {
                 $comment_id = $this->upsert_review($post_id, 'gyg', $review_id, [
                     'author' => $author,
                     'content' => $content,
-                    'rating' => round($r['overallRating'] ?? $r['rating'] ?? 5),
+                    'rating' => round((float)($r['overallRating'] ?? $r['rating'] ?? 5)),
                     'date' => $r['travelDate'] ?? $r['date'] ?? $r['created'] ?? '',
                     'photos' => $photos
                 ]);
@@ -939,7 +939,7 @@ class OTAReviewSync {
             $score += 5;
         }
         
-        return min(100, round($score, 1));
+        return min(100, round((float)$score, 1));
     }
 
     /**

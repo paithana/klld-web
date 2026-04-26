@@ -126,21 +126,87 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
     global $wpdb;
 
     if ($job === 'deduplicate') {
-        $duplicates = $wpdb->get_results("SELECT MIN(comment_ID) as keep_id, comment_post_ID, comment_author, comment_content, comment_date, COUNT(*) as cnt FROM {$wpdb->comments} WHERE comment_type = 'st_reviews' GROUP BY comment_post_ID, comment_author, comment_content, comment_date HAVING cnt > 1");
+        // Keep only the longest version of a review per (Author, Date, Tour)
+        $duplicates = $wpdb->get_results("SELECT comment_post_ID, comment_author, comment_date, COUNT(*) as cnt FROM {$wpdb->comments} WHERE comment_type = 'st_reviews' GROUP BY comment_post_ID, comment_author, comment_date HAVING cnt > 1");
         $deleted = 0;
         foreach ($duplicates as $dup) {
-            $ids_to_del = $wpdb->get_col($wpdb->prepare("SELECT comment_ID FROM {$wpdb->comments} WHERE comment_post_ID = %d AND comment_author = %s AND comment_content = %s AND comment_date = %s AND comment_ID != %d", $dup->comment_post_ID, $dup->comment_author, $dup->comment_content, $dup->comment_date, $dup->keep_id));
-            if (!empty($ids_to_del)) {
-                $ids_str = implode(',', array_map('intval', $ids_to_del));
-                $wpdb->query("DELETE FROM {$wpdb->comments} WHERE comment_ID IN ($ids_str)");
-                $wpdb->query("DELETE FROM {$wpdb->commentmeta} WHERE comment_id IN ($ids_str)");
-                $deleted += count($ids_to_del);
+            $all_versions = $wpdb->get_results($wpdb->prepare(
+                "SELECT comment_ID, LENGTH(comment_content) as len FROM {$wpdb->comments} 
+                 WHERE comment_post_ID = %d AND comment_author = %s AND comment_date = %s 
+                 ORDER BY len DESC", 
+                $dup->comment_post_ID, $dup->comment_author, $dup->comment_date
+            ));
+            
+            if (count($all_versions) > 1) {
+                $keep_id = $all_versions[0]->comment_ID;
+                $to_delete = [];
+                for ($i = 1; $i < count($all_versions); $i++) {
+                    $to_delete[] = $all_versions[$i]->comment_ID;
+                }
+                
+                if (!empty($to_delete)) {
+                    $ids_str = implode(',', array_map('intval', $to_delete));
+                    $wpdb->query("DELETE FROM {$wpdb->comments} WHERE comment_ID IN ($ids_str)");
+                    $wpdb->query("DELETE FROM {$wpdb->commentmeta} WHERE comment_id IN ($ids_str)");
+                    $deleted += count($to_delete);
+                }
             }
         }
-        wp_send_json_success(['message' => "Cleaned up $deleted duplicate reviews."]);
-    } elseif ($job === 'remap_orphans' || $job === 'gmb_filter' || $job === 'remap_all') {
+        wp_send_json_success(['message' => "Cleaned up $deleted redundant review versions (kept longest)."]);
+    } elseif ($job === 'remap_orphans' || $job === 'gmb_filter' || $job === 'remap_all' || $job === 'sync_translations') {
         $all_mapped_tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'post_status' => 'publish']);
         
+        if ($job === 'sync_translations') {
+            $cloned = 0;
+            global $wpdb;
+            
+            $groups = [];
+            foreach ($all_mapped_tours as $t) {
+                $trid = $wpdb->get_var($wpdb->prepare("SELECT trid FROM {$wpdb->prefix}icl_translations WHERE element_id = %d AND element_type = 'post_st_tours'", $t->ID));
+                if ($trid) $groups[$trid][] = $t->ID;
+            }
+
+            foreach ($groups as $trid => $pids) {
+                if (count($pids) < 2) continue;
+                
+                $pids_str = implode(',', $pids);
+                $reviews = $wpdb->get_results("SELECT * FROM {$wpdb->comments} WHERE comment_post_ID IN ($pids_str) AND comment_type = 'st_reviews'");
+                
+                foreach ($reviews as $rev) {
+                    foreach ($pids as $target_pid) {
+                        if ((int)$rev->comment_post_ID === (int)$target_pid) continue;
+                        
+                        // Refined Deduplication: Check content snippet + author + date
+                        $content_hash = md5(trim($rev->comment_content));
+                        $exists = $wpdb->get_var($wpdb->prepare(
+                            "SELECT c.comment_ID FROM {$wpdb->comments} c 
+                             WHERE c.comment_post_ID = %d 
+                             AND c.comment_author = %s 
+                             AND c.comment_date = %s", 
+                            $target_pid, $rev->comment_author, $rev->comment_date
+                        ));
+
+                        if (!$exists) {
+                            $new_comment = (array)$rev;
+                            unset($new_comment['comment_ID']);
+                            $new_comment['comment_post_ID'] = $target_pid;
+                            
+                            $new_id = wp_insert_comment($new_comment);
+                            if ($new_id) {
+                                $meta = $wpdb->get_results($wpdb->prepare("SELECT meta_key, meta_value FROM $wpdb->commentmeta WHERE comment_id = %d", $rev->comment_ID));
+                                foreach ($meta as $m) {
+                                    update_comment_meta($new_id, $m->meta_key, maybe_unserialize($m->meta_value));
+                                }
+                                if (function_exists('st_helper_update_total_review')) st_helper_update_total_review($target_pid);
+                                $cloned++;
+                            }
+                        }
+                    }
+                }
+            }
+            wp_send_json_success(['message' => "Language Parity Complete: Cloned $cloned reviews to ensure EN=FR=DE for all tours."]);
+        }
+
         if ($job === 'remap_orphans') {
             $reviews = $wpdb->get_results("SELECT * FROM {$wpdb->comments} WHERE comment_post_ID = 0 AND comment_type = 'st_reviews'");
         } elseif ($job === 'gmb_filter') {
@@ -551,6 +617,7 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) { ?>
                 <h2>🛠 System Maintenance</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
                     <button onclick="runMaintenance('remap_all')" class="k-btn k-btn-primary" style="background:var(--secondary);">🎯 Global Remap All</button>
+                    <button onclick="runMaintenance('sync_translations')" class="k-btn k-btn-outline" style="border-color:var(--accent); color:var(--accent);">🌍 Sync All Languages (EN=FR=DE)</button>
                     <button onclick="runMaintenance('deduplicate')" class="k-btn k-btn-outline">🧹 Deduplicate Reviews</button>
                     <button onclick="runMaintenance('remap_orphans')" class="k-btn k-btn-outline">📍 Remap Orphans</button>
                     <button onclick="runMaintenance('refresh_ratings')" class="k-btn k-btn-outline">⭐ Refresh Star Ratings</button>
