@@ -18,7 +18,7 @@ function fetch_content($source) {
         return file_get_contents($source);
     }
     
-    echo "🚀 Launching Antigravity Engine for URL: $source\n";
+    echo "🚀 Launching ThinkWeb Engine for URL: $source\n";
     
     // Path to our new stealth scraper
     $scraper_path = __DIR__ . '/wp-content/plugins/ota-reviews/scrapers/ta/antigravity_scraper.js';

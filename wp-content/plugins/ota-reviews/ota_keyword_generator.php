@@ -42,9 +42,11 @@ $processed_trids = [];
 
 // Comprehensive multi-lingual stop words
 $stop_words = [
-    'the', 'and', 'with', 'tour', 'trip', 'private', 'guided', 'from', 'to', 'for', 'this', 'that', 'with', 'your', 'full', 'day', 'best', 'discovery', 'discover', 'visit', 'will', 'have', 'were', 'about', 'after', 'there',
+    'the', 'and', 'with', 'tour', 'trip', 'private', 'guided', 'from', 'to', 'for', 'this', 'that', 'your', 'full', 'day', 'best', 'discovery', 'discover', 'visit', 'will', 'have', 'were', 'about', 'after', 'there',
     'mit', 'der', 'die', 'das', 'und', 'avec', 'pour', 'dans', 'votre', 'notre', 'avant', 'nous', 'vous', 'eine', 'einer', 'einem', 'einen', 'ihrem', 'ihnen', 'ihrer', 'sind', 'auch', 'diese', 'dieser', 'dieses', 'beim', 'bevor',
-    'mais', 'plus', 'tous', 'tout', 'toute', 'toutes', 'cette', 'ceux', 'celle', 'celles'
+    'mais', 'plus', 'tous', 'tout', 'toute', 'toutes', 'cette', 'ceux', 'celle', 'celles',
+    // Travel specific generic terms to avoid false matches
+    'guide', 'driver', 'lunch', 'dinner', 'breakfast', 'hotel', 'resort', 'enjoy', 'nature', 'jungle', 'local', 'market', 'service', 'experience', 'amazing', 'great', 'recommend', 'highly', 'everything', 'organized', 'thailand', 'khao', 'lak', 'khao lak', 'discovery'
 ];
 
 foreach ($all_tours as $tour) {
@@ -134,15 +136,59 @@ foreach ($all_tours as $tour) {
         $aggregated_keywords[] = $tw;
     }
 
-    // Final cleanup
+    // --- PRIORITY CATEGORIZATION ---
+    $categories = [
+        'unique'   => ['little amazon', 'off road', 'offroad', 'james bond', 'similan', 'surin', 'tachai', 'hong island', 'panyi', 'ko panyi', 'big buddha', 'wat chalong', 'tsunami memorial', 'cheow lan', 'emerald pool', 'phi phi', 'maya bay', 'bamboo rafting', 'white water', 'atv', 'treehouse', 'tree house', 'khao sok', 'elephant bath'],
+        'location' => ['khao lak', 'khao sok', 'phuket', 'phang nga', 'krabi', 'patong', 'takua pa'],
+        'duration' => ['3 day', '3-day', '3 days', '2 day', '2-day', '2 days', 'full day', 'half day', 'tages', 'jours'],
+        'activity' => ['elephant', 'bathing', 'bamboo raft', 'trekking', 'hiking', 'canoe', 'kayak', 'snorkel', 'market', 'shopping', 'safari', 'nightlife', 'party', 'sightseeing', 'cruise']
+    ];
+
+    $structured_keywords = [
+        'unique' => [],
+        'location' => [],
+        'duration' => [],
+        'activity' => []
+    ];
+
+    // Check title and content for category matches
+    $search_blob = strtolower($p->post_title . " " . get_post_meta($pid, 'tours_highlight', true));
+    
+    // Automatically treat title parts as unique if they are not stop words
+    $title_parts = explode(' ', strtolower(preg_replace('/[^a-z0-9 ]/iu', '', $p->post_title)));
+    foreach ($title_parts as $part) {
+        if (strlen($part) > 3 && !in_array($part, $stop_words) && !in_array($part, ['khao', 'lak', 'tour', 'discovery'])) {
+            if (!in_array($part, $structured_keywords['unique'])) {
+                // Check if this part is actually unique enough
+                $structured_keywords['unique'][] = $part;
+            }
+        }
+    }
+
+    foreach ($categories as $cat => $keywords) {
+        foreach ($keywords as $kw) {
+            if (stripos($search_blob, $kw) !== false) {
+                // Duration Sanity Check: Don't add "3 days" if the title explicitly says "2 day" etc.
+                if ($cat === 'duration') {
+                    if (strpos($kw, '3') !== false && (stripos($p->post_title, '2 day') !== false || stripos($p->post_title, '2-day') !== false || stripos($p->post_title, '2 days') !== false)) continue;
+                    if (strpos($kw, '2') !== false && (stripos($p->post_title, '3 day') !== false || stripos($p->post_title, '3-day') !== false || stripos($p->post_title, '3 days') !== false)) continue;
+                }
+                $structured_keywords[$cat][] = $kw;
+            }
+        }
+    }
+
+    // Final cleanup for the legacy flat list
     $aggregated_keywords = array_unique(array_filter($aggregated_keywords, function($k) use ($stop_words) {
         return strlen($k) > 3 && !in_array($k, $stop_words);
     }));
+    
     $final_kw_str = implode(', ', $aggregated_keywords);
     
     if ($final_kw_str) {
         foreach ($group_ids as $pid) {
             update_post_meta($pid, '_ota_keywords', $final_kw_str);
+            update_post_meta($pid, '_ota_keywords_structured', $structured_keywords);
         }
         echo "OK (" . count($aggregated_keywords) . " keywords synced)\n";
     } else {

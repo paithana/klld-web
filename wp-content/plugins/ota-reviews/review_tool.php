@@ -1,6 +1,6 @@
 <?php
 /**
- * GYG Reviews Tool - WordPress Admin Only (Integrated)
+ * OTAs Manager - Sync Manager
  * Consolidates mapping and fetching within the WP environment.
  */
 
@@ -30,7 +30,6 @@ function klld_get_translated_post_ids($post_id) {
     global $wpdb;
     $table = $wpdb->prefix . 'icl_translations';
     
-    // Check if table exists (WPML might be inactive)
     if ($wpdb->get_var("SHOW TABLES LIKE '$table'") !== $table) {
         return [$post_id];
     }
@@ -74,34 +73,16 @@ if (isset($_POST['action']) && $_POST['action'] === 'save_ota_mappings') {
         $count++;
     }
 
-    // Save Partner API Keys
-    if (isset($_POST['gyg_partner_key'])) {
-        update_option('_gyg_partner_api_key', sanitize_text_field($_POST['gyg_partner_key']));
-    }
-    if (isset($_POST['ta_api_key'])) {
-        update_option('_ta_api_key', sanitize_text_field($_POST['ta_api_key']));
-    }
-
-    // Save GTTD SFTP Settings
-    if (isset($_POST['sftp_host'])) {
-        update_option('_gttd_sftp_host', sanitize_text_field($_POST['sftp_host']));
-        update_option('_gttd_sftp_port', intval($_POST['sftp_port'] ?? 22));
-        update_option('_gttd_sftp_user', sanitize_text_field($_POST['sftp_user']));
-        update_option('_gttd_sftp_pass', sanitize_text_field($_POST['sftp_pass']));
-        update_option('_gttd_sftp_key', sanitize_text_field($_POST['sftp_key']));
-        update_option('_gttd_sftp_file', sanitize_text_field($_POST['sftp_file']));
-    }
-
-    wp_send_json_success(['message' => "Saved $count mappings and settings successfully."]);
+    wp_send_json_success(['message' => "Saved $count mappings successfully."]);
 }
 
-// ── AJAX Handler: Proxy Discovery (Fixes CORS/404) ────────────────────────
+// ── AJAX Handler: Proxy Discovery ─────────────────────────────────────────
 if (isset($_POST['action']) && $_POST['action'] === 'proxy_ota_discover') {
     $supplier_id = 203466;
     $offset = (int)($_POST['offset'] ?? 0);
     $limit  = (int)($_POST['limit'] ?? 50);
-    $token = "Basic VGhpbmtXZWIubWU6MmE3YzIwOGExOWM0MWE3Mzg4ZDYwZDA5YjQxMzhmZDI=";
-    // Try multiple possible GYG endpoints server-side
+    $token = get_option('_gyg_explorer_token', 'Basic VGhpbmtXZWIubWU6MmE3YzIwOGExOWM0MWE3Mzg4ZDYwZDA5YjQxMzhmZDI=');
+
     $gyg_urls = [
         "https://travelers-api.getyourguide.com/activities?supplierId={$supplier_id}&limit={$limit}&offset={$offset}",
         "https://www.getyourguide.com/api/catalog/v1/suppliers/{$supplier_id}/activities?limit={$limit}&offset={$offset}"
@@ -127,183 +108,21 @@ if (isset($_POST['action']) && $_POST['action'] === 'proxy_ota_discover') {
         header('Content-Type: application/json');
         echo $response_data;
     } else {
-        $last_error = (is_wp_error($resp)) ? $resp->get_error_message() : 'HTTP ' . wp_remote_retrieve_code($resp);
-        $is_blocked = (strpos($response_data, 'Cloudflare') !== false || wp_remote_retrieve_response_code($resp) === 403);
-        
-        echo json_encode([
-            'error' => 'Could not fetch activities from GYG endpoints.',
-            'details' => $last_error,
-            'is_blocked' => $is_blocked,
-            'debug_urls' => $gyg_urls
-        ]);
+        echo json_encode(['error' => 'Discovery failed. Check API Keys in Settings.']);
     }
     exit;
 }
 
-// ── AJAX Handler: Integrator API Discovery (Basic Auth) ──────────────────
-if (isset($_POST['action']) && $_POST['action'] === 'proxy_gyg_integrator') {
-    $user = sanitize_text_field($_POST['user'] ?? '');
-    $pass = sanitize_text_field($_POST['pass'] ?? '');
-    
-    if (!$user || !$pass) {
-        wp_send_json_error('Integrator credentials missing.');
-    }
-
-    $url = "https://api.getyourguide.com/integrator/v1/activities";
-    
-    $resp = wp_remote_get($url, [
-        'timeout' => 20,
-        'headers' => [
-            'Accept'        => 'application/json',
-            'Authorization' => 'Basic ' . base64_encode("$user:$pass")
-        ]
-    ]);
-
-    if (is_wp_error($resp)) {
-        wp_send_json_error($resp->get_error_message());
-    }
-
-    $code = wp_remote_retrieve_response_code($resp);
-    $body = wp_remote_retrieve_body($resp);
-
-    if ($code !== 200) {
-        echo json_encode(['error' => "Integrator API error (HTTP $code)", 'details' => $body]);
-        exit;
-    }
-
-    header('Content-Type: application/json');
-    echo $body;
-    exit;
-}
-
-// ── AJAX Handler: Official GYG Partner API Proxy ─────────────────────
-if (isset($_POST['action']) && $_POST['action'] === 'proxy_gyg_official') {
-    $tour_id  = intval($_POST['tour_id'] ?? 0);
-    $api_key  = sanitize_text_field($_POST['api_key'] ?? '');
-    $limit    = intval($_POST['limit'] ?? 100);
-    $offset   = intval($_POST['offset'] ?? 0);
-
-    if (!$tour_id || !$api_key) {
-        wp_send_json_error('tour_id and api_key are required.');
-    }
-
-    $currency = function_exists('st_get_default_currency') ? st_get_default_currency() : 'THB';
-    $url = "https://api.getyourguide.com/1/reviews/tour/{$tour_id}?cnt_language=en&currency={$currency}&limit={$limit}&offset={$offset}&sortfield=date&sortdirection=DESC";
-
-    $resp = wp_remote_get($url, [
-        'timeout' => 20,
-        'headers' => [
-            'Accept'        => 'application/json',
-            'Authorization' => $api_key,
-        ]
-    ]);
-
-    if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
-        // FALLBACK: Try travelers API if official one fails (e.g. auth issue)
-        $fallback_url = "https://travelers-api.getyourguide.com/activities/{$tour_id}/reviews?limit={$limit}";
-        $resp = wp_remote_get($fallback_url, [
-            'timeout' => 20,
-            'headers' => [ 'Accept' => 'application/json' ]
-        ]);
-        
-        if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
-             echo json_encode([
-                'error'   => "Both GYG APIs failed",
-                'details' => wp_remote_retrieve_body($resp),
-                'is_blocked' => true
-            ]);
-            exit;
-        }
-        $body = wp_remote_retrieve_body($resp);
-    } else {
-        $body = wp_remote_retrieve_body($resp);
-    }
-
-    header('Content-Type: application/json');
-    echo $body;
-    exit;
-}
-
-// ── AJAX Handler: Universal OTA Proxy Fetch ──────────────────────────
-if (isset($_POST['action']) && $_POST['action'] === 'proxy_ota_fetch') {
-    $url = $_POST['url'] ?? '';
-    if (!$url) wp_send_json_error('URL missing');
-
-    $is_ta = (strpos($url, 'tripadvisor.com') !== false);
-
-    $resp = wp_remote_get($url, [
-        'timeout' => 20,
-        'headers' => [
-            'Accept' => ($is_ta ? 'text/html' : 'application/json'),
-            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        ]
-    ]);
-    if (is_wp_error($resp)) wp_send_json_error($resp->get_error_message());
-    
-    $body = wp_remote_retrieve_body($resp);
-
-    if ($is_ta && strpos($body, 'reviewCard') !== false) {
-        // Basic TripAdvisor Scraper Logic
-        $reviews = [];
-        $dom = new DOMDocument();
-        @$dom->loadHTML('<?xml encoding="UTF-8">' . $body);
-        $xpath = new DOMXPath($dom);
-        
-        // This is a simplified scraper for modern TA layout
-        $cards = $xpath->query("//div[contains(@data-automation, 'reviewCard')]");
-        foreach ($cards as $card) {
-            $id = $card->getAttribute('id') ?: bin2hex(random_bytes(8));
-            $text = $xpath->query(".//span[contains(@class, 'ySdfQ')]", $card)->item(0)?->nodeValue ?? '';
-            $author = $xpath->query(".//span[contains(@class, 'biGQs')]", $card)->item(0)?->nodeValue ?? 'TA Traveler';
-            
-            // Extract rating from SVG or bubble class
-            $bubbles = $xpath->query(".//span[contains(@class, 'ui_bubble_rating')]", $card)->item(0);
-            $rating = 5;
-            if ($bubbles) {
-                $class = $bubbles->getAttribute('class');
-                if (preg_match('/bubble_(\d+)/', $class, $m)) $rating = intval($m[1]) / 10;
-            }
-
-            if ($text) {
-                $reviews[] = [
-                    'id' => $id,
-                    'text' => $text,
-                    'author' => $author,
-                    'rating' => $rating
-                ];
-            }
-        }
-        echo json_encode(['data' => ['reviews' => $reviews]]);
-        exit;
-    }
-
-    echo $body;
-    exit;
-}
-
-// ── AJAX Handler: Database Maintenance ───────────────────────────────────
+// ── AJAX Handler: Database & Maintenance ──────────────────────────────────
 if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
     $job = $_POST['job'] ?? '';
     global $wpdb;
-    $stats = [];
 
     if ($job === 'deduplicate') {
-        // Keep 1 copy of identical reviews (author + content + post + date)
-        $duplicates = $wpdb->get_results("
-            SELECT MIN(comment_ID) as keep_id, comment_post_ID, comment_author, comment_content, comment_date, COUNT(*) as cnt
-            FROM {$wpdb->comments}
-            WHERE comment_type = 'st_reviews'
-            GROUP BY comment_post_ID, comment_author, comment_content, comment_date
-            HAVING cnt > 1
-        ");
-        
+        $duplicates = $wpdb->get_results("SELECT MIN(comment_ID) as keep_id, comment_post_ID, comment_author, comment_content, comment_date, COUNT(*) as cnt FROM {$wpdb->comments} WHERE comment_type = 'st_reviews' GROUP BY comment_post_ID, comment_author, comment_content, comment_date HAVING cnt > 1");
         $deleted = 0;
         foreach ($duplicates as $dup) {
-            $ids_to_del = $wpdb->get_col($wpdb->prepare("
-                SELECT comment_ID FROM {$wpdb->comments} 
-                WHERE comment_post_ID = %d AND comment_author = %s AND comment_content = %s AND comment_date = %s AND comment_ID != %d
-            ", $dup->comment_post_ID, $dup->comment_author, $dup->comment_content, $dup->comment_date, $dup->keep_id));
-            
+            $ids_to_del = $wpdb->get_col($wpdb->prepare("SELECT comment_ID FROM {$wpdb->comments} WHERE comment_post_ID = %d AND comment_author = %s AND comment_content = %s AND comment_date = %s AND comment_ID != %d", $dup->comment_post_ID, $dup->comment_author, $dup->comment_content, $dup->comment_date, $dup->keep_id));
             if (!empty($ids_to_del)) {
                 $ids_str = implode(',', array_map('intval', $ids_to_del));
                 $wpdb->query("DELETE FROM {$wpdb->comments} WHERE comment_ID IN ($ids_str)");
@@ -312,162 +131,44 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
             }
         }
         wp_send_json_success(['message' => "Cleaned up $deleted duplicate reviews."]);
-
-    } elseif ($job === 'remap_orphans') {
-        // Map post_id = 0 based on keywords
-        $orphans = $wpdb->get_results("SELECT comment_ID, comment_content FROM {$wpdb->comments} WHERE comment_post_ID = 0 AND comment_type = 'st_reviews'");
-        $mappings = [
-            'Similan' => 14625,
-            'Safari'  => 14755,
-            'white water rafting' => 15162,
-            'ATV' => 15162,
-            'Treehouse' => 16171,
-            'Wildlife' => 14583,
-            'Elephant Bath' => 14791,
-            'James Bond' => 16255,
-            'Phang Nga' => 16255,
-            'Phuket Shopping' => 16299,
-        ];
+    } elseif ($job === 'remap_orphans' || $job === 'gmb_filter') {
+        $all_mapped_tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'post_status' => 'publish']);
+        $reviews = ($job === 'remap_orphans') ? $wpdb->get_results("SELECT comment_ID, comment_content FROM {$wpdb->comments} WHERE comment_post_ID = 0 AND comment_type = 'st_reviews'") : $wpdb->get_results("SELECT c.comment_ID, c.comment_content FROM {$wpdb->comments} c JOIN {$wpdb->commentmeta} cm ON c.comment_ID = cm.comment_id WHERE cm.meta_key = 'ota_source' AND cm.meta_value = 'gmb'");
         $mapped = 0;
-        foreach ($orphans as $o) {
-            foreach ($mappings as $kw => $pid) {
-                if (stripos($o->comment_content, $kw) !== false) {
-                    $wpdb->update($wpdb->comments, ['comment_post_ID' => $pid], ['comment_ID' => $o->comment_ID]);
-                    $mapped++;
-                    break;
-                }
+        foreach ($reviews as $rev) {
+            $best_score = 0; $best_pid = 0;
+            foreach ($all_mapped_tours as $t) {
+                $score = klld_calculate_review_match_score($rev->comment_content, $t->ID);
+                if ($score > $best_score) { $best_score = $score; $best_pid = $t->ID; }
+            }
+            if ($best_score >= 10 && $best_pid > 0) {
+                $wpdb->update($wpdb->comments, ['comment_post_ID' => $best_pid], ['comment_ID' => $rev->comment_ID]);
+                if (function_exists('st_helper_update_total_review')) st_helper_update_total_review($best_pid);
+                $mapped++;
             }
         }
-        wp_send_json_success(['message' => "Re-mapped $mapped orphan reviews using keywords."]);
-    } elseif ($job === 'gmb_filter') {
-        // Assign GMB reviews to tours based on keywords
-        $all_mapped_tours = get_posts([
-            'post_type' => 'st_tours',
-            'posts_per_page' => -1,
-            'meta_query' => [['key' => '_ota_keywords', 'compare' => 'EXISTS']]
-        ]);
-
-        $tour_keywords = [];
-        foreach ($all_mapped_tours as $t) {
-            $kw = get_post_meta($t->ID, '_ota_keywords', true);
-            if ($kw) {
-                $tour_keywords[$t->ID] = array_map('trim', explode(',', $kw));
-            }
-        }
-
-        if (empty($tour_keywords)) wp_send_json_error('No keywords defined for any tour.');
-
-        // Get GMB reviews (either post_id=0 or ota_source=gmb)
-        $gmb_reviews = $wpdb->get_results("
-            SELECT c.comment_ID, c.comment_content, c.comment_post_ID 
-            FROM {$wpdb->comments} c
-            JOIN {$wpdb->commentmeta} cm ON c.comment_ID = cm.comment_id
-            WHERE cm.meta_key = 'ota_source' AND cm.meta_value = 'gmb'
-        ");
-
-        $mapped = 0;
-        foreach ($gmb_reviews as $rev) {
-            foreach ($tour_keywords as $pid => $kws) {
-                foreach ($kws as $word) {
-                    if ($word && stripos($rev->comment_content, $word) !== false) {
-                        // Match Found!
-                        $wpdb->update($wpdb->comments, ['comment_post_ID' => $pid], ['comment_ID' => $rev->comment_ID]);
-                        // Also update summary
-                        if (function_exists('st_helper_update_total_review')) {
-                            st_helper_update_total_review($pid);
-                        }
-                        $mapped++;
-                        break 2; // Move to next review
-                    }
-                }
-            }
-        }
-        wp_send_json_success(['message' => "Scanned " . count($gmb_reviews) . " GMB reviews. Re-assigned $mapped reviews based on keywords."]);
+        wp_send_json_success(['message' => "Processed " . count($reviews) . " reviews. Re-assigned $mapped based on prioritized scoring."]);
     } elseif ($job === 'refresh_ratings') {
-        // Recalculate all ratings for all mapped tours
-        // Optimized query: Get IDs first to avoid slow meta joins
-        $mapped_ids = $wpdb->get_col("
-            SELECT DISTINCT post_id 
-            FROM {$wpdb->postmeta} 
-            WHERE meta_key IN ('_gyg_activity_id', '_viator_activity_id', '_tripadvisor_activity_id')
-        ");
-
-        if (empty($mapped_ids)) {
-            wp_send_json_success(['message' => "No tours with OTA mappings found."]);
-        }
-
-        $all_mapped_tours = get_posts([
-            'post_type' => 'st_tours',
-            'posts_per_page' => -1,
-            'post__in' => $mapped_ids,
-            'post_status' => 'any',
-            'no_found_rows' => true
-        ]);
-        $tour_ids = wp_list_pluck($all_mapped_tours, 'ID');
+        $mapped_ids = $wpdb->get_col("SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key IN ('_gyg_activity_id', '_viator_activity_id', '_tripadvisor_activity_id')");
+        if (empty($mapped_ids)) wp_send_json_success(['message' => "No tours with OTA mappings found."]);
+        $all_mapped_tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'post__in' => $mapped_ids, 'post_status' => 'any', 'no_found_rows' => true]);
         $total_updated = 0;
-        
-        foreach ($tour_ids as $id) {
-            $localized_ids = klld_get_translated_post_ids($id);
+        foreach ($all_mapped_tours as $tour) {
+            $localized_ids = klld_get_translated_post_ids($tour->ID);
             foreach ($localized_ids as $tid) {
-                if (function_exists('st_helper_update_total_review')) {
-                    st_helper_update_total_review($tid);
-                    $total_updated++;
-                }
+                if (function_exists('st_helper_update_total_review')) { st_helper_update_total_review($tid); $total_updated++; }
             }
         }
         wp_send_json_success(['message' => "Successfully refreshed aggregate ratings for $total_updated localized tour pages."]);
-    } elseif ($job === 'gmb_scrape') {
-        // Run the Puppeteer scraper
-        $scraper_dir = KLLD_OTA_PLUGIN_DIR . 'scrapers/gmb';
-        $cmd = "cd $scraper_dir && node scraper.js 2>&1";
-        $output = shell_exec($cmd);
-        
-        if (strpos($output, 'Success') !== false) {
-            wp_send_json_success(['message' => "Scraper finished successfully: " . trim($output)]);
-        } else {
-            wp_send_json_error(['message' => "Scraper failed: " . trim($output)]);
-        }
-
-    } elseif ($job === 'approve_all') {
-        // Approve all st_reviews
-        $updated = $wpdb->query("UPDATE {$wpdb->comments} SET comment_approved = '1' WHERE comment_type = 'st_reviews' AND comment_approved = '0'");
-        wp_send_json_success(['message' => "Successfully approved $updated tour reviews."]);
     } elseif ($job === 'sftp_push') {
         $push_file = dirname(__FILE__) . '/gttd_sftp_push.php';
         if (file_exists($push_file)) {
-            ob_start();
-            include($push_file);
-            $results = ob_get_clean();
-            wp_send_json_success(['message' => "SFTP Push execution completed.", 'results' => $results]);
-        } else {
-            wp_send_json_error('SFTP Push script not found.');
+            define('KLLD_TOOL_RUN', true);
+            ob_start(); include($push_file); $results = ob_get_clean();
+            wp_send_json_success(['message' => "SFTP Push completed.", 'results' => $results]);
         }
     }
     wp_send_json_error('Unknown maintenance job.');
-}
-
-if (isset($_POST['action']) && $_POST['action'] === 'run_auto_mapper') {
-    $mapper_file = dirname(__FILE__) . '/ota_auto_mapper.php';
-    if (file_exists($mapper_file)) {
-        ob_start();
-        include($mapper_file);
-        $results = ob_get_clean();
-        wp_send_json_success(['results' => $results]);
-    } else {
-        wp_send_json_error('Auto-Mapper script not found.');
-    }
-}
-
-if (isset($_POST['action']) && $_POST['action'] === 'run_system_health_check') {
-    $test_suite = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/test_tripadvisor_suite.php';
-    if (file_exists($test_suite)) {
-        ob_start();
-        include($test_suite);
-        $results = ob_get_clean();
-        wp_send_json_success(['results' => $results]);
-    } else {
-        wp_send_json_error('Test suite file not found at: ' . $test_suite);
-    }
 }
 
 // ── AJAX Handler: Direct Import from UI ──────────────────────────────────
@@ -487,17 +188,16 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
         $localized_ids = klld_get_translated_post_ids($post_id);
 
         foreach ($localized_ids as $target_post_id) {
-            // 1. DEDUPLICATION: Remove old version of this OTA review for THIS localized post
+            // 1. DEDUPLICATION
             $old_id = $wpdb->get_var($wpdb->prepare("SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = %s AND meta_value = %s LIMIT 1", $meta_key, $review_id));
             if ($old_id) {
-                // Verify if the old comment belongs to the target post to avoid accidental deletion
                 $old_comment = get_comment($old_id);
                 if ($old_comment && (int)$old_comment->comment_post_ID === (int)$target_post_id) {
                     wp_delete_comment($old_id, true);
                 }
             }
 
-            // 2. INSERT: Add new comment
+            // 2. INSERT
             $comment_data = [
                 'comment_post_ID'      => $target_post_id,
                 'comment_author'       => sanitize_text_field($entry['author'] ?? 'Traveler'),
@@ -514,48 +214,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
             $new_id = wp_insert_comment($comment_data);
 
             if ($new_id) {
-                // 3. PERSIST META
                 update_comment_meta($new_id, $meta_key, $review_id);
                 update_comment_meta($new_id, 'st_category_name', 'st_tours');
                 update_comment_meta($new_id, 'comment_rate', intval($entry['rating'] ?? 5));
-                
-                // Serialized Traveler Stats (language-aware)
-                // We use the language of the target_post_id to determine labels
-                $target_lang = $wpdb->get_var($wpdb->prepare("SELECT language_code FROM {$wpdb->prefix}icl_translations WHERE element_id = %d AND element_type = 'post_st_tours' LIMIT 1", $target_post_id)) ?: 'en';
-                
-                $labels = [
-                    'en' => ['iti' => 'Itinerary', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Driver', 'food' => 'Food', 'trans' => 'Transport'],
-                    'de' => ['iti' => 'Reiseverlauf', 'guide' => 'Reiseleiter', 'svc' => 'Service', 'drv' => 'Fahrer', 'food' => 'Essen', 'trans' => 'Transport'],
-                    'da' => ['iti' => 'Rejseplan', 'guide' => 'Tour guide', 'svc' => 'Service', 'drv' => 'Chauff\u00f8r', 'food' => 'Mad', 'trans' => 'Transport'],
-                    'no' => ['iti' => 'Reiseplan', 'guide' => 'Turguide', 'svc' => 'Service', 'drv' => 'Sj\u00e5f\u00f8r', 'food' => 'Mat', 'trans' => 'Transport'],
-                    'sv' => ['iti' => 'Resplan', 'guide' => 'Reseledare', 'svc' => 'Service', 'drv' => 'F\u00f6rare', 'food' => 'Mat', 'trans' => 'Transport'],
-                    'fr' => ['iti' => 'Itin\u00e9raire', 'guide' => 'Guide touristique', 'svc' => 'Service', 'drv' => 'Chauffeur', 'food' => 'Nourriture', 'trans' => 'Transport'],
-                    'nl' => ['iti' => 'Reisroute', 'guide' => 'Gids', 'svc' => 'Service', 'drv' => 'Bestuurder', 'food' => 'Eten', 'trans' => 'Vervoer'],
-                ];
-                $l = $labels[$target_lang] ?? $labels['en'];
-                
-                $stats = [
-                    $l['iti']   => intval($entry['statItinerary'] ?? $entry['rating']),
-                    $l['guide'] => intval($entry['statGuide']     ?? $entry['rating']),
-                    $l['svc']   => intval($entry['statService']   ?? $entry['rating']),
-                    $l['drv']   => intval($entry['statDriver']    ?? $entry['rating']),
-                ];
-                // Add Food & Transport to serialized stats if provided
-                if (isset($entry['statFood'])) $stats[$l['food']] = intval($entry['statFood']);
-                if (isset($entry['statTransport'])) $stats[$l['trans']] = intval($entry['statTransport']);
+                update_comment_meta($new_id, 'ota_source', ($meta_key === 'tripadvisor_review_id' ? 'TA' : ($meta_key === 'gyg_review_id' ? 'gyg' : 'gmb')));
 
-                update_comment_meta($new_id, 'st_stat_itinerary', $stats[$l['iti']]);
-                update_comment_meta($new_id, 'st_stat_tour-guide', $stats[$l['guide']]);
-                update_comment_meta($new_id, 'st_stat_service', $stats[$l['svc']]);
-                update_comment_meta($new_id, 'st_stat_driver', $stats[$l['drv']]);
-                
-                // New fields from user example
-                update_comment_meta($new_id, 'st_stat_food', intval($entry['statFood'] ?? $entry['rating']));
-                update_comment_meta($new_id, 'st_stat_transport', intval($entry['statTransport'] ?? $entry['rating']));
-
-                update_comment_meta($new_id, 'st_review_stats', serialize($stats));
-
-                // Sync total counts for post
                 if (function_exists('st_helper_update_total_review')) {
                     st_helper_update_total_review($target_post_id);
                 }
@@ -566,810 +229,152 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
     wp_send_json_success(['message' => "Successfully imported $count reviews directly to database."]);
 }
 
-// Fetch All Tours for UI
-$all_st_tours = get_posts([
-    'post_type' => 'st_tours',
-    'posts_per_page' => -1,
-    'post_status' => ['publish', 'private', 'draft'],
-    'orderby' => 'title',
-    'order' => 'ASC'
-]);
+if (isset($_POST['action']) && $_POST['action'] === 'run_auto_mapper') {
+    $mapper_file = dirname(__FILE__) . '/ota_auto_mapper.php';
+    if (file_exists($mapper_file)) {
+        ob_start(); include($mapper_file); $results = ob_get_clean();
+        wp_send_json_success(['results' => $results]);
+    } else {
+        wp_send_json_error('Auto-Mapper script not found.');
+    }
+}
 
-// All good — serve the tool
-if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
-?>
+// Fetch All Tours for UI
+$all_st_tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'post_status' => ['publish', 'private', 'draft'], 'orderby' => 'title', 'order' => 'ASC']);
+
+if ( ! defined( 'KLLD_TOOL_RUN' ) ) { ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GetYourGuide Reviews → SQL Generator | KLD</title>
-<?php } ?>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTAs Sync Manager | KLD</title>
     <script>
-        /**
-         * KLLD State Management (React-inspired pattern)
-         */
         const State = {
-            data: {
-                mappings: [],
-                isSyncing: false,
-                currentTab: 'sync',
-                lastLog: 'Ready...',
-                stopSync: false,
-                searchQuery: ''
-            },
-            
+            data: { mappings: [], isSyncing: false, currentTab: 'sync', lastLog: 'Ready...', stopSync: false, searchQuery: '' },
             listeners: [],
-
             subscribe(fn) { this.listeners.push(fn); },
-
-            setState(update) {
-                this.data = { ...this.data, ...update };
-                this.listeners.forEach(fn => fn(this.data));
-                this.render();
-            },
-
+            setState(update) { this.data = { ...this.data, ...update }; this.listeners.forEach(fn => fn(this.data)); this.render(); },
             render() {
-                // Handle tab switching
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === this.data.currentTab));
                 document.querySelectorAll('.tab-btn').forEach(b => {
-                    const text = b.textContent.toLowerCase();
-                    const tid = text.includes('sync') ? 'sync' : (text.includes('mapping') ? 'mapping' : (text.includes('feed') ? 'feed' : 'maintenance'));
+                    const tid = b.getAttribute('onclick').match(/'([^']+)'/)[1];
                     b.classList.toggle('active', tid === this.data.currentTab);
                 });
-
-                // Handle sync badge/button
                 const syncBtn = document.getElementById('sync-runner-btn');
-                if (syncBtn) {
-                    syncBtn.disabled = this.data.isSyncing;
-                    syncBtn.innerHTML = this.data.isSyncing ? '⏳ Syncing...' : '🚀 Start Full Sync';
-                }
-
+                if (syncBtn) { syncBtn.disabled = this.data.isSyncing; syncBtn.innerHTML = this.data.isSyncing ? '⏳ Syncing...' : '🚀 Start Full Sync'; }
                 const badge = document.getElementById('status-badge');
-                if (badge) {
-                    badge.textContent = this.data.isSyncing ? 'Syncing...' : 'Ready';
-                    badge.className = `badge ${this.data.isSyncing ? 'badge-blue pulse' : 'badge-green'}`;
-                }
+                if (badge) { badge.textContent = this.data.isSyncing ? 'Syncing...' : 'Ready'; badge.className = `badge ${this.data.isSyncing ? 'badge-blue pulse' : 'badge-green'}`; }
             }
         };
 
-        // Initialize state
-        window.addEventListener('DOMContentLoaded', () => {
-            const tourKeywords = {
-                <?php
-                foreach ($all_st_tours as $t) {
-                    $kw = get_post_meta($t->ID, '_ota_keywords', true);
-                    if ($kw) echo "'{$t->ID}': " . json_encode(array_map('trim', explode(',', $kw))) . ",\n";
-                }
-                ?>
-            };
-            State.setState({ tourKeywords });
-            State.subscribe(data => console.log('State Updated:', data));
-            State.render();
-        });
-
-        function showTab(tabId) {
-            State.setState({ currentTab: tabId });
-        }
-
-        /**
-         * Confirmation Hurdle
-         */
-        function confirmAction(actionName, callback) {
-            if (confirm(`Are you sure you want to perform: ${actionName}?`)) {
-                callback();
-            }
-        }
-
-        async function syncSingleGYG(wpId, mode = 'auto') {
-            const logBox = document.getElementById('sync-runner-log');
-            const secret = 'kld_sync_2024';
-            
-            State.setState({ isSyncing: true, currentTab: 'sync' });
-            logBox.innerHTML = `<b>Syncing Individual Tour (#${wpId}) in ${mode} mode...</b><br>`;
-            logBox.scrollTop = logBox.scrollHeight;
-
-            try {
-                // Using corrected path relative to plugin root
-                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1&mode=${mode}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-
-                if (data.success) {
-                    const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
-                    logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
-                    logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:100px; overflow:auto;">${data.log}</pre>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
-                }
-            } catch (e) {
-                logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-            }
-            
-            State.setState({ isSyncing: false });
-            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        async function syncAllSources(wpId) {
-            const logBox = document.getElementById('sync-runner-log');
-            const secret = 'kld_sync_2024';
-            
-            State.setState({ isSyncing: true, currentTab: 'sync' });
-            logBox.innerHTML = `<b>Syncing ALL Sources for Tour (#${wpId})...</b><br>`;
-            logBox.scrollTop = logBox.scrollHeight;
-
-            try {
-                // Using corrected path relative to plugin root
-                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-
-                if (data.success) {
-                    logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Sync completed for all sources.</div>`;
-                    logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:200px; overflow:auto;">${data.log}</pre>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
-                }
-            } catch (e) {
-                logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-            }
-            
-            State.setState({ isSyncing: false });
-            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
+        function showTab(tabId) { State.setState({ currentTab: tabId }); }
 
         async function startHistoricalSync() {
-            confirmAction('FULL HISTORICAL SYNC (All Tours)', async () => {
-                const logBox = document.getElementById('sync-runner-log');
-                const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
-                const secret = 'kld_sync_2024';
-                
-                State.setState({ isSyncing: true, stopSync: false });
-                logBox.innerHTML = '<b>Initializing Global Sync Sequence...</b><br>';
-
-                for (let i = 0; i < rows.length; i++) {
-                    if (State.data.stopSync) {
-                        logBox.innerHTML += '<br><b style="color:var(--danger);">[ABORTED]</b>';
-                        break;
+            if (!confirm('Start full historical sync for all mapped tours?')) return;
+            const logBox = document.getElementById('sync-runner-log');
+            const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
+            State.setState({ isSyncing: true, stopSync: false });
+            logBox.innerHTML = '<b>Initializing Global Sync Sequence...</b><br>';
+            for (let i = 0; i < rows.length; i++) {
+                if (State.data.stopSync) { logBox.innerHTML += '<br><b style="color:var(--danger);">[ABORTED]</b>'; break; }
+                const wpId = rows[i].querySelector('.wp-id').value.trim();
+                const tourName = rows[i].querySelector('.tour-name').value;
+                if (!wpId) continue;
+                logBox.innerHTML += `<div class="text-xs mt-1">[${i+1}/${rows.length}] ${tourName}...</div>`;
+                logBox.scrollTop = logBox.scrollHeight;
+                try {
+                    const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota_sync.php?post_id=${wpId}&limit=5000&secret=kld_sync_2024&format=json&force=1`;
+                    const resp = await fetch(url);
+                    const data = await resp.json();
+                    if (data.success) {
+                        const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
+                        logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
                     }
-
-                    const wpId = rows[i].querySelector('.wp-id').value.trim();
-                    const tourName = rows[i].querySelector('.tour-name').value;
-                    if (!wpId) continue;
-
-                    logBox.innerHTML += `<div class="text-xs mt-1">[${i+1}/${rows.length}] ${tourName}...</div>`;
-                    logBox.scrollTop = logBox.scrollHeight;
-
-                    try {
-                        const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota_sync.php?post_id=${wpId}&limit=5000&secret=${secret}&format=json&force=1`;
-                        const resp = await fetch(url);
-                        const data = await resp.json();
-
-                        if (data.success) {
-                            const count = (data.log.match(/Sync'd (\d+) reviews/) || [0, 0])[1];
-                            logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ ${count} reviews imported.</div>`;
-                        } else {
-                            logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.message || 'Error'}</div>`;
-                        }
-                    } catch (e) {
-                        logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-                    }
-                    logBox.scrollTop = logBox.scrollHeight;
-                }
-
-                State.setState({ isSyncing: false });
-                logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-            });
+                } catch (e) { logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`; }
+            }
+            State.setState({ isSyncing: false });
+            logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
         }
 
         async function saveMappings() {
-            confirmAction('SAVE ALL MAPPINGS', async () => {
-                const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
-                const mappings = rows.map(r => ({
-                    wpId: r.querySelector('.wp-id').value,
-                    gygId: r.querySelector('.gyg-id').value,
-                    gygUrl: r.querySelector('.gyg-url')?.value || '',
-                    viatorId: r.querySelector('.viator-id').value,
-                    viatorUrl: r.querySelector('.viator-url')?.value || '',
-                    taId: r.querySelector('.ta-id').value,
-                    taUrl: r.querySelector('.ta-url')?.value || '',
-                    gmbId: r.querySelector('.gmb-id').value,
-                    tpId: r.querySelector('.tp-id').value,
-                    keywords: r.querySelector('.keywords').value
-                }));
-
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'save_ota_mappings');
-                    formData.append('mappings', JSON.stringify(mappings));
-                    formData.append('ta_api_key', document.getElementById('ta-api-key').value);
-                    
-                    // SFTP Fields
-                    formData.append('sftp_host', document.getElementById('sftp-host').value);
-                    formData.append('sftp_port', document.getElementById('sftp-port').value);
-                    formData.append('sftp_user', document.getElementById('sftp-user').value);
-                    formData.append('sftp_pass', document.getElementById('sftp-pass').value);
-                    formData.append('sftp_key', document.getElementById('sftp-key').value);
-                    formData.append('sftp_file', document.getElementById('sftp-file').value);
-
-                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                    const data = await resp.json();
-                    if (data.success) {
-                        alert('✅ Mappings and Supplier URLs saved.');
-                        location.reload();
-                    } else {
-                        alert('❌ ' + (data.data || 'Save failed'));
-                    }
-                } catch (e) {
-                    alert('❌ Connection Error: ' + e.message);
-                }
-            });
+            const rows = [...document.querySelectorAll('#tour-rows .tour-row')];
+            const mappings = rows.map(r => ({
+                wpId: r.querySelector('.wp-id').value,
+                gygId: r.querySelector('.gyg-id').value,
+                gygUrl: r.querySelector('.gyg-url')?.value || '',
+                viatorId: r.querySelector('.viator-id').value,
+                viatorUrl: r.querySelector('.viator-url')?.value || '',
+                taId: r.querySelector('.ta-id').value,
+                taUrl: r.querySelector('.ta-url')?.value || '',
+                gmbId: r.querySelector('.gmb-id').value,
+                tpId: r.querySelector('.tp-id').value,
+                keywords: r.querySelector('.keywords').value
+            }));
+            const formData = new FormData();
+            formData.append('action', 'save_ota_mappings');
+            formData.append('mappings', JSON.stringify(mappings));
+            const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+            const data = await resp.json();
+            if (data.success) { alert('✅ Mappings saved.'); location.reload(); }
         }
 
         async function runMaintenance(job) {
-            confirmAction(`DATABASE MAINTENANCE: ${job}`, async () => {
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'ota_db_maintenance');
-                    formData.append('job', job);
-                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                    const data = await resp.json();
-                    alert(data.success ? '✅ ' + data.data.message : '❌ ' + (data.data.message || data.data));
-                } catch(e) { alert('Maintenance Error'); }
-            });
-        }
-
-        async function runHealthCheck() {
-            const logPanel = document.getElementById('health-check-results');
-            const logPre = document.getElementById('health-log');
-            logPanel.style.display = 'block';
-            logPre.textContent = 'Running suite...';
-            
-            try {
-                const formData = new FormData();
-                formData.append('action', 'run_system_health_check');
-                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                const data = await resp.json();
-                if (data.success) {
-                    logPre.textContent = data.data.results;
-                } else {
-                    logPre.textContent = 'Health check failed to run.';
-                }
-            } catch(e) { logPre.textContent = 'Error: ' + e.message; }
-        }
-
-        async function runAutoMapper() {
-            confirmAction('RUN AUTO-MAPPER (Attempts to match GYG IDs to Tours automatically)', async () => {
-                const logBox = document.getElementById('sync-runner-log');
-                State.setState({ isSyncing: true, currentTab: 'sync' });
-                logBox.innerHTML = '<b>Initializing Auto-Mapper Script...</b><br>';
-                logBox.scrollTop = logBox.scrollHeight;
-
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'run_auto_mapper');
-                    const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                    const data = await resp.json();
-                    
-                    if (data.success) {
-                        logBox.innerHTML += `<div style="color:var(--success); font-size:11px;">&nbsp;&nbsp;✓ Auto-Mapping Complete.</div>`;
-                        logBox.innerHTML += `<pre style="font-size:9px; color:var(--text-muted); padding:5px; background:#0002; border-radius:4px; max-height:400px; overflow:auto;">${data.data.results}</pre>`;
-                        alert('✅ Auto-Mapping completed. Please refresh the page to see updated mappings.');
-                    } else {
-                        logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;✗ ${data.data || 'Error'}</div>`;
-                    }
-                } catch (e) {
-                    logBox.innerHTML += `<div style="color:var(--danger); font-size:11px;">&nbsp;&nbsp;⚠ Network Failure</div>`;
-                }
-                
-                State.setState({ isSyncing: false });
-                logBox.innerHTML += '<br><b style="color:var(--success);">[COMPLETED]</b>';
-                logBox.scrollTop = logBox.scrollHeight;
-            });
-        }
-
-        async function manualImport(source = 'detect') {
-            const jsonText = document.getElementById('manual-json').value.trim();
-            const postId = document.getElementById('manual-post-id').value;
-            const logBox = document.getElementById('sync-runner-log');
-
-            if (!jsonText) { alert('Please paste JSON data first.'); return; }
-            if (!postId) { alert('Please select a target tour.'); return; }
-
-            try {
-                const raw = JSON.parse(jsonText);
-                let reviews = [];
-                
-                // 1. Detect/Force Format & Normalize
-                if (source === 'gyg' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.review_id || raw.reviews[0]?.id))) {
-                    // GYG: Travelers API or Official API v1
-                    const data = source === 'gyg' ? (raw.reviews || raw) : raw.reviews;
-                    const items = Array.isArray(data) ? data : (data.reviews || []);
-                    
-                    reviews = items.map(r => {
-                        // Official API v1 mapping
-                        if (r.review_id) {
-                            return {
-                                postId: postId,
-                                reviewId: r.review_id,
-                                metaKey: 'gyg_review_id',
-                                author: r.author_name || 'Traveler',
-                                content: r.review_content,
-                                rating: r.review_rating,
-                                dateStr: r.review_date,
-                                targetLang: 'en'
-                            };
-                        }
-                        // Travelers API mapping
-                        if (r.id) {
-                            const subStats = {};
-                            if (r.ratings && Array.isArray(r.ratings)) {
-                                r.ratings.forEach(sr => {
-                                    if (sr.ratingType === 'rating_guide') subStats.statGuide = sr.ratingValue;
-                                    if (sr.ratingType === 'rating_transport') subStats.statDriver = sr.ratingValue;
-                                    if (sr.ratingType === 'rating_overall') subStats.statService = sr.ratingValue;
-                                    if (sr.ratingType === 'rating_value') subStats.statItinerary = sr.ratingValue;
-                                });
-                            }
-
-                            return {
-                                postId: postId,
-                                reviewId: r.id,
-                                metaKey: 'gyg_review_id',
-                                author: r.fullName || 'Traveler',
-                                content: r.message,
-                                rating: r.rating,
-                                dateStr: r.created,
-                                statGuide: subStats.statGuide,
-                                statDriver: subStats.statDriver,
-                                statService: subStats.statService,
-                                statItinerary: subStats.statItinerary,
-                                statTransport: subStats.statDriver, // Map transport to driver if available
-                                targetLang: 'en'
-                            };
-                        }
-                        return null;
-                    }).filter(r => r !== null);
-                } else if (source === 'viator' || (source === 'detect' && raw.reviews && Array.isArray(raw.reviews) && (raw.reviews[0]?.reviewReferenceId || raw.reviews[0]?.reviewText))) {
-                    // Viator Format
-                    const items = Array.isArray(raw.reviews) ? raw.reviews : (Array.isArray(raw) ? raw : []);
-                    reviews = items.map(r => ({
-                        postId: postId,
-                        reviewId: r.reviewReferenceId || r.id,
-                        metaKey: 'viator_review_id',
-                        author: r.userName || r.authorName || 'Viator Traveler',
-                        content: r.reviewText || r.text || '',
-                        rating: r.rating || 5,
-                        dateStr: r.publishedDate || r.date || '',
-                        targetLang: 'en'
-                    }));
-                } else if (source === 'tripadvisor' || (source === 'detect' && raw.data && Array.isArray(raw.data) && raw.data[0]?.location_id)) {
-                    // TripAdvisor Content API Format
-                    const items = raw.data || (Array.isArray(raw) ? raw : []);
-                    reviews = items.map(r => ({
-                        postId: postId,
-                        reviewId: r.id,
-                        metaKey: 'tripadvisor_review_id',
-                        author: r.user?.username || 'TA Traveler',
-                        content: (r.title ? '<strong>' + r.title + '</strong><br>' : '') + r.text,
-                        rating: r.rating || 5,
-                        dateStr: r.published_date || '',
-                        targetLang: 'en'
-                    }));
-                } else if (source === 'gmb' || (source === 'detect' && Array.isArray(raw) && raw[0]?.author)) {
-                    // GMB Scraped Format (from browser tool)
-                    const kwsMap = State.data.tourKeywords || {};
-                    reviews = raw.map(r => {
-                        let matchedPostId = postId; // Default to selected
-                        
-                        // Try to auto-detect if postId was 0 or "Detect"
-                        if (postId === 'detect' || postId === '0') {
-                            for (const [tid, kws] of Object.entries(kwsMap)) {
-                                for (const kw of kws) {
-                                    if (kw && r.text.toLowerCase().includes(kw.toLowerCase())) {
-                                        matchedPostId = tid;
-                                        break;
-                                    }
-                                }
-                                if (matchedPostId !== postId) break;
-                            }
-                        }
-
-                        return {
-                            postId: matchedPostId,
-                            reviewId: btoa(r.author + r.date).substring(0, 16), // Generate unique ID
-                            metaKey: 'gmb_review_id',
-                            author: r.author,
-                            content: r.text,
-                            rating: parseFloat(String(r.rating).replace(/[^0-9.]/g, '')),
-                            dateStr: r.date,
-                            source: 'gmb',
-                            targetLang: 'en'
-                        };
-                    });
-                } else if (Array.isArray(raw) && (raw[0]?.text || raw[0]?.content)) {
-                    // Generic / TripAdvisor JSON
-                    reviews = raw.map(r => ({
-                        postId: postId,
-                        reviewId: r.id || btoa(r.author + r.text).substring(0,12),
-                        metaKey: 'tripadvisor_review_id',
-                        author: r.author || 'Traveler',
-                        content: r.text || r.content || '',
-                        rating: r.rating || 5,
-                        dateStr: r.date || '',
-                        targetLang: 'en'
-                    }));
-                }
-
-                if (reviews.length === 0) {
-                    alert('No reviews found in the provided JSON format.');
-                    return;
-                }
-
-                if (!confirm(`Found ${reviews.length} reviews. Import them now?`)) return;
-
-                State.setState({ isSyncing: true, currentTab: 'sync' });
-                logBox.innerHTML = `<b>Manually Importing ${reviews.length} reviews...</b><br>`;
-
-                const formData = new FormData();
-                formData.append('action', 'ota_direct_import');
-                formData.append('batch', JSON.stringify(reviews));
-
-                const resp = await fetch(window.location.href, { method: 'POST', body: formData });
-                const data = await resp.json();
-
-                if (data.success) {
-                    logBox.innerHTML += `<div style="color:var(--success);">${data.data.message}</div>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger);">Import Error: ${data.data}</div>`;
-                }
-
-            } catch (e) {
-                alert('Invalid JSON: ' + e.message);
-            }
-            State.setState({ isSyncing: false });
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        async function syncContent(wpId) {
-            const logBox = document.getElementById('sync-runner-log');
-            State.setState({ isSyncing: true, currentTab: 'sync' });
-            logBox.innerHTML = `<b>Syncing Content for Tour (#${wpId})...</b><br>`;
-            
-            try {
-                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota-content.php?action=sync&post_id=${wpId}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-                if (data.success) {
-                    logBox.innerHTML += `<div style="color:var(--success);">✓ Content updated from GYG.</div>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger);">✗ ${data.message || 'Error'}</div>`;
-                }
-            } catch (e) { logBox.innerHTML += `<div style="color:var(--danger);">⚠ Network Failure</div>`; }
-            
-            State.setState({ isSyncing: false });
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        async function syncCalendar(wpId) {
-            const logBox = document.getElementById('sync-runner-log');
-            State.setState({ isSyncing: true, currentTab: 'sync' });
-            logBox.innerHTML = `<b>Syncing Calendar for Tour (#${wpId})...</b><br>`;
-            
-            try {
-                const url = `<?php echo KLLD_OTA_PLUGIN_URL; ?>ota-calendar.php?action=sync&post_id=${wpId}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-                if (data.success) {
-                    logBox.innerHTML += `<div style="color:var(--success);">✓ ${data.synced} dates synced from GYG.</div>`;
-                } else {
-                    logBox.innerHTML += `<div style="color:var(--danger);">✗ ${data.message || 'Error'}</div>`;
-                }
-            } catch (e) { logBox.innerHTML += `<div style="color:var(--danger);">⚠ Network Failure</div>`; }
-            
-            State.setState({ isSyncing: false });
-            logBox.scrollTop = logBox.scrollHeight;
+            const formData = new FormData();
+            formData.append('action', 'ota_db_maintenance');
+            formData.append('job', job);
+            const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+            const data = await resp.json();
+            alert(data.success ? '✅ ' + data.data.message : '❌ ' + data.data);
         }
 
         function filterTours() {
             const query = document.getElementById('tour-search').value.toLowerCase();
-            const rows = document.querySelectorAll('#tour-rows .tour-row');
-            
-            rows.forEach(row => {
-                const searchData = row.getAttribute('data-search');
-                if (searchData.includes(query)) {
-                    row.classList.remove('hidden');
-                } else {
-                    row.classList.add('hidden');
-                }
+            document.querySelectorAll('#tour-rows .tour-row').forEach(row => {
+                row.classList.toggle('hidden', !row.getAttribute('data-search').includes(query));
             });
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                // Subtle feedback? maybe alert is too much
-                // alert('Copied: ' + text);
-            });
-        }
-
-        function clearAll() {
-            document.getElementById('sync-runner-log').innerHTML = 'Ready...';
         }
     </script>
     <style>
-        :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
-            --secondary: #6366f1;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --border: #e2e8f0;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-        }
-
-        .klld-dashboard {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: transparent;
-            color: var(--text);
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header-section {
-            background: linear-gradient(135deg, #0ea5e9, #6366f1);
-            color: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .header-section h1 {
-            color: white;
-            margin: 0;
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-        .header-section .subtitle { color: rgba(255,255,255,0.9); margin: 5px 0 0 0; font-size: 14px; }
-
-        /* --- Tabs --- */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 25px;
-            background: #fff;
-            padding: 6px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            width: fit-content;
-        }
-
-        .tab-btn {
-            padding: 10px 20px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
-        }
-
-        .tab-btn:hover:not(.active) { background: #f1f5f9; color: var(--text); }
-
-        .tab-content { display: none; animation: fadeIn 0.3s ease-out; }
+        :root { --primary: #0ea5e9; --primary-dark: #0284c7; --secondary: #6366f1; --bg: #f8fafc; --card-bg: #ffffff; --border: #e2e8f0; --text: #1e293b; --text-muted: #64748b; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; }
+        .klld-dashboard { font-family: 'Inter', system-ui, sans-serif; max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .header-section { background: linear-gradient(135deg, #0ea5e9, #6366f1); color: white; padding: 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header-section h1 { color: white; margin: 0; font-size: 28px; font-weight: 700; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 25px; background: #fff; padding: 6px; border-radius: 12px; border: 1px solid var(--border); width: fit-content; }
+        .tab-btn { padding: 10px 20px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600; border-radius: 8px; transition: all 0.2s; }
+        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2); }
+        .tab-content { display: none; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- Cards --- */
-        .k-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        }
-
-        .k-card h2 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #0f172a;
-        }
-
-        /* --- Mapping Table --- */
-        .mapping-wrapper {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: #fff;
-        }
-
-        .mapping-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            min-width: 1200px;
-            table-layout: fixed;
-        }
-
-        .mapping-table th {
-            text-align: left;
-            padding: 15px;
-            background: #f8fafc;
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .mapping-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: top;
-        }
-
+        .k-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .mapping-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); background: #fff; }
+        .mapping-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1200px; table-layout: fixed; }
+        .mapping-table th { text-align: left; padding: 15px; background: #f8fafc; color: var(--text-muted); font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        .mapping-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
         .mapping-table tr:hover { background: #f8fafc; }
-        .mapping-table tr:last-child td { border-bottom: none; }
-
-        input.k-input {
-            width: 100%;
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: var(--text);
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-
-        input.k-input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
-        }
-
-        /* Column Widths */
-        .wp-id-cell { width: 90px; }
-        .name-cell { width: 300px; }
-        .id-cell { width: 180px; }
-        .actions-cell { width: 160px; }
-        .keywords-cell { width: 200px; }
-
-        /* --- Buttons --- */
-        .k-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-            gap: 8px;
-            font-size: 13px;
-        }
-
-        .k-btn-primary { background: linear-gradient(to bottom, #0ea5e9, #0284c7); color: white; border-color: #0369a1; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .k-btn-primary:hover { transform: translateY(-1px); }
-        
+        .k-input { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+        .k-btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; gap: 8px; font-size: 13px; }
+        .k-btn-primary { background: linear-gradient(to bottom, #0ea5e9, #0284c7); color: white; border-color: #0369a1; }
         .k-btn-outline { background: white; border-color: #cbd5e1; color: #475569; }
-        .k-btn-outline:hover { background: #f8fafc; border-color: #94a3b8; color: #0f172a; }
-
+        .log-panel { background: #0f172a; border-radius: 12px; padding: 20px; font-family: monospace; font-size: 12px; color: #38bdf8; height: 300px; overflow-y: auto; margin-top: 1.5rem; }
+        .tour-row.hidden { display: none !important; }
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
         .badge-green { background: #dcfce7; color: #16a34a; }
         .badge-blue { background: #e0f2fe; color: #0ea5e9; }
-
-        /* --- Responsive --- */
-        @media (max-width: 1024px) {
-            .mapping-table { table-layout: auto; }
-        }
-
-        @media (max-width: 768px) {
-            .header-section { padding: 20px; flex-direction: column; align-items: flex-start; }
-            .tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; }
-            
-            .mapping-table thead { display: none; }
-            .mapping-table, .mapping-table tbody, .mapping-table tr, .mapping-table td { display: block; width: 100%; min-width: 0 !important; }
-            .mapping-table tr {
-                padding: 15px;
-                border: 1px solid var(--border);
-                margin-bottom: 20px;
-                background: #fff;
-                border-radius: 12px;
-                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            }
-            .mapping-table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 10px 0;
-                border: none;
-                border-bottom: 1px solid #f1f5f9;
-                text-align: right;
-            }
-            .mapping-table td::before {
-                content: attr(data-label);
-                font-weight: 700;
-                font-size: 10px;
-                color: var(--text-muted);
-                text-transform: uppercase;
-                text-align: left;
-            }
-            .mapping-table td:last-child { border-bottom: none; }
-        }
-
-        .search-container { position: relative; width: 100%; max-width: 400px; }
-        .search-container input { padding-left: 40px; height: 45px; }
-        .search-container::before {
-            content: "🔍"; position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
-            font-size: 16px; color: var(--text-muted); pointer-events: none;
-        }
-
-        .log-panel {
-            background: #0f172a; border-radius: 12px; padding: 20px;
-            font-family: 'Fira Code', 'Courier New', monospace;
-            font-size: 12px; color: #38bdf8; height: 300px; overflow-y: auto;
-            border: 1px solid #1e293b; margin-top: 1.5rem; line-height: 1.6;
-        }
-
         .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
         .status-online { background: var(--success); box-shadow: 0 0 8px var(--success); }
         .status-offline { background: #cbd5e1; }
-
-        .stat-box { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; color: var(--text) !important; }
-        .stat-box h3 { color: #0f172a !important; font-size: 15px !important; margin-top: 0; }
-        .stat-box p { color: #64748b !important; }
-
-        .ota-badge { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; font-weight: 700; font-size: 9px; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
-        .badge-gyg { background: #fff7ed; color: #ea580c; border-color: #ffedd5; }
-        .badge-tri { background: #f0fdf4; color: #16a34a; border-color: #dcfce7; }
     </style>
-<?php if ( ! defined( 'KLLD_TOOL_RUN' ) ) { ?>
 </head>
-
 <body>
-<?php } ?>
     <div class="klld-dashboard">
         <div class="header-section">
             <div style="display:flex; align-items:center; gap: 1rem;">
                 <img src="<?php echo KLLD_OTA_PLUGIN_URL; ?>img/ota-reviews-logo.svg" style="width:50px; height:50px; filter: brightness(0) invert(1);" alt="Logo">
                 <div>
-                    <h1>🎯 OTAs Manager Dashboard</h1>
-                    <p class="subtitle">Multi-source synchronization & mapping dashboard</p>
+                    <h1>🎯 Sync Manager Dashboard</h1>
+                    <p style="margin:5px 0 0 0; opacity:0.9; font-size:14px;">Multi-source synchronization & mapping control center</p>
                 </div>
             </div>
-            <div class="badge badge-blue pulse" id="status-badge">System Active</div>
+            <div class="badge badge-blue" id="status-badge">Ready</div>
         </div>
 
         <div class="tabs">
@@ -1379,207 +384,63 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             <button class="tab-btn" onclick="showTab('maintenance')">🛠 Maintenance</button>
         </div>
 
-        <!-- --- Tab: Sync & Import --- -->
         <div id="sync" class="tab-content active">
             <div class="k-card" style="border-left: 4px solid var(--primary);">
                 <h2>🚀 Historical Sync Runner</h2>
-                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; background: #020617; padding:1.5rem; border-radius:8px; border: 1px solid var(--border);">
-                    <div>
-                        <label class="text-xs text-muted">TripAdvisor API Key <a href="https://www.tripadvisor.com/ContentAPIRequest" target="_blank" class="text-blue-500 hover:underline">(Get Key)</a></label>
-                        <input type="password" id="ta-api-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_ta_api_key')); ?>" placeholder="Enter API Key...">
-                    </div>
-                    <div>
-                        <label class="text-xs text-muted">GYG API Key <a href="https://partner.getyourguide.com/api-management" target="_blank" class="text-blue-500 hover:underline">(Get Key)</a></label>
-                        <input type="password" id="gyg-partner-api-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_gyg_partner_api_key')); ?>" placeholder="Enter API Key...">
-                    </div>
-                    <div>
-                        <label class="text-xs text-muted">Viator Partner <a href="https://partner.viator.com/en/user/login" target="_blank" class="text-blue-500 hover:underline">(Portal)</a></label>
-                        <div class="text-xs text-muted mt-2">Manage your Viator connectivity directly on their portal.</div>
-                    </div>
+                <div style="background: #f0f9ff; padding: 20px; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-size: 14px; color: #0369a1;"><b>Connection Settings:</b> Manage your API keys and security tokens in the global settings.</div>
+                    <a href="?page=klld-ota-settings" class="k-btn k-btn-outline" style="background:white; border-color:#0ea5e9; color:#0ea5e9;">⚙️ Open Settings</a>
                 </div>
-                <p class="text-sm text-muted mb-4">Trigger a full historical sync for all mapped tours. Processes tours sequentially to avoid timeouts.</p>
+                <p class="text-sm text-muted mb-4">Trigger a full historical sync for all mapped tours. Sequential processing avoids server timeouts.</p>
                 <div class="flex gap-2">
                     <button id="sync-runner-btn" onclick="startHistoricalSync()" class="k-btn k-btn-primary">Start Full Sync</button>
-                    <button onclick="stopSync = true" class="k-btn k-btn-outline">Stop</button>
+                    <button onclick="State.setState({stopSync: true})" class="k-btn k-btn-outline">Stop</button>
+                    <button onclick="document.getElementById('sync-runner-log').innerHTML='Ready...'" class="k-btn k-btn-outline" style="margin-left:auto;">Clear Log</button>
                 </div>
                 <div id="sync-runner-log" class="log-panel">Ready...</div>
             </div>
-
-            <div class="k-card" style="border-left: 4px solid var(--success);">
-                <h2>🤖 Automated Daily Sync</h2>
-                <p class="text-sm text-muted mb-4">Cron endpoint for daily updates. Set this in your hosting panel.</p>
-                <code style="display:block; background:#020617; padding:10px; border-radius:6px; font-size:12px; color:var(--success);">
-                    https://khaolaklanddiscovery.com/ota_sync.php?secret=kld_sync_2024
-                </code>
-            </div>
-
-            <div class="k-card" style="border-left: 4px solid var(--warning);">
-                <h2>🛡 Manual JSON Fallback</h2>
-                <p class="text-sm text-muted mb-4">Paste raw API responses if the server is blocked or for custom imports.</p>
-                <div class="flex gap-2 items-center mb-2">
-                    <div style="flex: 1;">
-                        <label class="text-xs text-muted">Target Tour (Optional if using Keywords):</label>
-                        <select id="manual-post-id" class="k-input w-full">
-                            <option value="detect">-- Auto-Detect by Keywords --</option>
-                            <?php foreach ($all_st_tours as $t): ?>
-                                <option value="<?php echo $t->ID; ?>"><?php echo esc_html($t->post_title); ?> (#<?php echo $t->ID; ?>)</option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-                <textarea id="manual-json" class="k-input" style="height:120px; font-family:monospace; font-size:11px;" placeholder="Paste JSON data from GYG / Viator / TA / GMB here..."></textarea>
-                <div class="flex flex-wrap gap-2 mt-4">
-                    <button onclick="manualImport('gyg')" class="k-btn k-btn-primary" style="background:#f97316; border-color:#f97316;">Import GYG</button>
-                    <button onclick="manualImport('viator')" class="k-btn k-btn-primary" style="background:#5559be; border-color:#5559be;">Import Viator</button>
-                    <button onclick="manualImport('tripadvisor')" class="k-btn k-btn-primary" style="background:#34e0a1; border-color:#34e0a1; color:#000;">Import TA</button>
-                    <button onclick="manualImport('gmb')" class="k-btn k-btn-primary" style="background:#4285f4; border-color:#4285f4;">Import GMB</button>
-                    <button onclick="document.getElementById('manual-json').value=''" class="k-btn k-btn-outline" style="margin-left:auto;">Clear</button>
-                </div>
-            </div>
         </div>
 
-        <!-- --- Tab: Mapping --- -->
         <div id="mapping" class="tab-content">
             <div class="k-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap: wrap; gap: 1rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
                     <div style="display:flex; align-items:center; gap: 15px;">
-                        <h2>🗺 Global Tour Mapping <span class="badge-count"><?php echo count($all_st_tours); ?> tours</span></h2>
-                        <div class="search-container">
-                            <input type="text" id="tour-search" class="k-input" placeholder="Search tours by name or ID..." oninput="filterTours()">
-                        </div>
+                        <h2>🗺 Global Tour Mapping</h2>
+                        <input type="text" id="tour-search" class="k-input" style="width:300px;" placeholder="Search tours..." oninput="filterTours()">
                     </div>
-                        <div class="flex gap-2 items-center">
-                            <div class="flex items-center gap-1">
-                                <label class="text-xs text-muted">GYG Partner API Key:</label>
-                                <input type="password" id="gyg-partner-api-key" class="k-input" style="width:160px; font-size:10px;" value="<?php echo esc_attr(get_option('_gyg_partner_api_key')); ?>" placeholder="GYG Auth Header">
-                                <input type="password" id="ta-api-key" class="k-input" style="width:160px; font-size:10px;" value="<?php echo esc_attr(get_option('_ta_api_key')); ?>" placeholder="TripAdvisor API Key">
-                            </div>
-                            <button onclick="runAutoMapper()" class="k-btn k-btn-outline" style="border-color:var(--secondary); color:var(--secondary);">Auto-Map IDs</button>
-                            <button onclick="saveMappings()" class="k-btn k-btn-primary">Save Mappings</button>
-                        </div>
+                    <div class="flex gap-2">
+                        <button onclick="runAutoMapper()" class="k-btn k-btn-outline">Auto-Map IDs</button>
+                        <button onclick="saveMappings()" class="k-btn k-btn-primary">Save Mappings</button>
+                    </div>
                 </div>
-                
                 <div class="mapping-wrapper">
                     <table class="mapping-table">
                         <thead>
                             <tr>
-                                <th class="wp-id-cell">WP ID</th>
-                                <th class="name-cell">Tour Name</th>
-                                <th class="id-cell">GYG ID</th>
-                                <th class="id-cell">Viator ID</th>
-                                <th class="id-cell">TA ID</th>
-                                <th class="id-cell">Actions</th>
-                                <th class="id-cell">GMB/TP</th>
-                                <th class="id-cell">Keywords</th>
-                                <th style="width:50px;">Status</th>
+                                <th style="width:80px;">WP ID</th>
+                                <th style="width:250px;">Tour Name</th>
+                                <th style="width:150px;">GYG ID</th>
+                                <th style="width:150px;">Viator ID</th>
+                                <th style="width:150px;">TA ID</th>
+                                <th style="width:150px;">GMB ID</th>
+                                <th style="width:200px;">Keywords</th>
+                                <th style="width:60px;">Status</th>
                             </tr>
                         </thead>
                         <tbody id="tour-rows">
-                            <?php
-                            foreach ($all_st_tours as $tour) {
+                            <?php foreach ($all_st_tours as $tour) { 
                                 $id = $tour->ID;
-                                $gyg = get_post_meta($id, '_gyg_activity_id', true);
-                                $gyg_url = get_post_meta($id, '_gyg_url', true);
-                                $via = get_post_meta($id, '_viator_activity_id', true);
-                                $via_url = get_post_meta($id, '_viator_url', true);
-                                $ta  = get_post_meta($id, '_tripadvisor_activity_id', true);
-                                $ta_url = get_post_meta($id, '_ta_url', true);
-
-                                // Fallback URLs
-                                if (!$gyg_url && $gyg) $gyg_url = "https://www.getyourguide.com/activity/-t{$gyg}/";
-                                if (!$via_url && $via) $via_url = "https://www.viator.com/tours/search?query={$via}";
-                                if (!$ta_url && $ta) {
-                                    $clean_ta = preg_replace('/[^0-9]/', '', $ta);
-                                    $ta_url = (strpos($ta, 'd') === 0) ? "https://www.tripadvisor.com/Attraction_Review-g1-d{$clean_ta}" : "https://www.tripadvisor.com/{$ta}";
-                                }
-
-                                $gmb = get_post_meta($id, '_gmb_id', true);
-                                $tp  = get_post_meta($id, '_trustpilot_id', true);
-                                $title = $tour->post_title;
-                                
-                                $has_ota = ($gyg || $via || $ta || $gmb || $tp);
-                                ?>
-                                <tr class="tour-row" data-search="<?php echo esc_attr(strtolower($title . ' ' . $id)); ?>" style="<?php echo !$has_ota ? 'opacity:0.6;' : ''; ?>">
-                                    <td data-label="WP ID">
-                                        <div class="flex items-center">
-                                            <input type="number" class="k-input wp-id" value="<?php echo $id; ?>" disabled>
-                                            <button class="copy-btn" onclick="copyToClipboard('<?php echo $id; ?>')" title="Copy ID">📋</button>
-                                        </div>
-                                    </td>
-                                    <td data-label="Name">
-                                        <div class="tour-name-cell">
-                                            <div style="font-weight: 500; margin-bottom: 2px;"><?php echo esc_html($title); ?></div>
-                                            <div class="flex gap-2">
-                                                <a href="<?php echo get_edit_post_link($id); ?>" target="_blank" class="text-xs text-muted">Edit Tour</a>
-                                                <a href="<?php echo get_permalink($id); ?>" target="_blank" class="text-xs text-muted">View Page</a>
-                                            </div>
-                                            <input type="hidden" class="tour-name" value="<?php echo esc_attr($title); ?>">
-                                        </div>
-                                    </td>
-                                    <td data-label="GYG">
-                                        <div class="flex flex-col gap-1">
-                                            <div class="flex gap-1 items-center">
-                                                <input type="text" class="k-input gyg-id" value="<?php echo esc_attr($gyg); ?>" placeholder="ID">
-                                                <?php if ($gyg): ?>
-                                                    <a href="<?php echo esc_url($gyg_url); ?>" target="_blank" class="ota-link-icon" title="View on GYG">🔗</a>
-                                                    <div class="flex flex-col gap-1">
-                                                        <div class="flex gap-1">
-                                                            <button onclick="syncSingleGYG(<?php echo $id; ?>, 'partner')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px; background:#f97316;" title="Official API Sync">Official</button>
-                                                            <button onclick="syncSingleGYG(<?php echo $id; ?>, 'traveler')" class="k-btn k-btn-secondary k-btn-sm" style="font-size:9px; padding:2px 4px;" title="Traveler API Fallback">Public</button>
-                                                        </div>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </div>
-                                            <input type="url" class="k-input gyg-url mt-1" value="<?php echo esc_attr($gyg_url); ?>" placeholder="URL" style="font-size:10px;">
-                                        </div>
-                                    </td>
-                                    <td data-label="Viator">
-                                        <div class="flex flex-col gap-1">
-                                            <div class="flex gap-1 items-center">
-                                                <input type="text" class="k-input viator-id" value="<?php echo esc_attr($via); ?>" placeholder="Code">
-                                                <?php if ($via_url): ?>
-                                                    <a href="<?php echo esc_url($via_url); ?>" target="_blank" class="ota-link-icon" title="View on Viator">🔗</a>
-                                                <?php endif; ?>
-                                            </div>
-                                            <input type="url" class="k-input viator-url mt-1" value="<?php echo esc_attr($via_url); ?>" placeholder="URL" style="font-size:10px;">
-                                        </div>
-                                    </td>
-                                    <td data-label="TA">
-                                        <div class="flex flex-col gap-1">
-                                            <div class="flex gap-1 items-center">
-                                                <input type="text" class="k-input ta-id" value="<?php echo esc_attr($ta); ?>" placeholder="ID">
-                                                <?php if ($ta_url): ?>
-                                                    <a href="<?php echo esc_url($ta_url); ?>" target="_blank" class="ota-link-icon" title="View on TA">🔗</a>
-                                                <?php endif; ?>
-                                            </div>
-                                            <input type="url" class="k-input ta-url mt-1" value="<?php echo esc_attr($ta_url); ?>" placeholder="URL" style="font-size:10px;">
-                                        </div>
-                                    </td>
-                                    <td data-label="Actions">
-                                        <div class="flex flex-col gap-2">
-                                            <?php if ($has_ota): ?>
-                                                <button onclick="syncAllSources(<?php echo $id; ?>)" class="k-btn k-btn-primary k-btn-sm" style="background:#0ea5e9; font-weight:600;" title="Fetch reviews from all mapped OTAs">🚀 Sync Reviews</button>
-                                                <?php if ($gyg): ?>
-                                                    <button onclick="syncContent(<?php echo $id; ?>)" class="k-btn k-btn-outline k-btn-sm" style="font-size:10px; border-color:var(--success); color:var(--success);">📝 Sync Content</button>
-                                                    <button onclick="syncCalendar(<?php echo $id; ?>)" class="k-btn k-btn-outline k-btn-sm" style="font-size:10px; border-color:var(--warning); color:var(--warning);">📅 Sync Calendar</button>
-                                                <?php endif; ?>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                    <td data-label="GMB/TP">
-                                        <div class="flex flex-col gap-1">
-                                            <input type="text" class="k-input gmb-id" value="<?php echo esc_attr($gmb); ?>" placeholder="GMB Place ID">
-                                            <input type="text" class="k-input tp-id" value="<?php echo esc_attr($tp); ?>" placeholder="Trustpilot Slug">
-                                        </div>
-                                    </td>
-                                    <td data-label="Keywords">
-                                        <input type="text" class="k-input keywords" value="<?php echo esc_attr(get_post_meta($id, '_ota_keywords', true)); ?>" placeholder="Keyword1, Keyword2" style="font-size:10px;">
-                                    </td>
-                                    <td data-label="Status">
-                                        <div class="flex flex-col items-center">
-                                            <span class="status-indicator <?php echo $has_ota ? 'status-online' : 'status-offline'; ?>" title="<?php echo $has_ota ? 'Mapped' : 'Unmapped'; ?>"></span>
-                                        </div>
-                                    </td>
+                                $has_ota = get_post_meta($id, '_gyg_activity_id', true) || get_post_meta($id, '_viator_activity_id', true) || get_post_meta($id, '_tripadvisor_activity_id', true);
+                            ?>
+                                <tr class="tour-row" data-search="<?php echo esc_attr(strtolower($tour->post_title . ' ' . $id)); ?>">
+                                    <td><input type="number" class="k-input wp-id" value="<?php echo $id; ?>" disabled></td>
+                                    <td><div style="font-weight:600;"><?php echo esc_html($tour->post_title); ?></div><input type="hidden" class="tour-name" value="<?php echo esc_attr($tour->post_title); ?>"></td>
+                                    <td><input type="text" class="k-input gyg-id" value="<?php echo esc_attr(get_post_meta($id, '_gyg_activity_id', true)); ?>"></td>
+                                    <td><input type="text" class="k-input viator-id" value="<?php echo esc_attr(get_post_meta($id, '_viator_activity_id', true)); ?>"></td>
+                                    <td><input type="text" class="k-input ta-id" value="<?php echo esc_attr(get_post_meta($id, '_tripadvisor_activity_id', true)); ?>"></td>
+                                    <td><input type="text" class="k-input gmb-id" value="<?php echo esc_attr(get_post_meta($id, '_gmb_id', true)); ?>"></td>
+                                    <td><input type="text" class="k-input keywords" value="<?php echo esc_attr(get_post_meta($id, '_ota_keywords', true)); ?>"></td>
+                                    <td style="text-align:center;"><span class="status-indicator <?php echo $has_ota ? 'status-online' : 'status-offline'; ?>"></span></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -1588,93 +449,29 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) {
             </div>
         </div>
 
-        <!-- --- Tab: Maintenance --- -->
+        <div id="feed" class="tab-content">
+            <div class="k-card" style="border-left: 4px solid var(--secondary);">
+                <h2>📡 Google Things to Do Feed</h2>
+                <div style="background: #f5f3ff; padding: 20px; border-radius: 12px; border: 1px solid #ddd6fe; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-size: 14px; color: #5b21b6;"><b>SFTP Settings:</b> Delivery endpoints and private keys have been moved to the centralized settings page.</div>
+                    <a href="?page=klld-ota-settings" class="k-btn k-btn-outline" style="background:white; border-color:#8b5cf6; color:#8b5cf6;">⚙️ Configure SFTP</a>
+                </div>
+                <button onclick="runMaintenance('sftp_push')" class="k-btn k-btn-primary" style="background:var(--success);">🚀 Push Feed Now</button>
+            </div>
+        </div>
+
         <div id="maintenance" class="tab-content">
             <div class="k-card" style="border-left: 4px solid var(--danger);">
                 <h2>🛠 System Maintenance</h2>
-                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                        <h3>🧹 Deduplicate</h3>
-                        <p class="text-xs text-muted mb-4">Remove identical reviews imported multiple times.</p>
-                        <button onclick="runMaintenance('deduplicate')" class="k-btn k-btn-outline w-full">Deduplicate Now</button>
-                    </div>
-                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                        <h3>📍 Remap Orphans</h3>
-                        <p class="text-xs text-muted mb-4">Match Post ID 0 reviews to correct tours by keyword.</p>
-                        <button onclick="runMaintenance('remap_orphans')" class="k-btn k-btn-outline w-full">Remap Now</button>
-                    </div>
-                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                        <h3>⭐ Refresh Ratings</h3>
-                        <p class="text-xs text-muted mb-4">Force recalculate all star ratings (Fixes 0-rating display).</p>
-                        <button onclick="runMaintenance('refresh_ratings')" class="k-btn k-btn-primary w-full">Refresh All Now</button>
-                    </div>
-                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                        <h3>✅ Approve Reviews</h3>
-                        <p class="text-xs text-muted mb-4">Set status to 'Approved' for all imported tour reviews.</p>
-                        <button onclick="runMaintenance('approve_all')" class="k-btn k-btn-outline w-full" style="color:var(--success); border-color:var(--success);">Approve All</button>
-                    </div>
-                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                        <h3>🤖 GMB Scraper</h3>
-                        <p class="text-xs text-muted mb-4">Run Puppeteer to fetch live Google Maps reviews.</p>
-                        <button onclick="runMaintenance('gmb_scrape')" class="k-btn k-btn-primary w-full" style="background:#0ea5e9;">Scrape GMB Now</button>
-                    </div>
-                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                        <h3>🔍 GMB Filter</h3>
-                        <p class="text-xs text-muted mb-4">Assign GMB reviews to tours using keywords.</p>
-                        <button onclick="runMaintenance('gmb_filter')" class="k-btn k-btn-primary w-full" style="background:var(--secondary);">Filter GMB Now</button>
-                    </div>
-                    <div class="stat-box" style="background: #020617; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-                        <h3>🧬 Health Check</h3>
-                        <p class="text-xs text-muted mb-4">Run the project-wide integration test suite.</p>
-                        <button onclick="runHealthCheck()" class="k-btn k-btn-primary w-full">Run Suite</button>
-                    </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <button onclick="runMaintenance('deduplicate')" class="k-btn k-btn-outline">🧹 Deduplicate Reviews</button>
+                    <button onclick="runMaintenance('remap_orphans')" class="k-btn k-btn-outline">📍 Remap Orphans</button>
+                    <button onclick="runMaintenance('refresh_ratings')" class="k-btn k-btn-outline">⭐ Refresh Star Ratings</button>
+                    <button onclick="runMaintenance('approve_all')" class="k-btn k-btn-outline" style="color:var(--success);">✅ Approve All</button>
                 </div>
-                <div id="health-check-results" style="margin-top:1.5rem; display:none;">
-                    <h3 style="font-size:0.9rem; color:var(--primary);">System Health Results:</h3>
-                    <pre id="health-log" style="background:#020617; padding:15px; border-radius:8px; font-size:11px; color:var(--text-muted); border:1px solid var(--border); overflow:auto; max-height:300px;"></pre>
-                </div>
-            </div>
-        </div>
-
-        <!-- --- Tab: Feed Settings --- -->
-        <div id="feed" class="tab-content">
-            <div class="k-card" style="border-left: 4px solid var(--secondary);">
-                <h2>📡 Google Things to Do - SFTP Feed Delivery</h2>
-                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #020617; padding:1.5rem; border-radius:8px; border: 1px solid var(--border); margin-bottom: 20px;">
-                    <div>
-                        <label class="text-xs text-muted">SFTP Host</label>
-                        <input type="text" id="sftp-host" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_host', 'partnerupload.google.com')); ?>">
-                    </div>
-                    <div>
-                        <label class="text-xs text-muted">SFTP Port</label>
-                        <input type="number" id="sftp-port" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_port', 19321)); ?>">
-                    </div>
-                    <div>
-                        <label class="text-xs text-muted">SFTP Username</label>
-                        <input type="text" id="sftp-user" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_user', 'mc-sftp-5520609361')); ?>">
-                    </div>
-                    <div>
-                        <label class="text-xs text-muted">SFTP Password</label>
-                        <input type="password" id="sftp-pass" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_pass', ':(2Q>%zv4e')); ?>">
-                    </div>
-                    <div>
-                        <label class="text-xs text-muted">Private Key Path</label>
-                        <input type="text" id="sftp-key" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_key', '/home/u451564824/.ssh/gttd_rsa')); ?>">
-                    </div>
-                    <div>
-                        <label class="text-xs text-muted">Target Filename (.xml)</label>
-                        <input type="text" id="sftp-file" class="k-input w-full" value="<?php echo esc_attr(get_option('_gttd_sftp_file', 'tours_feed.xml')); ?>">
-                    </div>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="saveMappings()" class="k-btn k-btn-primary">Save SFTP Settings</button>
-                    <button onclick="runMaintenance('sftp_push')" class="k-btn k-btn-outline" style="border-color:var(--success); color:var(--success);">Push Feed Now</button>
-                </div>
-                <div id="sftp-status" style="margin-top:10px; font-size:11px; color:var(--text-muted);"></div>
             </div>
         </div>
     </div>
-
-<?php if ( ! defined( "KLLD_TOOL_RUN" ) ) { ?>
 </body>
-</html><?php } ?>
+</html>
+<?php } ?>

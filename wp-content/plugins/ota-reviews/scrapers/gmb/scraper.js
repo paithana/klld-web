@@ -57,7 +57,7 @@ function parseRelativeTime(relativeTime) {
 }
 
 async function scrapeGMB() {
-    console.log("🚀 Starting Antigravity GMB Scraper (Desktop Mode)...");
+    console.log("🚀 Starting ThinkWeb GMB Scraper (Desktop Mode)...");
     const browser = await puppeteer.launch({
         headless: "new", 
         executablePath: "/home/u451564824/.cache/puppeteer/chrome/linux-147.0.7727.57/chrome-linux64/chrome",

@@ -32,41 +32,6 @@ if (!$data) {
 }
 
 /**
- * Matching Algorithm (from ota_sync.php)
- */
-function calculate_match_score($title1, $title2) {
-    $title1 = strtolower(trim($title1));
-    $title2 = strtolower(trim($title2));
-    
-    // Remove common filler words to focus on unique keywords
-    $stop_words = ['tour', 'from', 'khao', 'lak', 'and', 'with', 'the', 'private', 'day', 'trip', 'island', 'islands'];
-    foreach ($stop_words as $word) {
-        $title1 = str_replace(" $word ", ' ', " $title1 ");
-        $title2 = str_replace(" $word ", ' ', " $title2 ");
-    }
-    $title1 = trim(preg_replace('/\s+/', ' ', $title1));
-    $title2 = trim(preg_replace('/\s+/', ' ', $title2));
-
-    if ($title1 === $title2) return 100;
-    
-    // Jaccard similarity based on words
-    $words1 = explode(' ', $title1);
-    $words2 = explode(' ', $title2);
-    $intersect = array_intersect($words1, $words2);
-    $union = array_unique(array_merge($words1, $words2));
-    
-    if (empty($union)) return 0;
-    $jaccard = (count($intersect) / count($union)) * 100;
-
-    // also check for substring
-    if (str_contains($title1, $title2) || str_contains($title2, $title1)) {
-        $jaccard = max($jaccard, 80);
-    }
-
-    return $jaccard;
-}
-
-/**
  * Fetch all tours for matching
  */
 $all_tours = get_posts([
@@ -91,7 +56,6 @@ $manual_slug_map = [
     'Phuket Weeked Market' => 'Phuket Weekend Market',
     'Khao Lak Expedition from Phuket' => 'Phuket Tour DIY',
     'Khao Sok Wildlife 2 Days' => '2 Day Khao Sok Wildlife',
-    'Khao Lak Land Discovery' => 'Khao Sok National Park 3 Days Discovery Tour',
     'Amazing 3 Temples' => 'Amazing 3 Temples',
     'Phuket Sunday Walking Street Market' => 'Phuket Sunday Walking Street',
     'Phang Nga Bay Sunset Serenity Cruise' => 'Phang Nga Bay Sunset Serenity Cruise',
@@ -151,23 +115,32 @@ foreach ($data as $batch_id => $batch_data) {
             }
         }
 
-        // 2. If still no hardcoded post_ids, try to match based on 'review_of'
-        if (empty($target_post_ids) && !empty($review_of)) {
+        // 2. If still no hardcoded post_ids, try to match based on 'review_of' or 'text'
+        if (empty($target_post_ids)) {
             $best_score = 0;
             $best_id = 0;
+            
+            // Primary content for matching
+            $match_text = $review_of . " " . ($r['text'] ?? '');
+
             foreach ($tour_map as $tid => $title) {
-                $score = calculate_match_score($review_of, $title);
+                // Use the new centralized prioritized scoring
+                $score = klld_calculate_review_match_score($match_text, $tid);
+                
+                // Extra weight if the tour title is exactly in 'review_of'
+                if ($review_of && stripos(strtolower($title), strtolower($review_of)) !== false) {
+                    $score += 60;
+                }
+
                 if ($score > $best_score) {
                     $best_score = $score;
                     $best_id = $tid;
                 }
             }
 
-            if ($best_score >= 60) {
+            if ($best_score >= 40) { // Slightly lower threshold for TA since we have 'review_of'
                 $target_post_ids = [$best_id];
-                echo "   🎯 Auto-matched '{$review_of}' to '{$tour_map[$best_id]}' (Score: " . round($best_score) . "%)\n";
-            } else {
-                // echo "   ❌ No match for '{$review_of}' (Best: '{$tour_map[$best_id]}' @ " . round($best_score) . "%)\n";
+                echo "   🎯 Auto-matched '{$review_of}' to '{$tour_map[$best_id]}' (Score: " . round($best_score) . ")\n";
             }
         }
 

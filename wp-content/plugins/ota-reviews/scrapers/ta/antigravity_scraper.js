@@ -5,7 +5,7 @@ puppeteer.use(StealthPlugin());
 const url = process.argv[2];
 
 if (!url) {
-    console.error("Usage: node antigravity_scraper.js <url>");
+    console.error("Usage: node thinkweb_scraper.js <url>");
     process.exit(1);
 }
 

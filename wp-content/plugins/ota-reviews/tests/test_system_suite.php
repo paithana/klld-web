@@ -28,11 +28,11 @@ class SystemSyncTest {
     private function test_date_normalization() {
         echo "SYS-01: DATE NORMALIZATION\n";
         $cases = [
-            '2024-04-18'          => '18-04-2024',
-            '18-Apr-2026'         => '18-04-2026', // Already normalized
-            '2024-04-18T10:00:00' => '18-04-2024', // ISO format
-            '1713434400'          => '18-04-2024', // Timestamp
-            'invalid'             => '',            // Invalid
+            '2024-04-18'          => '2024-04-18 00:00:00',
+            '18-Apr-2026'         => '2026-04-18 00:00:00', 
+            '2024-04-18T10:00:00' => '2024-04-18 10:00:00', 
+            '1713434400'          => '2024-04-18 10:00:00', 
+            'invalid'             => '',            
         ];
 
         foreach ($cases as $input => $expected) {

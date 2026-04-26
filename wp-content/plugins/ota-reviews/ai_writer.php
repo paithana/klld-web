@@ -8,13 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $openai_key = get_option('_klld_openai_api_key', '');
 
-// AJAX Handler: Save API Key
-if (isset($_POST['action']) && $_POST['action'] === 'klld_save_ai_config') {
-    update_option('_klld_openai_api_key', sanitize_text_field($_POST['api_key']));
-    wp_send_json_success('API Key saved successfully.');
-}
-
-// AJAX Handler: Generate Title
+// ── AJAX Handler: Generate Title ──────────────────────────────────────────
 if (isset($_POST['action']) && $_POST['action'] === 'klld_ai_generate_title') {
     $comment_id = intval($_POST['id']);
     $content = sanitize_textarea_field($_POST['content']);
@@ -105,12 +99,12 @@ $missing_titles = $wpdb->get_results("
         <div style="font-size: 13px; opacity: 0.9;">Powered by OpenAI GPT-3.5 & Ahrefs Writing Tools</div>
     </div>
 
-    <div class="ai-card">
-        <h2>🔑 OpenAI Configuration</h2>
-        <div style="display:flex; gap:10px; align-items:center;">
-            <input type="password" id="openai-key" class="k-input" style="width: 400px;" value="<?php echo esc_attr($openai_key); ?>" placeholder="sk-...">
-            <button onclick="saveApiKey()" class="k-btn k-btn-primary">Save Key</button>
-            <p class="description">Required for <b>Batch Auto-Generation</b>.</p>
+    <div class="ai-card" style="background: #fdf2f2; border-color: #fecaca;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+            <div style="font-size: 14px; color: #991b1b; line-height: 1.5;">
+                <b>System Notice:</b> API Keys and Global Configurations have been moved to the centralized settings dashboard.
+            </div>
+            <a href="?page=klld-ota-settings" class="k-btn k-btn-outline" style="background:white; border-color:#ef4444; color:#ef4444;">⚙️ Configure AI Keys</a>
         </div>
     </div>
 
@@ -164,7 +158,40 @@ $missing_titles = $wpdb->get_results("
 </div>
 
 <script>
-// ... (saveApiKey and generateTitle remain same)
+async function generateTitle(id) {
+    const content = document.getElementById('content-' + id).innerText;
+    const btn = document.getElementById('btn-' + id);
+    const preview = document.getElementById('preview-' + id);
+    const status = document.getElementById('status-' + id);
+
+    btn.disabled = true;
+    btn.innerText = 'Writing...';
+    preview.innerText = 'Consulting AI...';
+
+    const formData = new FormData();
+    formData.append('action', 'klld_ai_generate_title');
+    formData.append('id', id);
+    formData.append('content', content);
+
+    try {
+        const resp = await fetch(window.location.href, { method: 'POST', body: formData });
+        const res = await resp.json();
+        
+        if (res.success) {
+            preview.innerText = '"' + res.data.title + '"';
+            status.innerHTML = '<span class="status-pill status-done">Headline Generated</span>';
+            btn.style.display = 'none';
+        } else {
+            preview.innerText = 'Error: ' + res.data;
+            btn.disabled = false;
+            btn.innerText = 'Retry';
+        }
+    } catch (e) {
+        preview.innerText = 'Network error.';
+        btn.disabled = false;
+        btn.innerText = 'Retry';
+    }
+}
 
 function useAhrefs(id, tool) {
     const content = document.getElementById('content-' + id).innerText;

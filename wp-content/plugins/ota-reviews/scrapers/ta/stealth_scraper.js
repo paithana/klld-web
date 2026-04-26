@@ -11,7 +11,7 @@ const businessUrl = "https://www.tripadvisor.com/Attraction_Review-g297914-d1960
 const chromePath = "/home/u451564824/.cache/puppeteer/chrome/linux-147.0.7727.57/chrome-linux64/chrome";
 
 async function scrapeTAStealth() {
-    console.log("🚀 Starting Antigravity TripAdvisor Scraper (Stealth Mode)...");
+    console.log("🚀 Starting ThinkWeb TripAdvisor Scraper (Stealth Mode)...");
     
     if (!fs.existsSync(chromePath)) {
         console.error("❌ Error: Chrome binary not found at " + chromePath);
@@ -46,7 +46,7 @@ async function scrapeTAStealth() {
         console.log("Page title: " + title);
         
         if (title.toLowerCase().includes('captcha')) {
-            console.log("❌ Antigravity Failed: DataDome CAPTCHA detected via Stealth.");
+            console.log("❌ ThinkWeb Failed: DataDome CAPTCHA detected via Stealth.");
             const html = await page.content();
             fs.writeFileSync(path.join(__dirname, 'debug_stealth.html'), html);
             return;

@@ -126,23 +126,16 @@ if (isset($_POST['action']) && $_POST['action'] === 'klld_find_best_matches') {
         $comment = get_comment($comment_id);
         if (!$comment) continue;
 
-        // Try to find tour name in content/meta
-        $review_of = get_comment_meta($comment_id, 'ota_review_of', true);
         $content = $comment->comment_content;
-        $search_text = strtolower(($review_of ?: '') . " " . $content);
-
         $matches = [];
+        
         foreach ($en_tours as $tour) {
-            $score = 0;
-            $title_lower = strtolower($tour->post_title);
-
-            // Fast Exact Match (60 pts)
-            if (!empty($review_of) && stripos($title_lower, strtolower($review_of)) !== false) $score += 60;
+            $score = klld_calculate_review_match_score($content, $tour->ID);
             
-            // Text similarity (Only if title is somewhat present to save CPU)
-            if ($score > 0 || stripos($search_text, $title_lower) !== false) {
-                similar_text($title_lower, strtolower($review_of ?: $content), $percent);
-                $score += $percent;
+            // Also consider ota_review_of if available
+            $review_of = get_comment_meta($comment_id, 'ota_review_of', true);
+            if ($review_of && stripos(strtolower($tour->post_title), strtolower($review_of)) !== false) {
+                $score += 60;
             }
 
             if ($score > 10) {

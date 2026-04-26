@@ -3,7 +3,8 @@
  * Plugin Name: OTAs Manager
  * Description: Multi-platform review synchronization and management tool (GYG, Viator, TripAdvisor, GMB).
  * Version: 2.1.0
- * Author: Antigravity (KLLD Team)
+ * Author: Thanawat Poot-in
+ * Author URI: https://thinkweb.me
  * Text Domain: ota-reviews
  */
 
@@ -114,4 +115,38 @@ add_action( 'woocommerce_thankyou', function( $order_id ) {
 
     klld_render_google_customer_reviews_optin( $order_id, $email, $country, $tour_date, $products );
 });
+
+/**
+ * Weighted Review Matching Algorithm
+ * Prioritizes: Unique KW > Locations > Durations > Activities
+ */
+function klld_calculate_review_match_score($content, $pid) {
+    $structured = get_post_meta($pid, '_ota_keywords_structured', true);
+    if (!$structured || !is_array($structured)) return 0;
+
+    $score = 0;
+    $content_lower = strtolower($content);
+
+    // 1. UNIQUE KEYWORDS (100 pts)
+    foreach (($structured['unique'] ?? []) as $kw) {
+        if (stripos($content_lower, $kw) !== false) $score += 100;
+    }
+
+    // 2. LOCATIONS (30 pts)
+    foreach (($structured['location'] ?? []) as $kw) {
+        if (stripos($content_lower, $kw) !== false) $score += 30;
+    }
+
+    // 3. DURATIONS (20 pts)
+    foreach (($structured['duration'] ?? []) as $kw) {
+        if (stripos($content_lower, $kw) !== false) $score += 20;
+    }
+
+    // 4. ACTIVITIES (10 pts)
+    foreach (($structured['activity'] ?? []) as $kw) {
+        if (stripos($content_lower, $kw) !== false) $score += 10;
+    }
+
+    return $score;
+}
 

@@ -11,7 +11,7 @@ const businessUrl = "https://www.google.com/maps/place/Khao+Lak+Land+Discovery/@
 const chromePath = "/home/u451564824/.cache/puppeteer/chrome/linux-147.0.7727.57/chrome-linux64/chrome";
 
 async function scrapeGMBStealth() {
-    console.log("🚀 Starting Antigravity GMB Scraper (High Stealth)...");
+    console.log("🚀 Starting ThinkWeb GMB Scraper (High Stealth)...");
     
     const browser = await puppeteer.launch({
         headless: "new",

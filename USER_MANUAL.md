@@ -5,12 +5,12 @@ Welcome to the **OTAs Manager Command Center**. This suite of tools allows you t
 ## 🧭 1. Dashboard Overview
 Navigate to **OTAs Manager** in the WordPress sidebar to access the Command Center. 
 - **Tool Cards:** Click any card (Sync Manager, Review Editor, etc.) to open that specific tool.
+- **Settings:** Access the centralized **Settings** page to manage all API keys (OpenAI, TripAdvisor, Omkar) and SFTP credentials in one place.
 - **Activity Log:** View the 10 most recently imported or updated reviews across all platforms.
-- **SFTP Status:** Expand the "SFTP Connection & Feed Settings" to check the health of your Google Things to Do integration.
 
 ## 🔄 2. Sync Manager
 *Purpose: Map your WordPress tours to their respective OTA IDs and trigger synchronizations.*
-- **Sync & Import Tab:** Start manual background syncs for individual platforms.
+- **Sync & Import Tab:** Start manual background syncs for individual platforms. (Note: API keys must be configured in Settings).
 - **Global Mapping Tab:** Search for your tours and input the corresponding Product IDs from GYG, Viator, TripAdvisor, and Google Business. The background engine (`cron-scrape.sh`) uses these IDs to fetch new reviews.
 
 ## ✍️ 3. Review Editor
@@ -26,8 +26,7 @@ Navigate to **OTAs Manager** in the WordPress sidebar to access the Command Cent
 
 ## 🤖 4. AI Review Writer
 *Purpose: Automatically generate catchy headlines for reviews that lack titles.*
-- **Configuration:** Enter your OpenAI API key in the top box and click "Save".
-- **Batch Generation:** Click "✨ Batch Generate (OpenAI)" to automatically create titles for *all* reviews missing them.
+- **Batch Generation:** Click "✨ Batch Generate (OpenAI)" to automatically create titles for all reviews missing them. (Note: OpenAI key must be configured in Settings).
 - **Manual Generation:** For a specific review, click:
   - **OpenAI (Auto):** Generates and saves a title immediately.
   - **Ahrefs Title / Sum:** Opens Ahrefs' free web tools in a new tab with the review text pre-filled.
@@ -44,7 +43,13 @@ Navigate to **OTAs Manager** in the WordPress sidebar to access the Command Cent
 - Select **JSON** (for analysis/development) or **SQL** (for migrating to a new database).
 - The export deeply links reviews to their full tour descriptions (`wp_posts` and `wp_st_tours`).
 
-## ⚙️ 7. System Maintenance
+## ⚙️ 7. System Settings
+*Purpose: Centralized management of all third-party integrations.*
+- **AI & Content:** Manage your OpenAI API key for headline generation.
+- **OTA Platforms:** Configure TripAdvisor, GYG Partner, GYG Explorer, and Omkar Scraper keys.
+- **Google SFTP:** Set up your Google Things to Do feed delivery endpoints and private keys.
+
+## ⏱ 8. System Maintenance
 - Your system relies on two cron jobs configured on your server:
   - `cron-cache.sh`: Clears website caches to keep things fast.
   - `cron-scrape.sh`: Fetches new reviews and pushes feeds to Google.

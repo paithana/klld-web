@@ -73,7 +73,8 @@ class KLLD_Admin_Tools {
             'klld_update_review_post_id',
             'klld_delete_review',
             'klld_export_reviews',
-            'klld_ai_generate_title'
+            'klld_ai_generate_title',
+            'klld_save_ota_settings'
         ];
 
         if ( isset( $_POST['action'] ) && in_array( $_POST['action'], $ota_actions ) ) {
@@ -83,6 +84,8 @@ class KLLD_Admin_Tools {
                 $tool_file = 'export_tool.php';
             } elseif (strpos($_POST['action'], 'klld_ai') === 0) {
                 $tool_file = 'ai_writer.php';
+            } elseif (strpos($_POST['action'], 'klld_save_ota_settings') === 0) {
+                $tool_file = 'settings.php';
             } elseif (strpos($_POST['action'], 'klld_') === 0) {
                 $tool_file = 'review_editor.php';
             }
@@ -159,6 +162,15 @@ class KLLD_Admin_Tools {
             'manage_options',
             'klld-ai-writer',
             [ $this, 'render_ai_writer' ]
+        );
+
+        add_submenu_page(
+            'reviews-tools',
+            'Settings',
+            'Settings',
+            'manage_options',
+            'klld-ota-settings',
+            [ $this, 'render_settings' ]
         );
     }
 
@@ -252,8 +264,11 @@ class KLLD_Admin_Tools {
 
                 <div class="k-card-tool">
                     <h3>📊 Feed Health</h3>
-                    <p>Verify exactly what Google sees. Preview the JSON and XML feeds before they are pushed to servers via SFTP.</p>
-                    <a href="<?php echo KLLD_OTA_PLUGIN_URL; ?>google-tours-feed.php?preview=1" target="_blank" class="k-btn-link">Preview Statistics →</a>
+                    <p>Verify exactly what Google sees. Preview or download the JSON and XML feeds before they are pushed via SFTP.</p>
+                    <div class="flex gap-2">
+                        <a href="<?php echo KLLD_OTA_PLUGIN_URL; ?>google-tours-feed.php?preview=1" target="_blank" class="k-btn-link">Preview →</a>
+                        <a href="<?php echo KLLD_OTA_PLUGIN_URL; ?>google-tours-feed.php?format=xml&download=1" class="k-btn-link" style="background:#0ea5e9; color:white;">Download XML</a>
+                    </div>
                 </div>
             </div>
 
@@ -373,6 +388,16 @@ class KLLD_Admin_Tools {
             include $tool_path;
         } else {
             echo '<div class="notice notice-error"><p>AI Writer tool file not found.</p></div>';
+        }
+    }
+
+    public function render_settings() {
+        $tool_path = KLLD_OTA_PLUGIN_DIR . 'settings.php';
+        if ( file_exists( $tool_path ) ) {
+             if ( ! defined( 'KLLD_TOOL_RUN' ) ) define( 'KLLD_TOOL_RUN', true );
+            include $tool_path;
+        } else {
+            echo '<div class="notice notice-error"><p>Settings tool file not found.</p></div>';
         }
     }
 }
