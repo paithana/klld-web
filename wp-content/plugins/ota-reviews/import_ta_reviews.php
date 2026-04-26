@@ -117,30 +117,40 @@ foreach ($data as $batch_id => $batch_data) {
 
         // 2. If still no hardcoded post_ids, try to match based on 'review_of' or 'text'
         if (empty($target_post_ids)) {
-            $best_score = 0;
-            $best_id = 0;
-            
+            $content_lower = strtolower($r['text'] ?? '');
+
+            // Detect Multi-Tour Intent
+            $is_multi = false;
+            $multi_phrases = ['2 tours', '2 trips', 'two tours', 'two trips', '3 tours', 'both tours', 'multiple tours'];
+            foreach ($multi_phrases as $phrase) {
+                if (strpos($content_lower, $phrase) !== false) {
+                    $is_multi = true;
+                    break;
+                }
+            }
+
             // Primary content for matching
             $match_text = $review_of . " " . ($r['text'] ?? '');
 
             foreach ($tour_map as $tid => $title) {
-                // Use the new centralized prioritized scoring
                 $score = klld_calculate_review_match_score($match_text, $tid);
-                
-                // Extra weight if the tour title is exactly in 'review_of'
+
                 if ($review_of && stripos(strtolower($title), strtolower($review_of)) !== false) {
                     $score += 60;
                 }
 
-                if ($score > $best_score) {
-                    $best_score = $score;
-                    $best_id = $tid;
+                // Logic: 
+                // - 100+ (Unique Anchor) -> Always add
+                // - 40+ (Partial Match)  -> Add if Multi-Tour intent detected
+                if ($score >= 100 || ($is_multi && $score >= 40)) {
+                    $target_post_ids[] = $tid;
                 }
             }
 
-            if ($best_score >= 40) { // Slightly lower threshold for TA since we have 'review_of'
-                $target_post_ids = [$best_id];
-                echo "   🎯 Auto-matched '{$review_of}' to '{$tour_map[$best_id]}' (Score: " . round($best_score) . ")\n";
+            $target_post_ids = array_unique($target_post_ids);
+
+            if (!empty($target_post_ids)) {
+                echo "   🎯 Matched '" . count($target_post_ids) . "' tours for review from '{$review_of}' " . ($is_multi ? "(Multi-tour detected)" : "") . "\n";
             }
         }
 

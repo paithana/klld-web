@@ -25,6 +25,9 @@ if ( ! current_user_can( 'manage_options' ) && ! defined('KLLD_TOOL_RUN') ) {
 
 /**
  * Helper: Find all translations of a tour post
+ *
+ * @param int $post_id The tour post ID.
+ * @return array Array of translated post IDs.
  */
 function klld_get_translated_post_ids($post_id) {
     global $wpdb;
@@ -39,7 +42,9 @@ function klld_get_translated_post_ids($post_id) {
         $post_id
     ));
 
-    if (!$trid) return [$post_id];
+    if (!$trid) {
+        return [$post_id];
+    }
 
     $ids = $wpdb->get_col($wpdb->prepare(
         "SELECT element_id FROM {$table} WHERE trid = %d AND element_type = 'post_st_tours'",
@@ -59,7 +64,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'save_ota_mappings') {
     $count = 0;
     foreach ($mappings as $map) {
         $wp_id = (int)($map['wpId'] ?? 0);
-        if (!$wp_id) continue;
+        if (!$wp_id) {
+            continue;
+        }
 
         update_post_meta($wp_id, '_gyg_activity_id', sanitize_text_field($map['gygId'] ?? ''));
         update_post_meta($wp_id, '_gyg_url', esc_url_raw($map['gygUrl'] ?? ''));
@@ -131,26 +138,85 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
             }
         }
         wp_send_json_success(['message' => "Cleaned up $deleted duplicate reviews."]);
-    } elseif ($job === 'remap_orphans' || $job === 'gmb_filter') {
+    } elseif ($job === 'remap_orphans' || $job === 'gmb_filter' || $job === 'remap_all') {
         $all_mapped_tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'post_status' => 'publish']);
-        $reviews = ($job === 'remap_orphans') ? $wpdb->get_results("SELECT comment_ID, comment_content FROM {$wpdb->comments} WHERE comment_post_ID = 0 AND comment_type = 'st_reviews'") : $wpdb->get_results("SELECT c.comment_ID, c.comment_content FROM {$wpdb->comments} c JOIN {$wpdb->commentmeta} cm ON c.comment_ID = cm.comment_id WHERE cm.meta_key = 'ota_source' AND cm.meta_value = 'gmb'");
+        
+        if ($job === 'remap_orphans') {
+            $reviews = $wpdb->get_results("SELECT * FROM {$wpdb->comments} WHERE comment_post_ID = 0 AND comment_type = 'st_reviews'");
+        } elseif ($job === 'gmb_filter') {
+            $reviews = $wpdb->get_results("SELECT c.* FROM {$wpdb->comments} c JOIN {$wpdb->commentmeta} cm ON c.comment_ID = cm.comment_id WHERE cm.meta_key = 'ota_source' AND cm.meta_value = 'gmb'");
+        } else {
+            $reviews = $wpdb->get_results("SELECT * FROM {$wpdb->comments} WHERE comment_type = 'st_reviews'");
+        }
+
         $mapped = 0;
+        $cloned = 0;
+        $skipped = 0;
+        
         foreach ($reviews as $rev) {
-            $best_score = 0; $best_pid = 0;
+            $matched_pids = [];
+            $content_lower = strtolower($rev->comment_content);
+            
+            // Detect Multi-Tour Intent
+            $is_multi = false;
+            $multi_phrases = ['2 tours', '2 trips', 'two tours', 'two trips', '3 tours', '3 trips', 'both tours', 'combined', 'multiple tours'];
+            foreach ($multi_phrases as $phrase) {
+                if (strpos($content_lower, $phrase) !== false) {
+                    $is_multi = true;
+                    break;
+                }
+            }
+
             foreach ($all_mapped_tours as $t) {
                 $score = klld_calculate_review_match_score($rev->comment_content, $t->ID);
-                if ($score > $best_score) { $best_score = $score; $best_pid = $t->ID; }
+                if ($score >= 150 || ($is_multi && $score >= 70)) {
+                    $matched_pids[] = ['id' => $t->ID, 'score' => $score];
+                }
             }
-            if ($best_score >= 10 && $best_pid > 0) {
-                $wpdb->update($wpdb->comments, ['comment_post_ID' => $best_pid], ['comment_ID' => $rev->comment_ID]);
-                if (function_exists('st_helper_update_total_review')) st_helper_update_total_review($best_pid);
-                $mapped++;
+
+            usort($matched_pids, function($a, $b) { return $b['score'] <=> $a['score']; });
+            $matched_pids = array_slice($matched_pids, 0, 3);
+            $final_pids = array_column($matched_pids, 'id');
+
+            if (!empty($final_pids)) {
+                if (in_array((int)$rev->comment_post_ID, $final_pids)) {
+                    $primary_pid = (int)$rev->comment_post_ID;
+                    $final_pids = array_diff($final_pids, [$primary_pid]);
+                } else {
+                    $primary_pid = array_shift($final_pids);
+                    $wpdb->update($wpdb->comments, ['comment_post_ID' => $primary_pid], ['comment_ID' => $rev->comment_ID]);
+                    if (function_exists('st_helper_update_total_review')) st_helper_update_total_review($primary_pid);
+                    $mapped++;
+                }
+
+                foreach ($final_pids as $extra_pid) {
+                    $exists = $wpdb->get_var($wpdb->prepare("SELECT comment_ID FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_author = %s AND comment_date = %s", $extra_pid, $rev->comment_author, $rev->comment_date));
+                    if (!$exists) {
+                        $new_comment = (array)$rev;
+                        unset($new_comment['comment_ID']);
+                        $new_comment['comment_post_ID'] = $extra_pid;
+                        $new_id = wp_insert_comment($new_comment);
+                        if ($new_id) {
+                            $meta = $wpdb->get_results($wpdb->prepare("SELECT meta_key, meta_value FROM $wpdb->commentmeta WHERE comment_id = %d", $rev->comment_ID));
+                            foreach ($meta as $m) {
+                                update_comment_meta($new_id, $m->meta_key, maybe_unserialize($m->meta_value));
+                            }
+                            if (function_exists('st_helper_update_total_review')) st_helper_update_total_review($extra_pid);
+                            $cloned++;
+                        }
+                    }
+                }
+            } else {
+                $skipped++;
             }
         }
-        wp_send_json_success(['message' => "Processed " . count($reviews) . " reviews. Re-assigned $mapped based on prioritized scoring."]);
+        $type_label = ($job === 'remap_all') ? "Global" : (($job === 'remap_orphans') ? "orphan" : "GMB");
+        wp_send_json_success(['message' => "Scanned " . count($reviews) . " $type_label reviews. Re-assigned $mapped, Cloned $cloned. (Skipped $skipped weak matches)."]);
     } elseif ($job === 'refresh_ratings') {
         $mapped_ids = $wpdb->get_col("SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key IN ('_gyg_activity_id', '_viator_activity_id', '_tripadvisor_activity_id')");
-        if (empty($mapped_ids)) wp_send_json_success(['message' => "No tours with OTA mappings found."]);
+        if (empty($mapped_ids)) {
+            wp_send_json_success(['message' => "No tours with OTA mappings found."]);
+        }
         $all_mapped_tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'post__in' => $mapped_ids, 'post_status' => 'any', 'no_found_rows' => true]);
         $total_updated = 0;
         foreach ($all_mapped_tours as $tour) {
@@ -171,10 +237,17 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_db_maintenance') {
     wp_send_json_error('Unknown maintenance job.');
 }
 
-// ── AJAX Handler: Direct Import from UI ──────────────────────────────────
+/**
+ * AJAX Handler: Manual JSON Import
+ * Processes batches of reviews from the clipboard.
+ * 
+ * @internal Includes strict sanitization to block [object Object] corruption.
+ */
 if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
     $batch = json_decode(stripslashes($_POST['batch']), true);
-    if (!is_array($batch)) wp_send_json_error('Invalid batch data.');
+    if (!is_array($batch)) {
+        wp_send_json_error('Invalid batch data.');
+    }
 
     global $wpdb;
     $count = 0;
@@ -183,7 +256,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
         $review_id = sanitize_text_field($entry['reviewId'] ?? '');
         $meta_key  = sanitize_text_field($entry['metaKey'] ?? '');
         
-        if (!$post_id || !$review_id || !$meta_key) continue;
+        $author    = (isset($entry['author']) && is_string($entry['author'])) ? trim($entry['author']) : '';
+        $content   = (isset($entry['content']) && is_string($entry['content'])) ? trim($entry['content']) : '';
+
+        // Block malformed JS objects and empty data
+        if (empty($author) || strpos($author, '[object Object]') !== false) {
+            continue;
+        }
+        if (empty($content) || strpos($content, '[object Object]') !== false) {
+            continue;
+        }
+        
+        if (!$post_id || !$review_id || !$meta_key) {
+            continue;
+        }
 
         $localized_ids = klld_get_translated_post_ids($post_id);
 
@@ -200,9 +286,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'ota_direct_import') {
             // 2. INSERT
             $comment_data = [
                 'comment_post_ID'      => $target_post_id,
-                'comment_author'       => sanitize_text_field($entry['author'] ?? 'Traveler'),
+                'comment_author'       => $author,
                 'comment_author_email' => sanitize_email($entry['email'] ?? 'traveler@getyourguide.com'),
-                'comment_content'      => wp_kses_post($entry['content'] ?? ''),
+                'comment_content'      => wp_kses_post($content),
                 'comment_type'         => 'st_reviews',
                 'comment_parent'       => 0,
                 'user_id'              => 0,
@@ -463,12 +549,14 @@ if ( ! defined( 'KLLD_TOOL_RUN' ) ) { ?>
         <div id="maintenance" class="tab-content">
             <div class="k-card" style="border-left: 4px solid var(--danger);">
                 <h2>🛠 System Maintenance</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <button onclick="runMaintenance('remap_all')" class="k-btn k-btn-primary" style="background:var(--secondary);">🎯 Global Remap All</button>
                     <button onclick="runMaintenance('deduplicate')" class="k-btn k-btn-outline">🧹 Deduplicate Reviews</button>
                     <button onclick="runMaintenance('remap_orphans')" class="k-btn k-btn-outline">📍 Remap Orphans</button>
                     <button onclick="runMaintenance('refresh_ratings')" class="k-btn k-btn-outline">⭐ Refresh Star Ratings</button>
                     <button onclick="runMaintenance('approve_all')" class="k-btn k-btn-outline" style="color:var(--success);">✅ Approve All</button>
                 </div>
+                <p class="description" style="margin-top:20px;"><b>Global Remap:</b> Re-evaluates every review against prioritized keywords and enables multi-tour cloning for reviews like "We booked 2 tours".</p>
             </div>
         </div>
     </div>

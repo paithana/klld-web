@@ -44,7 +44,7 @@ echo "Total New Comments Created: $inserted_count\n";
 
 global $wpdb;
 $comments = $wpdb->get_results($wpdb->prepare(
-    "SELECT comment_ID, comment_post_ID FROM {$wpdb->comments} c 
+    "SELECT c.comment_ID, c.comment_post_ID FROM {$wpdb->comments} c 
      JOIN {$wpdb->commentmeta} m ON c.comment_ID = m.comment_id 
      WHERE m.meta_key = 'test_source_review_id' AND m.meta_value = %s", 
     $review_id

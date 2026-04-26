@@ -17,7 +17,9 @@ define( 'KLLD_OTA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 // Initialize the Tools Loader
 require_once KLLD_OTA_PLUGIN_DIR . 'admin-tools-loader.php';
 
-// Enqueue Modern Styles
+/**
+ * Enqueue Modern Styles for Singular Tour Pages
+ */
 add_action( 'wp_enqueue_scripts', function() {
     if ( is_singular( 'st_tours' ) ) {
         wp_enqueue_style( 'ota-modern-reviews', KLLD_OTA_PLUGIN_URL . 'assets/css/modern-reviews.css', [], '2.1.0' );
@@ -27,14 +29,25 @@ add_action( 'wp_enqueue_scripts', function() {
 /**
  * Google Customer Reviews Opt-in
  * Injected on the checkout success page (Both Traveler and WooCommerce).
+ * 
+ * @param int    $order_id  The order ID.
+ * @param string $email     Customer email.
+ * @param string $country   Customer country.
+ * @param string $tour_date Delivery/Tour date.
+ * @param array  $products  List of product IDs.
+ * @return void
  */
 function klld_render_google_customer_reviews_optin( $order_id, $email = '', $country = '', $tour_date = '', $products = [] ) {
-    if ( ! $email || ! $order_id ) return;
+    if ( ! $email || ! $order_id ) {
+        return;
+    }
 
     // Only render on checkout/success endpoints to prevent leaks on search/product pages
     if ( ! is_order_received_page() && ! isset( $_GET['st_code'] ) && ! isset( $_GET['order_code'] ) ) {
         // Simple heuristic for Traveler/WC success pages
-        if ( ! is_wc_endpoint_url( 'order-received' ) ) return;
+        if ( ! is_wc_endpoint_url( 'order-received' ) ) {
+            return;
+        }
     }
 
     // 1. Sanitize Country (Must be 2-letter CLDR)
@@ -84,7 +97,11 @@ function klld_render_google_customer_reviews_optin( $order_id, $email = '', $cou
     <?php
 }
 
-// Traveler Theme Success Page
+/**
+ * Traveler Theme Success Page Integration
+ *
+ * @param int $order_id The order ID.
+ */
 add_action( 'st_after_order_success_page_information_table', function( $order_id ) {
     $email = get_post_meta( $order_id, 'st_email', true );
     $country = get_post_meta( $order_id, 'st_country', true );
@@ -94,10 +111,16 @@ add_action( 'st_after_order_success_page_information_table', function( $order_id
     klld_render_google_customer_reviews_optin( $order_id, $email, $country, $tour_date, [ $item_id ] );
 });
 
-// WooCommerce Thank You Page
+/**
+ * WooCommerce Thank You Page Integration
+ *
+ * @param int $order_id The order ID.
+ */
 add_action( 'woocommerce_thankyou', function( $order_id ) {
     $order = wc_get_order( $order_id );
-    if ( ! $order ) return;
+    if ( ! $order ) {
+        return;
+    }
 
     $email = $order->get_billing_email();
     $country = $order->get_billing_country();
@@ -116,16 +139,43 @@ add_action( 'woocommerce_thankyou', function( $order_id ) {
     klld_render_google_customer_reviews_optin( $order_id, $email, $country, $tour_date, $products );
 });
 
+
 /**
  * Weighted Review Matching Algorithm
- * Prioritizes: Unique KW > Locations > Durations > Activities
+ * Prioritizes: KeySets > Unique KW > Locations > Durations > Activities
+ * 
+ * @param string $content The review content to match.
+ * @param int    $pid     The post ID to match against.
+ * @return int   Matching score.
  */
 function klld_calculate_review_match_score($content, $pid) {
     $structured = get_post_meta($pid, '_ota_keywords_structured', true);
-    if (!$structured || !is_array($structured)) return 0;
+    $keyset     = get_post_meta($pid, '_ota_keyset', true);
 
     $score = 0;
     $content_lower = strtolower($content);
+
+    // 0. LOGIC-BASED KEYSET (500 pts Bonus - Massive Priority)
+    if (!empty($keyset) && is_array($keyset)) {
+        $keyset_matched = true;
+        foreach ($keyset as $key_rule) {
+            $options = explode('|', strtolower($key_rule));
+            $found_option = false;
+            foreach ($options as $opt) {
+                if (stripos($content_lower, trim($opt)) !== false) {
+                    $found_option = true;
+                    break;
+                }
+            }
+            if (!$found_option) {
+                $keyset_matched = false;
+                break;
+            }
+        }
+        if ($keyset_matched) $score += 500;
+    }
+
+    if (!$structured || !is_array($structured)) return $score;
 
     // 1. UNIQUE KEYWORDS (100 pts)
     foreach (($structured['unique'] ?? []) as $kw) {
@@ -149,4 +199,3 @@ function klld_calculate_review_match_score($content, $pid) {
 
     return $score;
 }
-

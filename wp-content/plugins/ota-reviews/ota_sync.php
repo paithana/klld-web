@@ -68,7 +68,16 @@ if ($format === 'json') {
 
 set_time_limit(0); // No time limit for large syncs
 
+/**
+ * OTAReviewSync Class
+ * 
+ * Handles the synchronization of reviews from various Online Travel Agencies (OTAs)
+ * such as GetYourGuide, Viator, and TripAdvisor into the WordPress database.
+ */
 class OTAReviewSync {
+    /**
+     * @var array $sources Configuration for supported review sources.
+     */
     private $sources = [
         'gyg' => [
             'meta' => '_gyg_activity_id',
@@ -78,9 +87,15 @@ class OTAReviewSync {
             'meta' => '_viator_activity_id',
             'review_meta' => 'viator_review_id'
         ]
-        // TA, GMB, Trustpilot often require scraping or specific APIs not always suitable for basic server sync
     ];
 
+    /**
+     * Executes the synchronization process.
+     *
+     * @param int|null  $limits     Maximum number of reviews to process.
+     * @param bool|null $force_sync Whether to force synchronization regardless of existing reviews.
+     * @return array Sync statistics including number of tours processed and reviews imported.
+     */
     public function run($limits = null, $force_sync = null) {
         if ($limits === null) {
             $limits = isset($_GET['limits']) ? intval($_GET['limits']) : (isset($GLOBALS['argv'][1]) && is_numeric($GLOBALS['argv'][1]) ? intval($GLOBALS['argv'][1]) : 10);
@@ -121,7 +136,9 @@ class OTAReviewSync {
         echo "Found " . count($tours) . " tours to process.\n";
 
         foreach ($tours as $tour) {
-            if ($target_post_id && $tour->ID !== $target_post_id) continue;
+            if ($target_post_id && $tour->ID !== $target_post_id) {
+                continue;
+            }
             
             echo "Processing: {$tour->post_title} (#{$tour->ID})\n";
             
@@ -167,7 +184,6 @@ class OTAReviewSync {
             // Recalculate summary
             $this->update_summary($tour->ID);
             $stats['tours']++;
-            // Note: need to capture imported counts from sync_ methods if we want granular stats here
         }
 
         $this->cleanup();
@@ -176,6 +192,11 @@ class OTAReviewSync {
         return $stats;
     }
 
+    /**
+     * Cleans up the database by removing invalid and duplicate reviews.
+     *
+     * @return void
+     */
     public function cleanup() {
         global $wpdb;
         echo "🧹 Starting review cleanup (Duplicates & Invalid)...\n";
@@ -186,7 +207,9 @@ class OTAReviewSync {
             WHERE (comment_author LIKE '%object Object%' OR comment_content LIKE '%object Object%')
             AND comment_type = 'st_reviews'
         ");
-        if ($invalid_count) echo "   - Removed $invalid_count invalid 'object Object' reviews.\n";
+        if ($invalid_count) {
+            echo "   - Removed $invalid_count invalid 'object Object' reviews.\n";
+        }
 
         // 2. Remove duplicates (Same author, content, post, and date)
         $duplicates = $wpdb->get_results("
@@ -211,11 +234,23 @@ class OTAReviewSync {
                 $deleted += count($ids_to_del);
             }
         }
-        if ($deleted) echo "   - Cleaned up $deleted duplicate reviews.\n";
+        if ($deleted) {
+            echo "   - Cleaned up $deleted duplicate reviews.\n";
+        }
         
         echo "✅ Cleanup finished.\n";
     }
 
+    /**
+     * Synchronizes reviews from GetYourGuide for a specific post.
+     *
+     * @param int    $post_id     The WordPress post ID.
+     * @param string $activity_id The GYG activity ID.
+     * @param int    $limit_total Maximum reviews to fetch.
+     * @param bool   $force       Whether to force sync.
+     * @param string $mode        Sync mode (auto, traveler).
+     * @return void
+     */
     private function sync_gyg($post_id, $activity_id, $limit_total = 1000, $force = false, $mode = 'auto') {
         $batch = 100;
         $offset = 0;
@@ -323,7 +358,9 @@ class OTAReviewSync {
 
             foreach ($reviews as $r) {
                 $review_id = (string)($r['reviewId'] ?? $r['id'] ?? '');
-                if (!$review_id || $review_id === 'undefined') continue;
+                if (!$review_id || $review_id === 'undefined') {
+                    continue;
+                }
 
                 $t = $r['traveler'] ?? $r['author'] ?? [];
                 $author = is_array($t) ? ($t['firstName'] ?? $t['fullName'] ?? $t['name'] ?? 'Anonymous') : (is_string($t) ? $t : 'Anonymous');
@@ -344,7 +381,9 @@ class OTAReviewSync {
                     if (!$best_url && !empty($media_urls)) {
                         $best_url = end($media_urls)['url'] ?? '';
                     }
-                    if ($best_url) $photos[] = $best_url;
+                    if ($best_url) {
+                        $photos[] = $best_url;
+                    }
                 }
 
                 $comment_id = $this->upsert_review($post_id, 'gyg', $review_id, [
@@ -356,26 +395,39 @@ class OTAReviewSync {
                 ]);
 
                 if ($comment_id) {
-                    $total_imported++;
+                    $total_imported += $comment_id; // upsert_review returns total_new now
                     $consecutive_existing = 0;
                 } else {
                     $consecutive_existing++;
                 }
 
-                if ($consecutive_existing >= $max_skipped && $offset > 0) break 2;
+                if ($consecutive_existing >= $max_skipped && $offset > 0) {
+                    break 2;
+                }
             }
 
             $offset += count($reviews);
-            if (count($reviews) < $batch) break;
+            if (count($reviews) < $batch) {
+                break;
+            }
             
             sleep(1); // Avoid 429 Too Many Requests
         }
         echo "  - GYG Total: Sync'd $total_imported reviews for $activity_id\n";
     }
 
+    /**
+     * Synchronizes reviews from Viator for a specific post.
+     *
+     * @param int    $post_id      The WordPress post ID.
+     * @param string $product_code The Viator product code.
+     * @param int    $limit_total  Maximum reviews to fetch.
+     * @param bool   $force        Whether to force sync.
+     * @return void
+     */
     private function sync_viator($post_id, $product_code, $limit_total = 100, $force = false) {
         $offset = 0;
-        $batch = 50; // Optimized for GYG API limits
+        $batch = 50; 
         $total_imported = 0;
         $consecutive_existing = 0;
         $max_skipped = $force ? 9999 : 5;
@@ -396,9 +448,13 @@ class OTAReviewSync {
                 $body = wp_remote_retrieve_body($resp);
                 $diag = "";
                 if ($code == 403) {
-                    if (strpos($body, 'DataDome') !== false) $diag = " [Blocked by DataDome]";
-                    elseif (strpos($body, 'Cloudflare') !== false) $diag = " [Blocked by Cloudflare]";
-                    else $diag = " [Forbidden/Bot Protection]";
+                    if (strpos($body, 'DataDome') !== false) {
+                        $diag = " [Blocked by DataDome]";
+                    } elseif (strpos($body, 'Cloudflare') !== false) {
+                        $diag = " [Blocked by Cloudflare]";
+                    } else {
+                        $diag = " [Forbidden/Bot Protection]";
+                    }
                 }
                 echo "  [Viator] Error: {$code}{$diag}\n";
                 break;
@@ -406,18 +462,26 @@ class OTAReviewSync {
 
             $data = json_decode(wp_remote_retrieve_body($resp), true);
             $reviews = $data['reviews'] ?? [];
-            if (empty($reviews)) break;
+            if (empty($reviews)) {
+                break;
+            }
 
             foreach ($reviews as $r) {
                 $review_id = (string)($r['reviewReferenceId'] ?? $r['id'] ?? '');
-                if (!$review_id) continue;
+                if (!$review_id) {
+                    continue;
+                }
 
                 $c = $r['reviewText'] ?? $r['text'] ?? '';
                 $content = is_array($c) ? ($c['text'] ?? $c['message'] ?? '') : (is_string($c) ? $c : '');
 
                 // Extract Photos
                 $photos = [];
-                foreach (($r['photos'] ?? []) as $m) if (isset($m['photoUrl'])) $photos[] = $m['photoUrl'];
+                foreach (($r['photos'] ?? []) as $m) {
+                    if (isset($m['photoUrl'])) {
+                        $photos[] = $m['photoUrl'];
+                    }
+                }
 
                 $comment_id = $this->upsert_review($post_id, 'viator', $review_id, [
                     'author' => $r['userName'] ?? $r['authorName'] ?? 'Viator Traveler',
@@ -428,24 +492,38 @@ class OTAReviewSync {
                 ]);
 
                 if ($comment_id) {
-                    $total_imported++;
+                    $total_imported += $comment_id;
                     $consecutive_existing = 0;
                 } else {
                     $consecutive_existing++;
                 }
 
-                if ($consecutive_existing >= $max_skipped && $offset > 0) break 2;
+                if ($consecutive_existing >= $max_skipped && $offset > 0) {
+                    break 2;
+                }
             }
             $offset += count($reviews);
-            if (count($reviews) < $batch) break;
+            if (count($reviews) < $batch) {
+                break;
+            }
         }
         echo "  - Viator: Sync'd $total_imported reviews for $product_code\n";
     }
 
+    /**
+     * Synchronizes reviews from TripAdvisor for a specific post.
+     *
+     * @param int    $post_id     The WordPress post ID.
+     * @param string $ta_id       The TripAdvisor location/product ID.
+     * @param int    $limit_total Maximum reviews to fetch.
+     * @param bool   $force       Whether to force sync.
+     * @return void
+     */
     private function sync_tripadvisor($post_id, $ta_id, $limit_total = 100, $force = false) {
         $api_key = get_option('_ta_api_key');
         if ($api_key && $ta_id) {
-            return $this->sync_tripadvisor_api($post_id, $ta_id, $limit_total, $force);
+            $this->sync_tripadvisor_api($post_id, $ta_id, $limit_total, $force);
+            return;
         }
 
         $ta_url = get_post_meta($post_id, '_ta_url', true);
@@ -456,7 +534,7 @@ class OTAReviewSync {
 
         $is_profile = (strpos($ta_url, 'Attraction_Review') !== false);
         echo "  [TA] Scraper-based " . ($is_profile ? "Profile" : "Product") . " sync for: $ta_url\n";
-        // Logic similar to review_tool.php sync
+        
         $resp = wp_remote_get($ta_url, [
             'timeout' => 20,
             'headers' => [
@@ -470,17 +548,18 @@ class OTAReviewSync {
             $body = wp_remote_retrieve_body($resp);
             $diag = "";
             if ($code == 403) {
-                if (strpos($body, 'Cloudflare') !== false) $diag = " [Blocked by Cloudflare]";
-                else $diag = " [Forbidden/Bot Protection]";
+                if (strpos($body, 'Cloudflare') !== false) {
+                    $diag = " [Blocked by Cloudflare]";
+                } else {
+                    $diag = " [Forbidden/Bot Protection]";
+                }
             }
             echo "  [TA] Error: {$code}{$diag}\n";
             return;
         }
 
         $body = wp_remote_retrieve_body($resp);
-        $reviews = [];
         
-        // Use DOMDocument to extract data
         $dom = new DOMDocument();
         @$dom->loadHTML('<?xml encoding="UTF-8">' . $body);
         $xpath = new DOMXPath($dom);
@@ -494,22 +573,23 @@ class OTAReviewSync {
                       $xpath->query(".//span[contains(@class, 'biGQs')]", $card)->item(0)?->nodeValue ?? 'TA Traveler';
             
             $rating = 5;
-            // Try SVG title first (Modern UI)
             $rating_svg = $xpath->query(".//svg[contains(@title, 'of 5 bubble')]", $card)->item(0);
             if ($rating_svg) {
                 $title = $rating_svg->getAttribute('title');
-                if (preg_match('/([0-9.]+)/', $title, $m)) $rating = floatval($m[1]);
+                if (preg_match('/([0-9.]+)/', $title, $m)) {
+                    $rating = floatval($m[1]);
+                }
             } else {
-                // Fallback to legacy bubble class
                 $bubbles = $xpath->query(".//span[contains(@class, 'ui_bubble_rating')]", $card)->item(0);
                 if ($bubbles) {
                     $class = $bubbles->getAttribute('class');
-                    if (preg_match('/bubble_(\d+)/', $class, $m)) $rating = intval($m[1]) / 10;
+                    if (preg_match('/bubble_(\d+)/', $class, $m)) {
+                        $rating = intval($m[1]) / 10;
+                    }
                 }
             }
 
             if ($text) {
-                // Extract Photos
                 $photos = [];
                 $imgs = $xpath->query(".//img", $card);
                 foreach ($imgs as $img) {
@@ -523,15 +603,26 @@ class OTAReviewSync {
                     'author' => strip_tags($author),
                     'content' => $text,
                     'rating' => $rating,
-                    'date' => '', // Dates are hard to scrape from simple HTML
+                    'date' => '', 
                     'photos' => $photos
                 ]);
-                if ($comment_id) $total_imported++;
+                if ($comment_id) {
+                    $total_imported += $comment_id;
+                }
             }
         }
         echo "  - TA (Scraper): Scraped $total_imported reviews from $ta_url\n";
     }
 
+    /**
+     * Synchronizes reviews from TripAdvisor using the official API.
+     *
+     * @param int    $post_id     The WordPress post ID.
+     * @param string $ta_id       The TripAdvisor location ID.
+     * @param int    $limit_total Maximum reviews to fetch.
+     * @param bool   $force       Whether to force sync.
+     * @return void
+     */
     private function sync_tripadvisor_api($post_id, $ta_id, $limit_total = 100, $force = false) {
         $location_id = preg_replace('/[^0-9]/', '', $ta_id);
         $api_key = get_option('_ta_api_key');
@@ -555,13 +646,17 @@ class OTAReviewSync {
             if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) {
                 $code = is_wp_error($resp) ? 'WP_Error' : wp_remote_retrieve_response_code($resp);
                 echo "  [TA] API Error: {$code}\n";
-                if ($offset === 0) return $this->sync_tripadvisor_scraper($post_id, $ta_id, $limit_total, $force);
+                if ($offset === 0) {
+                    $this->sync_tripadvisor_scraper($post_id, $ta_id, $limit_total, $force);
+                }
                 break;
             }
 
             $data = json_decode(wp_remote_retrieve_body($resp), true);
             $reviews = $data['data'] ?? [];
-            if (empty($reviews)) break;
+            if (empty($reviews)) {
+                break;
+            }
 
             echo "  [TA] Processing " . count($reviews) . " reviews (Offset: $offset)\n";
 
@@ -579,24 +674,37 @@ class OTAReviewSync {
                         'content' => $text,
                         'rating' => $rating,
                         'title' => $title,
-                        'date' => $this->normalize_date($date)
+                        'date' => self::normalize_date($date)
                     ]);
-                    if ($comment_id) $total_imported++;
+                    if ($comment_id) {
+                        $total_imported += $comment_id;
+                    }
                 }
             }
 
             $offset += count($reviews);
-            if (count($reviews) < $batch) break;
+            if (count($reviews) < $batch) {
+                break;
+            }
         }
         echo "  - TA (API): Imported $total_imported reviews for Location ID $location_id\n";
     }
 
+    /**
+     * Synchronizes reviews from TripAdvisor using a scraper fallback.
+     *
+     * @param int    $post_id     The WordPress post ID.
+     * @param string $ta_id       The TripAdvisor location ID.
+     * @param int    $limit_total Maximum reviews to fetch.
+     * @param bool   $force       Whether to force sync.
+     * @return void
+     */
     private function sync_tripadvisor_scraper($post_id, $ta_id, $limit_total = 100, $force = false) {
         $ta_url = get_post_meta($post_id, '_ta_url', true);
-        if (!$ta_url) return;
+        if (!$ta_url) {
+            return;
+        }
         
-        $is_profile = (strpos($ta_url, 'Attraction_Review') !== false);
-        // Logic similar to review_tool.php sync
         $resp = wp_remote_get($ta_url, [
             'timeout' => 20,
             'headers' => [
@@ -625,11 +733,12 @@ class OTAReviewSync {
                       $xpath->query(".//span[contains(@class, 'biGQs')]", $card)->item(0)?->nodeValue ?? 'TA Traveler';
             
             $rating = 5;
-            // Try SVG title first
             $rating_svg = $xpath->query(".//svg[contains(@title, 'of 5 bubble')]", $card)->item(0);
             if ($rating_svg) {
                 $title = $rating_svg->getAttribute('title');
-                if (preg_match('/([0-9.]+)/', $title, $m)) $rating = floatval($m[1]);
+                if (preg_match('/([0-9.]+)/', $title, $m)) {
+                    $rating = floatval($m[1]);
+                }
             }
 
             if ($text) {
@@ -639,20 +748,52 @@ class OTAReviewSync {
                     'rating' => $rating,
                     'date' => ''
                 ]);
-                if ($comment_id) $total_imported++;
+                if ($comment_id) {
+                    $total_imported += $comment_id;
+                }
             }
         }
         echo "  - TA (Scraper Fallback): Scraped $total_imported reviews from $ta_url\n";
     }
 
+    /**
+     * Logs Google My Business Place ID for future sync.
+     *
+     * @param int    $post_id     The WordPress post ID.
+     * @param string $gmb_id      The GMB Place ID.
+     * @param int    $limit_total Maximum reviews to fetch.
+     * @param bool   $force       Whether to force sync.
+     * @return void
+     */
     private function sync_gmb($post_id, $gmb_id, $limit_total = 100, $force = false) {
-        // GMB Sync is usually manual or via specific API
-        // For now, we just log that we processed it, as GMB is handled via the "Filter" maintenance job
         echo "  [GMB] Place ID $gmb_id mapped. Fetch reviews via Google Business Dashboard or API.\n";
     }
 
+    /**
+     * Upsert a review into the WordPress database.
+     * Handles duplication checks and WPML translation propagation.
+     *
+     * @param int    $post_id   The original tour ID.
+     * @param string $source    Platform source (gyg, viator, etc).
+     * @param string $remote_id The unique ID from the OTA.
+     * @param array  $data      Review data (author, content, rating, date, photos).
+     * @return int Returns the number of new entries created (usually 1 or more for translated tours).
+     */
     public function upsert_review($post_id, $source, $remote_id, $data) {
-        if (!get_post_status($post_id)) return false; 
+        // Strict Validation: Prevent "[object Object]" data corruption and ensure non-empty strings
+        $author  = (isset($data['author']) && is_string($data['author'])) ? trim($data['author']) : '';
+        $content = (isset($data['content']) && is_string($data['content'])) ? trim($data['content']) : '';
+        
+        if (empty($author) || strpos($author, '[object Object]') !== false) {
+            return 0;
+        }
+        if (empty($content) || strpos($content, '[object Object]') !== false) {
+            return 0;
+        }
+
+        if (!get_post_status($post_id)) {
+            return 0;
+        }
         
         global $wpdb;
         $meta_key = $source . '_review_id';
@@ -678,8 +819,10 @@ class OTAReviewSync {
             }
 
             $rating = (float)$data['rating'];
-            $title = !empty($data['title']) ? $data['title'] : wp_trim_words($data['content'], 6, '...');
-            if (!$title) $title = "Expert tour from " . ucfirst($source);
+            $title = !empty($data['title']) ? $data['title'] : wp_trim_words($content, 6, '...');
+            if (!$title) {
+                $title = "Expert tour from " . ucfirst($source);
+            }
 
             $lang = $this->get_post_language($target_post_id);
             $labels = $this->get_sub_rating_labels($lang);
@@ -695,9 +838,9 @@ class OTAReviewSync {
 
             $comment_data = [
                 'comment_post_ID' => $target_post_id,
-                'comment_author' => $data['author'],
-                'comment_author_email' => sanitize_title($data['author']) . '@' . $source . '.com',
-                'comment_content' => $data['content'],
+                'comment_author' => $author,
+                'comment_author_email' => sanitize_title($author) . '@' . $source . '.com',
+                'comment_content' => $content,
                 'comment_type' => 'st_reviews',
                 'comment_approved' => '1',
                 'comment_date' => $this->normalize_date($data['date']),
@@ -737,8 +880,16 @@ class OTAReviewSync {
         return $total_new;
     }
 
+    /**
+     * Normalizes various date formats into WordPress standard Y-m-d H:i:s.
+     *
+     * @param string|int $d The date string or timestamp.
+     * @return string Normalized date string.
+     */
     public static function normalize_date($d) {
-        if (empty($d)) return '';
+        if (empty($d)) {
+            return '';
+        }
         
         $ts = is_numeric($d) ? $d : strtotime($d);
         if (!$ts) {
@@ -753,16 +904,26 @@ class OTAReviewSync {
         return $ts ? date('Y-m-d H:i:s', $ts) : '';
     }
 
+    /**
+     * Calculates a matching score between two strings (usually tour titles).
+     *
+     * @param string $s1 First string.
+     * @param string $s2 Second string.
+     * @return float Match score (0-100).
+     */
     public static function calculate_match_score($s1, $s2) {
         $s1 = strtolower(trim($s1));
         $s2 = strtolower(trim($s2));
-        if ($s1 == $s2) return 100;
+        if ($s1 == $s2) {
+            return 100;
+        }
         
         // Tokenize and calculate word intersection
         $stop_words = ['the', 'and', 'with', 'tour', 'trip', 'private', 'guided', 'from', 'to'];
         $tokens1 = array_diff(explode(' ', preg_replace('/[^a-z0-9 ]/', '', $s1)), $stop_words);
         $tokens2 = array_diff(explode(' ', preg_replace('/[^a-z0-9 ]/', '', $s2)), $stop_words);
-        $tokens1 = array_filter($tokens1); $tokens2 = array_filter($tokens2);
+        $tokens1 = array_filter($tokens1); 
+        $tokens2 = array_filter($tokens2);
 
         $intersect = array_intersect($tokens1, $tokens2);
         $union = array_unique(array_merge($tokens1, $tokens2));
@@ -781,6 +942,12 @@ class OTAReviewSync {
         return min(100, round($score, 1));
     }
 
+    /**
+     * Recalculates the aggregate review rating and count for a post.
+     *
+     * @param int $post_id The WordPress post ID.
+     * @return void
+     */
     public function update_summary($post_id) {
         global $wpdb;
         $stats = $wpdb->get_row($wpdb->prepare(
@@ -800,6 +967,12 @@ class OTAReviewSync {
         }
     }
 
+    /**
+     * Retrieves all translated post IDs for a given post.
+     *
+     * @param int $post_id The original post ID.
+     * @return array Array of post IDs including translations.
+     */
     public function get_translated_post_ids($post_id) {
         global $wpdb;
         $table = $wpdb->prefix . 'icl_translations';
@@ -809,7 +982,9 @@ class OTAReviewSync {
             $post_id
         ));
 
-        if (!$trid) return [$post_id];
+        if (!$trid) {
+            return [$post_id];
+        }
 
         $ids = $wpdb->get_col($wpdb->prepare(
             "SELECT element_id FROM {$table} WHERE trid = %d AND element_type = 'post_st_tours'",
@@ -819,6 +994,12 @@ class OTAReviewSync {
         return !empty($ids) ? $ids : [$post_id];
     }
 
+    /**
+     * Retrieves the language code for a given post.
+     *
+     * @param int $post_id The post ID.
+     * @return string Language code (e.g., 'en', 'de').
+     */
     public function get_post_language($post_id) {
         global $wpdb;
         $table = $wpdb->prefix . 'icl_translations';
@@ -829,6 +1010,12 @@ class OTAReviewSync {
         return $lang ?: 'en';
     }
 
+    /**
+     * Retrieves localized sub-rating labels.
+     *
+     * @param string $lang Language code.
+     * @return array Array of labels for sub-ratings.
+     */
     public function get_sub_rating_labels($lang = 'en') {
         $labels = [
             'en' => [

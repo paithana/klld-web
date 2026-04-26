@@ -130,7 +130,7 @@ wp_enqueue_script( 'st-reviews-form' );
 
     <?php
     $comment_form = [
-        'title_reply'          => st_get_language( 'write_a_review' ),
+        'title_reply'          => __( 'Provide your Feedback', 'traveler' ),
         'title_reply_to'       => st_get_language( 'leave_a_reply_to' ) . __( ' %s', 'traveler' ),
         'comment_notes_before' => '',
         'fields'               => [
@@ -143,7 +143,7 @@ wp_enqueue_script( 'st-reviews-form' );
                 <input class="form-control" id="email" name="email" type="text" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="30" aria-required="true">
                 </div></div></div>',
         ],
-        'label_submit'        => st_get_language( 'leave_a_review' ),
+        'label_submit'        => __( 'Provide your Feedback', 'traveler' ),
         'logged_in_as'        => '',
         'comment_field'       => '',
         'comment_notes_after' => '',

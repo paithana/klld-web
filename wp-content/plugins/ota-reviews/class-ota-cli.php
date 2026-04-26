@@ -34,23 +34,27 @@ class KLLD_OTA_CLI_Command {
         $post_id = isset( $assoc_args['post_id'] ) ? intval( $assoc_args['post_id'] ) : 0;
 
         WP_CLI::log( "🚀 Starting Global OTA Review Sync..." );
-        if ($post_id) WP_CLI::log( "   - Target Post: #$post_id" );
+        if ( $post_id ) {
+            WP_CLI::log( "   - Target Post: #$post_id" );
+        }
         WP_CLI::log( "   - Limits: $limits" );
-        WP_CLI::log( "   - Force Sync: " . ($force ? 'Enabled' : 'Disabled') );
+        WP_CLI::log( "   - Force Sync: " . ( $force ? 'Enabled' : 'Disabled' ) );
 
-        if ( ! defined( 'KLLD_SYNC_NO_RUN' ) ) define( 'KLLD_SYNC_NO_RUN', true );
+        if ( ! defined( 'KLLD_SYNC_NO_RUN' ) ) {
+            define( 'KLLD_SYNC_NO_RUN', true );
+        }
         
         // Pass target_post_id to global for ota_sync.php to pick up
-        if ($post_id) {
+        if ( $post_id ) {
             $GLOBALS['target_post_id'] = $post_id;
         }
 
-        require_once dirname(__FILE__) . '/ota_sync.php';
+        require_once dirname( __FILE__ ) . '/ota_sync.php';
         
         $sync = new OTAReviewSync();
-        $results = $sync->run($limits, $force);
+        $results = $sync->run( $limits, $force );
 
-        if ($results && isset($results['tours'])) {
+        if ( $results && isset( $results['tours'] ) ) {
             WP_CLI::success( "Sync completed! Processed {$results['tours']} tours." );
         } else {
             WP_CLI::success( "Sync process finished." );

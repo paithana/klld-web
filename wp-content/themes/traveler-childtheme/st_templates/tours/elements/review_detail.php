@@ -61,9 +61,8 @@ $hotel=new STTour();?>
                     <div class="booking-item-raiting-list-number"><?php echo esc_html($rate_terible)?></div>
                 </li>
             </ul>
-            <a href="<?php echo get_comments_link()?>" class="btn btn-primary"><?php st_the_language('write_a_review')?></a>
-        </div>
-
+            <a href="<?php echo get_comments_link()?>" class="btn btn-primary"><?php _e('Provide your Feedback', 'traveler')?></a>
+            </div>
         <?php $hotel_stats=$hotel->get_review_stats();
         if(!empty($hotel_stats) and is_array($hotel_stats))
         {

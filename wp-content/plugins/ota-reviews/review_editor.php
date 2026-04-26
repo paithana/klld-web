@@ -1,7 +1,11 @@
 <?php
 /**
  * Review Editor - WordPress Admin Only
+ * 
  * Allows searching, remapping, and status management of reviews.
+ * 
+ * @package OTAsManager
+ * @version 2.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -12,7 +16,10 @@ if ( ! current_user_can( 'manage_options' ) && ! defined('KLLD_TOOL_RUN') ) {
 
 global $wpdb;
 
-// ── AJAX Handler: Fetch Reviews ─────────────────────────────────────────
+/**
+ * AJAX Handler: Fetch Reviews
+ * Supports searching, pagination, and language filtering.
+ */
 if (isset($_POST['action']) && $_POST['action'] === 'klld_get_reviews') {
     $search = sanitize_text_field($_POST['search'] ?? '');
     $paged  = intval($_POST['paged'] ?? 1);
@@ -69,7 +76,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'klld_get_reviews') {
     ]);
 }
 
-// ── AJAX Handler: Update Status ──────────────────────────────────────────
+/**
+ * AJAX Handler: Update Status
+ */
 if (isset($_POST['action']) && $_POST['action'] === 'klld_update_review_status') {
     $id = intval($_POST['id']);
     $status = sanitize_text_field($_POST['status']);
@@ -77,7 +86,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'klld_update_review_status')
     wp_send_json_success('Status updated.');
 }
 
-// ── AJAX Handler: Update Post ID ─────────────────────────────────────────
+/**
+ * AJAX Handler: Update Post ID
+ */
 if (isset($_POST['action']) && $_POST['action'] === 'klld_update_review_post_id') {
     $id = intval($_POST['id']);
     $post_id = intval($_POST['post_id']);
@@ -92,14 +103,18 @@ if (isset($_POST['action']) && $_POST['action'] === 'klld_update_review_post_id'
     }
 }
 
-// ── AJAX Handler: Delete Review ──────────────────────────────────────────
+/**
+ * AJAX Handler: Delete Review
+ */
 if (isset($_POST['action']) && $_POST['action'] === 'klld_delete_review') {
     $id = intval($_POST['id']);
     wp_delete_comment($id, true);
     wp_send_json_success('Review deleted permanently.');
 }
 
-// ── AJAX Handler: Find Best Matches (Bulk) ──────────────────────────────
+/**
+ * AJAX Handler: Find Best Matches (Bulk)
+ */
 if (isset($_POST['action']) && $_POST['action'] === 'klld_find_best_matches') {
     $ids = array_map('intval', $_POST['ids'] ?? []);
     if (empty($ids)) {
@@ -155,7 +170,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'klld_find_best_matches') {
     wp_send_json_success($results);
 }
 
-// ── AJAX Handler: Bulk Update Post ID (Clone/Copy) ──────────────────────
+/**
+ * AJAX Handler: Bulk Update Post ID (Clone/Copy)
+ */
 if (isset($_POST['action']) && $_POST['action'] === 'klld_bulk_update_post') {
     $mappings = $_POST['mappings'] ?? []; // Array of {comment_id: post_id}
     if (is_string($mappings)) {
@@ -240,14 +257,10 @@ $tours = get_posts(['post_type' => 'st_tours', 'posts_per_page' => -1, 'post_sta
         .k-table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; vertical-align: top; word-break: break-word; overflow-wrap: break-word; overflow: hidden; }
         
         /* Select styling for long text */
-        .k-input.tour-select { 
-            max-width: 100%; 
-            text-overflow: ellipsis; 
-            white-space: nowrap; 
-            overflow: hidden; 
-        }
         .k-input.tour-select option { 
             white-space: normal; 
+        }
+
         /* Column Widths */
         .col-cb { width: 45px; }
         .col-reviewer { width: 250px; }
@@ -823,6 +836,7 @@ document.addEventListener('click', function(e) {
 fetchReviews(1);
 </script>
 <?php
-if ( ! defined( "KLLD_TOOL_RUN" ) ) { ?>
-</body>
-</html><?php } ?>
+// Ensure no extra output follows if this is included via AJAX
+if ( defined( 'KLLD_TOOL_RUN' ) ) {
+    exit;
+}

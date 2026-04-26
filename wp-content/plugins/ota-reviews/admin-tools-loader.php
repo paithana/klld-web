@@ -6,8 +6,16 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * KLLD_Admin_Tools Class
+ *
+ * Integrates standalone OTA tools into the WordPress Admin Menu.
+ */
 class KLLD_Admin_Tools {
 
+    /**
+     * Constructor: Initializes actions and filters.
+     */
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'add_menu_pages' ] );
         add_action( 'admin_init', [ $this, 'intercept_tool_ajax' ] );
@@ -20,6 +28,9 @@ class KLLD_Admin_Tools {
         }
     }
 
+    /**
+     * Dequeues scripts that cause conflicts on OTAs Manager pages.
+     */
     public function cleanup_admin_scripts() {
         $screen = get_current_screen();
         $my_pages = [
@@ -35,6 +46,9 @@ class KLLD_Admin_Tools {
         }
     }
 
+    /**
+     * Injects custom CSS for the admin menu icon.
+     */
     public function inject_admin_css() {
         ?>
         <style>
@@ -99,6 +113,9 @@ class KLLD_Admin_Tools {
         }
     }
 
+    /**
+     * Registers the admin menu and submenu pages.
+     */
     public function add_menu_pages() {
         add_menu_page(
             'OTAs Manager',
@@ -174,6 +191,9 @@ class KLLD_Admin_Tools {
         );
     }
 
+    /**
+     * Renders the main dashboard page.
+     */
     public function render_index_page() {
         ?>
         <div class="wrap" id="klld-tools-dashboard">

@@ -138,7 +138,7 @@ foreach ($all_tours as $tour) {
 
     // --- PRIORITY CATEGORIZATION ---
     $categories = [
-        'unique'   => ['little amazon', 'off road', 'offroad', 'james bond', 'similan', 'surin', 'tachai', 'hong island', 'panyi', 'ko panyi', 'big buddha', 'wat chalong', 'tsunami memorial', 'cheow lan', 'emerald pool', 'phi phi', 'maya bay', 'bamboo rafting', 'white water', 'atv', 'treehouse', 'tree house', 'khao sok', 'elephant bath'],
+        'unique'   => ['little amazon', 'off road', 'offroad', 'james bond', 'similan', 'surin', 'tachai', 'hong island', 'panyi', 'ko panyi', 'big buddha', 'wat chalong', 'tsunami memorial', 'cheow lan', 'emerald pool', 'phi phi', 'maya bay', 'bamboo rafting', 'white water', 'atv', 'treehouse', 'tree house', 'khao sok lake', 'ratchaprapha', 'ratchaprapha dam', 'elephant bath'],
         'location' => ['khao lak', 'khao sok', 'phuket', 'phang nga', 'krabi', 'patong', 'takua pa'],
         'duration' => ['3 day', '3-day', '3 days', '2 day', '2-day', '2 days', 'full day', 'half day', 'tages', 'jours'],
         'activity' => ['elephant', 'bathing', 'bamboo raft', 'trekking', 'hiking', 'canoe', 'kayak', 'snorkel', 'market', 'shopping', 'safari', 'nightlife', 'party', 'sightseeing', 'cruise']

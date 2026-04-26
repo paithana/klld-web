@@ -200,7 +200,7 @@ $post_id = get_the_ID();
             <!-- Write Review Section At the Bottom -->
             <?php if (comments_open($post_id)) { ?>
                 <div id="write-review" class="mt40" style="background: #f9f9f9; padding: 30px; border-radius: 12px; border: 1px solid #eee;">
-                    <h3 class="st-heading-section mb20" style="font-size: 20px;"><?php echo __('Leave a review', 'traveler'); ?></h3>
+                    <h3 class="st-heading-section mb20" style="font-size: 20px;"><?php echo __('Provide your Feedback', 'traveler'); ?></h3>
                     <style>
                         #respond { display: block !important; }
                     </style>
